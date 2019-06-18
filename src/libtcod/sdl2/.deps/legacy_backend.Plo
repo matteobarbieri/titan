@@ -1,0 +1,7 @@
+../../src/libtcod/sdl2/legacy_backend.lo: \
+ ../../src/libtcod/sdl2/legacy_backend.cpp /usr/include/stdc-predef.h \
+ ../../src/libtcod/sdl2/legacy_backend.h
+
+/usr/include/stdc-predef.h:
+
+../../src/libtcod/sdl2/legacy_backend.h:

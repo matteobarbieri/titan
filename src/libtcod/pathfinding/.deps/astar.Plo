@@ -1,0 +1,7 @@
+../../src/libtcod/pathfinding/astar.lo: \
+ ../../src/libtcod/pathfinding/astar.cpp /usr/include/stdc-predef.h \
+ ../../src/libtcod/pathfinding/astar.h
+
+/usr/include/stdc-predef.h:
+
+../../src/libtcod/pathfinding/astar.h:
