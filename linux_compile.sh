@@ -1,1 +1,1 @@
-g++ src/main2.cpp -o tuto -Isrc -L. -ltcod -g -Wl,-rpath=.
+g++ src/main.cpp -o titan -Isrc -L. -ltcod -g -Wl,-rpath=.
