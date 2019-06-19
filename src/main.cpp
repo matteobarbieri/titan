@@ -1,21 +1,20 @@
-//#include <iostream>
-
-#include <stdio.h>
-
 #include "libtcod.hpp"
-//#include "libtcod.h"
-
-//using namespace std;
-
-int main()
-{
-	int w=50, h=50;
-
-	//TCOD_console_init_root(w, h, "Test 1", false, TCOD_RENDERER_SDL2);
-	tcod::console::init_root(w, h, "Test 1", false, TCOD_RENDERER_SDL2);
-	//TCODConsole::initRoot (w, h, "Test 1");
-	
-	printf("Hello world!\n");
-
-	//cout << "Hello, world!" << endl;
+int main() {
+    int playerx=40,playery=25;
+    TCODConsole::initRoot(80,50,"libtcod C++ tutorial",false);
+    while ( !TCODConsole::isWindowClosed() ) {
+        TCOD_key_t key;
+        TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS,&key,NULL);
+        switch(key.vk) {
+            case TCODK_UP : playery--; break;
+            case TCODK_DOWN : playery++; break;
+            case TCODK_LEFT : playerx--; break;
+            case TCODK_RIGHT : playerx++; break;
+            default:break;
+        }
+        TCODConsole::root->clear();
+        TCODConsole::root->putChar(playerx,playery,'@');
+        TCODConsole::flush();
+    }
+    return 0;
 }
