@@ -33,3 +33,6 @@
 
 # Main executable
 titan
+
+# Vim swp files
+*.swp
