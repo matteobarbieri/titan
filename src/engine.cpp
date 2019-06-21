@@ -229,6 +229,20 @@ int main(int argc, char *argv[])
             "data/fonts/16x16-sb-ascii.png",
             TCOD_FONT_LAYOUT_ASCII_INROW);
 
+    // Init root console
+    TCODConsole::initRoot(
+        SCREEN_WIDTH, SCREEN_HEIGHT,
+        WINDOW_TITLE, false, TCOD_RENDERER_SDL);
+
+    // Create console for terrain
+    TCODConsole terrain_layer(
+        TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
+
+    // Create console for terrain
+    TCODConsole main_window(
+        TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
+
+
     return 0;
 }
 
@@ -245,33 +259,9 @@ def main():
     print("Seed was:", args.seed)
     random.seed(args.seed)
 
-
-    constants = get_constants()
-
-
-    libtcod.console_set_custom_font(
-        # 'data/fonts/Yayo-c64-640x200.png',
-        # 'data/fonts/Yayo-c64-1280x400-83b157.png',
-        # 'data/fonts/Alloy-curses-12x12.png',
-        # 'data/fonts/terminal16x16_gs_ro.png',
-        # 'data/fonts/16x16-RogueYun-AgmEdit.png', # good!
-        libtcod.FONT_LAYOUT_ASCII_INROW)
-
-    # libtcod.console_init_root(
-    #     constants['screen_width'], constants['screen_height'],
-    #     constants['window_title'], False)
-
-    libtcod.console_init_root(
-        constants['screen_width'], constants['screen_height'],
-        constants['window_title'], False, renderer=libtcod.RENDERER_SDL2)
-
-    terrain_layer = libtcod.console_new(
-        constants['terrain_layer_width'],
-        constants['terrain_layer_height'])
-
-    main_window = libtcod.console_new(
-        constants['terrain_layer_width'],
-        constants['terrain_layer_height'])
+    ######################
+    ##### UNTIL HERE #####
+    ######################
 
     panel = libtcod.console_new(
         constants['screen_width'],
