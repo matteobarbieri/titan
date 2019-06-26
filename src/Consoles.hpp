@@ -13,12 +13,16 @@ class Consoles
         TCODConsole * main_window = NULL ;
         TCODConsole * menu = NULL ;
         TCODConsole * submenu = NULL ;
+        TCODConsole * entity_frame = NULL ;
+        TCODConsole * inventory_frame = NULL ;
 
         /*! The static method to access the singleton */
         static Consoles & singleton();
 
     private:
         Consoles();
+        ~Consoles();
+
 };
 
 

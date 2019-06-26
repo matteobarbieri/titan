@@ -2,6 +2,7 @@
 #define R20177_CONSTANTS
 
 #define WINDOW_TITLE "Rogue 20177"
+#define GAME_NAME "Rogue 20177"
 
 // Root console geometry
 #define SCREEN_WIDTH 110

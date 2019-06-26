@@ -10,12 +10,10 @@ typedef struct {
     char * text;
 } MenuOption;
 
-void menu(TCODConsole * con, std::vector<MenuOption> options, char * header,
-          int width, int screen_width, int screen_height,
-          int x, int y, TCODColor header_fg);
-         
+void main_menu(TCODImage * background_image);
 
-//def menu(con, header, options, width, screen_width, screen_height,
-         //x=None, y=None, header_fg=libtcod.white):
+void menu(TCODConsole * con, std::vector<MenuOption> options, const char * header,
+          int width,
+          int x, int y, TCODColor header_fg);
 
 #endif /* ifndef R20177_MENUS */

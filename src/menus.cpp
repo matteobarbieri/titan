@@ -7,9 +7,9 @@
 
 #include "Consoles.hpp"
 
-void menu(TCODConsole * con, std::vector<MenuOption> options, char * header,
-          int width, int screen_width, int screen_height,
-          int x, int y, TCODColor header_fg)
+void menu(TCODConsole * con, std::vector<MenuOption> options, const char * header,
+          int width,
+          int x=-1, int y=-1, TCODColor header_fg=TCODColor::white)
 {
 
     if (options.size() > 26)
@@ -20,49 +20,117 @@ void menu(TCODConsole * con, std::vector<MenuOption> options, char * header,
 
     // calculate total height for the header (after auto-wrap)
     // and one line per option
-    int header_height = con->getHeightRect(0, 0, width, screen_height, "%s", header);
+    int header_height = con->getHeightRect(0, 0, width, SCREEN_HEIGHT, "%s", header);
 
     // Compute the size of the "menu console"
     int height = options.size() + header_height;
 
-    // create an off-screen console that represents the menu's window
-    // TODO check this guy
-    //window = libtcod.console_new(width, height)
+    //std::cout << "options.size(): " << options.size() << std::endl;
 
-    Consoles::singleton().menu->setDefaultForeground(TCODColor::white);
+    // create an off-screen console that represents the menu's window
+
+    //Consoles::singleton().menu->setDefaultForeground(TCODColor::white);
+    con->setDefaultForeground(TCODColor::white);
     // print the header, with auto-wrap
-    Consoles::singleton().menu->printRectEx(
+    //Consoles::singleton().menu->printRectEx(
+    con->printRectEx(
         0, 0, width, height, TCOD_BKGND_NONE, TCOD_LEFT, "%s", header);
 
     // print all the options
     int opt_y = header_height;
 
+    // TODO implement this bit here!
+    //for option_letter, option_text in options:
+        //text = "({}) {}".format(option_letter, option_text)
+        //libtcod.console_print_ex(
+            //window, 0, opt_y, libtcod.BKGND_NONE, libtcod.LEFT, text)
+        //opt_y += 1
+
+    // Set default values for x and y if they are not set
+    int menu_x, menu_y;
+    if (x == -1)
+    {
+        menu_x = SCREEN_WIDTH/2 - width/2;
+    } else
+    {
+        menu_x = x;
+    }
+
+    if (y == -1)
+    {
+        menu_y = SCREEN_HEIGHT/2 - height/2;
+    } else
+    {
+        menu_y = y;
+    }
+        
+    TCODConsole::blit(
+        //Consoles::singleton().menu,
+        con,
+        0, 0, width, height,
+        TCODConsole::root,
+        menu_x, menu_y);
+
+
+    // blit the contents of "window" to the root console
+    //libtcod.console_blit(window, 0, 0, width, height, 0, x, y, 1.0, 0.4)
+}
+
+void main_menu(TCODImage * background_image)
+{
+    
+    // Blit background image
+    //background_image->blit2x(Consoles::singleton().terrain_layer, 0, 0);
+    background_image->blit2x(TCODConsole::root, 0, 0);
+
+    // Set default fg color
+    //Consoles::singleton().terrain_layer->setDefaultForeground(TCODColor::lightYellow);
+    TCODConsole::root->setDefaultForeground(TCODColor::lightYellow);
+
+    //libtcod.console_print_ex(0, int(screen_width / 2), int(screen_height / 2)
+                             //- 4, libtcod.BKGND_NONE, libtcod.CENTER,
+                             //'Rogue 20177')
+                             
+    // Print game title
+    //Consoles::singleton().terrain_layer->printf(
+    TCODConsole::root->printf(
+        SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 4,
+        "%s", GAME_NAME);
+
+    //Consoles::singleton().terrain_layer->printEx(
+        //SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 4,
+        //TCOD_BKGND_NONE, TCOD_CENTER, "%s", GAME_NAME);
+
+    // Print author
+    //libtcod.console_print_ex(0, int(screen_width / 2), int(screen_height - 2),
+                             //libtcod.BKGND_NONE, libtcod.CENTER,
+                             //'By heXe')
+
+    //menu(con, "",
+         //['Play a new game', 'Continue last game', 'Quit'], 24,
+         //screen_width, screen_height)
+         //
+         //
+
+    // Build the list of options
+    std::vector<MenuOption> options;
+    menu(Consoles::singleton().menu, options, " ",
+         24);
 
 }
+
+//def main_menu(con, background_image, screen_width, screen_height):
+
+
+
 /*
 
 from equipment_slots import SLOT_NAMES
-
-def menu(con, header, options, width, screen_width, screen_height,
-         x=None, y=None, header_fg=libtcod.white):
 
     ###############################
     ########### FIN QUI ###########
     ###############################
 
-    for option_letter, option_text in options:
-        text = "({}) {}".format(option_letter, option_text)
-        libtcod.console_print_ex(
-            window, 0, opt_y, libtcod.BKGND_NONE, libtcod.LEFT, text)
-        opt_y += 1
-
-    # blit the contents of "window" to the root console
-    if x is None:
-        x = int(screen_width / 2 - width / 2)
-    if y is None:
-        y = int(screen_height / 2 - height / 2)
-
-    libtcod.console_blit(window, 0, 0, width, height, 0, x, y, 1.0, 0.4)
 
 
 def item_submenu(con, header, player, item, screen_width, screen_height):
@@ -149,22 +217,6 @@ def inventory_menu(con, header, player, inventory_frame,
         0, 0, w, h,
         con,
         0, 0)
-
-
-def main_menu(con, background_image, screen_width, screen_height):
-    libtcod.image_blit_2x(background_image, 0, 0, 0)
-
-    libtcod.console_set_default_foreground(0, libtcod.light_yellow)
-    libtcod.console_print_ex(0, int(screen_width / 2), int(screen_height / 2)
-                             - 4, libtcod.BKGND_NONE, libtcod.CENTER,
-                             'Rogue 20177')
-    libtcod.console_print_ex(0, int(screen_width / 2), int(screen_height - 2),
-                             libtcod.BKGND_NONE, libtcod.CENTER,
-                             'By heXe')
-
-    menu(con, '',
-         ['Play a new game', 'Continue last game', 'Quit'], 24,
-         screen_width, screen_height)
 
 
 def character_screen(player,

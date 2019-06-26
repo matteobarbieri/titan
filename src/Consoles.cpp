@@ -11,18 +11,37 @@ Consoles & Consoles::singleton()
     return instance;
 }
 
+Consoles::~Consoles()
+{
+    std::cout << "Destructing consoles" << std::endl;
+}
 /*! Private constructor */
 Consoles::Consoles()
 {
     /*! Initialize pointers for consoles */
-    terrain_layer = new TCODConsole(
-        TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
+    
+    /*! The main window */
     main_window = new TCODConsole(
         TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
+
+    /*! The main console, where terrain is displayed */
+    terrain_layer = new TCODConsole(
+        TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
+
+    /*! The auxiliary console for the list menu */
     menu = new TCODConsole(
         TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
+
+    /*! The auxiliary console for the submenu */
     submenu = new TCODConsole(
         TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
 
+    /*! The console for entity details */
+    entity_frame = new TCODConsole(
+        FRAME_WIDTH, FRAME_HEIGHT);
+
+    /*! The console for inventory and equipment */
+    inventory_frame = new TCODConsole(
+        FRAME_WIDTH, FRAME_HEIGHT);
 }
 

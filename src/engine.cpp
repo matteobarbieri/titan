@@ -1,6 +1,10 @@
 #include "Constants.h"
 
+#include "menus.hpp"
+
 #include "libtcod.hpp"
+
+
 
 using namespace std;
 
@@ -234,33 +238,17 @@ int main(int argc, char *argv[])
         SCREEN_WIDTH, SCREEN_HEIGHT,
         WINDOW_TITLE, false, TCOD_RENDERER_SDL);
 
-    // Create console for terrain
-    TCODConsole terrain_layer(
-        TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
-
-    // Create console for terrain
-    TCODConsole main_window(
-        TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
-
-    // Create console for the panel
-    TCODConsole panel(
-        SCREEN_WIDTH, PANEL_HEIGHT);
-
-    // Create console for the panel
-    TCODConsole entity_frame(
-        FRAME_WIDTH, FRAME_HEIGHT);
-
-    // Create console for the panel
-    TCODConsole inventory_frame(
-        FRAME_WIDTH, FRAME_HEIGHT);
-
     // Load the background image
     TCODImage main_menu_background_image("menu_background2.png");
 
     // TODO remove "false"
-    while (false and !TCODConsole::root->isWindowClosed())
+    while (!TCODConsole::root->isWindowClosed())
     {
-        cout << "kkk" << endl;
+        //libtcod.sys_check_for_event(
+            //libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
+
+        TCODConsole::root->flush();
+        main_menu(&main_menu_background_image);
     }
 
     //player = None
@@ -275,12 +263,8 @@ int main(int argc, char *argv[])
     //mouse = libtcod.Mouse()
 
     //while not libtcod.console_is_window_closed():
-        //libtcod.sys_check_for_event(
-            //libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
 
         //if show_main_menu:
-            //main_menu(terrain_layer, main_menu_background_image,
-                      //constants['screen_width'], constants['screen_height'])
 
             //if show_load_error_message:
                 //message_box(
