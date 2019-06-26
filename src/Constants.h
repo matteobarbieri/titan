@@ -3,28 +3,30 @@
 
 #define WINDOW_TITLE "Rogue 20177"
 
+// Root console geometry
 #define SCREEN_WIDTH 110
 #define SCREEN_HEIGHT 60
 
+// Size of the panel containing health bar and log
 #define BAR_WIDTH 20
 #define PANEL_HEIGHT 7
 #define PANEL_Y (SCREEN_HEIGHT - PANEL_HEIGHT)
 
-#define TERRAIN_LAYER_WIDTH (SCREEN_WIDTH)
+// The main console geometry (where terrain and stuff is being displayed)
+#define TERRAIN_LAYER_WIDTH SCREEN_WIDTH
 #define TERRAIN_LAYER_HEIGHT (SCREEN_HEIGHT - PANEL_HEIGHT)
+
+// Geometry of entity info frame
+#define FRAME_WIDTH 31
+#define FRAME_HEIGHT (SCREEN_HEIGHT - PANEL_HEIGHT)
+
+// Parameters for the log panel
+#define MESSAGE_X (BAR_WIDTH + 2)
+#define MESSAGE_WIDTH (SCREEN_WIDTH - BAR_WIDTH - 2)
+#define MESSAGE_HEIGHT (PANEL_HEIGHT - 1)
 
 /*
 
-# Size of the panel containing health bar and log
-
-# Geometry of entity info frame
-frame_width = 31
-frame_height = screen_height - panel_height
-
-# Parameters for the log panel
-message_x = bar_width + 2
-message_width = screen_width - bar_width - 2
-message_height = panel_height - 1
 
 # Size of the playing map
 # Must be greater or equal than screen in order to avoid the "pacman effect"

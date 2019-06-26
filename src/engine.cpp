@@ -242,6 +242,98 @@ int main(int argc, char *argv[])
     TCODConsole main_window(
         TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
 
+    // Create console for the panel
+    TCODConsole panel(
+        SCREEN_WIDTH, PANEL_HEIGHT);
+
+    // Create console for the panel
+    TCODConsole entity_frame(
+        FRAME_WIDTH, FRAME_HEIGHT);
+
+    // Create console for the panel
+    TCODConsole inventory_frame(
+        FRAME_WIDTH, FRAME_HEIGHT);
+
+    // Load the background image
+    TCODImage main_menu_background_image("menu_background2.png");
+
+    // TODO remove "false"
+    while (false and !TCODConsole::root->isWindowClosed())
+    {
+        cout << "kkk" << endl;
+    }
+
+    //player = None
+    //game_map = None
+    //message_log = None
+
+    //show_main_menu = True
+    //show_load_error_message = False
+
+
+    //key = libtcod.Key()
+    //mouse = libtcod.Mouse()
+
+    //while not libtcod.console_is_window_closed():
+        //libtcod.sys_check_for_event(
+            //libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
+
+        //if show_main_menu:
+            //main_menu(terrain_layer, main_menu_background_image,
+                      //constants['screen_width'], constants['screen_height'])
+
+            //if show_load_error_message:
+                //message_box(
+                    //terrain_layer, 'No save game to load', 50,
+                    //constants['screen_width'], constants['screen_height'])
+
+            //libtcod.console_flush()
+
+            //action = handle_main_menu(key)
+
+            //new_game = action.get('new_game')
+            //load_saved_game = action.get('load_game')
+            //exit_game = action.get('exit')
+
+            //if (show_load_error_message and
+                //(new_game or load_saved_game or exit_game)):
+                //# TODO wut?
+                //show_load_error_message = False
+            //elif new_game:
+                //# Start a new game
+                //player, game_map, message_log, game_phase = get_game_variables(
+                    //constants)
+                //game_phase = GamePhase.PLAYERS_TURN
+
+                //game_map.export_txt('maps_txt/lastmap.txt')
+
+                //show_main_menu = False
+            //elif load_saved_game:
+                //# Load a previously saved game
+                //try:
+                    //player, game_map, message_log, game_phase = load_game()
+                    //show_main_menu = False
+                //except FileNotFoundError:
+                    //show_load_error_message = True
+            //elif exit_game:
+                //break
+
+        //else:
+            //# migrating to tcod
+            //# libtcod.console_clear(terrain_layer)
+            //terrain_layer.clear()
+
+            //game_state = GameState()
+            //# game_state.player = player
+            //game_state.game_phase = game_phase
+            //# game_state.game_map = game_map
+
+            //play_game(player, game_map,
+                //game_state, message_log,
+                //terrain_layer, panel, entity_frame, inventory_frame,
+                //main_window, constants)
+
+            //show_main_menu = True
 
     return 0;
 }
@@ -263,90 +355,6 @@ def main():
     ##### UNTIL HERE #####
     ######################
 
-    panel = libtcod.console_new(
-        constants['screen_width'],
-        constants['panel_height'])
 
-    entity_frame = libtcod.console_new(
-        constants['frame_width'],
-        constants['frame_height'])
-
-    inventory_frame = libtcod.console_new(
-        constants['frame_width'],
-        constants['frame_height'])
-
-    player = None
-    game_map = None
-    message_log = None
-
-    show_main_menu = True
-    show_load_error_message = False
-
-    # main_menu_background_image = libtcod.image_load('menu_background1.png')
-    main_menu_background_image = libtcod.image_load('menu_background2.png')
-
-    key = libtcod.Key()
-    mouse = libtcod.Mouse()
-
-    while not libtcod.console_is_window_closed():
-        libtcod.sys_check_for_event(
-            libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
-
-        if show_main_menu:
-            main_menu(terrain_layer, main_menu_background_image,
-                      constants['screen_width'], constants['screen_height'])
-
-            if show_load_error_message:
-                message_box(
-                    terrain_layer, 'No save game to load', 50,
-                    constants['screen_width'], constants['screen_height'])
-
-            libtcod.console_flush()
-
-            action = handle_main_menu(key)
-
-            new_game = action.get('new_game')
-            load_saved_game = action.get('load_game')
-            exit_game = action.get('exit')
-
-            if (show_load_error_message and
-                (new_game or load_saved_game or exit_game)):
-                # TODO wut?
-                show_load_error_message = False
-            elif new_game:
-                # Start a new game
-                player, game_map, message_log, game_phase = get_game_variables(
-                    constants)
-                game_phase = GamePhase.PLAYERS_TURN
-
-                game_map.export_txt('maps_txt/lastmap.txt')
-
-                show_main_menu = False
-            elif load_saved_game:
-                # Load a previously saved game
-                try:
-                    player, game_map, message_log, game_phase = load_game()
-                    show_main_menu = False
-                except FileNotFoundError:
-                    show_load_error_message = True
-            elif exit_game:
-                break
-
-        else:
-            # migrating to tcod
-            # libtcod.console_clear(terrain_layer)
-            terrain_layer.clear()
-
-            game_state = GameState()
-            # game_state.player = player
-            game_state.game_phase = game_phase
-            # game_state.game_map = game_map
-
-            play_game(player, game_map,
-                game_state, message_log,
-                terrain_layer, panel, entity_frame, inventory_frame,
-                main_window, constants)
-
-            show_main_menu = True
 
 */
