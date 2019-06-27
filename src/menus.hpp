@@ -7,7 +7,7 @@
 
 typedef struct {
     char letter;
-    char * text;
+    const char * text;
 } MenuOption;
 
 void main_menu(TCODImage * background_image);

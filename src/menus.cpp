@@ -25,55 +25,31 @@ void menu(TCODConsole * con, std::vector<MenuOption> options, const char * heade
     // Compute the size of the "menu console"
     int height = options.size() + header_height;
 
-    //std::cout << "options.size(): " << options.size() << std::endl;
-
-    // create an off-screen console that represents the menu's window
-
-    //Consoles::singleton().menu->setDefaultForeground(TCODColor::white);
-    con->setDefaultForeground(TCODColor::white);
+    con->setDefaultForeground(header_fg);
     // print the header, with auto-wrap
-    //Consoles::singleton().menu->printRectEx(
     con->printRectEx(
         0, 0, width, height, TCOD_BKGND_NONE, TCOD_LEFT, "%s", header);
 
     // print all the options
     int opt_y = header_height;
-
-    // TODO implement this bit here!
-    //for option_letter, option_text in options:
-        //text = "({}) {}".format(option_letter, option_text)
-        //libtcod.console_print_ex(
-            //window, 0, opt_y, libtcod.BKGND_NONE, libtcod.LEFT, text)
-        //opt_y += 1
+    
+    for (int i=0; i<options.size(); i++)
+    {
+        con->printf(0, opt_y, "(%c) %s", options[i].letter, options[i].text);
+        opt_y++;
+    }
 
     // Set default values for x and y if they are not set
-    int menu_x, menu_y;
-    if (x == -1)
-    {
-        menu_x = SCREEN_WIDTH/2 - width/2;
-    } else
-    {
-        menu_x = x;
-    }
-
-    if (y == -1)
-    {
-        menu_y = SCREEN_HEIGHT/2 - height/2;
-    } else
-    {
-        menu_y = y;
-    }
+    if (x == -1) x = SCREEN_WIDTH/2 - width/2;
+    if (y == -1) y = SCREEN_HEIGHT/2 - height/2;
         
     TCODConsole::blit(
-        //Consoles::singleton().menu,
         con,
         0, 0, width, height,
         TCODConsole::root,
-        menu_x, menu_y);
+        x, y,
+        1.0, 0.4);
 
-
-    // blit the contents of "window" to the root console
-    //libtcod.console_blit(window, 0, 0, width, height, 0, x, y, 1.0, 0.4)
 }
 
 void main_menu(TCODImage * background_image)
@@ -87,41 +63,30 @@ void main_menu(TCODImage * background_image)
     //Consoles::singleton().terrain_layer->setDefaultForeground(TCODColor::lightYellow);
     TCODConsole::root->setDefaultForeground(TCODColor::lightYellow);
 
-    //libtcod.console_print_ex(0, int(screen_width / 2), int(screen_height / 2)
-                             //- 4, libtcod.BKGND_NONE, libtcod.CENTER,
-                             //'Rogue 20177')
-                             
     // Print game title
-    //Consoles::singleton().terrain_layer->printf(
+    // TODO work on alignment
+    // check http://roguecentral.org/doryen/data/libtcod/doc/1.5.2/html2/console_print.html
     TCODConsole::root->printf(
         SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 4,
         "%s", GAME_NAME);
-
-    //Consoles::singleton().terrain_layer->printEx(
-        //SCREEN_WIDTH/2, SCREEN_HEIGHT/2 - 4,
-        //TCOD_BKGND_NONE, TCOD_CENTER, "%s", GAME_NAME);
 
     // Print author
     //libtcod.console_print_ex(0, int(screen_width / 2), int(screen_height - 2),
                              //libtcod.BKGND_NONE, libtcod.CENTER,
                              //'By heXe')
 
-    //menu(con, "",
-         //['Play a new game', 'Continue last game', 'Quit'], 24,
-         //screen_width, screen_height)
-         //
-         //
-
     // Build the list of options
+
+    // TODO refactor as singleton
     std::vector<MenuOption> options;
+    options.push_back({'a', "Play a new game"});
+    options.push_back({'b', "Continue last game"});
+    options.push_back({'c', "Quit"});
+
     menu(Consoles::singleton().menu, options, " ",
          24);
 
 }
-
-//def main_menu(con, background_image, screen_width, screen_height):
-
-
 
 /*
 
@@ -130,8 +95,6 @@ from equipment_slots import SLOT_NAMES
     ###############################
     ########### FIN QUI ###########
     ###############################
-
-
 
 def item_submenu(con, header, player, item, screen_width, screen_height):
 

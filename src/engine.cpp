@@ -1,6 +1,7 @@
 #include "Constants.h"
 
 #include "menus.hpp"
+#include "input.hpp"
 
 #include "libtcod.hpp"
 
@@ -241,13 +242,40 @@ int main(int argc, char *argv[])
     // Load the background image
     TCODImage main_menu_background_image("menu_background2.png");
 
-    // TODO remove "false"
+    TCOD_key_t key;
+    TCOD_mouse_t mouse;
+
+    // TODO is this one really needed?
+    TCOD_event_t ev;
+
+    bool exit_game = false;
+
     while (!TCODConsole::root->isWindowClosed())
     {
-        //libtcod.sys_check_for_event(
-            //libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
+
+        // Check for a mouse or keyboard event
+        ev = TCODSystem::checkForEvent(
+            TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &key, &mouse);
+
+        // Handle input
+        // TODO also handle the other cases
+        switch(handle_main_menu(key))
+        {
+            case 'c':
+                exit_game = true;
+                break;
+
+        }
+
+        // Simply break the loop and exit the program
+        if (exit_game)
+        {
+            break;
+        }
 
         TCODConsole::root->flush();
+
+        // Display the main title menu
         main_menu(&main_menu_background_image);
     }
 
