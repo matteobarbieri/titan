@@ -1,3 +1,6 @@
+#ifndef R20177_CONSOLES
+#define R20177_CONSOLES
+
 #include "Constants.h"
 
 #include "libtcod.hpp"
@@ -25,4 +28,4 @@ class Consoles
 
 };
 
-
+#endif
