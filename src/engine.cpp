@@ -1,6 +1,8 @@
 #include "Constants.h"
 
 #include "menus.hpp"
+#include "Entity.hpp"
+#include "GameState.hpp"
 #include "input.hpp"
 
 #include "libtcod.hpp"
@@ -10,97 +12,13 @@
 using namespace std;
 
 /*
-import argparse
-
-import random
-
-import sys
-
-from input_handlers import handle_input, handle_main_menu
-from loader_functions.initialize_new_game import get_constants, get_game_variables
-from loader_functions.data_loaders import load_game, save_game
-from menus import main_menu, message_box
-from fov_functions import initialize_fov, recompute_fov
-
-from render_functions import render_all, check_if_still_in_sight
-
-from game_state import GamePhase, GameState
-from death_functions import kill_monster, kill_player
-
-from actions import ShowMenuException
-
-
-def parse_args():
-
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        '--seed', type=int)
-
-    return parser.parse_args()
-
-
-def update_game_state(
-    outcome,
-    game_state: GameState, fov_recompute, redraw_terrain,
-    message_log):  # noqa
-
-    # Update game state
-    if outcome.get('next_state') is not None:
-        game_state.game_phase = outcome.get('next_state')
-
-    # Update focused entity
-    if outcome.get('entity_focused') is not None:
-        game_state.entity_focused = outcome.get('entity_focused')
-
-    # Update targeted entity
-    if outcome.get('entity_targeted') is not None:
-        game_state.entity_targeted = outcome.get('entity_targeted')
-
-    # Update selected inventory item
-    if outcome.get('selected_inventory_item') is not None:
-        game_state.selected_inventory_item = outcome.get(
-            'selected_inventory_item')
-
-    # Determine whether to recompute fov...
-    if outcome.get('fov_recompute') is not None:
-        fov_recompute = outcome.get('fov_recompute')
-    else:
-        fov_recompute = fov_recompute
-
-    # Or redraw terrain
-    if outcome.get('redraw_terrain') is not None:
-        redraw_terrain = outcome.get('redraw_terrain')
-    else:
-        redraw_terrain = redraw_terrain
-
-    # Add messages to the log
-    if outcome.get('messages') is not None:
-        for m in outcome.get('messages'):
-            message_log.add_message(m)
-
-    return fov_recompute, redraw_terrain
-
 
 def play_game(player, game_map, game_state,
               message_log,
               terrain_layer, panel, entity_frame, inventory_frame,
               main_window, constants):
 
-    # At the beginning of the game, recompute fov
-    fov_recompute = True
-    redraw_terrain = True
-    redraw_entities = True
-
-    # Entity being inspected
-    game_state.entity_focused = None
-
-    # Entity being targeted
-    game_state.entity_targeted = None
-
-    # Inventory item being selected
-    game_state.selected_inventory_item = None
-
+    
     fov_map = initialize_fov(game_map)
 
     key = libtcod.Key()
@@ -223,6 +141,84 @@ def play_game(player, game_map, game_state,
 
             current_turn += 1
 
+
+*/
+
+void play_game(Entity * player, GameState * game_state)
+{
+    
+    // At the beginning of the game, recompute fov
+    bool fov_recompute = true;
+    bool redraw_terrain = true;
+    bool redraw_entities = true;
+
+    // TODO optionally reset focused/targeted entities?
+
+}
+
+/*
+import argparse
+
+import random
+
+import sys
+
+from input_handlers import handle_input, handle_main_menu
+from loader_functions.initialize_new_game import get_constants, get_game_variables
+from loader_functions.data_loaders import load_game, save_game
+from menus import main_menu, message_box
+from fov_functions import initialize_fov, recompute_fov
+
+from render_functions import render_all, check_if_still_in_sight
+
+from game_state import GamePhase, GameState
+from death_functions import kill_monster, kill_player
+
+from actions import ShowMenuException
+
+def update_game_state(
+    outcome,
+    game_state: GameState, fov_recompute, redraw_terrain,
+    message_log):  # noqa
+
+    # Update game state
+    if outcome.get('next_state') is not None:
+        game_state.game_phase = outcome.get('next_state')
+
+    # Update focused entity
+    if outcome.get('entity_focused') is not None:
+        game_state.entity_focused = outcome.get('entity_focused')
+
+    # Update targeted entity
+    if outcome.get('entity_targeted') is not None:
+        game_state.entity_targeted = outcome.get('entity_targeted')
+
+    # Update selected inventory item
+    if outcome.get('selected_inventory_item') is not None:
+        game_state.selected_inventory_item = outcome.get(
+            'selected_inventory_item')
+
+    # Determine whether to recompute fov...
+    if outcome.get('fov_recompute') is not None:
+        fov_recompute = outcome.get('fov_recompute')
+    else:
+        fov_recompute = fov_recompute
+
+    # Or redraw terrain
+    if outcome.get('redraw_terrain') is not None:
+        redraw_terrain = outcome.get('redraw_terrain')
+    else:
+        redraw_terrain = redraw_terrain
+
+    # Add messages to the log
+    if outcome.get('messages') is not None:
+        for m in outcome.get('messages'):
+            message_log.add_message(m)
+
+    return fov_recompute, redraw_terrain
+
+
+
 */
 
 
@@ -249,6 +245,7 @@ int main(int argc, char *argv[])
     TCOD_event_t ev;
 
     bool exit_game = false;
+    bool play_game = false;
 
     while (!TCODConsole::root->isWindowClosed())
     {
@@ -261,6 +258,12 @@ int main(int argc, char *argv[])
         // TODO also handle the other cases
         switch(handle_main_menu(key))
         {
+            case 'a':
+                play_game = true;
+                break;
+            case 'b':
+                play_game = true;
+                break;
             case 'c':
                 exit_game = true;
                 break;
@@ -271,6 +274,18 @@ int main(int argc, char *argv[])
         if (exit_game)
         {
             break;
+        }
+
+        if (play_game)
+        {
+
+            //play_game(player, game_map,
+                //game_state, message_log,
+                //terrain_layer, panel, entity_frame, inventory_frame,
+                //main_window, constants)
+                
+            // When returning to main menu, reset play_game variable to false
+            play_game = false;
         }
 
         TCODConsole::root->flush();
