@@ -1,5 +1,5 @@
-#ifndef R20177_CONSOLES
-#define R20177_CONSOLES
+#ifndef R20177_ENTITY
+#define R20177_ENTITY
 
 #include "Constants.h"
 
