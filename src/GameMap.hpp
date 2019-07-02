@@ -5,8 +5,20 @@
 
 #include "libtcod.hpp"
 
-/** A container for all consoles that are used in the game, except for the root
- * one, which is accessed directly via TCODConsole::root.
+#include <vector>
+
+// TODO consider moving this to a separate file
+class DijkstraMap
+{
+};
+
+// TODO consider moving this to a separate file
+class Direction
+{
+};
+
+/**
+ * A map level
  */
 class GameMap
 {
@@ -15,9 +27,50 @@ class GameMap
         int width;
         int height;
         
-
         GameMap(int w, int h);
         ~GameMap();
+
+};
+
+class MapPart
+{
+
+    public:
+
+        DijkstraMap d_map;
+
+        // Constructor
+        MapPart(int x, int y, std::vector<Direction> available_directions);
+
+        bool has_tile(int x, int y);
+
+        bool is_connected_to(MapPart other);
+
+        void remove_connection(MapPart other);
+
+        void connect_to(MapPart other);
+
+        float distance_from(MapPart other);
+
+        void reset_available_directions();
+
+        bool intersects_with(MapPart other);
+
+        void create_dijkstra_map(GameMap game_map);
+
+        bool has_available_directions();
+
+        // TODO check parameters, probably requires reference passing
+        void pick_starting_point();
+        
+        int height();
+
+        int width();
+
+        // TODO check parameters
+        void center(int & xc, int & yc);
+
+        void dig(GameMap game_map, int pad=0);
 
 };
 
@@ -46,268 +99,7 @@ import shelve
 # TODO temporarily disabled
 # from random_utils import from_dungeon_level, random_choice_from_dict
 
-from .directions import Direction
-
 from .map_utils import dig_rect, _intersection_area
-
-from dijkstra_map import DijkstraMap
-
-class MapPart():
-
-    def __init__(self, xy, available_directions=None):
-
-        self.xy = xy
-        self.available_directions = available_directions
-
-        # Also keep track of the original available directions (for map
-        # generation)
-        self._available_directions = available_directions
-
-        # The list of other parts of the map this one is connected to
-        # (possibly useful later for pathfinding etc.)
-        self.connected_parts = list()
-
-    def has_tile(self, x, y):
-        """
-        Check if a single tile belongs to this map part
-        """
-
-        # Unpack coordinates
-        x1, y1, x2, y2 = self.xy
-
-        return x >= x1 and x <= x2 and y >= y1 and y <= y2
-
-    def remove_connection(self, other):
-        if other in self.connected_parts:
-            self.connected_parts.remove(other)
-
-    def is_connected_to(self, other):
-        """
-        Returns True if self is connected to other
-        """
-
-        return other in self.connected_parts
-
-    def connect_to(self, other):
-        if other not in self.connected_parts:
-            self.connected_parts.append(other)
-
-    def distance_from(self, other):
-        """
-        Return the euclidean distance from the centers of the two parts
-        """
-        x1, y1 = self.center
-        x2, y2 = other.center
-
-        return ((x2 - x1)**2 + (y2 - y1)**2)**(0.5)
-
-    def reset_available_directions(self):
-
-        self. available_directions = list(self._available_directions)
-
-    def intersects_with(self, other):
-        """
-        Returns True if the rectangle specified by other_xy has an intersection
-        different than 0 with this map part.
-        """
-
-        does_intersect = _intersection_area(self.xy, other.xy) > 0
-        if does_intersect:
-            text = 'does intersect'
-        else:
-            text = 'does NOT intersect'
-
-        logger = logging.getLogger()
-        logger.debug("{} at {} {} with {} at {}".format(\
-                type(self), self.xy,
-                text,
-                type(other), other.xy,
-            ))
-
-        return does_intersect
-        # return _intersection_area(self.xy, other.xy) > 0
-
-    def create_dijkstra_map(self, game_map):
-        """
-        Create and store a Dijkstra map pointing to the center of the map part.
-        See http://www.roguebasin.com/index.php?title=The_Incredible_Power_of_Dijkstra_Maps
-        for more info on Dijkstra maps
-        """
-
-        # print("creating dmap for room at {}".format(self.center))
-
-        d_map = list()
-
-        # Max value
-        MAX_VALUE = 2 * game_map.width * game_map.height
-
-        # Fill the map with max values
-        for x in range(game_map.width):
-            d_row = list()
-            for y in range(game_map.height):
-                d_row.append(MAX_VALUE)
-
-            d_map.append(d_row)
-
-        # Set the goal tile[s] to 0
-        x_center, y_center = self.center
-        d_map[x_center][y_center] = 0
-
-        """
-        # First inefficient implementation
-        anything_changed = True
-        while anything_changed:
-            anything_changed = False
-            for x in range(1, game_map.width-1):
-                for y in range(1, game_map.height-1):
-                    # Only check floor tiles
-                    if type(game_map.tiles[x][y]) == Floor:
-                        min_val = MAX_VALUE
-                        for x1 in range(x-1, x+2):
-                            for y1 in range(y-1, y+2):
-                                if d_map[x1][y1] < min_val:
-                                    min_val = d_map[x1][y1]
-
-                        # If the smalles neighbour is more than 1 smaller than
-                        # the current tile, set it to be 1 greater than the
-                        # smallest value
-                        if min_val < d_map[x][y] - 1:
-                            d_map[x][y] = min_val + 1
-                            anything_changed = True
-        """
-
-        # Keep a queue of tiles that need updating
-        # queue = [(x_center, y_center)]
-        queue = list()
-        for x in range(x_center-1, x_center+2):
-            for y in range(y_center-1, y_center+2):
-                if (x, y) != (x_center, y_center):
-                    queue.append((x, y))
-
-        while queue:
-            (xx, yy) = queue.pop(0)
-            # tmp_queue = list()
-
-            min_val = MAX_VALUE
-
-            # First check the min value in the neighborhood
-            for x in range(max(0, xx-1), min(game_map.width, xx+2)):
-                for y in range(max(0, yy-1), min(game_map.height, yy+2)):
-                    if (x, y) != (xx, yy):
-                        # tmp_queue.append((x, y))
-                        if d_map[x][y] < min_val:
-                            min_val = d_map[x][y]
-
-            # If that's the case, update current cell
-            if min_val < d_map[xx][yy] - 1:
-                d_map[xx][yy] = min_val + 1
-
-            # Add more cells to be updated
-            for x in range(max(0, xx-1), min(game_map.width, xx+2)):
-                for y in range(max(0, yy-1), min(game_map.height, yy+2)):
-                    if (x, y) != (xx, yy):
-                        """
-                        if \
-                                type(game_map.tiles[x][y]) == Floor and \
-                                d_map[x][y] > min_val + 1 and \
-                                (x, y) not in queue:
-                            queue.append((x, y))
-                        """
-                        if \
-                                not game_map.tiles[x][y].blocked and \
-                                d_map[x][y] > min_val + 1 and \
-                                (x, y) not in queue:
-                            queue.append((x, y))
-                    """
-                    if \
-                            (x, y) not in queue and \
-                            type(game_map.tiles[x][y]) == Floor and \
-                            d_map[x][y] > min_val + 1 and \
-                            (x, y) != (xx, yy):
-                        queue.append((x, y))
-                    """
-
-        # Save the Dijkstra map for this room
-        self.d_map = DijkstraMap(d_map)
-
-
-    def has_available_directions(self):
-        return len(self.available_directions) > 0
-
-    def pick_starting_point(self):
-        """
-        Pick a starting point and direction for the next element in the
-        dungeon. The coordinates are supposed to be part of the previous
-        element, i.e. walkable space (a Floor tile, NOT a Wall tile).
-        """
-
-        d = random.choice(self.available_directions)
-
-        # Unpack coordinates
-        x1, y1, x2, y2 = self.xy
-
-        if d == Direction.WEST:
-            x = x1
-            y = y1 + int((y2 - y1)/2)
-        elif d == Direction.EAST:
-            x = x2
-            y = y1 + int((y2 - y1)/2)
-        elif d == Direction.NORTH:
-            x = x1 + int((x2 - x1)/2)
-            y = y1
-        elif d == Direction.SOUTH:
-            x = x1 + int((x2 - x1)/2)
-            y = y2
-
-        # Remove option
-        self.available_directions.remove(d)
-
-        return x, y, d
-
-    @property
-    def height(self):
-        # Unpack coordinates
-        y1, y2, = self.xy[1], self.xy[3]
-
-        return y2 - y1 + 1
-
-    @property
-    def width(self):
-        # Unpack coordinates
-        x1, x2, = self.xy[0], self.xy[2]
-
-        return x2 - x1 + 1
-
-    @property
-    def center(self):
-        """
-        Return the rough coordinates of the center of the room
-        """
-
-        # Unpack coordinates
-        x1, y1, x2, y2 = self.xy
-
-        xc = x1 + int((x2 - x1)/2)
-        yc = y1 + int((y2 - y1)/2)
-
-        return xc, yc
-
-    def dig(self, game_map, pad=0):
-        """
-        Actually dig the map part in the game map.
-        """
-
-        # Unpack coordinates
-        x1, y1, x2, y2 = self.xy
-
-        logger = logging.getLogger()
-        logger.debug("Digging {} at {}".format(
-            type(self), [x1+pad, y1+pad, x2-pad, y2-pad]))
-
-        dig_rect(game_map, [x1+pad, y1+pad, x2-pad, y2-pad])
-
-        # TODO
-        # Do more than this
 
 
 class Door(MapPart):
