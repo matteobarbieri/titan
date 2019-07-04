@@ -3,7 +3,10 @@
 #include "menus.hpp"
 #include "Entity.hpp"
 #include "GameState.hpp"
+
 #include "input.hpp"
+#include "fov_functions.hpp"
+#include "render_functions.hpp"
 
 #include "libtcod.hpp"
 
@@ -18,40 +21,53 @@ def play_game(player, game_map, game_state,
               terrain_layer, panel, entity_frame, inventory_frame,
               main_window, constants):
 
+
+
+
+*/
+
+void play_game(Entity * player, GameMap * game_map, GameState * game_state)
+{
     
-    fov_map = initialize_fov(game_map)
+    // At the beginning of the game, recompute fov
+    bool fov_recompute = true;
+    bool redraw_terrain = true;
+    bool redraw_entities = true;
 
-    key = libtcod.Key()
-    mouse = libtcod.Mouse()
+    // Initialize fov map
+    TCODMap * fov_map = initialize_fov(game_map);
 
-    # TODO temporarily disabled
-    # previous_game_state = game_state
+    // TODO needs initialization?
+    TCOD_key_t key;
+    TCOD_mouse_t mouse;
 
-    # TODO temporarily disabled
-    # targeting_item = None
+    // TODO is this one really needed?
+    TCOD_event_t ev;
+    
+    ////////////////////////////////////////////
+    /////////////// MAIN LOOP //////////////////
+    ////////////////////////////////////////////
 
-    current_turn = 1
-    # entities = game_map.entities
+    while (!TCODConsole::root->isWindowClosed())
+    {
 
-    ############################################
-    ############### MAIN LOOP ##################
-    ############################################
+        // Check for a mouse or keyboard event
+        ev = TCODSystem::checkForEvent(
+            TCOD_EVENT_KEY_PRESS | TCOD_EVENT_MOUSE, &key, &mouse);
 
-    while not libtcod.console_is_window_closed():
-        libtcod.sys_check_for_event(
-            libtcod.EVENT_KEY_PRESS | libtcod.EVENT_MOUSE, key, mouse)
+        ////////////////////////////////////////////
+        /////////// RENDER GAME WINDOW /////////////
+        ////////////////////////////////////////////
+        
+        if (fov_recompute)
+        {
+            fov_map->computeFov(
+                player->x, player->y, FOV_RADIUS,
+                FOV_LIGHT_WALLS, FOV_ALGORITHM);
 
-        ############################################
-        ########### RENDER GAME WINDOW #############
-        ############################################
-        if fov_recompute:
+        }
 
-            fov_map.compute_fov(
-                player.x, player.y,
-                constants['fov_radius'], constants['fov_light_walls'],
-                constants['fov_algorithm'])
-
-        # If the player move, check if targeted entity is still in sight
+        /*
         if game_state.entity_targeted and redraw_terrain:
             game_state.entity_targeted = check_if_still_in_sight(
                 fov_map, game_state.entity_targeted)
@@ -66,6 +82,30 @@ def play_game(player, game_map, game_state,
 
             # TODO same for focused entity?
 
+        */
+
+        // If the player move, check if targeted entity is still in sight
+        if (game_state->entity_targeted != NULL && redraw_terrain)
+        {
+
+            game_state->entity_targeted = check_if_still_in_sight(
+                fov_map, game_state->entity_targeted);
+
+            // Check if by any chance target is dead
+            // TODO more generally, if it is no longer targetable for any
+            // reason
+            
+            if (game_state->entity_targeted != NULL &&
+                game_state->entity_targeted->fighter == NULL)
+            {
+                game_state->entity_targeted = NULL;
+            }
+
+            // TODO same for focused entity?
+
+        }
+
+        /*
         top_x, top_y = render_all(
             terrain_layer, panel, entity_frame, inventory_frame, main_window,
             player, game_map, fov_map, fov_recompute,
@@ -82,15 +122,19 @@ def play_game(player, game_map, game_state,
         redraw_entities = False
 
         libtcod.console_flush()
+        */
 
-        ############################################
-        ############## PLAYER'S TURN ###############
-        ############################################
+
+        ////////////////////////////////////////////
+        ////////////// PLAYER'S TURN ///////////////
+        ////////////////////////////////////////////
+
+        /*
         if game_state.is_players_turn():
 
-            ############################################
-            ############# EXECUTE ACTIONS ##############
-            ############################################
+            ////////////////////////////////////////////
+            ///////////// EXECUTE ACTIONS //////////////
+            ////////////////////////////////////////////
             action = handle_input(key, mouse, game_state.game_phase)
 
             # Add all objects required to perform any action
@@ -106,18 +150,22 @@ def play_game(player, game_map, game_state,
                 # Exit main game loop and return to main menu
                 return True
 
-            ############################################
-            ############# RESOLVE OUTCOME ##############
-            ############################################
+            ////////////////////////////////////////////
+            ///////////// RESOLVE OUTCOME //////////////
+            ////////////////////////////////////////////
             if outcome is not None:
 
                 fov_recompute, redraw_terrain = update_game_state(
                     outcome, game_state, fov_recompute, redraw_terrain,
                     message_log)
 
-        ############################################
-        ############## ENEMIES' TURN ###############
-        ############################################
+                    */
+
+        /*
+
+        ////////////////////////////////////////////
+        ////////////// ENEMIES' TURN ///////////////
+        ////////////////////////////////////////////
         elif game_state.is_enemies_turn():
 
             # Each entity takes a turn
@@ -140,20 +188,8 @@ def play_game(player, game_map, game_state,
             redraw_terrain = True
 
             current_turn += 1
-
-
-*/
-
-void play_game(Entity * player, GameState * game_state)
-{
-    
-    // At the beginning of the game, recompute fov
-    bool fov_recompute = true;
-    bool redraw_terrain = true;
-    bool redraw_entities = true;
-
-    // TODO optionally reset focused/targeted entities?
-
+    */
+    }
 }
 
 /*

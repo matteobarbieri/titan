@@ -26,6 +26,11 @@
 #define MESSAGE_WIDTH (SCREEN_WIDTH - BAR_WIDTH - 2)
 #define MESSAGE_HEIGHT (PANEL_HEIGHT - 1)
 
+// Variables for field of view (FOV)
+#define FOV_ALGORITHM FOV_BASIC
+#define FOV_LIGHT_WALLS true
+#define FOV_RADIUS 10
+
 /*
 
 
@@ -38,11 +43,6 @@ map_height = 100
 room_max_size = 10
 room_min_size = 6
 max_rooms = 40
-
-# Variables for field of view (FOV)
-fov_algorithm = 0
-fov_light_walls = True
-fov_radius = 10
 
 # Maximum number of monsters per room
 max_monsters_per_room = 3
