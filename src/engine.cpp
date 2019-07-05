@@ -4,6 +4,8 @@
 #include "Entity.hpp"
 #include "GameState.hpp"
 
+#include "Consoles.hpp"
+
 #include "input.hpp"
 #include "fov_functions.hpp"
 #include "render_functions.hpp"
@@ -44,6 +46,11 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
     // TODO is this one really needed?
     TCOD_event_t ev;
     
+    // TODO move this
+    // The current turn
+    int current_turn = 1;
+
+    int top_x, top_y;
     ////////////////////////////////////////////
     /////////////// MAIN LOOP //////////////////
     ////////////////////////////////////////////
@@ -112,7 +119,22 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
             redraw_terrain, redraw_entities, message_log,
             constants, mouse, game_state,
             current_turn)
+        */
 
+        
+
+        render_all(
+            Consoles::singleton().terrain_layer,
+            Consoles::singleton().panel, 
+            Consoles::singleton().entity_frame,
+            Consoles::singleton().inventory_frame, 
+            Consoles::singleton().main_window,
+            player, game_map, fov_map,
+            fov_recompute, redraw_terrain,
+            &mouse, game_state, current_turn,
+            top_x, top_y);
+
+        /*
         # TODO find a better place
         game_map.top_x = top_x
         game_map.top_y = top_y

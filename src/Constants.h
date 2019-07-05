@@ -10,6 +10,7 @@
 
 // Size of the panel containing health bar and log
 #define BAR_WIDTH 20
+#define PANEL_WIDTH SCREEN_WIDTH
 #define PANEL_HEIGHT 7
 #define PANEL_Y (SCREEN_HEIGHT - PANEL_HEIGHT)
 

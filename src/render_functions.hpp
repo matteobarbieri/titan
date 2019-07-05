@@ -2,10 +2,29 @@
 #define R20177_RENDER_FUNCTIONS
 
 #include "Entity.hpp"
+#include "GameMap.hpp"
+#include "GameState.hpp"
 
 #include "libtcod.hpp"
 
 Entity * check_if_still_in_sight(TCODMap * fov_map, Entity * entity);
+
+// TODO missing message_log parameter
+void render_all(
+    TCODConsole * terrain_layer, TCODConsole * panel,
+    TCODConsole * entity_frame, TCODConsole * inventory_frame,
+    TCODConsole * main_window,
+    Entity * player,
+    GameMap * game_map, TCODMap * fov_map,
+    bool fov_recompute, bool redraw_terrain, 
+    TCOD_mouse_t * mouse, GameState * game_state,
+    int current_turn, int & top_x, int & top_y);
+
+/*
+ *
+*/
+
+
 
 /*
 # import libtcodpy as libtcod
@@ -24,18 +43,6 @@ class RenderOrder(Enum):
     CORPSE = auto()
     ITEM = auto()
     ACTOR = auto()
-
-
-def check_if_still_in_sight(fov_map, entity):
-    """
-    Checks if an entity is in sight and return it if it is true, else return
-    None.
-    """
-
-    if libtcod.map_is_in_fov(fov_map, entity.x, entity.y):
-        return entity
-    else:
-        return None
 
 
 def get_entity_under_mouse(mouse, entities, fov_map, top_x, top_y):
@@ -166,229 +173,6 @@ def draw_entity(terrain_layer, entity,
             terrain_layer, entity.x-top_x, entity.y-top_y, entity.color)
 
 
-def render_all(terrain_layer, panel, entity_frame, inventory_frame,
-               main_window,
-               player,
-               game_map, fov_map, fov_recompute,
-               redraw_terrain, redraw_entities, message_log,
-               constants, mouse,
-               game_state, current_turn):
-
-    ### Extract variables from contants dict
-    screen_width = constants['screen_width']
-    screen_height = constants['screen_height']
-    panel_height = constants['panel_height']
-    bar_width = constants['bar_width']
-    panel_y = constants['panel_y']
-    terrain_layer_width = constants['terrain_layer_width']
-    terrain_layer_height = constants['terrain_layer_height']
-    frame_width = constants['frame_width']
-    frame_height = constants['frame_height']
-
-    # TODO tmp workaround
-    game_phase = game_state.game_phase
-
-    #########################################
-    ######### Render terrain first ##########
-    #########################################
-
-    # First compute the part of visible map, based on the player's position
-    # Compute top left corner coordinates
-    top_x = int(player.x - screen_width/2)
-    top_x = max(0, top_x)
-    top_x = min(game_map.width - screen_width, top_x)
-
-    top_y = int(player.y - screen_height/2)
-    top_y = max(0, top_y)
-    top_y = min(game_map.height - screen_height + panel_height, top_y)
-
-    # Only redraw terrain if needed
-    if redraw_terrain:
-
-        # Clear the console before drawing on it
-        libtcod.console_clear(terrain_layer)
-
-        for y in range(top_y, top_y + screen_height - panel_height):
-            for x in range(top_x, top_x + screen_width):
-                visible = libtcod.map_is_in_fov(fov_map, x, y)
-
-                if visible:
-                    # Render it as visible
-                    # game_map.tiles[x][y].render_at(terrain_layer, x, y, visible)
-                    game_map.tiles[x][y].render_at(
-                        terrain_layer, x-top_x, y-top_y, visible)
-                    game_map.tiles[x][y].explored = True
-
-                elif game_map.tiles[x][y].explored:
-                    # Render as currently out of sight
-                    game_map.tiles[x][y].render_at(
-                        terrain_layer, x-top_x, y-top_y, visible)
-
-        if game_state.entity_targeted:
-            visible = libtcod.map_is_in_fov(
-                fov_map,
-                game_state.entity_targeted.x, game_state.entity_targeted.y)
-
-            if visible:
-                # print("Targeted {} at ({}, {})".format(
-                    # entity_targeted.name, entity_targeted.x, entity_targeted.y))
-
-                libtcod.console_set_char_background(
-                    terrain_layer,
-                    game_state.entity_targeted.x-top_x,
-                    game_state.entity_targeted.y-top_y,
-                    libtcod.red, libtcod.BKGND_SET)
-
-    #########################################
-    ########### Render entities  ############
-    #########################################
-
-    # if redraw_terrain or redraw_entities:
-    if redraw_terrain:
-        # libtcod.console_clear(entities_layer)
-        # Sort entities by their associated render order
-        entities_in_render_order = sorted(
-            game_map.entities, key=lambda x: x.render_order.value)
-
-        # Draw all entities in the list in the correct order
-        for entity in entities_in_render_order:
-            draw_entity(terrain_layer, entity,
-                        fov_map, game_map, top_x, top_y)
-
-        # # Blit terrain layer on root console
-        # libtcod.console_blit(
-            # terrain_layer,
-            # 0, 0, screen_width, screen_height,
-            # 0,
-            # 0, 0)
-
-    #########################################
-    ############ Render panel  ##############
-    #########################################
-
-    # Now render the health bar
-    libtcod.console_set_default_background(panel, libtcod.black)
-    libtcod.console_clear(panel)
-
-    # Print the game messages, one line at a time
-    y = 1
-    for message in message_log.messages:
-        libtcod.console_set_default_foreground(panel, message.color)
-        libtcod.console_print_ex(
-            panel,
-            message_log.x,
-            y,
-            libtcod.BKGND_NONE,
-            libtcod.LEFT,
-            message.text)
-        y += 1
-
-    # Render the HP bar
-    render_bar(
-        panel, 1, 1, bar_width,
-        'HP', player.c['fighter'].hp, player.c['fighter'].max_hp,
-        libtcod.light_red, libtcod.darker_red)
-
-    # Show current dungeon level
-    libtcod.console_print_ex(panel, 1, 3, libtcod.BKGND_NONE, libtcod.LEFT,
-                             'Dungeon level: {0}'.format(
-                                 game_map.dungeon_level))
-
-    # Show current dungeon level
-    libtcod.console_print_ex(panel, 1, 5, libtcod.BKGND_NONE, libtcod.LEFT,
-                             'Time: {0}'.format(
-                                 current_turn))
-
-    # Show info about entities under mouse cursor
-    libtcod.console_set_default_foreground(panel, libtcod.light_gray)
-    libtcod.console_print_ex(
-        panel,
-        1,
-        0,
-        libtcod.BKGND_NONE,
-        libtcod.LEFT,
-        get_names_under_mouse(
-            mouse, game_map.entities, fov_map, top_x, top_y))
-
-    # Blit panel console on root console
-    libtcod.console_blit(
-        panel, 0, 0,
-        screen_width, panel_height,
-        0,
-        0, panel_y)
-
-    #########################################
-    ### Blit terrain layer on root console ##
-    #########################################
-
-    libtcod.console_blit(
-        terrain_layer,
-        0, 0, terrain_layer_width, terrain_layer_height,
-        main_window,
-        0, 0)
-
-    #########################################
-    ######### Render entity label ###########
-    #########################################
-
-    entity_under_mouse = get_entity_under_mouse(
-            mouse, game_map.entities, fov_map, top_x, top_y)
-
-    if entity_under_mouse:
-
-        render_entity_label(
-            main_window, entity_under_mouse,
-            top_x, top_y)
-
-    #########################################
-    ######### Render entity frame  ##########
-    #########################################
-
-    # Render the focused entity
-    if game_phase == GamePhase.ENTITY_INFO:
-        render_entity_frame(entity_frame, game_state.entity_focused)
-
-    # Render the selected inventory item
-    if game_phase == GamePhase.INVENTORY_ITEM_MENU:
-        render_entity_frame(entity_frame, game_state.selected_inventory_item)
-
-    # Blit the frame on the console below (main window)
-    if game_phase in (GamePhase.ENTITY_INFO, GamePhase.INVENTORY_ITEM_MENU):
-        libtcod.console_blit(
-            entity_frame,
-            0, 0, frame_width, frame_height,
-            main_window,
-            screen_width - frame_width, 0)
-
-    # Finally blit main window console on root console
-    libtcod.console_blit(
-        main_window,
-        0, 0, terrain_layer_width, terrain_layer_height,
-        0,
-        0, 0)
-
-    # Show inventory menu
-    if game_phase in (GamePhase.INVENTORY_MENU, GamePhase.INVENTORY_ITEM_MENU):
-
-        inventory_title = 'Inventory'
-
-        inventory_menu(
-            terrain_layer, inventory_title, player,
-            inventory_frame, screen_width, screen_height)
-
-    # Inventory item submenu
-    if game_phase == GamePhase.INVENTORY_ITEM_MENU:
-
-        item_submenu(
-            terrain_layer, 'Actions', player,
-            game_state.selected_inventory_item,
-            screen_width, screen_height)
-
-    # Show character screen
-    elif game_phase == GamePhase.CHARACTER_SCREEN:
-        character_screen(player, 30, 10, screen_width, screen_height)
-
-    return top_x, top_y
 
 */
 

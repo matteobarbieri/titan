@@ -13,6 +13,7 @@ class Consoles
     public:
 
         TCODConsole * terrain_layer = NULL;
+        TCODConsole * panel = NULL;
         TCODConsole * main_window = NULL ;
         TCODConsole * menu = NULL ;
         TCODConsole * submenu = NULL ;

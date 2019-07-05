@@ -28,6 +28,10 @@ Consoles::Consoles()
     terrain_layer = new TCODConsole(
         TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
 
+    /*! The panel at the bottom of the screen, where info are displayed */
+    panel = new TCODConsole(
+        PANEL_WIDTH, PANEL_HEIGHT);
+
     /*! The auxiliary console for the list menu */
     menu = new TCODConsole(
         TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
