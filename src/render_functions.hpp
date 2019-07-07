@@ -11,9 +11,6 @@ Entity * check_if_still_in_sight(TCODMap * fov_map, Entity * entity);
 
 // TODO missing message_log parameter
 void render_all(
-    TCODConsole * terrain_layer, TCODConsole * panel,
-    TCODConsole * entity_frame, TCODConsole * inventory_frame,
-    TCODConsole * main_window,
     Entity * player,
     GameMap * game_map, TCODMap * fov_map,
     bool fov_recompute, bool redraw_terrain, 

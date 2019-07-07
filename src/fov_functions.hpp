@@ -1,5 +1,5 @@
-#ifndef ROGUE_2077_FOV_FUNCTIONS
-#define ROGUE_2077_FOV_FUNCTIONS
+#ifndef ROGUE_20177_FOV_FUNCTIONS
+#define ROGUE_20177_FOV_FUNCTIONS 
 
 #include "libtcod.hpp"
 
@@ -7,7 +7,5 @@
 
 TCODMap * initialize_fov(GameMap * game_map);
 
-void recompute_fov(TCODMap fov_map, int x, int y, int radius,
-                   bool light_walls, TCOD_fov_algorithm_t algo=FOV_BASIC);
+#endif /* ifndef ROGUE_20177_FOV_FUNCTIONS */
 
-#endif /* ROGUE_2077_FOV_FUNCTIONS */

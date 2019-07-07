@@ -1,3 +1,30 @@
+
+#include "libtcod.hpp"
+
+#include "Entity.hpp"
+
+#include "GameMap.hpp"
+#include "GameState.hpp"
+
+Entity * check_if_still_in_sight(TCODMap * fov_map, Entity * entity)
+{
+    // TODO to implement
+    return NULL;
+}
+
+// TODO missing message_log parameter
+void render_all(
+    Entity * player,
+    GameMap * game_map, TCODMap * fov_map,
+    bool fov_recompute, bool redraw_terrain, 
+    TCOD_mouse_t * mouse, GameState * game_state,
+    int current_turn, int & top_x, int & top_y)
+{
+
+    // TODO to implement
+}
+
+
 /*
 # import libtcodpy as libtcod
 import tcod as libtcod

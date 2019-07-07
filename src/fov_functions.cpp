@@ -1,17 +1,13 @@
-#ifndef ROGUE_2077_FOV_FUNCTIONS
-#define ROGUE_2077_FOV_FUNCTIONS
+#include "libtcod.hpp"
 
-class FovFunctions
+#include "GameMap.hpp"
+
+TCODMap * initialize_fov(GameMap * game_map)
 {
-private:
-    
 
-public:
-    FovFunctions();
-    virtual ~FovFunctions();
-};
-
-#endif /* ROGUE_2077_FOV_FUNCTIONS */
+    // TODO to implement
+    return NULL;
+}
 
 /*
 import libtcodpy as libtcod

@@ -5,13 +5,13 @@
 #include "GameState.hpp"
 
 #include "Consoles.hpp"
+#include "Action.hpp"
 
 #include "input.hpp"
 #include "fov_functions.hpp"
 #include "render_functions.hpp"
 
 #include "libtcod.hpp"
-
 
 
 using namespace std;
@@ -22,10 +22,6 @@ def play_game(player, game_map, game_state,
               message_log,
               terrain_layer, panel, entity_frame, inventory_frame,
               main_window, constants):
-
-
-
-
 */
 
 void play_game(Entity * player, GameMap * game_map, GameState * game_state)
@@ -51,6 +47,9 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
     int current_turn = 1;
 
     int top_x, top_y;
+
+    Action * action;
+
     ////////////////////////////////////////////
     /////////////// MAIN LOOP //////////////////
     ////////////////////////////////////////////
@@ -74,23 +73,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 
         }
 
-        /*
-        if game_state.entity_targeted and redraw_terrain:
-            game_state.entity_targeted = check_if_still_in_sight(
-                fov_map, game_state.entity_targeted)
-            # Check if by any chance target is dead
-            # TODO more generally, if it is no longer targetable for any
-            # reason
-            if (
-                game_state.entity_targeted and
-                not game_state.entity_targeted.fighter):  # noqa
-
-                game_state.entity_targeted = None
-
-            # TODO same for focused entity?
-
-        */
-
         // If the player move, check if targeted entity is still in sight
         if (game_state->entity_targeted != NULL && redraw_terrain)
         {
@@ -112,58 +94,44 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 
         }
 
-        /*
-        top_x, top_y = render_all(
-            terrain_layer, panel, entity_frame, inventory_frame, main_window,
-            player, game_map, fov_map, fov_recompute,
-            redraw_terrain, redraw_entities, message_log,
-            constants, mouse, game_state,
-            current_turn)
-        */
-
-        
-
         render_all(
-            Consoles::singleton().terrain_layer,
-            Consoles::singleton().panel, 
-            Consoles::singleton().entity_frame,
-            Consoles::singleton().inventory_frame, 
-            Consoles::singleton().main_window,
             player, game_map, fov_map,
             fov_recompute, redraw_terrain,
             &mouse, game_state, current_turn,
             top_x, top_y);
 
-        /*
-        # TODO find a better place
-        game_map.top_x = top_x
-        game_map.top_y = top_y
+        // TODO find a better place
+        game_map->top_x = top_x;
+        game_map->top_y = top_y;
 
-        fov_recompute = False
-        redraw_terrain = False
-        redraw_entities = False
+        fov_recompute = false;
+        redraw_terrain = false;
+        redraw_entities = false;
 
-        libtcod.console_flush()
-        */
+        TCODConsole::root->flush();
 
 
         ////////////////////////////////////////////
         ////////////// PLAYER'S TURN ///////////////
         ////////////////////////////////////////////
 
-        /*
-        if game_state.is_players_turn():
+        if (game_state->is_players_turn())
+        {
+
 
             ////////////////////////////////////////////
             ///////////// EXECUTE ACTIONS //////////////
             ////////////////////////////////////////////
-            action = handle_input(key, mouse, game_state.game_phase)
 
-            # Add all objects required to perform any action
-            # TODO check, should the message log be passed here?
-            action.set_context(
-                game_map, player, message_log, fov_map,
-                game_state)
+            action = handle_input(key, mouse, game_state);
+
+            // Add all objects required to perform any action
+
+            action->set_context(
+                game_map, player, fov_map, game_state);
+
+            /*
+
 
             # Execute it
             try:
@@ -181,7 +149,9 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
                     outcome, game_state, fov_recompute, redraw_terrain,
                     message_log)
 
-                    */
+        */
+
+        }
 
         /*
 

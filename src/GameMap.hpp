@@ -128,8 +128,15 @@ class GameMap
 
     public:
 
+        // Properties
+        
         int width;
         int height;
+
+        int top_x;
+        int top_y;
+        
+        // Methods
         
         GameMap(int w, int h);
         ~GameMap();

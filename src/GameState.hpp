@@ -13,6 +13,8 @@ class GameState
 {
     public:
 
+        // Attributes
+        
         // Entity being inspected
         Entity * entity_focused = NULL;
 
@@ -22,9 +24,13 @@ class GameState
         // Inventory item being selected
         Entity * selected_inventory_item = NULL;
 
+        
+        // Methods
+
         GameState();
         ~GameState();
 
+        bool is_players_turn();
 };
 
 #endif

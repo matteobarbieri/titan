@@ -1,5 +1,8 @@
 #include "libtcod.hpp"
 
+#include "Action.hpp"
+#include "GameState.hpp"
+
 /*
 def handle_main_menu(key):
     key_char = chr(key.c)
@@ -27,6 +30,13 @@ char handle_main_menu(TCOD_key_t key)
             return '\0';
             break;
     }
+}
+
+Action * handle_input(
+    TCOD_key_t key, TCOD_mouse_t mouse, GameState * game_state)
+{
+    // TODO implement
+    return NULL;
 }
 
 /*
