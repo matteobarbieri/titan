@@ -3,6 +3,10 @@
 #include "Constants.h"
 #include "GameMap.hpp"
 
+#include "Entity.hpp"
+
+#include <vector>
+
 /*
     def __init__(self, width, height, dungeon_level=1):
 
@@ -30,6 +34,12 @@ GameMap::GameMap(int w, int h)
 {
     width = w;
     height = h;
+}
+
+std::vector<Entity *> GameMap::entities()
+{
+
+    return _entities;
 }
 
 /*

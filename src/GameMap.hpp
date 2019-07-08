@@ -5,7 +5,8 @@
 
 #include "libtcod.hpp"
 
-#include "Entity.hpp"
+// Forward declaration
+class Entity;
 
 #include <vector>
 
@@ -28,8 +29,10 @@ class MapPart
 
     public:
 
+        // Attributes
         DijkstraMap d_map;
 
+        
         // Constructor
         MapPart(Rect xy, std::vector<Direction> available_directions);
 
@@ -169,6 +172,7 @@ class GameMap
         // TODO check return type
         std::vector<MapPart *> all_parts();
 
+        std::vector<Entity *> entities();
 };
 
 #endif

@@ -3,9 +3,12 @@
 #include "menus.hpp"
 #include "Entity.hpp"
 #include "GameState.hpp"
+#include "GamePhase.hpp"
 
 #include "Consoles.hpp"
 #include "Action.hpp"
+
+#include "components/Ai.hpp"
 
 #include "input.hpp"
 #include "fov_functions.hpp"
@@ -48,7 +51,12 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 
     int top_x, top_y;
 
+    // Objects required for Player Actions
     Action * action;
+    Outcome * outcome;
+
+    // Objects required for Enemies' Actions
+    AIAction * entity_action;
 
     ////////////////////////////////////////////
     /////////////// MAIN LOOP //////////////////
@@ -130,66 +138,83 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
             action->set_context(
                 game_map, player, fov_map, game_state);
 
-            /*
+            // TODO explicitly destroy action?
+            // TODO explicitly destroy outcome?
 
-
-            # Execute it
-            try:
-                outcome = action.execute()
-            except ShowMenuException:
-                # Exit main game loop and return to main menu
-                return True
+            // Execute the action
+            try {
+                outcome = action->execute();
+            } catch(ExitGameException e) {
+                // Exit to main menu
+                return;
+            }
 
             ////////////////////////////////////////////
             ///////////// RESOLVE OUTCOME //////////////
             ////////////////////////////////////////////
-            if outcome is not None:
+            
+            if (outcome != NULL)
+            {
+                // TODO also need message log parameter?
+                game_state->update(outcome, fov_recompute, redraw_terrain);
+            }
 
-                fov_recompute, redraw_terrain = update_game_state(
-                    outcome, game_state, fov_recompute, redraw_terrain,
-                    message_log)
-
-        */
-
-        }
-
-        /*
+        } // if (game_state->is_players_turn())
 
         ////////////////////////////////////////////
         ////////////// ENEMIES' TURN ///////////////
         ////////////////////////////////////////////
-        elif game_state.is_enemies_turn():
+        else if (game_state->is_enemies_turn())
+        {
 
-            # Each entity takes a turn
-            for entity in game_map.entities:
-                if entity.ai:
-                    # enemy_turn_results = entity.ai.take_turn(player, fov_map, game_map)
+            // Each entity takes a turn
+            for (int i=0; i<(int)(game_map->entities().size()); i++)
+            {
+                if (game_map->entities()[i]->ai != NULL)
+                {
+                    /*
 
-                    # Pick an action for each entity
-                    entity_action = entity.ai.pick_action(player, game_map)
+                    */
 
-                    # XXX no need to set context, asit was needed previously to
-                    # choose the action
+                    // Pick an action for each entity
+                    entity_action = game_map->entities()[i]->ai->pick_action(
+                        player, game_map);
 
-                    # Execute the action
-                    outcome = entity_action.execute()
+                    // XXX no need to set context, asit was needed previously to
+                    // choose the action
 
+                    // Execute the action
+                    outcome = entity_action->execute();
+
+                    // TODO
+                    // Should we use the same method?
+                    if (outcome != NULL)
+                    {
+                        // TODO also need message log parameter?
+                        game_state->update(outcome, fov_recompute, redraw_terrain);
+                    }
+
+                    // TODO destroy entity_action?
+                    // TODO destroy outcome?
+
+                }
+            }
+
+            /*
             # Go back to player's turn state
             game_state.game_phase = GamePhase.PLAYERS_TURN
             # redraw_entities = True
             redraw_terrain = True
+            */
 
-            current_turn += 1
-    */
+            current_turn++;
+
+        } // if (game_state->is_enemies_turn())
+
     }
 }
 
 /*
-import argparse
-
-import random
-
-import sys
 
 from input_handlers import handle_input, handle_main_menu
 from loader_functions.initialize_new_game import get_constants, get_game_variables
@@ -203,49 +228,6 @@ from game_state import GamePhase, GameState
 from death_functions import kill_monster, kill_player
 
 from actions import ShowMenuException
-
-def update_game_state(
-    outcome,
-    game_state: GameState, fov_recompute, redraw_terrain,
-    message_log):  # noqa
-
-    # Update game state
-    if outcome.get('next_state') is not None:
-        game_state.game_phase = outcome.get('next_state')
-
-    # Update focused entity
-    if outcome.get('entity_focused') is not None:
-        game_state.entity_focused = outcome.get('entity_focused')
-
-    # Update targeted entity
-    if outcome.get('entity_targeted') is not None:
-        game_state.entity_targeted = outcome.get('entity_targeted')
-
-    # Update selected inventory item
-    if outcome.get('selected_inventory_item') is not None:
-        game_state.selected_inventory_item = outcome.get(
-            'selected_inventory_item')
-
-    # Determine whether to recompute fov...
-    if outcome.get('fov_recompute') is not None:
-        fov_recompute = outcome.get('fov_recompute')
-    else:
-        fov_recompute = fov_recompute
-
-    # Or redraw terrain
-    if outcome.get('redraw_terrain') is not None:
-        redraw_terrain = outcome.get('redraw_terrain')
-    else:
-        redraw_terrain = redraw_terrain
-
-    # Add messages to the log
-    if outcome.get('messages') is not None:
-        for m in outcome.get('messages'):
-            message_log.add_message(m)
-
-    return fov_recompute, redraw_terrain
-
-
 
 */
 

@@ -6,6 +6,7 @@
 #include "GameState.hpp"
 #include "Entity.hpp"
 
+#include "Outcome.hpp"
 
 /** An action performed by a player 
  */
@@ -18,6 +19,11 @@ void Action::set_context(
     // TODO implement
 }
 
+Outcome * Action::execute()
+{
+    // TODO implement
+    return NULL;
+}
 
 /*
 from game_state import GamePhase

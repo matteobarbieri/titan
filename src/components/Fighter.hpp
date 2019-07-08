@@ -1,5 +1,5 @@
-#ifndef ROGUE_2077_FOV_FIGHTER
-#define ROGUE_2077_FOV_FIGHTER
+#ifndef ROGUE_2077_FIGHTER
+#define ROGUE_2077_FIGHTER
 
 class Fighter
 {
@@ -11,7 +11,7 @@ public:
     virtual ~Fighter();
 };
 
-#endif /* ROGUE_2077_FOV_FIGHTER */
+#endif /* ROGUE_2077_FIGHTER */
 
 /*
 import libtcodpy as libtcod
