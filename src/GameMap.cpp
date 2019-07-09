@@ -42,11 +42,16 @@ std::vector<Entity *> GameMap::entities()
     return _entities;
 }
 
-/*
-# TODO temporarily disabled
-# from entity import Entity
+MapPart::MapPart(Rect xy) : xy(xy)
+{
 
-import logging
+}
+
+Room::Room(Rect xy) : MapPart(xy)
+{
+}
+
+/*
 
 # from item_functions import cast_confuse, cast_fireball, cast_lightning, heal
 
@@ -84,10 +89,6 @@ class MapPart():
         # Also keep track of the original available directions (for map
         # generation)
         self._available_directions = available_directions
-
-        # The list of other parts of the map this one is connected to
-        # (possibly useful later for pathfinding etc.)
-        self.connected_parts = list()
 
     def has_tile(self, x, y):
         """

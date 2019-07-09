@@ -1,15 +1,9 @@
-#include "libtcod.hpp"
+//#include "libtcod.hpp"
 
-#include "Action.hpp"
-
-#include "GameMap.hpp"
-#include "GameState.hpp"
-#include "Entity.hpp"
-
+#include "Outcome.hpp"
 
 /** An action performed by a player 
  */
-
 
 /*
 from game_state import GamePhase

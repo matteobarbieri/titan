@@ -1,8 +1,6 @@
 #ifndef R20177_GAME_MAP
 #define R20177_GAME_MAP
 
-#include "Constants.h"
-
 #include "libtcod.hpp"
 
 // Forward declaration
@@ -12,6 +10,8 @@ class Entity;
 
 class Rect
 {
+    public:
+        int x1, y1, x2, y2;
 };
 
 // TODO consider moving this to a separate file
@@ -28,13 +28,21 @@ class MapPart
 {
 
     public:
+        
+        Rect xy;
 
         // Attributes
         DijkstraMap d_map;
-
         
+        // The list of other parts of the map this one is connected to
+        // (possibly useful later for pathfinding etc.)
+        // TODO to implement
+        //self.connected_parts = list()
+
         // Constructor
         MapPart(Rect xy, std::vector<Direction> available_directions);
+
+        MapPart(Rect xy);
 
         bool has_tile(int x, int y);
 
@@ -78,9 +86,13 @@ class Door : public MapPart
 
 class Room : public MapPart
 {
+
     public:
 
+        Rect xy;
+
         Room(Rect xy, std::vector<Direction> available_directions);
+        Room(Rect xy);
 
         // TODO check if needed
         //void dig(GameMap game_map);

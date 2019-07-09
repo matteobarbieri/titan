@@ -188,7 +188,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 
                     // TODO
                     // Should we use the same method?
-                    if (outcome != NULL)
+                    if (outcome != 0)
                     {
                         // TODO also need message log parameter?
                         game_state->update(outcome, fov_recompute, redraw_terrain);
@@ -200,12 +200,9 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
                 }
             }
 
-            /*
-            # Go back to player's turn state
-            game_state.game_phase = GamePhase.PLAYERS_TURN
-            # redraw_entities = True
-            redraw_terrain = True
-            */
+            // Go back to player's turn state
+            game_state->game_phase = PLAYERS_TURN;
+            redraw_entities = true;
 
             current_turn++;
 
@@ -231,6 +228,12 @@ from actions import ShowMenuException
 
 */
 
+/**
+ * Initialize a new game
+ *
+ */
+void init_new_game(
+    GameMap ** game_map, Entity ** player, GameState ** game_state);
 
 int main(int argc, char *argv[])
 {
@@ -256,7 +259,14 @@ int main(int argc, char *argv[])
 
     bool exit_game = false;
     bool play_game = false;
+    bool load_game = false;
 
+    Entity * player;
+    GameMap * game_map;
+
+    // TODO enable message log again
+    //message_log = None
+    
     while (!TCODConsole::root->isWindowClosed())
     {
 
@@ -272,7 +282,7 @@ int main(int argc, char *argv[])
                 play_game = true;
                 break;
             case 'b':
-                play_game = true;
+                load_game = true;
                 break;
             case 'c':
                 exit_game = true;
@@ -286,9 +296,25 @@ int main(int argc, char *argv[])
             break;
         }
 
+        // Continue last game
+        if (load_game)
+        {
+            // TODO implement
+            break;
+        }
+
         if (play_game)
         {
 
+            // Start a new game
+            //player, game_map, message_log, game_phase = get_game_variables(
+                //constants)
+            //game_phase = GamePhase.PLAYERS_TURN
+
+            //game_map.export_txt('maps_txt/lastmap.txt')
+
+            //show_main_menu = False
+            
             //play_game(player, game_map,
                 //game_state, message_log,
                 //terrain_layer, panel, entity_frame, inventory_frame,
@@ -304,9 +330,6 @@ int main(int argc, char *argv[])
         main_menu(&main_menu_background_image);
     }
 
-    //player = None
-    //game_map = None
-    //message_log = None
 
     //show_main_menu = True
     //show_load_error_message = False
@@ -337,14 +360,7 @@ int main(int argc, char *argv[])
                 //# TODO wut?
                 //show_load_error_message = False
             //elif new_game:
-                //# Start a new game
-                //player, game_map, message_log, game_phase = get_game_variables(
-                    //constants)
-                //game_phase = GamePhase.PLAYERS_TURN
-
-                //game_map.export_txt('maps_txt/lastmap.txt')
-
-                //show_main_menu = False
+            // XXX removed code
             //elif load_saved_game:
                 //# Load a previously saved game
                 //try:
@@ -387,11 +403,5 @@ def main():
     # Initialize random number generator
     print("Seed was:", args.seed)
     random.seed(args.seed)
-
-    ######################
-    ##### UNTIL HERE #####
-    ######################
-
-
 
 */

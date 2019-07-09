@@ -4,5 +4,6 @@
 g++ \
     src/*.cpp \
     src/components/*.cpp \
+    src/map/generators/*.cpp \
     -o titan \
     -Isrc -L. -ltcod -g -Wl,-rpath=.

@@ -3,11 +3,7 @@
 
 #include "libtcod.hpp"
 
-#include "GameMap.hpp"
-#include "Entity.hpp"
-
-
-/** An action performed by a player 
+/** The outcome of an action performed by a player 
  */
 
 class Outcome

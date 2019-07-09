@@ -32,13 +32,15 @@
 #define FOV_LIGHT_WALLS true
 #define FOV_RADIUS 10
 
+// TODO should this be here?
+// Size of the playing map
+// Must be greater or equal than screen in order to avoid the "pacman effect"
+#define MAP_WIDTH 110
+#define MAP_HEIGHT 100
+
 /*
 
 
-# Size of the playing map
-# Must be greater or equal than screen in order to avoid the "pacman effect"
-map_width = 110
-map_height = 100
 
 # Parameters for rooms generation
 room_max_size = 10

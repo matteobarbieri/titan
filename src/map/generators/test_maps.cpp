@@ -1,10 +1,19 @@
-
-#include "GameMap.hpp"
+// TODO check if file stays in place
+#include "../../GameMap.hpp"
 
 /*
 def generate_dungeon_level(width, height, min_room_length, max_room_length):
     # TODO add parameters (and use them!)
 
+*/
+
+//GameMap generate_dungeon_level(width, height, min_room_length, max_room_length)
+GameMap * generate_room(int width, int height)
+{
+
+    GameMap * level = new GameMap(width, height);
+
+    /*
     #############################
     ######### FIN QUI ###########
     #############################
@@ -37,18 +46,8 @@ def generate_dungeon_level(width, height, min_room_length, max_room_length):
 
     level.entities.append(up_stairs)
 
-    return level
-*/
 
-//GameMap generate_dungeon_level(width, height, min_room_length, max_room_length)
-GameMap generate_dungeon_level(int width, int height)
-{
-
-    GameMap level(width, height);
-
-    // Coordinates of map center
-    int xc = width/2;
-    int yc = height/2;
+    */
 
     return level;
 }
