@@ -13,16 +13,20 @@ GameMap * generate_room(int width, int height)
 
     GameMap * level = new GameMap(width, height);
 
+    int xc = width/2;
+    int yc = height/2;
+
+    // Collect coordinates in a variable
+    Rect xy(xc-10, yc-6, xc+10, yc+6);
+
+    // Add room to level
+    Room * entry_room = new Room(xy, Direction::FourD());
+    level->add_part(entry_room);
+
     /*
     #############################
     ######### FIN QUI ###########
     #############################
-
-    # Collect coordinates in a variable
-    xy = [xc-10, yc-6, xc+10, yc+6]
-
-    entry_room = Room(xy, list(Direction))
-    level.add_part(entry_room)
 
     # Add an external layer of walls to rooms
     logging.getLogger().info("Adding walls")

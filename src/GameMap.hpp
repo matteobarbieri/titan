@@ -12,6 +12,13 @@ class Rect
 {
     public:
         int x1, y1, x2, y2;
+
+        /**
+         * Standard constructor which stores 4 integer values (two for each
+         * coordinate pair).
+         *
+         */
+        Rect(int x1, int y1, int x2, int y2);
 };
 
 // TODO consider moving this to a separate file
@@ -22,6 +29,24 @@ class DijkstraMap
 // TODO consider moving this to a separate file
 class Direction
 {
+    public:
+
+        const int dx;
+        const int dy;
+
+        Direction(int dx, int dy);
+
+        // Four cardinal directions
+        static Direction * NN;
+        static Direction * SS;
+        static Direction * EE;
+        static Direction * WW;
+
+        /**
+         * Return the list of four cardinal directions: North, South, West and
+         * East
+         */
+        static std::vector<Direction *> FourD();
 };
 
 class MapPart
@@ -29,9 +54,10 @@ class MapPart
 
     public:
         
-        Rect xy;
-
         // Attributes
+        Rect xy;
+        std::vector<Direction *> available_directions;
+
         DijkstraMap d_map;
         
         // The list of other parts of the map this one is connected to
@@ -40,7 +66,7 @@ class MapPart
         //self.connected_parts = list()
 
         // Constructor
-        MapPart(Rect xy, std::vector<Direction> available_directions);
+        MapPart(Rect xy, std::vector<Direction *> available_directions);
 
         MapPart(Rect xy);
 
@@ -89,9 +115,10 @@ class Room : public MapPart
 
     public:
 
-        Rect xy;
+        // Properties
 
-        Room(Rect xy, std::vector<Direction> available_directions);
+        // Methods
+        Room(Rect xy, std::vector<Direction *> available_directions);
         Room(Rect xy);
 
         // TODO check if needed
@@ -150,6 +177,9 @@ class GameMap
 
         int top_x;
         int top_y;
+
+        // List of map parts
+        std::vector<Room *> rooms;
         
         // Methods
         
@@ -162,7 +192,7 @@ class GameMap
 
         void place_player(Entity * player);
 
-        void dig(MapPart part, int pad=0);
+        void dig(MapPart * part, int pad=0);
 
         void create_dijkstra_map(MapPart * part);
 

@@ -30,10 +30,56 @@
         self.entities = list()
 */
 
+
+Rect::Rect(int x1, int y1, int x2, int y2)
+{
+
+    this->x1 = x1;
+    this->y1 = y1;
+    this->x2 = x2;
+    this->y2 = y2;
+
+}
+
+Direction::Direction(int dx, int dy) : dx(dx), dy(dy)
+{
+}
+
+// Initialize static members
+Direction * Direction::NN = new Direction(0, 1);
+Direction * Direction::SS = new Direction(0, -1);
+Direction * Direction::EE = new Direction(1, 0);
+Direction * Direction::WW = new Direction(-1, 0);
+
+std::vector<Direction *> Direction::FourD()
+{
+    std::vector<Direction *> directions;
+    directions.push_back(Direction::NN);
+    directions.push_back(Direction::SS);
+    directions.push_back(Direction::EE);
+    directions.push_back(Direction::WW);
+    
+    return directions;
+}
+
+// MapPart constructors
+MapPart::MapPart(Rect xy) : xy(xy) {}
+MapPart::MapPart(Rect xy, std::vector<Direction *> available_directions) : 
+    xy(xy), available_directions(available_directions)
+{
+}
+
+// Room constructors
+Room::Room(Rect xy) : MapPart(xy) {}
+Room::Room(Rect xy, std::vector<Direction *> available_directions) : 
+    MapPart(xy, available_directions) {}
+
 GameMap::GameMap(int w, int h)
 {
     width = w;
     height = h;
+
+    // TODO implement
 }
 
 std::vector<Entity *> GameMap::entities()
@@ -42,14 +88,25 @@ std::vector<Entity *> GameMap::entities()
     return _entities;
 }
 
-MapPart::MapPart(Rect xy) : xy(xy)
+void GameMap::add_part(Room * room)
 {
-
+    rooms.push_back(room);
+    dig(room);
 }
 
-Room::Room(Rect xy) : MapPart(xy)
+void GameMap::dig(MapPart * part, int padding)
 {
+    // TODO implement
+    
 }
+
+/*
+    def add_room(self, room):
+        """
+        """
+
+        self.rooms.append(room)
+*/
 
 /*
 
@@ -526,12 +583,6 @@ class GameMap:
         """
 
         self.doors.append(door)
-
-    def add_room(self, room):
-        """
-        """
-
-        self.rooms.append(room)
 
     def can_place(self, part):
         """
