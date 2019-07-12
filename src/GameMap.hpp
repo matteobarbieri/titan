@@ -4,7 +4,8 @@
 #include "libtcod.hpp"
 
 // Forward declaration
-class Entity;
+//class Entity;
+#include "Entity.hpp"
 
 #include <vector>
 
@@ -178,6 +179,8 @@ class GameMap
         int top_x;
         int top_y;
 
+        int dungeon_level;
+
         // List of map parts
         std::vector<Room *> rooms;
         
@@ -200,6 +203,8 @@ class GameMap
         void add_part(Junction *);
         void add_part(Room *);
         void add_part(Door *);
+
+        void add_walls();
 
         bool can_place(MapPart part);
 

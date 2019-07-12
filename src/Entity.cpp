@@ -1,89 +1,65 @@
-#ifndef R20177_ENTITY
-#define R20177_ENTITY
-
 #include <string>
-
-#include "Constants.h"
-
-#include "RenderOrder.hpp"
 
 #include "libtcod.hpp"
 
-// Forward declarations
-class Fighter;
-class MonsterAi;
-class Stairs;
-class Item;
-class Level;
-class Equipment;
-class Equippable;
-class Inventory;
+#include "Entity.hpp"
+#include "RenderOrder.hpp"
 
-/** A container for all consoles that are used in the game, except for the root
- * one, which is accessed directly via TCODConsole::root.
- */
-class Entity
+Entity::Entity(int x, int y, int symbol,
+    TCODColor color, std::string name, RenderOrder render_order,
+    bool blocks, bool blocks_sight) :
+    x(x), y(y), render_order(render_order), name(name),
+    symbol(symbol), _color(color),
+    _blocks(blocks), _blocks_sight(blocks_sight)
 {
-
-    private:
-
-        // The color of the entity's symbol
-        TCODColor _color;
-
-        // Is it a blocking entity?
-        bool _blocks;
-
-        // Does it blocks sight?
-        bool _blocks_sight;
-
-        // In which order the entity is rendered
-        RenderOrder render_order;
-
-    public:
-
-        // Entity coordinates in the game map
-        int x;
-        int y;
-
-        // The entity's name
-        std::string name;
-
-        // The character representing the entity on the map
-        int symbol;
-
-        // Methods
-        
-        // Constructor
-        Entity(int x, int y, int symbol,
-               TCODColor color, std::string name,
-               RenderOrder render_order=CORPSE,
-               bool blocks=false, bool blocks_sight=false);
-
-        ~Entity();
-
-        // Components
-        Fighter * fighter;
-        MonsterAi * ai;
-        Stairs * stairs;
-        Item * item;
-        Level * level;
-        Equipment * equipment;
-        Equippable * equippable;
-        Inventory * inventory;
-
-};
-
-#endif
+}
 
 /*
+
 import math
 
 from render_functions import RenderOrder
+
 
 class Entity:
     """
     A generic object to represent players, enemies, items, etc.
     """
+
+    # TODO change components to kwargs
+    def __init__(self, x, y, char, color, name, blocks=False,
+                 block_sight=False, render_order=RenderOrder.CORPSE,
+                 components=dict()):
+
+        # The entity's current position
+        self.x = x
+        self.y = y
+
+        # The ASCII character representing it
+        self.char = char
+
+        # Is it currently equipped?
+        self.equipped = False
+
+        # Its color
+        self._color = color
+
+        # Its name
+        self.name = name
+
+        # Is it a blocking entity?
+        self.blocks = blocks
+
+        # Does it block LoS?
+        self.block_sight = block_sight
+
+        # Render order
+        self.render_order = render_order
+
+        self.components = dict()
+        # Add components
+        for k, v in components.items():
+            self.add_component(k, v)
 
     def __str__(self):
         return self.name

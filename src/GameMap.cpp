@@ -97,16 +97,15 @@ void GameMap::add_part(Room * room)
 void GameMap::dig(MapPart * part, int padding)
 {
     // TODO implement
-    
+    float a = 1/0;
 }
 
-/*
-    def add_room(self, room):
-        """
-        """
 
-        self.rooms.append(room)
-*/
+void GameMap::add_walls()
+{
+    // TODO implement
+    float a = 1/0;
+}
 
 /*
 

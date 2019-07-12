@@ -1,11 +1,24 @@
 // TODO check if file stays in place
 #include "../../GameMap.hpp"
 
+// Components
+#include "../../components/Stairs.hpp"
+
+#include <iostream>
+
+#include "../../RenderOrder.hpp"
+
 /*
 def generate_dungeon_level(width, height, min_room_length, max_room_length):
     # TODO add parameters (and use them!)
 
 */
+
+// TODO implement
+void add_monsters(GameMap * level);
+
+// TODO implement
+void add_items(GameMap * level);
 
 //GameMap generate_dungeon_level(width, height, min_room_length, max_room_length)
 GameMap * generate_room(int width, int height)
@@ -23,37 +36,48 @@ GameMap * generate_room(int width, int height)
     Room * entry_room = new Room(xy, Direction::FourD());
     level->add_part(entry_room);
 
+    // Add an external layer of walls to rooms
+    std::cout << "Adding walls" << std::endl;
+    level->add_walls();
+
+    // Populate Dungeon with entities
+    // Monsters
+    add_monsters(level);
+
+    // Add some items in the room
+    add_items(level);
+
+    // Create and add entry stairs '<'
+
+    Stairs * up_stairs_component = new Stairs(level->dungeon_level - 1);
+
+    Entity * up_stairs = new Entity(
+        xc, yc, '<',
+        TCODColor::white, "Stairs up", STAIRS);
+
+    //level.entities.append(up_stairs)
+
+
     /*
     #############################
     ######### FIN QUI ###########
     #############################
 
-    # Add an external layer of walls to rooms
-    logging.getLogger().info("Adding walls")
-    add_walls(level)
-
-    # Populate Dungeon with entities
-    # Monsters
-    add_monsters(level)
-
-    # Add some items in the room
-    add_items(level)
-
-    # Create and add entry stairs '<'
-    entry_x, entry_y = entry_room.center
-
-    up_stairs_component = Stairs(level.dungeon_level - 1)
-    up_stairs = Entity(
-        entry_x, entry_y, '<',
-        libtcod.white, 'Stairs up', render_order=RenderOrder.STAIRS,
-        components=dict(stairs=up_stairs_component))
-
-    level.entities.append(up_stairs)
-
-
     */
 
     return level;
+}
+
+// TODO implement
+void add_monsters(GameMap * level)
+{
+    float a = 1/0;
+}
+
+// TODO implement
+void add_items(GameMap * level)
+{
+    float a = 1/0;
 }
 
 /*
