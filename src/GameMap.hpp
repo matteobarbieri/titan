@@ -206,6 +206,10 @@ class GameMap
 
         void add_walls();
 
+        // Add or remove an entity from the level
+        void add_entity(Entity *);
+        void remove_entity(Entity *);
+
         bool can_place(MapPart part);
 
         void initialize_tiles();

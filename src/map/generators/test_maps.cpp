@@ -51,11 +51,15 @@ GameMap * generate_room(int width, int height)
 
     Stairs * up_stairs_component = new Stairs(level->dungeon_level - 1);
 
+    // Create entity object
     Entity * up_stairs = new Entity(
         xc, yc, '<',
         TCODColor::white, "Stairs up", STAIRS);
 
-    //level.entities.append(up_stairs)
+    // Add stairs component to entity
+    up_stairs->stairs = up_stairs_component;
+
+    level->add_entity(up_stairs);
 
 
     /*

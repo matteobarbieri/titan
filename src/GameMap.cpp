@@ -6,6 +6,7 @@
 #include "Entity.hpp"
 
 #include <vector>
+#include <algorithm>
 
 /*
     def __init__(self, width, height, dungeon_level=1):
@@ -105,6 +106,24 @@ void GameMap::add_walls()
 {
     // TODO implement
     float a = 1/0;
+}
+
+void GameMap::add_entity(Entity * entity)
+{
+    _entities.push_back(entity);
+}
+
+void GameMap::remove_entity(Entity * entity)
+{
+
+    // Solution taken from
+    // https://stackoverflow.com/questions/3385229/c-erase-vector-element-by-value-rather-than-by-position
+
+    _entities.erase(
+        std::remove(_entities.begin(), _entities.end(), 8),
+        _entities.end());
+
+    _entities.push_back(entity);
 }
 
 /*
