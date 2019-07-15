@@ -3,7 +3,7 @@
 
 #include "Entity.hpp"
 
-#include "GameMap.hpp"
+#include "map/GameMap.hpp"
 #include "GameState.hpp"
 
 Entity * check_if_still_in_sight(TCODMap * fov_map, Entity * entity)
@@ -22,6 +22,7 @@ void render_all(
 {
 
     // TODO to implement
+    float aa = 1/0;
 }
 
 

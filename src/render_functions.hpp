@@ -1,8 +1,10 @@
 #ifndef R20177_RENDER_FUNCTIONS
 #define R20177_RENDER_FUNCTIONS
 
+// Consider replacing with forward declarations?
+
 #include "Entity.hpp"
-#include "GameMap.hpp"
+#include "map/GameMap.hpp"
 #include "GameState.hpp"
 
 #include "libtcod.hpp"

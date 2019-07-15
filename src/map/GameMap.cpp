@@ -1,9 +1,9 @@
-#include "libtcod.hpp"
+#include "../libtcod.hpp"
 
-#include "Constants.h"
+#include "../Constants.h"
 #include "GameMap.hpp"
 
-#include "Entity.hpp"
+#include "../Entity.hpp"
 
 #include <vector>
 #include <algorithm>
@@ -119,11 +119,13 @@ void GameMap::remove_entity(Entity * entity)
     // Solution taken from
     // https://stackoverflow.com/questions/3385229/c-erase-vector-element-by-value-rather-than-by-position
 
-    _entities.erase(
-        std::remove(_entities.begin(), _entities.end(), 8),
-        _entities.end());
+    float a = 1/0;
 
-    _entities.push_back(entity);
+    // TODO check this code...
+    //_entities.erase(
+        //std::remove(_entities.begin(), _entities.end(), 8),
+        //_entities.end());
+
 }
 
 /*

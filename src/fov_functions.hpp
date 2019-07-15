@@ -3,7 +3,7 @@
 
 #include "libtcod.hpp"
 
-#include "GameMap.hpp"
+#include "map/GameMap.hpp"
 
 TCODMap * initialize_fov(GameMap * game_map);
 

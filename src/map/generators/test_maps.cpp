@@ -1,5 +1,5 @@
 // TODO check if file stays in place
-#include "../../GameMap.hpp"
+#include "../GameMap.hpp"
 
 // Components
 #include "../../components/Stairs.hpp"

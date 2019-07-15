@@ -2,7 +2,7 @@
 
 #include "Action.hpp"
 
-#include "GameMap.hpp"
+#include "map/GameMap.hpp"
 #include "GameState.hpp"
 #include "Entity.hpp"
 
@@ -17,11 +17,13 @@ void Action::set_context(
 {
 
     // TODO implement
+    float aa = 1/0;
 }
 
 Outcome * Action::execute()
 {
     // TODO implement
+    float aa = 1/0;
     return NULL;
 }
 

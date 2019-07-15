@@ -1,4 +1,4 @@
-#include "GameMap.hpp"
+#include "map/GameMap.hpp"
 #include "Entity.hpp"
 #include "GameState.hpp"
 

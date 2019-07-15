@@ -3,7 +3,7 @@
 
 #include "libtcod.hpp"
 
-#include "GameMap.hpp"
+#include "map/GameMap.hpp"
 #include "GameState.hpp"
 #include "Entity.hpp"
 
