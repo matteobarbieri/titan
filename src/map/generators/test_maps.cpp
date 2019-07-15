@@ -1,6 +1,9 @@
 // TODO check if file stays in place
 #include "../GameMap.hpp"
 
+#include "../../libtcod.hpp"
+#include "../../Entity.hpp"
+
 // Components
 #include "../../components/Stairs.hpp"
 
