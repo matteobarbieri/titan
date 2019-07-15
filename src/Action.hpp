@@ -3,12 +3,11 @@
 
 #include "libtcod.hpp"
 
-#include "map/GameMap.hpp"
-#include "GameState.hpp"
-#include "Entity.hpp"
-
 // Forward declaration
 class Outcome;
+class GameMap;
+class GameState;
+class Entity;
 
 /** An action performed by a player 
  */

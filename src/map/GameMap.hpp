@@ -1,11 +1,11 @@
 #ifndef R20177_GAME_MAP
 #define R20177_GAME_MAP
 
-#include "libtcod.hpp"
+//#include "libtcod.hpp"
+//#include "Entity.hpp"
 
 // Forward declaration
-//class Entity;
-#include "Entity.hpp"
+class Entity;
 
 #include <vector>
 
