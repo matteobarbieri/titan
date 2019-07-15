@@ -1,3 +1,19 @@
+#include "Tile.hpp"
+
+#include "../libtcod.hpp"
+
+/////////////////////////////////
+///////////// TILE //////////////
+/////////////////////////////////
+
+Tile::Tile(bool blocked, bool block_sight) : _blocked(blocked), _block_sight(block_sight)
+{
+}
+
+void Tile::render_at(TCODConsole * con, int x, int y, bool visible)
+{
+}
+
 /*
 import random
 
