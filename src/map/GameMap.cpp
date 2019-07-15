@@ -2,11 +2,71 @@
 
 #include "../Constants.h"
 #include "GameMap.hpp"
+#include "Tile.hpp"
 
 #include "../Entity.hpp"
 
 #include <vector>
 #include <algorithm>
+
+/////////////////////////////////
+///////////// RECT //////////////
+/////////////////////////////////
+
+Rect::Rect(int x1, int y1, int x2, int y2)
+{
+
+    this->x1 = x1;
+    this->y1 = y1;
+    this->x2 = x2;
+    this->y2 = y2;
+
+}
+
+/////////////////////////////////
+/////////// DIRECTION ///////////
+/////////////////////////////////
+
+Direction::Direction(int dx, int dy) : dx(dx), dy(dy)
+{
+}
+
+// Initialize static members
+Direction * Direction::NN = new Direction(0, 1);
+Direction * Direction::SS = new Direction(0, -1);
+Direction * Direction::EE = new Direction(1, 0);
+Direction * Direction::WW = new Direction(-1, 0);
+
+std::vector<Direction *> Direction::FourD()
+{
+    std::vector<Direction *> directions;
+    directions.push_back(Direction::NN);
+    directions.push_back(Direction::SS);
+    directions.push_back(Direction::EE);
+    directions.push_back(Direction::WW);
+    
+    return directions;
+}
+
+/////////////////////////////////
+/////////// MAP PART ////////////
+/////////////////////////////////
+
+// MapPart constructors
+MapPart::MapPart(Rect xy) : xy(xy) {}
+MapPart::MapPart(Rect xy, std::vector<Direction *> available_directions) : 
+    xy(xy), available_directions(available_directions)
+{
+}
+
+/////////////////////////////////
+///////////// ROOM //////////////
+/////////////////////////////////
+
+// Room constructors
+Room::Room(Rect xy) : MapPart(xy) {}
+Room::Room(Rect xy, std::vector<Direction *> available_directions) : 
+    MapPart(xy, available_directions) {}
 
 /*
     def __init__(self, width, height, dungeon_level=1):
@@ -32,55 +92,46 @@
 */
 
 
-Rect::Rect(int x1, int y1, int x2, int y2)
-{
+/////////////////////////////////
+/////////// GAME MAP ////////////
+/////////////////////////////////
 
-    this->x1 = x1;
-    this->y1 = y1;
-    this->x2 = x2;
-    this->y2 = y2;
-
-}
-
-Direction::Direction(int dx, int dy) : dx(dx), dy(dy)
-{
-}
-
-// Initialize static members
-Direction * Direction::NN = new Direction(0, 1);
-Direction * Direction::SS = new Direction(0, -1);
-Direction * Direction::EE = new Direction(1, 0);
-Direction * Direction::WW = new Direction(-1, 0);
-
-std::vector<Direction *> Direction::FourD()
-{
-    std::vector<Direction *> directions;
-    directions.push_back(Direction::NN);
-    directions.push_back(Direction::SS);
-    directions.push_back(Direction::EE);
-    directions.push_back(Direction::WW);
-    
-    return directions;
-}
-
-// MapPart constructors
-MapPart::MapPart(Rect xy) : xy(xy) {}
-MapPart::MapPart(Rect xy, std::vector<Direction *> available_directions) : 
-    xy(xy), available_directions(available_directions)
-{
-}
-
-// Room constructors
-Room::Room(Rect xy) : MapPart(xy) {}
-Room::Room(Rect xy, std::vector<Direction *> available_directions) : 
-    MapPart(xy, available_directions) {}
 
 GameMap::GameMap(int w, int h)
 {
     width = w;
     height = h;
 
+    initialize_tiles();
+
     // TODO implement
+}
+
+
+/*
+def initialize_tiles(self):
+        tiles = [
+                [
+                    Tile(True) for y in range(self.height)
+                ] for x in range(self.width)
+        ]
+
+        return tiles
+*/
+
+void GameMap::initialize_tiles()
+{
+    // Initialize array of Tile * of size width x height
+    tiles = (Tile **)malloc(width * height * sizeof(Tile *));
+
+    for (int x=0; x<height; x++)
+    {
+        for (int y=0; y<width; y++)
+        {
+            // Fill tiles with fake base tiles, allocating memory
+            tiles[x*width + y] = new Tile(true, true);
+        }
+    }
 }
 
 std::vector<Entity *> GameMap::entities()
@@ -638,15 +689,7 @@ class GameMap:
 
         return True
 
-    def initialize_tiles(self):
-        tiles = [
-                [
-                    Tile(True) for y in range(self.height)
-                ] for x in range(self.width)
-        ]
-
-        return tiles
-
+    
     def export_shelf(self, destination):
         with shelve.open(destination) as db:
             db['level'] = self

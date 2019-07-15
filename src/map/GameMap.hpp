@@ -6,6 +6,7 @@
 
 // Forward declaration
 class Entity;
+class Tile;
 
 #include <vector>
 
@@ -171,7 +172,9 @@ class GameMap
 
     public:
 
-        // Properties
+        /////////////////////////////////
+        ////////// ATTRIBUTES ///////////
+        /////////////////////////////////
         
         int width;
         int height;
@@ -181,10 +184,15 @@ class GameMap
 
         int dungeon_level;
 
-        // List of map parts
+        // Lists of map parts
         std::vector<Room *> rooms;
         
-        // Methods
+        // The tiles
+        Tile ** tiles;
+
+        /////////////////////////////////
+        //////////// METHODS ////////////
+        /////////////////////////////////
         
         GameMap(int w, int h);
         ~GameMap();
