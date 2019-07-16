@@ -1,3 +1,13 @@
+#include "Equipment.hpp"
+
+Equipment::Equipment()
+{
+}
+
+Equipment::~Equipment()
+{
+}
+
 /*
 from game_messages import Message
 

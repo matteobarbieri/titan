@@ -1,3 +1,21 @@
+#ifndef ROGUE_20177_EQUIPMENT
+#define ROGUE_20177_EQUIPMENT 
+
+class Equipment
+{
+
+    private:
+
+
+    public:
+        Equipment();
+        ~Equipment();
+};
+
+
+#endif /* ifndef ROGUE_20177_EQUIPMENT */
+
+/*
 from game_messages import Message
 
 import tcod as libtcod
@@ -179,3 +197,4 @@ class Equipment:
         # print(weapons)
 
         return weapons
+*/

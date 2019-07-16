@@ -1,3 +1,21 @@
+#ifndef ROGUE_20177_LEVEL
+#define ROGUE_20177_LEVEL
+
+class Level
+{
+
+    private:
+
+
+    public:
+        Level();
+        ~Level();
+};
+
+
+#endif /* ifndef ROGUE_20177_LEVEL */
+
+/*
 class Level:
     def __init__(self, current_level=1, current_xp=0, level_up_base=200, level_up_factor=150):
         self.current_level = current_level
@@ -19,3 +37,4 @@ class Level:
             return True
         else:
             return False
+*/

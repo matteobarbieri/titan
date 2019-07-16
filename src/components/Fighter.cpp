@@ -1,22 +1,6 @@
+#include "Fighter.hpp"
+
 /*
-import libtcodpy as libtcod
-
-from game_messages import Message
-
-from render_functions import RenderOrder
-
-from .item import ItemType, ItemSubtype
-
-
-class NoMeleeWeaponsEquippedException(Exception):
-    pass
-
-
-class NoRangedWeaponsEquippedException(Exception):
-    pass
-
-
-class Fighter:
     def __init__(self, hp, defense, power, xp=0,
                  STR=0, DEX=0, INT=0):
 
@@ -36,6 +20,32 @@ class Fighter:
             'base_dex': DEX,
             'base_int': INT,
         }
+*/
+
+Fighter::Fighter(int max_hp) : _max_hp(max_hp)
+{
+}
+
+
+/*
+import libtcodpy as libtcod
+
+from game_messages import Message
+
+from render_functions import RenderOrder
+
+from .item import ItemType, ItemSubtype
+
+
+class NoMeleeWeaponsEquippedException(Exception):
+    pass
+
+
+class NoRangedWeaponsEquippedException(Exception):
+    pass
+
+
+class Fighter:
 
     def get_adjusted_stat(self, stat_name):
         base_stat = self.stats['base_{}'.format(stat_name)]

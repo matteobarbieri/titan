@@ -1,14 +1,6 @@
+#include "Inventory.hpp"
+
 /*
-import tcod as libtcod
-
-from game_messages import Message
-
-
-class InventoryFullException(Exception):
-    pass
-
-
-class Inventory:
 
     def __init__(self, capacity):
         self.capacity = capacity
@@ -22,6 +14,25 @@ class Inventory:
         # between equipped and in inventory
         self.available_letters = [
             chr(i) for i in range(ord('a'), ord('z') + 1)]
+
+*/
+
+Inventory::Inventory(int capacity) : _capacity(capacity)
+{
+}
+
+/*
+import tcod as libtcod
+
+from game_messages import Message
+
+
+class InventoryFullException(Exception):
+    pass
+
+
+class Inventory:
+
 
     def unequip(self, item):
 

@@ -1,5 +1,17 @@
+#include "libtcod.hpp"
+
 #include "map/GameMap.hpp"
+
 #include "Entity.hpp"
+
+#include "RenderOrder.hpp"
+
+// Components
+#include "components/Fighter.hpp"
+#include "components/Inventory.hpp"
+#include "components/Level.hpp"
+#include "components/Equipment.hpp"
+
 #include "GameState.hpp"
 
 /*
@@ -44,29 +56,29 @@ void init_new_game(
     GameMap ** game_map, Entity ** player, GameState ** game_state)
 {
 
-    /*
-      
-    # TODO use parameters
-    # game_map = generate_dungeon_level(
-        # constants['map_width'], constants['map_height'], 10, 20)
-
-    */
-
     // Generate a small room
     * game_map = generate_room(
         MAP_WIDTH, MAP_HEIGHT);
 
     /*
 
-    # Fighter component for player
-    fighter_component = Fighter(hp=100, defense=1, power=2)
 
-    # Inventory component for the player
-    inventory_component = Inventory(26)
+    */
 
-    # The level component for leveling up
-    level_component = Level()
+    // Fighter component for player
+    // fighter_component = Fighter(hp=100, defense=1, power=2)
+    Fighter * fighter_component = new Fighter(100);
 
+    // Iventory component for player
+    // inventory_component = Inventory(26)
+    Inventory * inventory_component = new Inventory(26);
+
+    // The level component for leveling up
+    // level_component = Level()
+    Level * level_component = new Level();
+
+
+    /*
     # The equipment component, for equippable items
     equipment_component = Equipment(
         available_slots=[
@@ -78,8 +90,12 @@ void init_new_game(
             EquipmentSlots.LEGS,
             EquipmentSlots.FEET,
             ])
+    */
 
-    # Create the Player object
+    // TODO use a proper equipment component
+    Equipment * equipment_component = new Equipment();
+
+    /*
     player = Entity(
         0, 0, # Coordinates - useless here
         '@', libtcod.white, 'Player', # Appearance
@@ -92,7 +108,22 @@ void init_new_game(
             equipment=equipment_component
         )
     )
+    */
 
+
+    // Create the Player object
+    * player = new Entity(0, 0, '@',
+               TCODColor::white, "Player",
+               ACTOR,
+               true, false);
+
+    // Add components
+    (* player)->fighter = fighter_component; 
+    (* player)->inventory = inventory_component; 
+    (* player)->level = level_component; 
+    (* player)->equipment = equipment_component; 
+
+    /*
     # Create the dagger from the prefab
     dagger = make_dagger()
 
@@ -104,6 +135,9 @@ void init_new_game(
 
     # Add dagger to player's inventory
     player.inventory.pickup(dagger, game_map)
+    */
+
+    /*
 
     # Place player in the map
     game_map.place_player(player)

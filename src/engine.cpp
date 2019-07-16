@@ -146,7 +146,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
             ///////////// RESOLVE OUTCOME //////////////
             ////////////////////////////////////////////
             
-            if (outcome != NULL)
+            if (outcome != 0)
             {
                 // TODO also need message log parameter?
                 game_state->update(outcome, fov_recompute, redraw_terrain);
@@ -163,11 +163,8 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
             // Each entity takes a turn
             for (int i=0; i<(int)(game_map->entities().size()); i++)
             {
-                if (game_map->entities()[i]->ai != NULL)
+                if (game_map->entities()[i]->ai != 0)
                 {
-                    /*
-
-                    */
 
                     // Pick an action for each entity
                     entity_action = game_map->entities()[i]->ai->pick_action(
@@ -253,6 +250,7 @@ int main(int argc, char *argv[])
 
     Entity * player;
     GameMap * game_map;
+    GameState * game_state;
 
     // TODO enable message log again
     //message_log = None
@@ -295,6 +293,9 @@ int main(int argc, char *argv[])
 
         if (play_game)
         {
+
+            init_new_game(
+                 &game_map,  &player,  &game_state);
 
             // Start a new game
             //player, game_map, message_log, game_phase = get_game_variables(

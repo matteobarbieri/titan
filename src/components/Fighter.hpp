@@ -3,12 +3,15 @@
 
 class Fighter
 {
-private:
-    
 
-public:
-    Fighter();
-    virtual ~Fighter();
+    private:
+
+        int _max_hp;
+        
+
+    public:
+        Fighter(int max_hp);
+        ~Fighter();
 };
 
 #endif /* ROGUE_2077_FIGHTER */

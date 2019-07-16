@@ -1,3 +1,22 @@
+#ifndef ROGUE_20177_INVENTORY
+#define ROGUE_20177_INVENTORY
+
+class Inventory
+{
+
+    private:
+
+        int _capacity;
+
+    public:
+        Inventory(int capacity);
+        ~Inventory();
+};
+
+
+#endif /* ifndef ROGUE_20177_INVENTORY */
+
+/*
 import tcod as libtcod
 
 from game_messages import Message
@@ -145,3 +164,5 @@ class Inventory:
 
         return results
         """
+
+*/
