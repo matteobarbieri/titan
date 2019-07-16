@@ -13,6 +13,7 @@
 #include "components/Equipment.hpp"
 
 #include "GameState.hpp"
+#include "GamePhase.hpp"
 
 /*
 import libtcodpy as libtcod
@@ -96,6 +97,7 @@ void init_new_game(
     Equipment * equipment_component = new Equipment();
 
     /*
+
     player = Entity(
         0, 0, # Coordinates - useless here
         '@', libtcod.white, 'Player', # Appearance
@@ -110,8 +112,8 @@ void init_new_game(
     )
     */
 
-
     // Create the Player object
+    // TODO complete this
     * player = new Entity(0, 0, '@',
                TCODColor::white, "Player",
                ACTOR,
@@ -124,6 +126,9 @@ void init_new_game(
     (* player)->equipment = equipment_component; 
 
     /*
+
+    // TODO activate this
+    
     # Create the dagger from the prefab
     dagger = make_dagger()
 
@@ -137,18 +142,23 @@ void init_new_game(
     player.inventory.pickup(dagger, game_map)
     */
 
+    // Place player in the map
+    (*game_map)->place_player(* player);
+
     /*
 
-    # Place player in the map
-    game_map.place_player(player)
-
+    // TODO activate this
     # Initialize message log
     message_log = MessageLog(
         constants['message_x'], constants['message_width'],
         constants['message_height'])
+    */
 
-    # Begin the game in player's turn
-    game_state = GamePhase.PLAYERS_TURN
+    // Begin the game in player's turn
+    * game_state = new GameState();
+    (* game_state)->game_phase = PLAYERS_TURN;
+
+    /*
 
     return player, game_map, message_log, game_state
 
