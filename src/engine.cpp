@@ -28,8 +28,12 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
     bool redraw_terrain = true;
     bool redraw_entities = true;
 
+    std::cout << "Checkpoint 1!" << std::endl;
+
     // Initialize fov map
     TCODMap * fov_map = initialize_fov(game_map);
+
+    std::cout << "Checkpoint 2!" << std::endl;
 
     // TODO needs initialization?
     TCOD_key_t key;
@@ -75,7 +79,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
         }
 
         // If the player move, check if targeted entity is still in sight
-        if (game_state->entity_targeted != NULL && redraw_terrain)
+        if (game_state->entity_targeted != 0 && redraw_terrain)
         {
 
             game_state->entity_targeted = check_if_still_in_sight(
@@ -95,11 +99,15 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 
         }
 
+        std::cout << "Checkpoint 6!" << std::endl;
+
         render_all(
             player, game_map, fov_map,
             fov_recompute, redraw_terrain,
             &mouse, game_state, current_turn,
             top_x, top_y);
+
+        std::cout << "Checkpoint 7!" << std::endl;
 
         // TODO find a better place
         game_map->top_x = top_x;
@@ -111,6 +119,8 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 
         TCODConsole::root->flush();
 
+
+        std::cout << "Checkpoint 7!" << std::endl;
 
         ////////////////////////////////////////////
         ////////////// PLAYER'S TURN ///////////////
@@ -125,6 +135,8 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
             ////////////////////////////////////////////
 
             action = handle_input(key, mouse, game_state);
+
+            std::cout << "Checkpoint 8!" << std::endl;
 
             // Add all objects required to perform any action
 
@@ -245,7 +257,7 @@ int main(int argc, char *argv[])
     TCOD_event_t ev;
 
     bool exit_game = false;
-    bool play_game = false;
+    bool play_game_ = false;
     bool load_game = false;
 
     Entity * player;
@@ -267,7 +279,7 @@ int main(int argc, char *argv[])
         switch(handle_main_menu(key))
         {
             case 'a':
-                play_game = true;
+                play_game_ = true;
                 break;
             case 'b':
                 load_game = true;
@@ -291,28 +303,28 @@ int main(int argc, char *argv[])
             break;
         }
 
-        if (play_game)
+        if (play_game_)
         {
-
-            init_new_game(
-                 &game_map,  &player,  &game_state);
 
             // Start a new game
             //player, game_map, message_log, game_phase = get_game_variables(
                 //constants)
             //game_phase = GamePhase.PLAYERS_TURN
+            //
+            
+            std::cout << "Checkpoint 1!" << std::endl;
+            
+            init_new_game(
+                 &game_map,  &player,  &game_state);
 
             //game_map.export_txt('maps_txt/lastmap.txt')
 
             //show_main_menu = False
-            
-            //play_game(player, game_map,
-                //game_state, message_log,
-                //terrain_layer, panel, entity_frame, inventory_frame,
-                //main_window, constants)
+            play_game(player, game_map, game_state);
+
                 
             // When returning to main menu, reset play_game variable to false
-            play_game = false;
+            //play_game = false;
         }
 
         TCODConsole::root->flush();

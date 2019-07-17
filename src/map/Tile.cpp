@@ -10,14 +10,28 @@ Tile::Tile(bool blocked, bool block_sight) : _blocked(blocked), _block_sight(blo
 {
 }
 
-void Tile::render_at(TCODConsole * con, int x, int y, bool visible)
-{
-}
-
 Tile::~Tile()
 {
 }
 
+bool Tile::blocked()
+{
+    return _blocked;
+}
+
+bool Tile::block_sight()
+{
+    return _block_sight;
+}
+
+void Tile::render_at(TCODConsole * con, int x, int y, bool visible)
+{
+}
+
+void Tile::explored(bool v)
+{
+    _explored = v;
+}
 /////////////////////////////////
 ///////////// FLOOR /////////////
 /////////////////////////////////
@@ -61,6 +75,44 @@ Floor::Floor(TCODColor bg_color, TCODColor fg_color, int fg_symbol) :
 
     _fg_symbol = fg_symbol;
 
+}
+
+
+
+/////////////////////////////////
+///////////// WALL //////////////
+/////////////////////////////////
+
+/*
+
+   def __init__(self, bg_color, fg_symbol='#', fg_color=libtcod.black):
+
+        # Declare it as blocked
+        super().__init__(True)
+
+        self.bg_color = bg_color
+        self.fg_color = fg_color
+        self._fg_symbol = fg_symbol
+
+*/
+
+Wall::Wall(TCODColor bg_color, TCODColor fg_color, int fg_symbol) : Tile(true, true)
+{
+
+    _bg_color = bg_color;
+    _fg_color = fg_color;
+
+    _fg_symbol = fg_symbol;
+}
+
+Wall * Wall::create_from_palette(std::vector<TCODColor> palette)
+{
+
+    // TODO choose a random bg color from palette
+    
+    Wall * wall = new Wall(palette[0]);
+
+    return wall;
 }
 
 /*
@@ -178,14 +230,6 @@ class Wall(Tile):
     A block of wall
     """
 
-    def __init__(self, bg_color, fg_symbol='#', fg_color=libtcod.black):
-
-        # Declare it as blocked
-        super().__init__(True)
-
-        self.bg_color = bg_color
-        self.fg_color = fg_color
-        self._fg_symbol = fg_symbol
 
     def create_from_palette(palette=GRAY_PALETTE):
         """

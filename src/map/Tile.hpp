@@ -49,6 +49,9 @@ class Tile
         bool blocked();
         bool block_sight();
         bool explored();
+        
+        // Set value
+        void explored(bool v);
 
         TCODColor bg_color();
         TCODColor fg_color();
@@ -82,12 +85,12 @@ class Wall : public Tile
 
         Wall(TCODColor bg_color,
               TCODColor fg_color = TCODColor::black,
-              int fg_symbol=250);
+              int fg_symbol='#');
 
         /**
          * Create a wall tile choosing the background color from a
          */
-        static Wall create_from_palette(std::vector<TCODColor> palette);
+        static Wall * create_from_palette(std::vector<TCODColor> palette);
 
 };
 

@@ -4,6 +4,10 @@ class GameMap;
 
 class Rect;
 
+/**
+ * Compute the array index
+ */
+int compute_tile_index(int x, int y, int width);
 
 /**
  * Dig a rectangle of empty space in the map.

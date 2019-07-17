@@ -3,8 +3,9 @@
 #include "../Constants.h"
 #include "GameMap.hpp"
 #include "Tile.hpp"
-
 #include "../Entity.hpp"
+
+#include "map_utils.hpp"
 
 #include <vector>
 #include <algorithm>
@@ -109,13 +110,6 @@ GameMap::GameMap(int w, int h)
 
 /*
 
-    def get_player_starting_coords(self):
-
-        # TODO!!!
-        for e in self.entities:
-            if e.char == '<':
-                return e.x, e.y
-
 
 */
 
@@ -162,12 +156,28 @@ void GameMap::initialize_tiles()
     // Initialize array of Tile * of size width x height
     tiles = (Tile **)malloc(width * height * sizeof(Tile *));
 
+    /*
+    GRAY_PALETTE = [
+    ]
+    */
+
+    std::vector<TCODColor> gray_palette = std::vector<TCODColor>();
+    gray_palette.push_back(TCODColor(242, 242, 242));
+    gray_palette.push_back(TCODColor(204, 204, 204));
+    gray_palette.push_back(TCODColor(165, 165, 165));
+    gray_palette.push_back(TCODColor(127, 127, 127));
+    gray_palette.push_back(TCODColor(89, 89, 89));
+
     for (int x=0; x<height; x++)
     {
         for (int y=0; y<width; y++)
         {
+
             // Fill tiles with fake base tiles, allocating memory
-            tiles[x*width + y] = new Tile(true, true);
+            //tiles[x*width + y] = new Tile(true, true);
+
+            // level.tiles[X][Y] = Wall.create_from_palette()
+            tiles[x*width + y] = Wall::create_from_palette(gray_palette);
         }
     }
 }
@@ -184,16 +194,45 @@ void GameMap::add_part(Room * room)
     dig(room);
 }
 
-void GameMap::dig(MapPart * part, int padding)
+void GameMap::dig(MapPart * map_part, int padding)
 {
-    // TODO implement
-    float a = 1/0;
+
+    Rect padded_rect(
+        map_part->xy.x1 + padding,
+        map_part->xy.y1 + padding,
+        map_part->xy.x2 - padding,
+        map_part->xy.y2 - padding);
+
+    dig_rect(this, padded_rect);
+
+    // TODO Do more than this
 }
+
+/*
+
+
+def add_walls(level):
+    """
+    Creates walls in all Tile-type tiles adjacent to something non-Tile
+    """
+
+    for X in range(level.width):
+        for Y in range(level.height):
+            for x in range(max(X-1, 0), min(X+2, level.width)):
+                for y in range(max(Y-1, 0), min(Y+2, level.height)):
+                    if (type(level.tiles[X][Y]) == Tile and \
+                       (type(level.tiles[x][y]) not in [Tile, Wall])):
+                       ## Create wall
+                       level.tiles[X][Y] = Wall.create_from_palette()
+
+
+*/
 
 
 void GameMap::add_walls()
 {
     // TODO implement
+    std::cout << "Implement GameMap::add_walls" << std::endl;
     float a = 1/0;
 }
 
@@ -208,6 +247,8 @@ void GameMap::remove_entity(Entity * entity)
     // Solution taken from
     // https://stackoverflow.com/questions/3385229/c-erase-vector-element-by-value-rather-than-by-position
 
+    // TODO implement
+    std::cout << "Implement GameMap::remove_entity" << std::endl;
     float a = 1/0;
 
     // TODO check this code...
@@ -481,22 +522,6 @@ class MapPart():
 
         return xc, yc
 
-    def dig(self, game_map, pad=0):
-        """
-        Actually dig the map part in the game map.
-        """
-
-        # Unpack coordinates
-        x1, y1, x2, y2 = self.xy
-
-        logger = logging.getLogger()
-        logger.debug("Digging {} at {}".format(
-            type(self), [x1+pad, y1+pad, x2-pad, y2-pad]))
-
-        dig_rect(game_map, [x1+pad, y1+pad, x2-pad, y2-pad])
-
-        # TODO
-        # Do more than this
 
 
 class Door(MapPart):
@@ -622,12 +647,6 @@ class GameMap:
         """
         return self.junctions + self.corridors + self.rooms
 
-    def get_player_starting_coords(self):
-
-        # TODO!!!
-        for e in self.entities:
-            if e.char == '<':
-                return e.x, e.y
 
     def get_item_at(self, x, y):
         """

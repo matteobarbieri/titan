@@ -27,6 +27,8 @@ void add_items(GameMap * level);
 GameMap * generate_room(int width, int height)
 {
 
+    std::cout << "Checkpoint 1 (generate_room)!" << std::endl;
+
     GameMap * level = new GameMap(width, height);
 
     int xc = width/2;
@@ -40,15 +42,18 @@ GameMap * generate_room(int width, int height)
     level->add_part(entry_room);
 
     // Add an external layer of walls to rooms
-    std::cout << "Adding walls" << std::endl;
-    level->add_walls();
+    //std::cout << "Adding walls" << std::endl;
+    //level->add_walls();
 
     // Populate Dungeon with entities
+    
     // Monsters
-    add_monsters(level);
+    // TODO enable
+    //add_monsters(level);
 
     // Add some items in the room
-    add_items(level);
+    // TODO enable
+    //add_items(level);
 
     // Create and add entry stairs '<'
 
@@ -64,7 +69,6 @@ GameMap * generate_room(int width, int height)
 
     level->add_entity(up_stairs);
 
-
     /*
     #############################
     ######### FIN QUI ###########
@@ -78,12 +82,14 @@ GameMap * generate_room(int width, int height)
 // TODO implement
 void add_monsters(GameMap * level)
 {
+    std::cout << "Implement add_monsters!" << std::endl;
     float a = 1/0;
 }
 
 // TODO implement
 void add_items(GameMap * level)
 {
+    std::cout << "Implement add_items!" << std::endl;
     float a = 1/0;
 }
 
@@ -116,19 +122,6 @@ from prefabs.weapons.pistol import make_pistol
 
 from components.ai import MonsterAi
 
-def add_walls(level):
-    """
-    Creates walls in all Tile-type tiles adjacent to something non-Tile
-    """
-
-    for X in range(level.width):
-        for Y in range(level.height):
-            for x in range(max(X-1, 0), min(X+2, level.width)):
-                for y in range(max(Y-1, 0), min(Y+2, level.height)):
-                    if (type(level.tiles[X][Y]) == Tile and \
-                       (type(level.tiles[x][y]) not in [Tile, Wall])):
-                       ## Create wall
-                       level.tiles[X][Y] = Wall.create_from_palette()
 
 def add_monsters(level):
     """
