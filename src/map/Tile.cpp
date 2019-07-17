@@ -28,10 +28,16 @@ void Tile::render_at(TCODConsole * con, int x, int y, bool visible)
 {
 }
 
+bool Tile::explored()
+{
+    return _explored;
+}
+
 void Tile::explored(bool v)
 {
     _explored = v;
 }
+
 /////////////////////////////////
 ///////////// FLOOR /////////////
 /////////////////////////////////
