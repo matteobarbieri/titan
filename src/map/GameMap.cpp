@@ -96,7 +96,6 @@ Room::Room(Rect xy, std::vector<Direction *> available_directions) :
 /////////// GAME MAP ////////////
 /////////////////////////////////
 
-
 GameMap::GameMap(int w, int h)
 {
     width = w;
@@ -107,17 +106,55 @@ GameMap::GameMap(int w, int h)
     // TODO implement
 }
 
-
 /*
-def initialize_tiles(self):
-        tiles = [
-                [
-                    Tile(True) for y in range(self.height)
-                ] for x in range(self.width)
-        ]
 
-        return tiles
+    def get_player_starting_coords(self):
+
+        # TODO!!!
+        for e in self.entities:
+            if e.char == '<':
+                return e.x, e.y
+
+
 */
+
+
+void GameMap::get_player_starting_coords(int & x, int & y)
+{
+
+    // TODO change this
+    for (int i=0; i<(int)entities().size(); i++)
+    {
+        if (entities()[i]->symbol == '<')
+        {
+            x = entities()[i]->x;
+            y = entities()[i]->y;
+
+            return;
+        }
+    }
+
+    // TODO
+    // Raise exception if no starting point is found
+}
+
+void GameMap::place_player(Entity * player)
+{
+
+    int x, y;
+    
+    // Get starting coordinates from the map object itself
+    get_player_starting_coords(x, y);
+
+    // Set player's coordinates
+    player->x = x;
+    player->y = y;
+
+    // Add player to list of entities
+    add_entity(player);
+
+}
+
 
 void GameMap::initialize_tiles()
 {
@@ -604,22 +641,6 @@ class GameMap:
         else:
             return None
 
-    def place_player(self, player):
-        """
-        Place player in the map
-        """
-
-        # TODO
-        # Should place him/her in an entry/exit tile (depending on where they
-        # came from).
-        # starting_room = random.choice(self.rooms)
-
-        x, y = self.get_player_starting_coords()
-        player.x = x
-        player.y = y
-
-        # Add player to list of entities
-        self.entities.append(player)
 
     def add_part(self, part):
         """
