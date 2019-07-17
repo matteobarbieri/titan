@@ -13,6 +13,7 @@
 ///////////// RECT //////////////
 /////////////////////////////////
 
+// TODO refactor with initialization list
 Rect::Rect(int x1, int y1, int x2, int y2)
 {
 

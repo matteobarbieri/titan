@@ -1,4 +1,5 @@
 #include "GameMap.hpp"
+#include "Tile.hpp"
 
 /*
 def dig_rect(game_map, xy):
@@ -25,8 +26,33 @@ def dig_rect(game_map, xy):
 
 */
 
+int compute_tile_index(int x, int y, int width)
+{
+    return y*width + x;
+}
+
 void dig_rect(GameMap * game_map, Rect xy)
 {
+    
+    // Variable to keep array index
+    int tile_index;
+
+    for (int x = xy.x1; x <= xy.x2; x++)
+    {
+        for (int y = xy.y1; y <= xy.y2; y++)
+        {
+            // Compute tile index
+            tile_index = compute_tile_index(x, y, game_map->width);
+
+            // Free up object
+            // TODO incomplete type?
+            delete game_map->tiles[tile_index];
+
+            // Create a Floor tile in that spot
+            game_map->tiles[tile_index] = new Floor();
+
+        }
+    }
 }
 
 /*

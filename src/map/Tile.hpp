@@ -28,7 +28,7 @@ GRAY_PALETTE = [
 class Tile
 {
 
-    private:
+    protected:
 
         bool _blocked;
         bool _block_sight;
@@ -43,6 +43,7 @@ class Tile
     public:
 
         Tile(bool blocked, bool block_sight);
+        virtual ~Tile();
 
         // Private member getters
         bool blocked();

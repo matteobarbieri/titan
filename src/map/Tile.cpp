@@ -14,6 +14,55 @@ void Tile::render_at(TCODConsole * con, int x, int y, bool visible)
 {
 }
 
+Tile::~Tile()
+{
+}
+
+/////////////////////////////////
+///////////// FLOOR /////////////
+/////////////////////////////////
+
+
+/*
+
+   // TODO add the remaining code!
+    def __init__(self, bg_color=libtcod.Color(20, 20, 20), fg_symbol=250,
+                 alternate_fg_symbols=['[', ']', '{', '}', '*', '%'],
+                 alternate_symbol_chance=0.1,
+                 # fg_color=libtcod.Color(70, 70, 70)):
+                 fg_color=libtcod.Color(65, 65, 65)):
+
+        # self.bg_color = libtcod.black
+        # self.bg_color = libtcod.Color(10, 10, 10)
+        # self.bg_color = libtcod.Color(32, 32, 32)
+        # self.bg_color = libtcod.Color(16, 16, 16)
+        self.bg_color = bg_color
+        self.fg_color = fg_color
+
+        # Choose one of the available symbols every once in a while
+        if random.random() < alternate_symbol_chance:
+            # The alternate symbol
+            self._fg_symbol = random.choice(alternate_fg_symbols)
+        else:
+            # The default symbol
+            self._fg_symbol = fg_symbol
+
+
+
+
+*/
+
+Floor::Floor(TCODColor bg_color, TCODColor fg_color, int fg_symbol) : 
+    Tile(false, false) 
+{
+
+    _bg_color = bg_color;
+    _fg_color = fg_color;
+
+    _fg_symbol = fg_symbol;
+
+}
+
 /*
 import random
 
@@ -85,30 +134,6 @@ class Floor(Tile):
     """
     A block representing traversable terrain
     """
-
-    def __init__(self, bg_color=libtcod.Color(20, 20, 20), fg_symbol=250,
-                 alternate_fg_symbols=['[', ']', '{', '}', '*', '%'],
-                 alternate_symbol_chance=0.1,
-                 # fg_color=libtcod.Color(70, 70, 70)):
-                 fg_color=libtcod.Color(65, 65, 65)):
-
-        # Declare it as non-blocking
-        super().__init__(False)
-
-        # self.bg_color = libtcod.black
-        # self.bg_color = libtcod.Color(10, 10, 10)
-        # self.bg_color = libtcod.Color(32, 32, 32)
-        # self.bg_color = libtcod.Color(16, 16, 16)
-        self.bg_color = bg_color
-        self.fg_color = fg_color
-
-        # Choose one of the available symbols every once in a while
-        if random.random() < alternate_symbol_chance:
-            # The alternate symbol
-            self._fg_symbol = random.choice(alternate_fg_symbols)
-        else:
-            # The default symbol
-            self._fg_symbol = fg_symbol
 
 
 class Door(Tile):
