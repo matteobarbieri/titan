@@ -14,12 +14,74 @@
 
 #include "Consoles.hpp"
 
+#include "render_functions.hpp"
+
 Entity * check_if_still_in_sight(TCODMap * fov_map, Entity * entity)
 {
     // TODO to implement
     return NULL;
 }
 
+
+/*
+
+def draw_entity(terrain_layer, entity,
+                fov_map, game_map, top_x=0, top_y=0):
+
+    # Only draw entities that are in player's fov
+    if (libtcod.map_is_in_fov(fov_map, entity.x, entity.y) or
+        (entity.stairs and game_map.tiles[entity.x][entity.y].explored)):
+        # (entity.c['stairs'] and game_map.tiles[entity.x][entity.y].explored):
+        # TODO include case for doors
+
+        # print("Bgcolor: {}".format(bg_color))
+
+
+
+*/
+
+void draw_entity(TCODConsole * terrain_layer, Entity * entity,
+                 TCODMap * fov_map, GameMap * game_map, int top_x, int top_y)
+{
+
+    // Draw an entity if it is in player's FOV or is a non-moving entity
+    // (e.g., stairs) on an explored tile.
+    if (
+            fov_map->isInFov(entity->x, entity->y) ||
+            (entity->stairs != 0 and
+             game_map->tiles[
+                compute_tile_index(entity->x, entity->y, game_map->width)
+             ]->explored())
+       )
+
+        /*
+         libtcod.console_put_char(
+            terrain_layer,
+            entity.x-top_x,
+            entity.y-top_y,
+            entity.char,
+            libtcod.BKGND_NONE)
+
+        libtcod.console_set_char_foreground(
+            terrain_layer, entity.x-top_x, entity.y-top_y, entity.color)
+        */
+
+    {
+
+        // Draw the symbol
+        Consoles::singleton().terrain_layer->putChar(
+            entity->x - top_x, entity->y - top_y,
+            entity->symbol, TCOD_BKGND_NONE);
+
+        // Color the symbol
+        Consoles::singleton().terrain_layer->setCharForeground(
+            entity->x - top_x, entity->y - top_y,
+            entity->color());
+
+    }
+
+
+}
 
 /*
 def render_all(terrain_layer, panel, entity_frame, inventory_frame,
@@ -106,54 +168,60 @@ void render_all(
             }
         }
 
+        if (game_state->entity_targeted != 0)
+        {
 
-/*
+            // Check if target is [still] visible
+            if (fov_map->isInFov(
+                game_state->entity_targeted->x,
+                game_state->entity_targeted->y))
+            {
 
-        if game_state.entity_targeted:
-            visible = libtcod.map_is_in_fov(
-                fov_map,
-                game_state.entity_targeted.x, game_state.entity_targeted.y)
+                // TODO find another way to highlight targeted entity
+                // Set background red
+                Consoles::singleton().terrain_layer->setCharBackground(
+                    game_state->entity_targeted->x - top_x,
+                    game_state->entity_targeted->y - top_y,
+                    TCODColor::red, TCOD_BKGND_SET);
+            }
 
-            if visible:
-                # print("Targeted {} at ({}, {})".format(
-                    # entity_targeted.name, entity_targeted.x, entity_targeted.y))
 
-                libtcod.console_set_char_background(
-                    terrain_layer,
-                    game_state.entity_targeted.x-top_x,
-                    game_state.entity_targeted.y-top_y,
-                    libtcod.red, libtcod.BKGND_SET)
+        }
 
-*/
+
     }
+
+
+    /////////////////////////////////////////
+    /////////// Render entities  ////////////
+    /////////////////////////////////////////
+
+    if (redraw_terrain)
+    {
+
+        // Draw all entities in the list in the correct order
+        // Entities are kept sorted in GameMap::add_entity
+        for (int i=0; i < (int)game_map->entities().size(); i++)
+        {
+            draw_entity(
+                Consoles::singleton().terrain_layer, game_map->entities()[i],
+                fov_map, game_map, top_x, top_y);
+        }
+
+        // Blit terrain layer on root console
+        TCODConsole::blit(
+            Consoles::singleton().terrain_layer,
+            0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
+            TCODConsole::root,
+            0, 0);
+
+    }
+
+
 /*
-
-    #########################################
-    ########### Render entities  ############
-    #########################################
-
-    # if redraw_terrain or redraw_entities:
-    if redraw_terrain:
-        # libtcod.console_clear(entities_layer)
-        # Sort entities by their associated render order
-        entities_in_render_order = sorted(
-            game_map.entities, key=lambda x: x.render_order.value)
-
-        # Draw all entities in the list in the correct order
-        for entity in entities_in_render_order:
-            draw_entity(terrain_layer, entity,
-                        fov_map, game_map, top_x, top_y)
-
-        # # Blit terrain layer on root console
-        # libtcod.console_blit(
-            # terrain_layer,
-            # 0, 0, screen_width, screen_height,
-            # 0,
-            # 0, 0)
-
-    #########################################
-    ############ Render panel  ##############
-    #########################################
+    /////////////////////////////////////////
+    //////////// Render panel  //////////////
+    /////////////////////////////////////////
 
     # Now render the health bar
     libtcod.console_set_default_background(panel, libtcod.black)
@@ -410,27 +478,6 @@ def render_bar(panel, x, y, total_width,
         libtcod.CENTER,
         '{0}: {1}/{2}'.format(name, value, maximum))
 
-
-def draw_entity(terrain_layer, entity,
-                fov_map, game_map, top_x=0, top_y=0):
-
-    # Only draw entities that are in player's fov
-    if (libtcod.map_is_in_fov(fov_map, entity.x, entity.y) or
-        (entity.stairs and game_map.tiles[entity.x][entity.y].explored)):
-        # (entity.c['stairs'] and game_map.tiles[entity.x][entity.y].explored):
-        # TODO include case for doors
-
-        # print("Bgcolor: {}".format(bg_color))
-
-        libtcod.console_put_char(
-            terrain_layer,
-            entity.x-top_x,
-            entity.y-top_y,
-            entity.char,
-            libtcod.BKGND_NONE)
-
-        libtcod.console_set_char_foreground(
-            terrain_layer, entity.x-top_x, entity.y-top_y, entity.color)
 
 */
 

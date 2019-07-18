@@ -239,6 +239,9 @@ void GameMap::add_walls()
 void GameMap::add_entity(Entity * entity)
 {
     _entities.push_back(entity);
+
+    // Sort entities based on render order when a new one is added
+    std::sort(_entities.begin(), _entities.end());
 }
 
 void GameMap::remove_entity(Entity * entity)

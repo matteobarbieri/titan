@@ -8,10 +8,25 @@
 Entity::Entity(int x, int y, int symbol,
     TCODColor color, std::string name, RenderOrder render_order,
     bool blocks, bool blocks_sight) :
-    x(x), y(y), render_order(render_order), name(name),
+    x(x), y(y), _render_order(render_order), name(name),
     symbol(symbol), _color(color),
     _blocks(blocks), _blocks_sight(blocks_sight)
 {
+}
+
+bool Entity::operator < (const Entity & other) const
+{
+    return (this->render_order() < other.render_order());
+}
+
+RenderOrder Entity::render_order() const
+{
+    return _render_order;
+}
+
+TCODColor Entity::color() const
+{
+    return _color;
 }
 
 /*

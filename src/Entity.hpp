@@ -37,7 +37,7 @@ class Entity
         bool _blocks_sight;
 
         // In which order the entity is rendered
-        RenderOrder render_order;
+        RenderOrder _render_order;
 
     public:
 
@@ -60,6 +60,13 @@ class Entity
                bool blocks=false, bool blocks_sight=false);
 
         ~Entity();
+
+        // Required for sorting
+        bool operator < (const Entity & other) const;
+
+        RenderOrder render_order() const;
+
+        TCODColor color() const;
 
         // Components
         Fighter * fighter;

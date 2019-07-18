@@ -20,9 +20,10 @@ void render_all(
     int current_turn, int & top_x, int & top_y);
 
 /*
- *
+ * Draw an entity on the terrain layer
 */
-
+void draw_entity(TCODConsole * terrain_layer, Entity * entity,
+                 TCODMap * fov_map, GameMap * game_map, int top_x=0, int top_y=0);
 
 
 /*
@@ -150,26 +151,6 @@ def render_bar(panel, x, y, total_width,
         '{0}: {1}/{2}'.format(name, value, maximum))
 
 
-def draw_entity(terrain_layer, entity,
-                fov_map, game_map, top_x=0, top_y=0):
-
-    # Only draw entities that are in player's fov
-    if (libtcod.map_is_in_fov(fov_map, entity.x, entity.y) or
-        (entity.stairs and game_map.tiles[entity.x][entity.y].explored)):
-        # (entity.c['stairs'] and game_map.tiles[entity.x][entity.y].explored):
-        # TODO include case for doors
-
-        # print("Bgcolor: {}".format(bg_color))
-
-        libtcod.console_put_char(
-            terrain_layer,
-            entity.x-top_x,
-            entity.y-top_y,
-            entity.char,
-            libtcod.BKGND_NONE)
-
-        libtcod.console_set_char_foreground(
-            terrain_layer, entity.x-top_x, entity.y-top_y, entity.color)
 
 
 
