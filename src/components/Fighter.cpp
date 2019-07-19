@@ -22,8 +22,20 @@
         }
 */
 
-Fighter::Fighter(int max_hp) : _max_hp(max_hp)
+Fighter::Fighter(int max_hp) : _max_hp(max_hp), _hp(max_hp)
 {
+}
+
+int Fighter::hp() const
+{
+    // TODO possibly change this
+    return _hp;
+}
+
+int Fighter::max_hp() const
+{
+    // TODO possibly change this
+    return _max_hp;
 }
 
 

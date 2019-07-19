@@ -5,6 +5,7 @@
 #include "Constants.h"
 
 #include "Entity.hpp"
+#include "components/Fighter.hpp"
 
 #include "map/GameMap.hpp"
 #include "map/Tile.hpp"
@@ -54,27 +55,25 @@ void draw_entity(TCODConsole * terrain_layer, Entity * entity,
              ]->explored())
        )
 
-        /*
-         libtcod.console_put_char(
-            terrain_layer,
-            entity.x-top_x,
-            entity.y-top_y,
-            entity.char,
-            libtcod.BKGND_NONE)
-
-        libtcod.console_set_char_foreground(
-            terrain_layer, entity.x-top_x, entity.y-top_y, entity.color)
-        */
 
     {
 
+        // TODO evaluate whether to use Consoles::singleton() or pass the
+        // console as a parameter
+        
         // Draw the symbol
-        Consoles::singleton().terrain_layer->putChar(
+        //Consoles::singleton().terrain_layer->putChar(
+            //entity->x - top_x, entity->y - top_y,
+            //entity->symbol, TCOD_BKGND_NONE);
+        terrain_layer->putChar(
             entity->x - top_x, entity->y - top_y,
             entity->symbol, TCOD_BKGND_NONE);
 
         // Color the symbol
-        Consoles::singleton().terrain_layer->setCharForeground(
+        //Consoles::singleton().terrain_layer->setCharForeground(
+            //entity->x - top_x, entity->y - top_y,
+            //entity->color());
+        terrain_layer->setCharForeground(
             entity->x - top_x, entity->y - top_y,
             entity->color());
 
@@ -218,14 +217,17 @@ void render_all(
     }
 
 
-/*
     /////////////////////////////////////////
     //////////// Render panel  //////////////
     /////////////////////////////////////////
 
-    # Now render the health bar
-    libtcod.console_set_default_background(panel, libtcod.black)
-    libtcod.console_clear(panel)
+
+    // Now render the health bar
+    Consoles::singleton().panel->setDefaultBackground(TCODColor::black);
+    Consoles::singleton().panel->clear();
+
+    // TODO enable print message logs
+/*
 
     # Print the game messages, one line at a time
     y = 1
@@ -240,11 +242,29 @@ void render_all(
             message.text)
         y += 1
 
+*/
+
+/*
+
+
     # Render the HP bar
     render_bar(
         panel, 1, 1, bar_width,
         'HP', player.c['fighter'].hp, player.c['fighter'].max_hp,
         libtcod.light_red, libtcod.darker_red)
+
+
+*/
+
+    render_bar(
+        Consoles::singleton().panel, 1, 1, BAR_WIDTH,
+        "HP", player->fighter->hp() , player->fighter->max_hp(),
+        TCODColor::lightRed, TCODColor::darkerRed);
+
+
+/*
+
+
 
     # Show current dungeon level
     libtcod.console_print_ex(panel, 1, 3, libtcod.BKGND_NONE, libtcod.LEFT,

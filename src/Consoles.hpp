@@ -16,6 +16,7 @@ class Consoles
         TCODConsole * main_window = NULL ;
         TCODConsole * menu = NULL ;
         TCODConsole * submenu = NULL ;
+        TCODConsole * panel = NULL ;
         TCODConsole * entity_frame = NULL ;
         TCODConsole * inventory_frame = NULL ;
 

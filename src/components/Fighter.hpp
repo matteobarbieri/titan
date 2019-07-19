@@ -7,11 +7,16 @@ class Fighter
     private:
 
         int _max_hp;
+        int _hp;
         
 
     public:
+
         Fighter(int max_hp);
         ~Fighter();
+
+        int max_hp() const;
+        int hp() const;
 };
 
 #endif /* ROGUE_2077_FIGHTER */

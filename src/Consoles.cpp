@@ -24,6 +24,10 @@ Consoles::Consoles()
     main_window = new TCODConsole(
         TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
 
+    /*! The panel below the main console, containig HP and other info */
+    panel = new TCODConsole(
+        PANEL_WIDTH, PANEL_HEIGHT);
+
     /*! The main console, where terrain is displayed */
     terrain_layer = new TCODConsole(
         TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
