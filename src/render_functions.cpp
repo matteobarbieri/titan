@@ -244,37 +244,32 @@ void render_all(
 
 */
 
-/*
-
-
-    # Render the HP bar
-    render_bar(
-        panel, 1, 1, bar_width,
-        'HP', player.c['fighter'].hp, player.c['fighter'].max_hp,
-        libtcod.light_red, libtcod.darker_red)
-
-
-*/
-
     render_bar(
         Consoles::singleton().panel, 1, 1, BAR_WIDTH,
         "HP", player->fighter->hp() , player->fighter->max_hp(),
         TCODColor::lightRed, TCODColor::darkerRed);
 
 
+    // Show current dungeon level
+    // TODO change with non deprecated function?
+    Consoles::singleton().panel->printEx(
+        1, 3, TCOD_BKGND_NONE, TCOD_LEFT, "Dungeon level: %d",
+        game_map->dungeon_level);
+
 /*
 
 
+*/
 
-    # Show current dungeon level
-    libtcod.console_print_ex(panel, 1, 3, libtcod.BKGND_NONE, libtcod.LEFT,
-                             'Dungeon level: {0}'.format(
-                                 game_map.dungeon_level))
+    // Show current turn
+    // TODO change with non deprecated function?
+    Consoles::singleton().panel->printEx(
+        1, 5, TCOD_BKGND_NONE, TCOD_LEFT, "Time: %d",
+        game_map->dungeon_level);
 
-    # Show current dungeon level
-    libtcod.console_print_ex(panel, 1, 5, libtcod.BKGND_NONE, libtcod.LEFT,
-                             'Time: {0}'.format(
-                                 current_turn))
+/*
+
+
 
     # Show info about entities under mouse cursor
     libtcod.console_set_default_foreground(panel, libtcod.light_gray)
