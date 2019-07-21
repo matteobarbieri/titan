@@ -28,12 +28,8 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
     bool redraw_terrain = true;
     bool redraw_entities = true;
 
-    std::cout << "Checkpoint 1!" << std::endl;
-
     // Initialize fov map
     TCODMap * fov_map = initialize_fov(game_map);
-
-    std::cout << "Checkpoint 2!" << std::endl;
 
     // TODO needs initialization?
     TCOD_key_t key;
@@ -311,8 +307,6 @@ int main(int argc, char *argv[])
                 //constants)
             //game_phase = GamePhase.PLAYERS_TURN
             //
-            
-            std::cout << "Checkpoint 1!" << std::endl;
             
             init_new_game(
                  &game_map,  &player,  &game_state);

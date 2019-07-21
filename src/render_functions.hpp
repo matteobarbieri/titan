@@ -28,16 +28,17 @@ void render_all(
 void draw_entity(TCODConsole * terrain_layer, Entity * entity,
                  TCODMap * fov_map, GameMap * game_map, int top_x=0, int top_y=0);
 
-/*
-
-*/
-
 /**
  * Render a generic bar on a console
  */
 void render_bar(TCODConsole * console, int x, int y, int total_width,
                std::string name, int value, int maximum,
                TCODColor bar_color, TCODColor back_color);
+
+//std::vector<std::string> get_names_under_mouse(
+std::string get_names_under_mouse(
+    TCOD_mouse_t * mouse, std::vector<Entity *> entities, TCODMap * fov_map,
+    int top_x, int top_y);
 
 /*
 
@@ -72,17 +73,6 @@ def get_entity_under_mouse(mouse, entities, fov_map, top_x, top_y):
         return None
 
 
-def get_names_under_mouse(mouse, entities, fov_map, top_x, top_y):
-    (x, y) = (mouse.cx, mouse.cy)
-
-    names = [
-        entity.name for entity in entities if
-            entity.x == (top_x + x) and  # noqa
-            entity.y == (top_y + y) and  # noqa
-            libtcod.map_is_in_fov(fov_map, entity.x, entity.y)]  # noqa
-    names = ', '.join(names)
-
-    return names.capitalize()
 
 
 def render_entity_label(terrain_layer, entity, top_x, top_y):

@@ -24,6 +24,41 @@ Entity * check_if_still_in_sight(TCODMap * fov_map, Entity * entity)
 }
 
 
+//std::vector<std::string> get_names_under_mouse(
+std::string get_names_under_mouse(
+    TCOD_mouse_t * mouse, std::vector<Entity *> entities, TCODMap * fov_map,
+    int top_x, int top_y)
+{
+    int x = mouse->cx;
+    int y = mouse->cy;
+
+    //std::vector<std::string> names;
+    std::string names = "";
+
+    for (int i=0; i<(int)entities.size(); i++)
+    {
+        if (
+            entities[i]->x == (top_x + x) && 
+            entities[i]->y == (top_y + y) && 
+            fov_map->isInFov(entities[i]->x, entities[i]->y)
+            )
+        {
+            names.append(entities[i]->name);
+            names.append(", ");
+        }
+    }
+
+    // Remove last ", "
+    if (names.length() > 0)
+    {
+        names = names.substr(0, names.length() - 2);
+        // TODO
+        // Capitalize first name
+    }
+
+    return names;
+}
+
 /*
 
 def draw_entity(terrain_layer, entity,
@@ -291,31 +326,25 @@ void render_all(
         1, 3, TCOD_BKGND_NONE, TCOD_LEFT, "Dungeon level: %d",
         game_map->dungeon_level);
 
-/*
-
-
-*/
-
     // Show current turn
     // TODO change with non deprecated function?
     Consoles::singleton().panel->printEx(
         1, 5, TCOD_BKGND_NONE, TCOD_LEFT, "Time: %d",
         game_map->dungeon_level);
 
+    Consoles::singleton().panel->setDefaultForeground(TCODColor::lightGrey);
+    Consoles::singleton().panel->printEx(
+        1, 0, TCOD_BKGND_NONE, TCOD_LEFT,
+        "%s",
+        get_names_under_mouse(
+            mouse, game_map->entities(), fov_map,
+            top_x, top_y).c_str());
+
 /*
 
+*/
 
-
-    # Show info about entities under mouse cursor
-    libtcod.console_set_default_foreground(panel, libtcod.light_gray)
-    libtcod.console_print_ex(
-        panel,
-        1,
-        0,
-        libtcod.BKGND_NONE,
-        libtcod.LEFT,
-        get_names_under_mouse(
-            mouse, game_map.entities, fov_map, top_x, top_y))
+/*
 
     # Blit panel console on root console
     libtcod.console_blit(
@@ -398,8 +427,6 @@ void render_all(
     return top_x, top_y
 */
 
-    // TODO to implement
-    float aa = 1/0;
 }
 
 
