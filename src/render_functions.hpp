@@ -29,32 +29,6 @@ void draw_entity(TCODConsole * terrain_layer, Entity * entity,
                  TCODMap * fov_map, GameMap * game_map, int top_x=0, int top_y=0);
 
 /*
-def render_bar(panel, x, y, total_width,
-               name, value, maximum,
-               bar_color, back_color):
-
-    # Compute bar width, based on current value and maximum
-    bar_width = int(float(value) / maximum * total_width)
-
-    # Draw a rectangle of the background color for the full
-    # length of the bar
-    libtcod.console_set_default_background(panel, back_color)
-    libtcod.console_rect(panel, x, y, total_width, 1,
-                         False, libtcod.BKGND_SCREEN)
-
-    # Now draw the 'active' part of the bar
-    libtcod.console_set_default_background(panel, bar_color)
-    if bar_width > 0:
-        libtcod.console_rect(panel, x, y, bar_width, 1,
-                             False, libtcod.BKGND_SCREEN)
-
-    # Draw the event log
-    libtcod.console_set_default_foreground(panel, libtcod.white)
-    libtcod.console_print_ex(
-        panel, int(x + total_width / 2), y,
-        libtcod.BKGND_NONE,
-        libtcod.CENTER,
-        '{0}: {1}/{2}'.format(name, value, maximum))
 
 */
 

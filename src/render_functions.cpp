@@ -91,8 +91,43 @@ def render_all(terrain_layer, panel, entity_frame, inventory_frame,
                constants, mouse,
                game_state, current_turn):
 
+
 */
 
+void render_bar(TCODConsole * console, int x, int y, int total_width,
+               std::string name, int value, int maximum,
+               TCODColor bar_color, TCODColor back_color)
+{
+
+
+    // Compute bar width, based on current value and maximum
+    //bar_width = int(float(value) / maximum * total_width)
+    int bar_width = (int) ((float)value / maximum * total_width);
+
+    // Draw a rectangle of the background color for the full
+    // length of the bar
+    console->setDefaultBackground(back_color);
+    console->rect(x, y, total_width, 1, false, TCOD_BKGND_SCREEN);
+
+    // Now draw the 'active' part of the bar
+    console->setDefaultBackground(bar_color);
+    if (bar_width > 0)
+    {
+        console->rect(x, y, bar_width, 1, false, TCOD_BKGND_SCREEN);
+    }
+
+    // Draw the bar name
+    console->setDefaultForeground(TCODColor::white);
+    console->printEx(
+        x + total_width / 2, y, TCOD_BKGND_NONE, TCOD_CENTER,
+        "%s: %d/%d", name.c_str(), value, maximum );
+
+}
+
+/*
+
+
+*/
 
 // TODO missing message_log parameter
 void render_all(
@@ -466,32 +501,6 @@ def render_entity_frame(entity_frame, entity):
         3, 5, 10, 10, 0, bg=entity.color)
 
 
-def render_bar(panel, x, y, total_width,
-               name, value, maximum,
-               bar_color, back_color):
-
-    # Compute bar width, based on current value and maximum
-    bar_width = int(float(value) / maximum * total_width)
-
-    # Draw a rectangle of the background color for the full
-    # length of the bar
-    libtcod.console_set_default_background(panel, back_color)
-    libtcod.console_rect(panel, x, y, total_width, 1,
-                         False, libtcod.BKGND_SCREEN)
-
-    # Now draw the 'active' part of the bar
-    libtcod.console_set_default_background(panel, bar_color)
-    if bar_width > 0:
-        libtcod.console_rect(panel, x, y, bar_width, 1,
-                             False, libtcod.BKGND_SCREEN)
-
-    # Draw the event log
-    libtcod.console_set_default_foreground(panel, libtcod.white)
-    libtcod.console_print_ex(
-        panel, int(x + total_width / 2), y,
-        libtcod.BKGND_NONE,
-        libtcod.CENTER,
-        '{0}: {1}/{2}'.format(name, value, maximum))
 
 
 */
