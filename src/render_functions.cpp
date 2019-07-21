@@ -20,9 +20,37 @@
 Entity * check_if_still_in_sight(TCODMap * fov_map, Entity * entity)
 {
     // TODO to implement
-    return NULL;
+    return 0;
 }
 
+/*
+
+*/
+
+Entity * get_entity_under_mouse(
+    TCOD_mouse_t * mouse, std::vector<Entity *> entities,
+    TCODMap * fov_map, int top_x, int top_y)
+{
+    
+    int x = mouse->cx;
+    int y = mouse->cy;
+
+    Entity * entity = 0;
+
+    for (int i=0; i<(int)entities.size(); i++)
+    {
+        if (
+            entities[i]->x == (top_x + x) && 
+            entities[i]->y == (top_y + y) && 
+            fov_map->isInFov(entities[i]->x, entities[i]->y)
+            )
+        {
+            entity = entities[i];
+        }
+    }
+
+    return entity;
+}
 
 //std::vector<std::string> get_names_under_mouse(
 std::string get_names_under_mouse(
@@ -286,11 +314,9 @@ void render_all(
 
     }
 
-
     /////////////////////////////////////////
     //////////// Render panel  //////////////
     /////////////////////////////////////////
-
 
     // Now render the health bar
     Consoles::singleton().panel->setDefaultBackground(TCODColor::black);
@@ -340,68 +366,80 @@ void render_all(
             mouse, game_map->entities(), fov_map,
             top_x, top_y).c_str());
 
-/*
+    /////////////////////////////////////////
+    /////// Blit panel on root console //////
+    /////////////////////////////////////////
 
-*/
+    TCODConsole::blit(
+        Consoles::singleton().panel, 0, 0,
+        SCREEN_WIDTH, PANEL_HEIGHT,
+        TCODConsole::root, 0, PANEL_Y);
+    
+    /////////////////////////////////////////
+    /// Blit terrain layer on root console //
+    /////////////////////////////////////////
 
-/*
+    TCODConsole::blit(
+        Consoles::singleton().terrain_layer, 0, 0,
+        TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT,
+        Consoles::singleton().main_window,
+        0, 0);
 
-    # Blit panel console on root console
-    libtcod.console_blit(
-        panel, 0, 0,
-        screen_width, panel_height,
-        0,
-        0, panel_y)
+    /////////////////////////////////////////
+    ///////// Render entity label ///////////
+    /////////////////////////////////////////
 
-    #########################################
-    ### Blit terrain layer on root console ##
-    #########################################
+    Entity * entity_under_mouse = get_entity_under_mouse(
+            mouse, game_map->entities(), fov_map, top_x, top_y);
 
-    libtcod.console_blit(
-        terrain_layer,
-        0, 0, terrain_layer_width, terrain_layer_height,
-        main_window,
-        0, 0)
-
-    #########################################
-    ######### Render entity label ###########
-    #########################################
-
-    entity_under_mouse = get_entity_under_mouse(
-            mouse, game_map.entities, fov_map, top_x, top_y)
-
-    if entity_under_mouse:
-
+    if (entity_under_mouse)
+    {
         render_entity_label(
-            main_window, entity_under_mouse,
-            top_x, top_y)
+            Consoles::singleton().main_window, entity_under_mouse,
+            top_x, top_y);
 
-    #########################################
-    ######### Render entity frame  ##########
-    #########################################
+    }
 
-    # Render the focused entity
-    if game_phase == GamePhase.ENTITY_INFO:
-        render_entity_frame(entity_frame, game_state.entity_focused)
+    /////////////////////////////////////////
+    ///////// Render entity frame  //////////
+    /////////////////////////////////////////
 
-    # Render the selected inventory item
-    if game_phase == GamePhase.INVENTORY_ITEM_MENU:
-        render_entity_frame(entity_frame, game_state.selected_inventory_item)
+    // Render the focused entity
+    if (game_state->game_phase == ENTITY_INFO)
+    {
+        render_entity_frame(
+            Consoles::singleton().entity_frame, 
+            game_state->entity_focused);
+    }
 
-    # Blit the frame on the console below (main window)
-    if game_phase in (GamePhase.ENTITY_INFO, GamePhase.INVENTORY_ITEM_MENU):
-        libtcod.console_blit(
-            entity_frame,
-            0, 0, frame_width, frame_height,
-            main_window,
-            screen_width - frame_width, 0)
+    // Render the selected inventory item
+    if (game_state->game_phase == INVENTORY_ITEM_MENU)
+    {
+        render_entity_frame(
+            Consoles::singleton().entity_frame, 
+            game_state->selected_inventory_item);
+    }
 
-    # Finally blit main window console on root console
-    libtcod.console_blit(
-        main_window,
-        0, 0, terrain_layer_width, terrain_layer_height,
-        0,
-        0, 0)
+    // Blit the frame on the console below (main window)
+    if (game_state->game_phase == ENTITY_INFO ||
+        game_state->game_phase == INVENTORY_ITEM_MENU)
+    {
+        TCODConsole::blit(
+            Consoles::singleton().entity_frame, 0, 0,
+            FRAME_WIDTH, FRAME_HEIGHT,
+            Consoles::singleton().main_window,
+            SCREEN_WIDTH - FRAME_WIDTH, 0);
+    }
+
+    // Finally blit main window console on root console
+    TCODConsole::blit(
+        Consoles::singleton().main_window,
+        0, 0,
+        TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT,
+        TCODConsole::root,
+        0, 0);
+
+/*
 
     # Show inventory menu
     if game_phase in (GamePhase.INVENTORY_MENU, GamePhase.INVENTORY_ITEM_MENU):
@@ -448,35 +486,6 @@ def check_if_still_in_sight(fov_map, entity):
         return entity
     else:
         return None
-
-
-def get_entity_under_mouse(mouse, entities, fov_map, top_x, top_y):
-    (x, y) = (mouse.cx, mouse.cy)
-
-    entities_list = [
-        entity for entity in entities if
-            entity.x == (top_x + x) and  # noqa
-            entity.y == (top_y + y) and  # noqa
-            libtcod.map_is_in_fov(fov_map, entity.x, entity.y)]  # noqa
-
-    if entities_list:
-        sorted(entities_list, key=lambda e: e.render_order.value)
-        return entities_list[-1]  # The last one
-    else:
-        return None
-
-
-def get_names_under_mouse(mouse, entities, fov_map, top_x, top_y):
-    (x, y) = (mouse.cx, mouse.cy)
-
-    names = [
-        entity.name for entity in entities if
-            entity.x == (top_x + x) and  # noqa
-            entity.y == (top_y + y) and  # noqa
-            libtcod.map_is_in_fov(fov_map, entity.x, entity.y)]  # noqa
-    names = ', '.join(names)
-
-    return names.capitalize()
 
 
 def render_entity_label(terrain_layer, entity, top_x, top_y):

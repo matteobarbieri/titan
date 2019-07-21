@@ -35,98 +35,24 @@ void render_bar(TCODConsole * console, int x, int y, int total_width,
                std::string name, int value, int maximum,
                TCODColor bar_color, TCODColor back_color);
 
+/**
+ * Return the string of all entities at a given map position
+ */
 //std::vector<std::string> get_names_under_mouse(
 std::string get_names_under_mouse(
     TCOD_mouse_t * mouse, std::vector<Entity *> entities, TCODMap * fov_map,
     int top_x, int top_y);
 
-/*
+Entity * get_entity_under_mouse(
+    TCOD_mouse_t * mouse, std::vector<Entity *> entities,
+    TCODMap * fov_map, int top_x, int top_y);
 
-from enum import Enum, auto
-
-from game_state import GamePhase
-
-from menus import (
-    character_screen, inventory_menu, item_submenu)
-
-
-class RenderOrder(Enum):
-    STAIRS = auto()
-    CORPSE = auto()
-    ITEM = auto()
-    ACTOR = auto()
+void render_entity_label(
+    TCODConsole * terrain_layer, Entity * entity,
+    int top_x, int top_y);
 
 
-def get_entity_under_mouse(mouse, entities, fov_map, top_x, top_y):
-    (x, y) = (mouse.cx, mouse.cy)
-
-    entities_list = [
-        entity for entity in entities if
-            entity.x == (top_x + x) and  # noqa
-            entity.y == (top_y + y) and  # noqa
-            libtcod.map_is_in_fov(fov_map, entity.x, entity.y)]  # noqa
-
-    if entities_list:
-        sorted(entities_list, key=lambda e: e.render_order.value)
-        return entities_list[-1]  # The last one
-    else:
-        return None
-
-
-
-
-def render_entity_label(terrain_layer, entity, top_x, top_y):
-
-    # Print the name of the entity on the top left tile
-    libtcod.console_put_char(
-        terrain_layer,
-        entity.x-top_x-1, entity.y-top_y-1,
-        '\\', libtcod.BKGND_DEFAULT)
-
-    libtcod.console_print_ex(
-        terrain_layer,
-        # 0,
-        # top_x - entity.x - 1, top_y - entity.y - 1,
-        entity.x - top_x - 1,  entity.y - top_y - 2,
-        libtcod.BKGND_NONE,
-        libtcod.LEFT,
-        '{}'.format(entity.name))
-
-
-def render_entity_frame(entity_frame, entity):
-
-    # Draw a rectangle of the background color for the full
-    # length of the bar
-    # libtcod.console_set_default_background(entity_frame, libtcod.red)
-    # libtcod.console_rect(entity_frame, 3, 3, 7, 2,
-                         # False, libtcod.BKGND_SCREEN)
-
-    # Extract width and height
-    w = entity_frame.width
-    h = entity_frame.height
-
-    # Draw frame
-    entity_frame.draw_frame(
-        1, 1,
-        w-2, h-2,
-        'Info')
-
-    # Print the entiy's name
-    entity_frame.print(
-        3, 3, '{}'.format(entity.name))
-
-    # Draw entity graphics
-    # TODO
-    # Mockup for entity detail
-    # entity_frame.draw_rect(
-        # 3, 5, 10, 10, 0, bg=libtcod.red)
-    entity_frame.draw_rect(
-        3, 5, 10, 10, 0, bg=entity.color)
-
-
-
-
-
-*/
+void render_entity_frame(
+    TCODConsole * entity_frame, Entity * entity);
 
 #endif
