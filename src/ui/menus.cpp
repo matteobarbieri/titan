@@ -1,11 +1,99 @@
-#include "libtcod.hpp"
+#include "../libtcod.hpp"
 
 #include <vector>
+#include <string>
 
-#include "Constants.h"
+#include "../Constants.h"
+#include "../Consoles.hpp"
+
+#include "../components/Inventory.hpp"
+#include "../components/Item.hpp"
+#include "../Entity.hpp"
+
 #include "menus.hpp"
 
-#include "Consoles.hpp"
+void inventory_menu(
+    Entity * player, std::string header)
+{
+    // Extract width and height
+    int w = Consoles::singleton().inventory_frame->getWidth();
+    int h = Consoles::singleton().inventory_frame->getHeight();
+
+    // Draw frame
+    // TODO check this one
+    Consoles::singleton().inventory_frame->printFrame(
+        1, 1,
+        w-2, h-2,
+        false, TCOD_BKGND_NONE, header.c_str());
+
+    // List the items in the inventory
+    // Starting
+    int item_y = 5;
+
+    for (int i=0; i<(int)player->inventory->items().size(); i++)
+    {
+        Entity * e = player->inventory->items()[i];
+
+        // If it isn't equipped
+        if (!e->item->equipped())
+        {
+
+            // Old python code
+            //inventory_frame.print(
+                //3, item_y, '({}) {}'.format(e.item_letter, e.name),
+                //fg=e.color)
+            
+            // Set the color first
+            Consoles::singleton().inventory_frame->setDefaultForeground(e->color());
+
+            // Then print menu item
+            Consoles::singleton().inventory_frame->printf(
+                3, item_y,
+                "(%c) %s",
+                e->item->item_letter(), e->name.c_str());
+
+            // Increment y coordinate of next menu item by one
+            item_y++;
+
+        }
+    } 
+
+}
+
+/*
+def inventory_menu(con, header, player, inventory_frame,
+                   screen_width, screen_height):
+
+
+
+    # List equipped items
+    if player.equipment.slots:
+
+        inventory_frame.print(
+                3, 28, 'Equipped items:',
+            fg=libtcod.white)
+
+        item_y = 30
+        for slot, e in player.equipment.slots.items():
+            inventory_frame.print(
+                3, item_y, '({}) {} ({})'.format(
+                    e.item_letter, e.name, SLOT_NAMES[slot]),
+                fg=e.color)
+
+            item_y += 1
+
+    else:
+        inventory_frame.print(
+                3, 28, 'No items equipped!',
+            fg=libtcod.white)
+
+    # Blit panel console on root console
+    libtcod.console_blit(
+        inventory_frame,
+        0, 0, w, h,
+        con,
+        0, 0)
+*/
 
 void menu(TCODConsole * con, std::vector<MenuOption> options, const char * header,
           int width,
@@ -33,7 +121,7 @@ void menu(TCODConsole * con, std::vector<MenuOption> options, const char * heade
     // print all the options
     int opt_y = header_height;
     
-    for (int i=0; i<options.size(); i++)
+    for (int i=0; i<(int)options.size(); i++)
     {
         con->printf(0, opt_y, "(%c) %s", options[i].letter, options[i].text);
         opt_y++;
@@ -127,59 +215,6 @@ def item_submenu(con, header, player, item, screen_width, screen_height):
     menu(con, header, item_options, width, screen_width, screen_height,
          x=31, y=item_position)
 
-def inventory_menu(con, header, player, inventory_frame,
-                   screen_width, screen_height):
-
-    # Extract width and height
-    w = inventory_frame.width
-    h = inventory_frame.height
-
-    # Draw frame
-    inventory_frame.draw_frame(
-        1, 1,
-        w-2, h-2,
-        'Inventory')
-
-    # List the items in the inventory
-    # Starting
-    item_y = 5
-
-    if player.inventory.items:
-        for e in player.inventory.items:
-            if not e.item.equipped:
-                inventory_frame.print(
-                    3, item_y, '({}) {}'.format(e.item_letter, e.name),
-                    fg=e.color)
-
-                item_y += 1
-
-    # List equipped items
-    if player.equipment.slots:
-
-        inventory_frame.print(
-                3, 28, 'Equipped items:',
-            fg=libtcod.white)
-
-        item_y = 30
-        for slot, e in player.equipment.slots.items():
-            inventory_frame.print(
-                3, item_y, '({}) {} ({})'.format(
-                    e.item_letter, e.name, SLOT_NAMES[slot]),
-                fg=e.color)
-
-            item_y += 1
-
-    else:
-        inventory_frame.print(
-                3, 28, 'No items equipped!',
-            fg=libtcod.white)
-
-    # Blit panel console on root console
-    libtcod.console_blit(
-        inventory_frame,
-        0, 0, w, h,
-        con,
-        0, 0)
 
 
 def character_screen(player,

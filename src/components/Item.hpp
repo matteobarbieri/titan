@@ -1,3 +1,23 @@
+#ifndef ROGUE_20177_ITEM
+#define ROGUE_20177_ITEM
+
+class Item
+{
+
+    private:
+
+        bool _equipped;
+        int _item_letter;
+
+    public:
+        Item();
+        ~Item();
+
+        bool equipped();
+        int item_letter();
+};
+
+/*
 """
 The item class represents items and their properties "while they are in the
 backpack". Meaning that for instance the info about their properties as items
@@ -114,3 +134,6 @@ class Item:
 
     def is_ranged(self):
         return ItemSubtype.RANGED in self.item_subtypes
+*/
+
+#endif /* ifndef ROGUE_20177_ITEM */

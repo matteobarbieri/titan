@@ -1,4 +1,5 @@
 #include "Inventory.hpp"
+#include "../Entity.hpp"
 
 /*
 
@@ -19,6 +20,11 @@
 
 Inventory::Inventory(int capacity) : _capacity(capacity)
 {
+}
+
+std::vector<Entity *> Inventory::items()
+{
+    return _items;
 }
 
 /*

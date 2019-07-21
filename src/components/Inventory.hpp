@@ -1,16 +1,27 @@
 #ifndef ROGUE_20177_INVENTORY
 #define ROGUE_20177_INVENTORY
 
+#include <vector>
+
+// Forward declarations
+class Entity;
+
 class Inventory
 {
 
     private:
 
+        std::vector<Entity *> _items;
+
         int _capacity;
 
     public:
+
         Inventory(int capacity);
         ~Inventory();
+
+        std::vector<Entity *> items();
+
 };
 
 

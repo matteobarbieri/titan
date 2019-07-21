@@ -17,6 +17,8 @@
 
 #include "render_functions.hpp"
 
+#include "ui/menus.hpp"
+
 Entity * check_if_still_in_sight(TCODMap * fov_map, Entity * entity)
 {
     // TODO to implement
@@ -439,16 +441,20 @@ void render_all(
         TCODConsole::root,
         0, 0);
 
+    // Show inventory menu
+    if (game_state->game_phase == INVENTORY_MENU ||
+        game_state->game_phase == INVENTORY_ITEM_MENU)
+    {
+        inventory_menu(player);
+    }
+
 /*
 
-    # Show inventory menu
-    if game_phase in (GamePhase.INVENTORY_MENU, GamePhase.INVENTORY_ITEM_MENU):
 
-        inventory_title = 'Inventory'
+*/
 
-        inventory_menu(
-            terrain_layer, inventory_title, player,
-            inventory_frame, screen_width, screen_height)
+
+/*
 
     # Inventory item submenu
     if game_phase == GamePhase.INVENTORY_ITEM_MENU:

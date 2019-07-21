@@ -1,3 +1,24 @@
+#include "Item.hpp"
+
+Item::Item()
+{
+    _equipped = false;
+}
+
+Item::~Item()
+{
+}
+
+bool Item::equipped()
+{
+    return _equipped;
+}
+
+int Item::item_letter()
+{
+    return _item_letter;
+}
+
 /*
 """
 The item class represents items and their properties "while they are in the
