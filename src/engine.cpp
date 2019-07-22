@@ -95,8 +95,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 
         }
 
-        std::cout << "Checkpoint 6!" << std::endl;
-
         render_all(
             player, game_map, fov_map,
             fov_recompute, redraw_terrain,
@@ -114,7 +112,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
         redraw_entities = false;
 
         TCODConsole::root->flush();
-
 
         std::cout << "Checkpoint 7!" << std::endl;
 

@@ -57,13 +57,9 @@ void init_new_game(
     GameMap ** game_map, Entity ** player, GameState ** game_state)
 {
 
-    std::cout << "Checkpoint 2 (init_new_game)!" << std::endl;
-
     // Generate a small room
     * game_map = generate_room(
         MAP_WIDTH, MAP_HEIGHT);
-
-    std::cout << "Checkpoint 3 (init_new_game)!" << std::endl;
 
     /*
 

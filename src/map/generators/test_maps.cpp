@@ -27,8 +27,6 @@ void add_items(GameMap * level);
 GameMap * generate_room(int width, int height)
 {
 
-    std::cout << "Checkpoint 1 (generate_room)!" << std::endl;
-
     GameMap * level = new GameMap(width, height);
 
     int xc = width/2;
