@@ -49,37 +49,38 @@ void render_entity_label(
 
 }
 
+void render_entity_frame(Entity * entity)
+{
+    // Extract width and height
+    int w = Consoles::singleton().entity_frame->getWidth();
+    int h = Consoles::singleton().entity_frame->getHeight();
+
+    // Draw frame
+    Consoles::singleton().entity_frame->printFrame(
+        1, 1, 
+        w -2, h -2,
+        true, TCOD_BKGND_DEFAULT, "Info");
+
+    // Print the entiy's name
+    Consoles::singleton().entity_frame->printf(
+        3, 3, "%s", entity->name.c_str());
+
+    // Draw entity graphics
+    // TODO
+    // Mockup for entity detail
+    //# entity_frame.draw_rect(
+        //# 3, 5, 10, 10, 0, bg=libtcod.red)
+    
+    // Print a rectangle of the same color of the entity
+    Consoles::singleton().entity_frame->setDefaultBackground(
+        entity->color());
+    Consoles::singleton().entity_frame->rect(
+        3, 5, 10, 10, true);
+   
+}
+
 /*
 
-def render_entity_frame(entity_frame, entity):
-
-    # Draw a rectangle of the background color for the full
-    # length of the bar
-    # libtcod.console_set_default_background(entity_frame, libtcod.red)
-    # libtcod.console_rect(entity_frame, 3, 3, 7, 2,
-                         # False, libtcod.BKGND_SCREEN)
-
-    # Extract width and height
-    w = entity_frame.width
-    h = entity_frame.height
-
-    # Draw frame
-    entity_frame.draw_frame(
-        1, 1,
-        w-2, h-2,
-        'Info')
-
-    # Print the entiy's name
-    entity_frame.print(
-        3, 3, '{}'.format(entity.name))
-
-    # Draw entity graphics
-    # TODO
-    # Mockup for entity detail
-    # entity_frame.draw_rect(
-        # 3, 5, 10, 10, 0, bg=libtcod.red)
-    entity_frame.draw_rect(
-        3, 5, 10, 10, 0, bg=entity.color)
 
 */
 
@@ -464,7 +465,6 @@ void render_all(
     if (game_state->game_phase == ENTITY_INFO)
     {
         render_entity_frame(
-            Consoles::singleton().entity_frame, 
             game_state->entity_focused);
     }
 
@@ -472,7 +472,6 @@ void render_all(
     if (game_state->game_phase == INVENTORY_ITEM_MENU)
     {
         render_entity_frame(
-            Consoles::singleton().entity_frame, 
             game_state->selected_inventory_item);
     }
 

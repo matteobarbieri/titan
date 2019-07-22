@@ -3,8 +3,10 @@
 
 #include "libtcod.hpp"
 
-#include "Action.hpp"
 #include "GameState.hpp"
+
+// Forward declarations
+class Action;
 
 char handle_main_menu(TCOD_key_t);
 

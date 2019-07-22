@@ -6,7 +6,7 @@
 #include "GamePhase.hpp"
 
 #include "Consoles.hpp"
-#include "Action.hpp"
+#include "actions/Action.hpp"
 
 #include "components/Ai.hpp"
 

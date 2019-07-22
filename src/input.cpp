@@ -1,6 +1,6 @@
 #include "libtcod.hpp"
 
-#include "Action.hpp"
+#include "actions/Action.hpp"
 #include "GameState.hpp"
 
 /*

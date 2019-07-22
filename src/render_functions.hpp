@@ -51,8 +51,10 @@ void render_entity_label(
     TCODConsole * terrain_layer, Entity * entity,
     int top_x, int top_y);
 
-
+/**
+ * Print a frame containing information about the entity.
+ */
 void render_entity_frame(
-    TCODConsole * entity_frame, Entity * entity);
+    Entity * entity);
 
 #endif
