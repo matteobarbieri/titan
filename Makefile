@@ -5,6 +5,7 @@ CXX = g++
 ccsrc = $(wildcard src/*.cpp) \
         $(wildcard src/components/*.cpp) \
         $(wildcard src/ui/*.cpp) \
+        $(wildcard src/actions/*.cpp) \
         $(wildcard src/map/*.cpp) \
         $(wildcard src/map/generators/*.cpp) 
 

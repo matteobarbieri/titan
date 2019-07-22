@@ -1,31 +1,38 @@
-#include "libtcod.hpp"
+#ifndef R20177_ACTION
+#define R20177_ACTION
 
-#include "Action.hpp"
+#include "../libtcod.hpp"
 
-#include "map/GameMap.hpp"
-#include "GameState.hpp"
-#include "Entity.hpp"
-
-#include "Outcome.hpp"
+// Forward declaration
+class Outcome;
+class GameMap;
+class GameState;
+class Entity;
 
 /** An action performed by a player 
  */
 
-void Action::set_context(
+class Action
+{
+    public:
+
+        Action();
+        virtual ~Action();
+
+        void set_context(
             GameMap * game_map, Entity * player, TCODMap * fov_map,
-            GameState * game_state)
-{
+            GameState * game_state);
 
-    // TODO implement
-    float aa = 1/0;
-}
+        Outcome * execute();
+};
 
-Outcome * Action::execute()
+
+class ExitGameException: public std::exception
 {
-    // TODO implement
-    float aa = 1/0;
-    return NULL;
-}
+};
+
+
+#endif
 
 /*
 from game_state import GamePhase
