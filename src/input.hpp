@@ -3,10 +3,9 @@
 
 #include "libtcod.hpp"
 
-#include "GameState.hpp"
-
 // Forward declarations
 class Action;
+class GameState;
 
 char handle_main_menu(TCOD_key_t);
 
@@ -17,9 +16,6 @@ Action * handle_input(
 #endif
 
 /*
-import tcod as libtcod
-
-from game_state import GamePhase
 
 from actions import *
 

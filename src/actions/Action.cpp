@@ -11,14 +11,30 @@
 /** An action performed by a player 
  */
 
+/*
+    def set_context(self, game_map, player, message_log, fov_map,
+                    game_state):
+
+        self.game_map = game_map
+        self.player = player
+        self.message_log = message_log
+        self.fov_map = fov_map
+        # self.entity_targeted = entity_targeted
+        self.game_state = game_state
+*/
+
+// TODO consider whether to add also message log
 void Action::set_context(
             GameMap * game_map, Entity * player, TCODMap * fov_map,
             GameState * game_state)
 {
-
-    // TODO implement
-    std::cout << "Implement Action::set_context!" << std::endl;
-    float aa = 1/0;
+    
+    // Set object attributes
+    _game_map = game_map;
+    _player = player;
+    _game_state = game_state;
+    _fov_map = fov_map;
+    
 }
 
 Outcome * Action::execute()
@@ -38,16 +54,6 @@ class Action():
     def __init__(self):
         self.game_map = None
         self.player = None
-
-    def set_context(self, game_map, player, message_log, fov_map,
-                    game_state):
-
-        self.game_map = game_map
-        self.player = player
-        self.message_log = message_log
-        self.fov_map = fov_map
-        # self.entity_targeted = entity_targeted
-        self.game_state = game_state
 
     def _execute(self):
         """

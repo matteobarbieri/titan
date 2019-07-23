@@ -36,15 +36,10 @@ Action * handle_input(
     TCOD_key_t key, TCOD_mouse_t mouse, GameState * game_state)
 {
     // TODO implement
-    return NULL;
+    return 0;
 }
 
 /*
-import tcod as libtcod
-
-from game_state import GamePhase
-
-from actions import *
 
 def handle_input(key, mouse, game_state):
     """
@@ -81,6 +76,9 @@ def handle_input(key, mouse, game_state):
     # Return empty outcome dict
     return {}
 
+*/
+
+/*
 
 def handle_entity_info(key, mouse):
 

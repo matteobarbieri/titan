@@ -129,32 +129,38 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 
             action = handle_input(key, mouse, game_state);
 
-            std::cout << "Checkpoint 8!" << std::endl;
-
-            // Add all objects required to perform any action
-
-            action->set_context(
-                game_map, player, fov_map, game_state);
-
-            // TODO explicitly destroy action?
-            // TODO explicitly destroy outcome?
-
-            // Execute the action
-            try {
-                outcome = action->execute();
-            } catch(ExitGameException e) {
-                // Exit to main menu
-                return;
-            }
-
-            ////////////////////////////////////////////
-            ///////////// RESOLVE OUTCOME //////////////
-            ////////////////////////////////////////////
-            
-            if (outcome != 0)
+            // Only do something if there actually is an input of some kind
+            if (action != 0)
             {
-                // TODO also need message log parameter?
-                game_state->update(outcome, fov_recompute, redraw_terrain);
+
+                std::cout << "Checkpoint 8!" << std::endl;
+
+                // Add all objects required to perform any action
+
+                action->set_context(
+                    game_map, player, fov_map, game_state);
+
+                // TODO explicitly destroy action?
+                // TODO explicitly destroy outcome?
+
+                // Execute the action
+                try {
+                    outcome = action->execute();
+                } catch(ExitGameException e) {
+                    // Exit to main menu
+                    return;
+                }
+
+                ////////////////////////////////////////////
+                ///////////// RESOLVE OUTCOME //////////////
+                ////////////////////////////////////////////
+                
+                if (outcome != 0)
+                {
+                    // TODO also need message log parameter?
+                    game_state->update(outcome, fov_recompute, redraw_terrain);
+                }
+
             }
 
         } // if (game_state->is_players_turn())
