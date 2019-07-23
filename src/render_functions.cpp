@@ -21,8 +21,11 @@
 
 Entity * check_if_still_in_sight(TCODMap * fov_map, Entity * entity)
 {
-    // TODO to implement
-    return 0;
+
+    if (fov_map->isInFov(entity->x, entity->y))
+        return entity;
+    else
+        return 0;
 }
 
 // Print the name of the entity on the top left tile
@@ -533,18 +536,6 @@ from game_state import GamePhase
 
 from menus import (
     character_screen, inventory_menu, item_submenu)
-
-
-def check_if_still_in_sight(fov_map, entity):
-    """
-    Checks if an entity is in sight and return it if it is true, else return
-    None.
-    """
-
-    if libtcod.map_is_in_fov(fov_map, entity.x, entity.y):
-        return entity
-    else:
-        return None
 
 
 
