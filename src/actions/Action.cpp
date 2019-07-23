@@ -17,12 +17,14 @@ void Action::set_context(
 {
 
     // TODO implement
+    std::cout << "Implement Action::set_context!" << std::endl;
     float aa = 1/0;
 }
 
 Outcome * Action::execute()
 {
     // TODO implement
+    std::cout << "Implement Action::execute!" << std::endl;
     float aa = 1/0;
     return NULL;
 }
