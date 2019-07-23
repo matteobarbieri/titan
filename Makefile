@@ -16,3 +16,6 @@ LDFLAGS = -Isrc -L. -ltcod -g -Wl,-rpath=.
 
 titan: $(obj)
 	$(CXX) -o $@ $^ $(LDFLAGS)
+
+clean: $(obj)
+	rm $^
