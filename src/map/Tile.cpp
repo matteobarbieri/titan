@@ -140,19 +140,6 @@ GRAY_PALETTE = [
     libtcod.Color(89, 89, 89),
 ]
 
-
-class Tile:
-    """
-    A tile on a map. It may or may not be blocked, and may or may not block
-    sight.
-    """
-
-class Floor(Tile):
-    """
-    A block representing traversable terrain
-    """
-
-
 class Door(Tile):
     """
     A door

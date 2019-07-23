@@ -15,17 +15,9 @@ class Entity;
 class Action
 {
 
-    private:
-
-        GameMap * _game_map;
-        Entity * _player;
-        TCODMap * _fov_map;
-        GameState * _game_state;
-
     public:
 
         Action();
-        virtual ~Action();
 
         void set_context(
             GameMap * game_map, Entity * player, TCODMap * fov_map,
@@ -42,6 +34,13 @@ class Action
          * method, saved (in order to allow replay) and returned.
          */
         virtual Outcome * execute();
+
+
+        GameMap * game_map;
+        Entity * player;
+        TCODMap * fov_map;
+        GameState * game_state;
+
 };
 
 

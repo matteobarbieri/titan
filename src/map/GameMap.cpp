@@ -188,6 +188,17 @@ std::vector<Entity *> GameMap::entities()
     return _entities;
 }
 
+bool GameMap::is_blocked(int x, int y) const
+{
+    //int tile_index = compute_tile_index(x, y, width);
+    //return tiles[tile_index]->blocked();
+
+    return tiles[
+        compute_tile_index(x, y, width)
+    ]->blocked();
+}
+
+
 void GameMap::add_part(Room * room)
 {
     rooms.push_back(room);
@@ -770,9 +781,4 @@ class GameMap:
                 tf.write("\n")
 
 
-    def is_blocked(self, x, y):
-        if self.tiles[x][y].blocked:
-            return True
-
-        return False
 */

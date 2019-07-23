@@ -51,6 +51,16 @@ class Entity
         // The character representing the entity on the map
         int symbol;
 
+        // Components
+        Fighter * fighter;
+        MonsterAi * ai;
+        Stairs * stairs;
+        Item * item;
+        Level * level;
+        Equipment * equipment;
+        Equippable * equippable;
+        Inventory * inventory;
+
         // Methods
         
         // Constructor
@@ -66,17 +76,9 @@ class Entity
 
         RenderOrder render_order() const;
 
+        // Getters
         TCODColor color() const;
-
-        // Components
-        Fighter * fighter;
-        MonsterAi * ai;
-        Stairs * stairs;
-        Item * item;
-        Level * level;
-        Equipment * equipment;
-        Equippable * equippable;
-        Inventory * inventory;
+        bool blocks() const;
 
 };
 
@@ -264,14 +266,4 @@ def get_inspectable_entities_at_location(
     return None
 
 
-def get_blocking_entities_at_location(
-    entities, destination_x, destination_y):  # noqa
-
-    for entity in entities:
-        if (entity.blocks and
-            entity.x == destination_x and
-            entity.y == destination_y):  # noqa
-            return entity
-
-    return None
 */

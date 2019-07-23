@@ -222,7 +222,7 @@ class GameMap
 
         void initialize_tiles();
 
-        bool is_blocked(int x, int y);
+        bool is_blocked(int x, int y) const;
 
         void export_txt(const char * txt_file);
 

@@ -29,6 +29,11 @@ TCODColor Entity::color() const
     return _color;
 }
 
+bool Entity::blocks() const
+{
+    return _blocks;
+}
+
 /*
 
 import math

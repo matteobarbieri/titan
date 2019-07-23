@@ -11,6 +11,10 @@
 /** An action performed by a player 
  */
 
+Action::Action()
+{
+}
+
 /*
     def set_context(self, game_map, player, message_log, fov_map,
                     game_state):
@@ -30,19 +34,26 @@ void Action::set_context(
 {
     
     // Set object attributes
-    _game_map = game_map;
-    _player = player;
-    _game_state = game_state;
-    _fov_map = fov_map;
+    this->game_map = game_map;
+    this->player = player;
+    this->game_state = game_state;
+    this->fov_map = fov_map;
     
+}
+
+/**
+ * Virtual function, should never be called
+ */
+Outcome * Action::_execute()
+{
+    return 0;
 }
 
 Outcome * Action::execute()
 {
-    // TODO implement
-    std::cout << "Implement Action::execute!" << std::endl;
-    float aa = 1/0;
-    return NULL;
+    // Simply return the outcome of the proper subclass implementation of
+    // _execute()
+    return _execute();
 }
 
 /*

@@ -101,8 +101,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
             &mouse, game_state, current_turn,
             top_x, top_y);
 
-        std::cout << "Checkpoint 7!" << std::endl;
-
         // TODO find a better place
         game_map->top_x = top_x;
         game_map->top_y = top_y;
@@ -112,8 +110,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
         redraw_entities = false;
 
         TCODConsole::root->flush();
-
-        std::cout << "Checkpoint 7!" << std::endl;
 
         ////////////////////////////////////////////
         ////////////// PLAYER'S TURN ///////////////
