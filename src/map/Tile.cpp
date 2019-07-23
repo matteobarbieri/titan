@@ -6,7 +6,10 @@
 ///////////// TILE //////////////
 /////////////////////////////////
 
-Tile::Tile(bool blocked, bool block_sight) : _blocked(blocked), _block_sight(block_sight)
+
+Tile::Tile(bool blocked, bool block_sight) :
+    _blocked(blocked), _block_sight(block_sight),
+    _explored(false), _fg_symbol(' ')
 {
 }
 
@@ -14,23 +17,44 @@ Tile::~Tile()
 {
 }
 
-bool Tile::blocked()
+bool Tile::blocked() const
 {
     return _blocked;
 }
 
-bool Tile::block_sight()
+bool Tile::block_sight() const
 {
     return _block_sight;
 }
 
-void Tile::render_at(TCODConsole * con, int x, int y, bool visible)
-{
-}
-
-bool Tile::explored()
+bool Tile::explored() const
 {
     return _explored;
+}
+
+int Tile::fg_symbol() const
+{
+    return _fg_symbol;
+}
+
+TCODColor Tile::fg_color() const
+{
+    return _fg_color;
+}
+
+TCODColor Tile::bg_color() const
+{
+    return _bg_color;
+}
+
+void Tile::render_at(TCODConsole * con, int x, int y, bool visible)
+{
+
+    // TODO use also 'visible' argument
+    
+    con->setCharBackground(x, y, bg_color());
+    con->putChar(x, y, fg_symbol(), TCOD_BKGND_NONE);
+    con->setCharForeground(x, y, fg_color());
 }
 
 void Tile::explored(bool v)
@@ -67,9 +91,6 @@ void Tile::explored(bool v)
             # The default symbol
             self._fg_symbol = fg_symbol
 
-
-
-
 */
 
 Floor::Floor(TCODColor bg_color, TCODColor fg_color, int fg_symbol) : 
@@ -88,19 +109,6 @@ Floor::Floor(TCODColor bg_color, TCODColor fg_color, int fg_symbol) :
 /////////////////////////////////
 ///////////// WALL //////////////
 /////////////////////////////////
-
-/*
-
-   def __init__(self, bg_color, fg_symbol='#', fg_color=libtcod.black):
-
-        # Declare it as blocked
-        super().__init__(True)
-
-        self.bg_color = bg_color
-        self.fg_color = fg_color
-        self._fg_symbol = fg_symbol
-
-*/
 
 Wall::Wall(TCODColor bg_color, TCODColor fg_color, int fg_symbol) : Tile(true, true)
 {
@@ -124,8 +132,6 @@ Wall * Wall::create_from_palette(std::vector<TCODColor> palette)
 /*
 import random
 
-import libtcodpy as libtcod
-
 GRAY_PALETTE = [
     # libtcod.Color(242, 242, 242),
     libtcod.Color(204, 204, 204),
@@ -140,53 +146,6 @@ class Tile:
     A tile on a map. It may or may not be blocked, and may or may not block
     sight.
     """
-
-    def __init__(self, blocked, block_sight=None):
-
-        self._blocked = blocked
-
-        # By default, if a tile is blocked, it also blocks sight
-        if block_sight is None:
-            block_sight = blocked
-
-        self._block_sight = block_sight
-
-        self._fg_symbol = ' '
-        self.explored = False
-
-    @property
-    def fg_symbol(self):
-        return self._fg_symbol
-
-    @property
-    def blocked(self):
-        return self._blocked
-
-    @property
-    def block_sight(self):
-        return self._block_sight
-
-    def render_at(self, con, x, y, visible):
-        """
-        Render a tile at position x, y
-        """
-        # Set color for background
-
-        if type(self) == Tile:
-            return
-
-        libtcod.console_set_char_background(
-            con, x, y, self.bg_color, libtcod.BKGND_SET)
-
-        if self.fg_symbol is not None:
-
-            # Draw symbol on foreground
-            libtcod.console_put_char(
-                con, x, y, self.fg_symbol, libtcod.BKGND_NONE)
-
-            # Set color for foreground symbol
-            libtcod.console_set_char_foreground(con, x, y, self.fg_color)
-
 
 class Floor(Tile):
     """

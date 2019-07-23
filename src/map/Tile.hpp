@@ -46,17 +46,16 @@ class Tile
         virtual ~Tile();
 
         // Private member getters
-        bool blocked();
-        bool block_sight();
-        bool explored();
+        virtual bool blocked() const;
+        virtual bool block_sight() const;
+        virtual bool explored() const;
+        virtual int fg_symbol() const;
         
         // Set value
         void explored(bool v);
 
-        TCODColor bg_color();
-        TCODColor fg_color();
-
-        int fg_symbol();
+        TCODColor bg_color() const;
+        TCODColor fg_color() const;
 
         virtual void render_at(TCODConsole * con, int x, int y, bool visible);
 };
@@ -84,7 +83,7 @@ class Wall : public Tile
     public:
 
         Wall(TCODColor bg_color,
-              TCODColor fg_color = TCODColor::black,
+              TCODColor fg_color=TCODColor::black,
               int fg_symbol='#');
 
         /**
