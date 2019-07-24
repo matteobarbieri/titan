@@ -4,6 +4,9 @@
 #include "../libtcod.hpp"
 #include "../GamePhase.hpp"
 
+// Forward declarations
+class Entity;
+
 /** The outcome of an action performed by a player 
  */
 
@@ -15,7 +18,14 @@ class Outcome
         bool fov_recompute;
         bool redraw_terrain;
 
-        Outcome(GamePhase next_phase, bool fov_recompute, bool redraw_terrain);
+        Entity * entity_focused;
+        Entity * entity_targeted;
+        Entity * selected_inventory_item;
+
+        Outcome(GamePhase next_phase, bool fov_recompute, bool redraw_terrain,
+                Entity * entity_focused=0, Entity * entity_targeted=0,
+                Entity * selected_inventory_item=0
+                );
 
 };
 

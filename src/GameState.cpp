@@ -1,5 +1,7 @@
 #include "GameState.hpp"
 
+#include "actions/Outcome.hpp"
+
 GameState::GameState()
 {
 }
@@ -22,33 +24,24 @@ bool GameState::is_enemies_turn()
 void GameState::update(Outcome * outcome, bool & fov_recompute,
         bool & redraw_terrain)
 {
-    // TODO implement
-    return;
-}
 
-/*
-def update_game_state(
-    outcome,
-    game_state: GameState, fov_recompute, redraw_terrain,
-    message_log):  # noqa
+    // Update game phase
+    game_phase = outcome->next_phase;
 
-    # Update game state
-    if outcome.get('next_state') is not None:
-        game_state.game_phase = outcome.get('next_state')
+    // Update focused entity
+    if (outcome->entity_focused != 0)
+        entity_focused = outcome->entity_focused;
 
-    # Update focused entity
-    if outcome.get('entity_focused') is not None:
-        game_state.entity_focused = outcome.get('entity_focused')
+    // Update targeted entity
+    if (outcome->entity_targeted != 0)
+        entity_targeted = outcome->entity_targeted;
 
-    # Update targeted entity
-    if outcome.get('entity_targeted') is not None:
-        game_state.entity_targeted = outcome.get('entity_targeted')
+    // Update selected inventory item
+    if (outcome->selected_inventory_item != 0)
+        selected_inventory_item = outcome->selected_inventory_item;
 
-    # Update selected inventory item
-    if outcome.get('selected_inventory_item') is not None:
-        game_state.selected_inventory_item = outcome.get(
-            'selected_inventory_item')
-
+    /*
+    TODO this was the original python code
     # Determine whether to recompute fov...
     if outcome.get('fov_recompute') is not None:
         fov_recompute = outcome.get('fov_recompute')
@@ -60,13 +53,24 @@ def update_game_state(
         redraw_terrain = outcome.get('redraw_terrain')
     else:
         redraw_terrain = redraw_terrain
+    */
 
+    // Determine whether to recompute fov...
+    fov_recompute = outcome->fov_recompute;
+    // or redraw terrain
+    redraw_terrain = outcome->redraw_terrain;
+
+    // TODO enable message log
+    /*
     # Add messages to the log
     if outcome.get('messages') is not None:
         for m in outcome.get('messages'):
             message_log.add_message(m)
+    */
 
-    return fov_recompute, redraw_terrain
+}
+
+/*
 
 from enum import Enum, auto
 
