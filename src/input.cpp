@@ -1,6 +1,9 @@
 #include "libtcod.hpp"
 
+// Actions
 #include "actions/Action.hpp"
+#include "actions/Move.hpp"
+
 #include "GameState.hpp"
 #include "GamePhase.hpp"
 
@@ -47,23 +50,36 @@ Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     ////////////// MOVEMENT /////////////////
     /////////////////////////////////////////
 
+    // Cross movement
+    if (key.vk == TCODK_UP || key_char == 'k')
+        return new MoveAction(0, -1);
+
+    if (key.vk == TCODK_DOWN || key_char == 'j')
+        return new MoveAction(0, 1);
+
+    if (key.vk == TCODK_LEFT || key_char == 'h')
+        return new MoveAction(-1, 0);
+
+    if (key.vk == TCODK_RIGHT || key_char == 'l')
+        return new MoveAction(1, 0);
+
+    if (key.vk == TCODK_RIGHT || key_char == 'l')
+        return new MoveAction(1, 0);
+
+    // Diagonal movements
+    if (key_char == 'y')
+        return new MoveAction(-1, -1);
+
+    if (key_char == 'u')
+        return new MoveAction(1, -1);
+
+    if (key_char == 'b')
+        return new MoveAction(-1, 1);
+
+    if (key_char == 'n')
+        return new MoveAction(1, 1);
+
     /*
-    if key.vk == libtcod.KEY_UP or key_char == 'k':
-        return MoveAction(direction=(0, -1))
-    elif key.vk == libtcod.KEY_DOWN or key_char == 'j':
-        return MoveAction(direction=(0, 1))
-    elif key.vk == libtcod.KEY_LEFT or key_char == 'h':
-        return MoveAction(direction=(-1, 0))
-    elif key.vk == libtcod.KEY_RIGHT or key_char == 'l':
-        return MoveAction(direction=(1, 0))
-    elif key_char == 'y':
-        return MoveAction(direction=(-1, -1))
-    elif key_char == 'u':
-        return MoveAction(direction=(1, -1))
-    elif key_char == 'b':
-        return MoveAction(direction=(-1, 1))
-    elif key_char == 'n':
-        return MoveAction(direction=(1, 1))
     elif key_char == 'z':
         return WaitAction()
     */
