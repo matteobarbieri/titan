@@ -3,6 +3,7 @@
 // Actions
 #include "actions/Action.hpp"
 #include "actions/Move.hpp"
+#include "actions/Menus.hpp"
 
 #include "GameState.hpp"
 #include "GamePhase.hpp"
@@ -79,122 +80,96 @@ Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     if (key_char == 'n')
         return new MoveAction(1, 1);
 
+    /////////////////////////////////////////
+    /////////// GO TO MAIN MENU /////////////
+    /////////////////////////////////////////
+
+    if (key.vk == TCODK_ESCAPE)
+        return new ShowMenuAction();
+
     /*
     elif key_char == 'z':
         return WaitAction()
     */
 
 
+    // No key was pressed
     return 0;
 }
 
 /*
- *def handle_player_turn_keys(key, mouse):
- *
- *
- *    #########################################
- *    ############## MOVEMENT #################
- *    #########################################
- *
- *    if key.vk == libtcod.KEY_UP or key_char == 'k':
- *        return MoveAction(direction=(0, -1))
- *    elif key.vk == libtcod.KEY_DOWN or key_char == 'j':
- *        return MoveAction(direction=(0, 1))
- *    elif key.vk == libtcod.KEY_LEFT or key_char == 'h':
- *        return MoveAction(direction=(-1, 0))
- *    elif key.vk == libtcod.KEY_RIGHT or key_char == 'l':
- *        return MoveAction(direction=(1, 0))
- *    elif key_char == 'y':
- *        return MoveAction(direction=(-1, -1))
- *    elif key_char == 'u':
- *        return MoveAction(direction=(1, -1))
- *    elif key_char == 'b':
- *        return MoveAction(direction=(-1, 1))
- *    elif key_char == 'n':
- *        return MoveAction(direction=(1, 1))
- *    elif key_char == 'z':
- *        return WaitAction()
- *
- *    #########################################
- *    ################ COMBAT #################
- *    #########################################
- *
- *    # Targeting
- *    if key.vk == libtcod.KEY_TAB:
- *
- *        if key.shift:
- *            # Select the previous one
- *            return CycleTargetAction(-1)
- *        else:
- *            # Select the next one
- *            return CycleTargetAction(1)
- *
- *    elif key_char == 'f':
- *        return ShootAction()
- *
- *    #########################################
- *    ########### GO TO MAIN MENU #############
- *    #########################################
- *
- *    # Show main menu
- *    elif key.vk == libtcod.KEY_ESCAPE:
- *        return ShowMenuAction()
- *
- *    #########################################
- *    ########## TOGGLE FULLSCREEN ############
- *    #########################################
- *
- *    elif key.vk == libtcod.KEY_ENTER and key.lalt:
- *        # Alt+Enter: toggle full screen
- *        return ToggleFullscreenAction()
- *
- *    #########################################
- *    ################# MISC ##################
- *    #########################################
- *
- *    elif key_char == 'i':
- *        return ShowInventoryAction()
- *
- *    elif key_char == 'c':
- *        return ShowCharacterScreenAction()
- *
- *    elif key_char == 'g':
- *        return PickupAction()
- *
- *    #########################################
- *    ############ MOUSE ACTIONS ##############
- *    #########################################
- *
- *    (x, y) = (mouse.cx, mouse.cy)
- *
- *    if mouse.lbutton_pressed:
- *        return InspectAction(x, y)
- *    # elif mouse.rbutton_pressed:
- *        # return {'right_click': (x, y)}
- *
- *    #########################################
- *    ############ SELECT ENTITY ##############
- *    #########################################
- *
- *
- *    """
- *    elif key_char == 'g':
- *        return {'pickup': True}
- *    elif key_char == 'd':
- *        return {'drop_inventory': True}
- *    elif key.vk == libtcod.KEY_ENTER:
- *        return {'take_stairs': True}
- *
- *    # Updated
- *    elif key.vk == libtcod.KEY_ESCAPE:
- *        # Exit the game
- *        return {'exit': True}
- *    """
- *
- *    # No key was pressed
- *    return NoopAction()
- */
+def handle_player_turn_keys(key, mouse):
 
+
+    #########################################
+    ################ COMBAT #################
+    #########################################
+
+    # Targeting
+    if key.vk == libtcod.KEY_TAB:
+
+        if key.shift:
+            # Select the previous one
+            return CycleTargetAction(-1)
+        else:
+            # Select the next one
+            return CycleTargetAction(1)
+
+    elif key_char == 'f':
+        return ShootAction()
+
+    #########################################
+    ########## TOGGLE FULLSCREEN ############
+    #########################################
+
+    elif key.vk == libtcod.KEY_ENTER and key.lalt:
+        # Alt+Enter: toggle full screen
+        return ToggleFullscreenAction()
+
+    #########################################
+    ################# MISC ##################
+    #########################################
+
+    elif key_char == 'i':
+        return ShowInventoryAction()
+
+    elif key_char == 'c':
+        return ShowCharacterScreenAction()
+
+    elif key_char == 'g':
+        return PickupAction()
+
+    #########################################
+    ############ MOUSE ACTIONS ##############
+    #########################################
+
+    (x, y) = (mouse.cx, mouse.cy)
+
+    if mouse.lbutton_pressed:
+        return InspectAction(x, y)
+    # elif mouse.rbutton_pressed:
+        # return {'right_click': (x, y)}
+
+    #########################################
+    ############ SELECT ENTITY ##############
+    #########################################
+
+
+    """
+    elif key_char == 'g':
+        return {'pickup': True}
+    elif key_char == 'd':
+        return {'drop_inventory': True}
+    elif key.vk == libtcod.KEY_ENTER:
+        return {'take_stairs': True}
+
+    # Updated
+    elif key.vk == libtcod.KEY_ESCAPE:
+        # Exit the game
+        return {'exit': True}
+    """
+
+*/
 
 Action * handle_input(
     TCOD_key_t key, TCOD_mouse_t mouse, GameState * game_state)

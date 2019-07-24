@@ -44,10 +44,13 @@ class Action
 };
 
 
-class ExitGameException: public std::exception
+//class ExitGameException: public std::exception
+//{
+//};
+
+class ShowMenuException : public std::exception
 {
 };
-
 
 #endif
 

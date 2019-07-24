@@ -142,7 +142,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
                 // Execute the action
                 try {
                     outcome = action->execute();
-                } catch(ExitGameException e) {
+                } catch(ShowMenuException e) {
                     // Exit to main menu
                     return;
                 }
@@ -317,7 +317,7 @@ int main(int argc, char *argv[])
 
                 
             // When returning to main menu, reset play_game variable to false
-            //play_game = false;
+            play_game_ = false;
         }
 
         TCODConsole::root->flush();
