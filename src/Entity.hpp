@@ -72,7 +72,7 @@ class Entity
         ~Entity();
 
         // Required for sorting
-        bool operator < (const Entity & other) const;
+        //bool operator < (const Entity & other) const;
 
         RenderOrder render_order() const;
 

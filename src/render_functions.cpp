@@ -360,6 +360,7 @@ void render_all(
         // Entities are kept sorted in GameMap::add_entity
         for (int i=0; i < (int)game_map->entities().size(); i++)
         {
+            //std::cout << i << " " << game_map->entities()[i]->name << std::endl;
             draw_entity(
                 Consoles::singleton().terrain_layer, game_map->entities()[i],
                 fov_map, game_map, top_x, top_y);

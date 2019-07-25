@@ -1,5 +1,6 @@
 #include <string>
 
+
 #include "libtcod.hpp"
 
 #include "Entity.hpp"
@@ -14,10 +15,17 @@ Entity::Entity(int x, int y, int symbol,
 {
 }
 
+/*
 bool Entity::operator < (const Entity & other) const
 {
+    std::cout << this->name << ": " << this->render_order() <<
+        other.name << ": " << other.render_order() << std::endl;
+
+    std::cout << "comparison: " << (this->render_order() < other.render_order()) << std::endl;
+
     return (this->render_order() < other.render_order());
 }
+*/
 
 RenderOrder Entity::render_order() const
 {

@@ -129,7 +129,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
             if (action != 0)
             {
 
-                std::cout << "Checkpoint 8!" << std::endl;
+                //std::cout << "Checkpoint 8!" << std::endl;
 
                 // Add all objects required to perform any action
 

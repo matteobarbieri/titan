@@ -247,12 +247,25 @@ void GameMap::add_walls()
     float a = 1/0;
 }
 
+// Compares two entities according to render_order
+bool compare_render_order(Entity * e1, Entity * e2)
+{
+    //std::cout << "here!" << std::endl;
+    return (e1->render_order() < e2->render_order());
+}
+
 void GameMap::add_entity(Entity * entity)
 {
     _entities.push_back(entity);
 
     // Sort entities based on render order when a new one is added
-    std::sort(_entities.begin(), _entities.end());
+    std::sort(_entities.begin(), _entities.end(), compare_render_order);
+    
+    //std::cout << "sorting" << std::endl;
+    //for (int i=0;i<(int)_entities.size();i++)
+    //{
+        //std::cout << i << " " << _entities[i]->name << std::endl;
+    //}
 }
 
 void GameMap::remove_entity(Entity * entity)
