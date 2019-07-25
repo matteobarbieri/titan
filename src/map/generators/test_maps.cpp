@@ -1,5 +1,9 @@
+#include <iostream>
+
 // TODO check if file stays in place
 #include "../GameMap.hpp"
+
+#include "../../RenderOrder.hpp"
 
 #include "../../libtcod.hpp"
 #include "../../Entity.hpp"
@@ -7,17 +11,13 @@
 // Components
 #include "../../components/Stairs.hpp"
 
-#include <iostream>
+// Prefabs
+#include "../../prefabs/enemies.hpp"
 
-#include "../../RenderOrder.hpp"
 
-/*
-def generate_dungeon_level(width, height, min_room_length, max_room_length):
-    # TODO add parameters (and use them!)
-
-*/
-
-// TODO implement
+/**
+ * Add a single immobile orc in the room
+ */
 void add_monsters(GameMap * level);
 
 // TODO implement
@@ -45,16 +45,7 @@ GameMap * generate_room(int width, int height)
 
     // Populate Dungeon with entities
     
-    // Monsters
-    // TODO enable
-    //add_monsters(level);
-
-    // Add some items in the room
-    // TODO enable
-    //add_items(level);
-
     // Create and add entry stairs '<'
-
     Stairs * up_stairs_component = new Stairs(level->dungeon_level - 1);
 
     // Create entity object
@@ -67,21 +58,25 @@ GameMap * generate_room(int width, int height)
 
     level->add_entity(up_stairs);
 
-    /*
-    #############################
-    ######### FIN QUI ###########
-    #############################
+    // Monsters
+    // TODO enable
+    add_monsters(level);
 
-    */
+    // Add some items in the room
+    // TODO enable
+    //add_items(level);
 
     return level;
 }
 
-// TODO implement
+////////////////////////////////
+/////// IMPLEMENTATIONS ////////
+////////////////////////////////
+
 void add_monsters(GameMap * level)
 {
-    std::cout << "Implement add_monsters!" << std::endl;
-    float a = 1/0;
+    Entity * orc = make_orc(level->rooms[0]);
+    level->add_entity(orc);
 }
 
 // TODO implement

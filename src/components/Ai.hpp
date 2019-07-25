@@ -9,28 +9,25 @@ class Outcome;
 // TODO move somewhere else
 class AIAction
 {
-private:
-    
+    private:
+        
 
-public:
-    AIAction();
-    virtual ~AIAction();
+    public:
+        AIAction();
+        virtual ~AIAction();
 
-    Outcome * execute();
+        Outcome * execute();
     
 };
 
 class MonsterAi
 {
-private:
-    
+    private:
+        
 
-public:
+    public:
 
-    MonsterAi();
-    virtual ~MonsterAi();
-
-    AIAction * pick_action(Entity * player, GameMap * game_map);
+        AIAction * pick_action(Entity * player, GameMap * game_map);
 };
 
 #endif /* ROGUE_2077_AI */
@@ -50,18 +47,6 @@ class DestinationReachedException(Exception):
     Used to signal that the destination has been reached
     """
     pass
-
-
-class MonsterAi:
-    """
-    A monster which stands still
-    """
-
-    def __init__(self, location, state=MobState.LOITERING):
-        self.state = state
-
-    def pick_action(self, player, game_map):
-        return AIAction()
 
 
 class BasicMonster(MonsterAi):

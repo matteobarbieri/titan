@@ -13,6 +13,16 @@ Entity::Entity(int x, int y, int symbol,
     symbol(symbol), _color(color),
     _blocks(blocks), _blocks_sight(blocks_sight)
 {
+    
+        // Initialize pointers to NULL
+        fighter = nullptr;
+        ai = nullptr;
+        stairs = nullptr;
+        item = nullptr;
+        level = nullptr;
+        equipment = nullptr;
+        equippable = nullptr;
+        inventory = nullptr;
 }
 
 /*

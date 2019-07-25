@@ -6,23 +6,19 @@
 
 #include "RenderOrder.hpp"
 
+#include "GameState.hpp"
+#include "GamePhase.hpp"
+
 // Components
 #include "components/Fighter.hpp"
 #include "components/Inventory.hpp"
 #include "components/Level.hpp"
 #include "components/Equipment.hpp"
 
-#include "GameState.hpp"
-#include "GamePhase.hpp"
-
 /*
 import libtcodpy as libtcod
 
-from components.equipment import Equipment
 from components.equippable import Equippable
-from components.fighter import Fighter
-from components.inventory import Inventory
-from components.level import Level
 from components.item import Item
 
 from prefabs.weapons.dagger import make_dagger

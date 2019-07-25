@@ -1,8 +1,10 @@
 #include "Ai.hpp"
+#include <iostream>
 
 AIAction * MonsterAi::pick_action(Entity * player, GameMap * game_map)
 {
 
+    std::cout << "Must implement MonsterAi::pick_action" << std::endl;
     // TODO implement
     return 0;
 }
@@ -11,6 +13,7 @@ AIAction * MonsterAi::pick_action(Entity * player, GameMap * game_map)
 Outcome * AIAction::execute()
 {
 
+    std::cout << "Must implement AIAction::execute" << std::endl;
     // TODO implement
     return 0;
 }
