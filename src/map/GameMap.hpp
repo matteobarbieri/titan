@@ -4,6 +4,10 @@
 //#include "libtcod.hpp"
 //#include "Entity.hpp"
 
+#include "../nlohmann/json.hpp"
+
+using json = nlohmann::json;
+
 // Forward declaration
 class Entity;
 class Tile;
@@ -227,6 +231,8 @@ class GameMap
         void export_txt(const char * txt_file);
 
         void export_shelf(const char * destination);
+
+        json to_json();
 
         // TODO check return type
         std::vector<MapPart *> all_parts();

@@ -10,6 +10,14 @@
 #include <vector>
 #include <algorithm>
 
+#include "../nlohmann/json.hpp"
+
+using json = nlohmann::json;
+
+// TODO
+// Forward declaration
+json tcodcolor_to_json(TCODColor c);
+
 /////////////////////////////////
 ///////////// RECT //////////////
 /////////////////////////////////
@@ -217,6 +225,24 @@ void GameMap::dig(MapPart * map_part, int padding)
     dig_rect(this, padded_rect);
 
     // TODO Do more than this
+}
+
+json GameMap::to_json()
+{
+    json json_data;
+    json json_tiles;
+
+    for (int i=0; i<width*height; i++)
+    {
+        json_tiles.push_back(tiles[i]->to_json());
+    }
+
+    json_data["dungeon_level"] = dungeon_level;
+    json_data["width"] = width;
+    json_data["height"] = height;
+    json_data["tiles"] = json_tiles;
+
+    return json_data;
 }
 
 /*

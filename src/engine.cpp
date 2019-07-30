@@ -4,6 +4,7 @@
 #include "Entity.hpp"
 #include "GameState.hpp"
 #include "GamePhase.hpp"
+#include "SaveGame.hpp"
 
 #include "Consoles.hpp"
 #include "actions/Action.hpp"
@@ -143,6 +144,11 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
                 try {
                     outcome = action->execute();
                 } catch(ShowMenuException e) {
+
+                    // Save game
+                    SaveGame sg;
+                    sg.save("latest.json", player, game_map);
+
                     // Exit to main menu
                     return;
                 }

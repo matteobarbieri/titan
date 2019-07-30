@@ -1,10 +1,16 @@
 #include <string>
 
-
 #include "libtcod.hpp"
 
 #include "Entity.hpp"
 #include "RenderOrder.hpp"
+
+#include "SaveGame.hpp"
+
+// Json library
+#include "nlohmann/json.hpp"
+
+using json = nlohmann::json;
 
 Entity::Entity(int x, int y, int symbol,
     TCODColor color, std::string name, RenderOrder render_order,
@@ -52,11 +58,24 @@ bool Entity::blocks() const
     return _blocks;
 }
 
+json Entity::to_json()
+{
+    // TODO to complete
+    json json_data;
+
+    json_data["_blocks"] = _blocks;
+    json_data["_blocks_sight"] = _blocks_sight;
+    json_data["name"] = name;
+
+    return json_data;
+};
+
+//void Entity::accept(Visitor * v)
+//{
+    //v->visit(*this);
+//}
+
 /*
-
-import math
-
-from render_functions import RenderOrder
 
 
 class Entity:
@@ -64,88 +83,6 @@ class Entity:
     A generic object to represent players, enemies, items, etc.
     """
 
-    # TODO change components to kwargs
-    def __init__(self, x, y, char, color, name, blocks=False,
-                 block_sight=False, render_order=RenderOrder.CORPSE,
-                 components=dict()):
-
-        # The entity's current position
-        self.x = x
-        self.y = y
-
-        # The ASCII character representing it
-        self.char = char
-
-        # Is it currently equipped?
-        self.equipped = False
-
-        # Its color
-        self._color = color
-
-        # Its name
-        self.name = name
-
-        # Is it a blocking entity?
-        self.blocks = blocks
-
-        # Does it block LoS?
-        self.block_sight = block_sight
-
-        # Render order
-        self.render_order = render_order
-
-        self.components = dict()
-        # Add components
-        for k, v in components.items():
-            self.add_component(k, v)
-
-    def __str__(self):
-        return self.name
-
-    # Fix the NoneType callable  due to overriding __getattr__ method
-    def __getstate__(self):
-        return self.__dict__
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-
-    def __getattr__(self, name):
-        """
-        Look through components
-        """
-
-        # First check that name is a valid component type
-        # TODO to implement
-        if True:
-            # Return the corresponding component (or None)
-            return self.components.get(name)
-        else:
-            raise AttributeError()
-
-    def add_component(self, component_type, component):
-        """
-        Add a component to the entity
-        """
-
-        def check_component_type(component_type, component):
-            """
-            Check that the component is of the correct type
-            """
-
-            # TODO stub
-            return True
-
-        check_component_type(component_type, component)
-
-        component.owner = self
-        self.components[component_type] = component
-
-    @property
-    def c(self):
-        """
-        Shortcut to components attribute
-        """
-        return self.components
 
     @property
     def color(self):

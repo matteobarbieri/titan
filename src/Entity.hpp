@@ -9,6 +9,10 @@
 
 #include "libtcod.hpp"
 
+#include "nlohmann/json.hpp"
+
+using json = nlohmann::json;
+
 // Forward declarations
 class Fighter;
 class MonsterAi;
@@ -18,6 +22,8 @@ class Level;
 class Equipment;
 class Equippable;
 class Inventory;
+
+class Visitor;
 
 /** A container for all consoles that are used in the game, except for the root
  * one, which is accessed directly via TCODConsole::root.
@@ -79,6 +85,19 @@ class Entity
         // Getters
         TCODColor color() const;
         bool blocks() const;
+
+        /**
+         * Creates a json representation of the entity
+         *
+         * json_data = {
+         *   "name" : name,
+         * }
+         */
+        json to_json();
+
+        //friend class Visitor;
+
+        //void accept(Visitor * v);
 
 };
 

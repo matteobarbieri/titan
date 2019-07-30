@@ -7,7 +7,6 @@ Outcome * ShowMenuAction::_execute()
     // TODO implement this
     //save_game(self.player, self.game_map, self.message_log,
               //GamePhase.PLAYERS_TURN)
-    std::cout << "Inside ShowMenuAction::_execute(): Must implement game save!" << std::endl;
 
     throw ShowMenuException();
     return 0;

@@ -2,6 +2,10 @@
 
 #include "../libtcod.hpp"
 
+#include "../nlohmann/json.hpp"
+
+using json = nlohmann::json;
+
 /////////////////////////////////
 ///////////// TILE //////////////
 /////////////////////////////////
@@ -60,6 +64,20 @@ void Tile::render_at(TCODConsole * con, int x, int y, bool visible)
 void Tile::explored(bool v)
 {
     _explored = v;
+}
+
+json Tile::to_json()
+{
+    json json_data;
+
+    json_data["_blocked"] = _blocked;
+    json_data["_block_sight"] = _block_sight;
+    json_data["_explored"] = _explored;
+    json_data["_fg_symbol"] = _fg_symbol;
+    json_data["_fg_color"] = tcodcolor_to_json(_fg_color);
+    json_data["_bg_color"] = tcodcolor_to_json(_bg_color);
+
+    return json_data;
 }
 
 /////////////////////////////////

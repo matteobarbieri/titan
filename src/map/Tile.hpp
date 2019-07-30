@@ -21,6 +21,12 @@ GRAY_PALETTE = [
 
 #include "../libtcod.hpp"
 
+#include "../nlohmann/json.hpp"
+
+using json = nlohmann::json;
+
+json tcodcolor_to_json(TCODColor c);
+
 /**
  * A tile on a map. It may or may not be blocked, and may or may not block
  * sight.
@@ -58,6 +64,7 @@ class Tile
         TCODColor fg_color() const;
 
         virtual void render_at(TCODConsole * con, int x, int y, bool visible);
+        virtual json to_json();
 };
 
 /**
