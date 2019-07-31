@@ -35,3 +35,6 @@ titan
 
 # Vim swp files
 *.swp
+
+# Latest save game
+latest.json
