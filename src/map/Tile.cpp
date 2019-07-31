@@ -1,6 +1,7 @@
 #include "Tile.hpp"
 
 #include "../libtcod.hpp"
+#include "../SaveGame.hpp"
 
 #include "../nlohmann/json.hpp"
 
@@ -80,6 +81,21 @@ json Tile::to_json()
     return json_data;
 }
 
+//void Tile::init_from_json(json j)
+//{
+//}
+
+Tile * Tile::from_json(json j)
+{
+    if (j.get<std::string>() == "WALL")
+        return Wall::from_json(j);
+
+    if (j.get<std::string>() == "FLOOR")
+        return Floor::from_json(j);
+
+    return nullptr;
+}
+
 /////////////////////////////////
 ///////////// FLOOR /////////////
 /////////////////////////////////
@@ -122,7 +138,28 @@ Floor::Floor(TCODColor bg_color, TCODColor fg_color, int fg_symbol) :
 
 }
 
+json Floor::to_json()
+{
+    json j = Tile::to_json();
 
+    j["class"] = "FLOOR";
+
+    return j;
+}
+
+Floor * Floor::from_json(json j)
+{
+
+    Floor * floor_tile = new Floor(
+        json_to_tcodcolor(j["_bg_color"]), 
+        json_to_tcodcolor(j["_fg_color"]), 
+        j["_fg_symbol"]);
+
+    // Set the "explored" status
+    floor_tile->_explored = j["_explored"];
+
+    return floor_tile;
+}
 
 /////////////////////////////////
 ///////////// WALL //////////////
@@ -145,6 +182,29 @@ Wall * Wall::create_from_palette(std::vector<TCODColor> palette)
     Wall * wall = new Wall(palette[0]);
 
     return wall;
+}
+
+json Wall::to_json()
+{
+    json j = Tile::to_json();
+
+    j["class"] = "WALL";
+
+    return j;
+}
+
+Wall * Wall::from_json(json j)
+{
+
+    Wall * wall_tile = new Wall(
+        json_to_tcodcolor(j["_bg_color"]), 
+        json_to_tcodcolor(j["_fg_color"]), 
+        j["_fg_symbol"]);
+
+    // Set the "explored" status
+    wall_tile->_explored = j["_explored"];
+
+    return wall_tile;
 }
 
 /*
@@ -194,38 +254,4 @@ class Door(Tile):
     def block_sight(self):
         return not self.is_open
 
-
-class Wall(Tile):
-    """
-    A block of wall
-    """
-
-
-    def create_from_palette(palette=GRAY_PALETTE):
-        """
-        palette: list
-            Each element is a libtcod.Color object
-        """
-
-        return Wall(random.choice(palette))
-
-#     def create(base_color=libtcod.Color(159, 89, 66), color_variance=20):
-
-        # # Extract colors
-        # b, g, r = base_color.b, base_color.g, base_color.r
-
-        # # Slightly alter them
-        # b += random.randint(-color_variance, color_variance)
-        # b = max(0, b)
-        # b = min(255, b)
-
-        # g += random.randint(-color_variance, color_variance)
-        # g = max(0, g)
-        # g = min(255, g)
-
-        # r += random.randint(-color_variance, color_variance)
-        # r = max(0, r)
-        # r = min(255, r)
-
-        # return Wall(libtcod.Color(b, g, r))
 */

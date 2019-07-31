@@ -25,6 +25,7 @@ GRAY_PALETTE = [
 
 using json = nlohmann::json;
 
+// TODO check this one
 json tcodcolor_to_json(TCODColor c);
 
 /**
@@ -51,6 +52,7 @@ class Tile
         Tile(bool blocked, bool block_sight);
         virtual ~Tile();
 
+
         // Private member getters
         virtual bool blocked() const;
         virtual bool block_sight() const;
@@ -65,6 +67,13 @@ class Tile
 
         virtual void render_at(TCODConsole * con, int x, int y, bool visible);
         virtual json to_json();
+
+        static Tile * from_json(json);
+
+        /**
+         * Fill in base attributes from json object
+         */
+        //void init_from_json(json);
 };
 
 /**
@@ -78,6 +87,10 @@ class Floor : public Tile
         Floor(TCODColor bg_color = TCODColor(20, 20, 20),
               TCODColor fg_color = TCODColor(65, 65, 65),
               int fg_symbol=250);
+
+        json to_json() override;
+
+        static Floor * from_json(json);
 
 };
 
@@ -97,6 +110,10 @@ class Wall : public Tile
          * Create a wall tile choosing the background color from a
          */
         static Wall * create_from_palette(std::vector<TCODColor> palette);
+
+        json to_json() override;
+
+        static Wall * from_json(json);
 
 };
 

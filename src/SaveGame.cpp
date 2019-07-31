@@ -23,6 +23,12 @@ json tcodcolor_to_json(TCODColor c)
     return json_data;
 }
 
+TCODColor json_to_tcodcolor(json j)
+{
+
+    return TCODColor(j[0].get<int>(), j[1].get<int>(), j[2].get<int>());
+}
+
 /*
 void SaveVisitor::visit(GameMap & el)
 {

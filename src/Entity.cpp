@@ -63,12 +63,38 @@ json Entity::to_json()
     // TODO to complete
     json json_data;
 
+    // Base entity features
     json_data["_blocks"] = _blocks;
     json_data["_blocks_sight"] = _blocks_sight;
+    json_data["_render_order"] = _render_order;
     json_data["name"] = name;
+    json_data["symbol"] = symbol;
+    json_data["_color"] = tcodcolor_to_json(_color);
 
+    // Current coordinates in the map
+    json_data["x"] = x;
+    json_data["y"] = y;
+
+    // Components
+    // TODO
+    
     return json_data;
 };
+
+Entity * Entity::from_json(json j)
+{
+    // First create base object
+    Entity * e = new Entity(j["x"], j["y"], j["symbol"],
+           json_to_tcodcolor(j["color"]),  j["name"],
+           j["_render_order"],
+           j["_blocks"], j["_blocks_sight"]);
+
+    // Then create and assign all components
+    // TODO
+    std::cout << "Implement components assignment in Entity::from_json" << std::endl;
+    
+    return e;
+}
 
 //void Entity::accept(Visitor * v)
 //{

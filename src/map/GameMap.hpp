@@ -198,7 +198,7 @@ class GameMap
         //////////// METHODS ////////////
         /////////////////////////////////
         
-        GameMap(int w, int h);
+        GameMap(int width, int height, bool _initialize_tiles=true);
         ~GameMap();
 
         void get_player_starting_coords(int & x, int & y);
@@ -233,6 +233,7 @@ class GameMap
         void export_shelf(const char * destination);
 
         json to_json();
+        static GameMap * from_json(json j);
 
         // TODO check return type
         std::vector<MapPart *> all_parts();

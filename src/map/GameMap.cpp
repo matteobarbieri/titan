@@ -106,12 +106,13 @@ Room::Room(Rect xy, std::vector<Direction *> available_directions) :
 /////////// GAME MAP ////////////
 /////////////////////////////////
 
-GameMap::GameMap(int w, int h)
+GameMap::GameMap(int width, int height, bool _initialize_tiles) : 
+    width(width), height(height)
 {
-    width = w;
-    height = h;
 
-    initialize_tiles();
+    // Decide whether to initialize tiles or not
+    if (_initialize_tiles)
+        initialize_tiles();
 
     // TODO implement
 }
@@ -243,6 +244,29 @@ json GameMap::to_json()
     json_data["tiles"] = json_tiles;
 
     return json_data;
+}
+
+GameMap * GameMap::from_json(json j)
+{
+    // Create object but do not initialize tiles
+    GameMap * game_map = new GameMap(j["width"], j["height"], false);
+
+    game_map->dungeon_level = j["dungeon_level"];
+
+    // Initialize array of Tile * of size width x height
+    game_map->tiles = (Tile **)malloc(
+        game_map->width * game_map->height * sizeof(Tile *));
+
+    // Restore tiles from json data
+    for (int i=0; i<(game_map->width * game_map->height); i++)
+    {
+        game_map->tiles[i] = Tile::from_json(j["tiles"][i]);
+    }
+    
+    // TODO restore tiles
+    //j["tiles"] = json_tiles;
+
+    return game_map;
 }
 
 /*

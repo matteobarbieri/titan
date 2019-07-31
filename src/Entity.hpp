@@ -95,6 +95,8 @@ class Entity
          */
         json to_json();
 
+        static Entity * from_json(json j);
+
         //friend class Visitor;
 
         //void accept(Visitor * v);
