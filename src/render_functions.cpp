@@ -261,6 +261,8 @@ void render_all(
     int current_turn, int & top_x, int & top_y)
 {
 
+    //std::cout << "render_all: Checkpoint 1" << std::endl;
+
     /*
     // TODO tmp workaround
     game_phase = game_state.game_phase
@@ -284,6 +286,8 @@ void render_all(
     // Only redraw terrain if needed
     if (redraw_terrain)
     {
+
+        //std::cout << "render_all: Checkpoint 2" << std::endl;
 
         // Clear the console before drawing on it
         Consoles::singleton().terrain_layer->clear();
@@ -325,6 +329,8 @@ void render_all(
             }
         }
 
+        //std::cout << "render_all: Checkpoint 3" << std::endl;
+
         if (game_state->entity_targeted != 0)
         {
 
@@ -356,15 +362,19 @@ void render_all(
     if (redraw_terrain)
     {
 
+        //std::cout << "render_all: Checkpoint 4" << std::endl;
+
         // Draw all entities in the list in the correct order
         // Entities are kept sorted in GameMap::add_entity
         for (int i=0; i < (int)game_map->entities().size(); i++)
         {
-            //std::cout << i << " " << game_map->entities()[i]->name << std::endl;
+            std::cout << i << " " << game_map->entities()[i]->name << std::endl;
             draw_entity(
                 Consoles::singleton().terrain_layer, game_map->entities()[i],
                 fov_map, game_map, top_x, top_y);
         }
+
+        //std::cout << "render_all: Checkpoint 5" << std::endl;
 
         // Blit terrain layer on root console
         TCODConsole::blit(
@@ -406,6 +416,7 @@ void render_all(
         "HP", player->fighter->hp() , player->fighter->max_hp(),
         TCODColor::lightRed, TCODColor::darkerRed);
 
+        //std::cout << "render_all: Checkpoint 6" << std::endl;
 
     // Show current dungeon level
     // TODO change with non deprecated function?
@@ -537,9 +548,6 @@ from game_state import GamePhase
 
 from menus import (
     character_screen, inventory_menu, item_submenu)
-
-
-
 
 */
 

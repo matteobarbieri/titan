@@ -87,11 +87,13 @@ json Tile::to_json()
 
 Tile * Tile::from_json(json j)
 {
-    if (j.get<std::string>() == "WALL")
+    if (j["class"].get<std::string>() == "WALL")
         return Wall::from_json(j);
 
-    if (j.get<std::string>() == "FLOOR")
+    if (j["class"].get<std::string>() == "FLOOR")
         return Floor::from_json(j);
+
+    std::cout << "This should not happend..." << std::endl;
 
     return nullptr;
 }

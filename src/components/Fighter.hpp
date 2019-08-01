@@ -1,6 +1,10 @@
 #ifndef ROGUE_2077_FIGHTER
 #define ROGUE_2077_FIGHTER
 
+#include "../nlohmann/json.hpp"
+
+using json = nlohmann::json;
+
 class Fighter
 {
 
@@ -13,10 +17,20 @@ class Fighter
     public:
 
         Fighter(int max_hp);
+        Fighter(int max_hp, int hp);
+
         ~Fighter();
 
         int max_hp() const;
         int hp() const;
+
+        /**
+         * Creates a json representation of the component
+         */
+        json to_json();
+
+        static Fighter * from_json(json j);
+
 };
 
 #endif /* ROGUE_2077_FIGHTER */

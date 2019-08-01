@@ -248,14 +248,25 @@ json GameMap::to_json()
 
 GameMap * GameMap::from_json(json j)
 {
+
+    std::cout << "Reconstructing game_map" << std::endl;
+
+    //std::cout << "Checkpoint 1" << std::endl;
+
     // Create object but do not initialize tiles
     GameMap * game_map = new GameMap(j["width"], j["height"], false);
 
+    //std::cout << "Checkpoint 2" << std::endl;
+
     game_map->dungeon_level = j["dungeon_level"];
+
+    //std::cout << "Checkpoint 3" << std::endl;
 
     // Initialize array of Tile * of size width x height
     game_map->tiles = (Tile **)malloc(
         game_map->width * game_map->height * sizeof(Tile *));
+
+    //std::cout << "Checkpoint 4" << std::endl;
 
     // Restore tiles from json data
     for (int i=0; i<(game_map->width * game_map->height); i++)
@@ -263,8 +274,7 @@ GameMap * GameMap::from_json(json j)
         game_map->tiles[i] = Tile::from_json(j["tiles"][i]);
     }
     
-    // TODO restore tiles
-    //j["tiles"] = json_tiles;
+    //std::cout << "Checkpoint 5" << std::endl;
 
     return game_map;
 }

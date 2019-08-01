@@ -1,6 +1,10 @@
 #ifndef ROGUE_20177_EQUIPMENT
 #define ROGUE_20177_EQUIPMENT 
 
+#include "../nlohmann/json.hpp"
+
+using json = nlohmann::json;
+
 class Equipment
 {
 
@@ -10,6 +14,14 @@ class Equipment
     public:
         Equipment();
         ~Equipment();
+
+        /**
+         * Creates a json representation of the component
+         */
+        json to_json();
+
+        static Equipment * from_json(json j);
+
 };
 
 

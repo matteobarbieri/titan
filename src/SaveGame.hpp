@@ -14,6 +14,7 @@ TCODColor json_to_tcodcolor(json j);
 // Forward declarations
 class Entity;
 class GameMap;
+class GameState;
 
 // Abstract class for visitor
 
@@ -45,10 +46,10 @@ class SaveGame
         //SaveGame();
 
         void save(const char * save_file,
-             Entity * player, GameMap * game_map);
+             Entity * player, GameMap * game_map, GameState * game_state);
 
         void load(const char * save_file,
-             Entity ** player, GameMap ** game_map);
+             Entity ** player, GameMap ** game_map, GameState ** game_state);
 
 };
 

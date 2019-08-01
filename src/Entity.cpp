@@ -7,10 +7,15 @@
 
 #include "SaveGame.hpp"
 
-// Json library
-#include "nlohmann/json.hpp"
-
-using json = nlohmann::json;
+// Components
+#include "components/Fighter.hpp"
+#include "components/Ai.hpp"
+#include "components/Stairs.hpp"
+#include "components/Item.hpp"
+#include "components/Level.hpp"
+#include "components/Equipment.hpp"
+#include "components/Equippable.hpp"
+#include "components/Inventory.hpp"
 
 Entity::Entity(int x, int y, int symbol,
     TCODColor color, std::string name, RenderOrder render_order,
@@ -76,22 +81,85 @@ json Entity::to_json()
     json_data["y"] = y;
 
     // Components
-    // TODO
-    
+    if (fighter != nullptr)
+        json_data["fighter"] = fighter->to_json();
+    else
+        json_data["fighter"] = nullptr;
+
+    if (ai != nullptr)
+        json_data["ai"] = ai->to_json();
+    else
+        json_data["ai"] = nullptr;
+
+    if (item != nullptr)
+        json_data["item"] = item->to_json();
+    else
+        json_data["item"] = nullptr;
+
+    if (stairs != nullptr)
+        json_data["stairs"] = stairs->to_json();
+    else
+        json_data["stairs"] = nullptr;
+
+    if (level != nullptr)
+        json_data["level"] = level->to_json();
+    else
+        json_data["level"] = nullptr;
+
+    if (equipment != nullptr)
+        json_data["equipment"] = equipment->to_json();
+    else
+        json_data["equipment"] = nullptr;
+
+    if (equippable != nullptr)
+        json_data["equippable"] = equippable->to_json();
+    else
+        json_data["equippable"] = nullptr;
+
+    if (inventory != nullptr)
+        json_data["inventory"] = inventory->to_json();
+    else
+        json_data["inventory"] = nullptr;
+
+
     return json_data;
 };
 
 Entity * Entity::from_json(json j)
 {
+
+    std::cout << "Reconstructing entity" << std::endl;
+
     // First create base object
     Entity * e = new Entity(j["x"], j["y"], j["symbol"],
-           json_to_tcodcolor(j["color"]),  j["name"],
+           json_to_tcodcolor(j["_color"]),  j["name"],
            j["_render_order"],
            j["_blocks"], j["_blocks_sight"]);
 
-    // Then create and assign all components
-    // TODO
-    std::cout << "Implement components assignment in Entity::from_json" << std::endl;
+    // Then reconstruct and assign all components
+    if (j["fighter"] != nullptr)
+        e->fighter = Fighter::from_json(j["fighter"]);
+    
+    if (j["ai"] != nullptr)
+        e->ai = MonsterAi::from_json(j["ai"]);
+    
+    if (j["stairs"] != nullptr)
+        e->stairs = Stairs::from_json(j["stairs"]);
+    
+    if (j["item"] != nullptr)
+        e->item = Item::from_json(j["item"]);
+    
+    if (j["level"] != nullptr)
+        e->level = Level::from_json(j["level"]);
+    
+    if (j["equipment"] != nullptr)
+        e->equipment = Equipment::from_json(j["equipment"]);
+    
+    if (j["equippable"] != nullptr)
+        e->equippable = Equippable::from_json(j["equippable"]);
+    
+    if (j["inventory"] != nullptr)
+        e->inventory = Inventory::from_json(j["inventory"]);
     
     return e;
 }

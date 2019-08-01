@@ -56,6 +56,8 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
     /////////////// MAIN LOOP //////////////////
     ////////////////////////////////////////////
 
+    //std::cout << "play_game: Checkpoint 1" << std::endl;
+
     while (!TCODConsole::root->isWindowClosed())
     {
 
@@ -73,11 +75,15 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
                 player->x, player->y, FOV_RADIUS,
                 FOV_LIGHT_WALLS, FOV_ALGORITHM);
 
+        //std::cout << "play_game: Checkpoint 2" << std::endl;
+
         }
 
         // If the player move, check if targeted entity is still in sight
         if (game_state->entity_targeted != 0 && redraw_terrain)
         {
+
+            //std::cout << "play_game: Checkpoint 3" << std::endl;
 
             game_state->entity_targeted = check_if_still_in_sight(
                 fov_map, game_state->entity_targeted);
@@ -86,21 +92,28 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
             // TODO more generally, if it is no longer targetable for any
             // reason
             
-            if (game_state->entity_targeted != NULL &&
-                game_state->entity_targeted->fighter == NULL)
+            if (game_state->entity_targeted != nullptr &&
+                game_state->entity_targeted->fighter == nullptr)
             {
-                game_state->entity_targeted = NULL;
+
+            //std::cout << "play_game: Checkpoint 4" << std::endl;
+
+                game_state->entity_targeted = nullptr;
             }
 
             // TODO same for focused entity?
 
         }
 
+        //std::cout << "play_game: Checkpoint 2b" << std::endl;
+
         render_all(
             player, game_map, fov_map,
             fov_recompute, redraw_terrain,
             &mouse, game_state, current_turn,
             top_x, top_y);
+
+        //std::cout << "play_game: Checkpoint 5" << std::endl;
 
         // TODO find a better place
         game_map->top_x = top_x;
@@ -119,6 +132,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
         if (game_state->is_players_turn())
         {
 
+            //std::cout << "play_game: Checkpoint 6" << std::endl;
 
             ////////////////////////////////////////////
             ///////////// EXECUTE ACTIONS //////////////
@@ -127,16 +141,17 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
             action = handle_input(key, mouse, game_state);
 
             // Only do something if there actually is an input of some kind
-            if (action != 0)
+            if (action != nullptr)
             {
 
-                //std::cout << "Checkpoint 8!" << std::endl;
+                //std::cout << "play_game: Checkpoint 7" << std::endl;
 
                 // Add all objects required to perform any action
 
                 action->set_context(
                     game_map, player, fov_map, game_state);
 
+                //std::cout << "play_game: Checkpoint 8" << std::endl;
                 // TODO explicitly destroy action?
                 // TODO explicitly destroy outcome?
 
@@ -147,7 +162,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 
                     // Save game
                     SaveGame sg;
-                    sg.save("latest.json", player, game_map);
+                    sg.save("latest.json", player, game_map, game_state);
 
                     // Exit to main menu
                     return;
@@ -301,7 +316,14 @@ int main(int argc, char *argv[])
         if (load_game)
         {
             // TODO implement
-            break;
+            // Load game
+            SaveGame sg;
+            sg.load("latest.json", &player, &game_map, &game_state);
+
+            play_game(player, game_map, game_state);
+
+            load_game = false;
+            //break;
         }
 
         if (play_game_)

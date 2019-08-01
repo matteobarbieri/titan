@@ -8,6 +8,25 @@ Level::~Level()
 {
 }
 
+json Level::to_json()
+{
+    json j;
+
+    // TODO just so that there is something
+    j["null"] = true;
+
+    return j;
+}
+
+Level * Level::from_json(json j)
+{
+    // TODO There is nothing in this component so far
+    Level * c = new Level();
+
+    return c;
+}
+
+
 /*
 class Level:
     def __init__(self, current_level=1, current_xp=0, level_up_base=200, level_up_factor=150):

@@ -7,6 +7,10 @@
 
 #include "GamePhase.hpp"
 
+#include "nlohmann/json.hpp"
+
+using json = nlohmann::json;
+
 // Forward declarations
 class Outcome;
 class Entity;
@@ -18,20 +22,25 @@ class GameState
 {
     public:
 
-        // Attributes
+        /////////////////////////////////
+        ////////// ATTRIBUTES ///////////
+        /////////////////////////////////
+        
         GamePhase game_phase;
         
         // Entity being inspected
-        Entity * entity_focused = 0;
+        Entity * entity_focused = nullptr;
 
         // Entity being targeted
-        Entity * entity_targeted = 0;
+        Entity * entity_targeted = nullptr;
 
         // Inventory item being selected
-        Entity * selected_inventory_item = 0;
+        Entity * selected_inventory_item = nullptr;
         
-        // Methods
-
+        /////////////////////////////////
+        //////////// METHODS ////////////
+        /////////////////////////////////
+        
         GameState();
         //~GameState();
 
@@ -42,6 +51,13 @@ class GameState
         // TODO does it need also message_log ?
         void update(Outcome * outcome, bool & fov_recompute,
                 bool & redraw_terrain);
+
+        /**
+         * Creates a json representation of the component
+         */
+        json to_json();
+
+        static GameState * from_json(json j);
 };
 
 /*

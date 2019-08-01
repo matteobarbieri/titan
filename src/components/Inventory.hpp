@@ -3,6 +3,10 @@
 
 #include <vector>
 
+#include "../nlohmann/json.hpp"
+
+using json = nlohmann::json;
+
 // Forward declarations
 class Entity;
 
@@ -22,6 +26,13 @@ class Inventory
 
         std::vector<Entity *> items();
 
+
+        /**
+         * Creates a json representation of the component
+         */
+        json to_json();
+
+        static Inventory * from_json(json j);
 };
 
 

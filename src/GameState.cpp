@@ -70,6 +70,25 @@ void GameState::update(Outcome * outcome, bool & fov_recompute,
 
 }
 
+
+json GameState::to_json()
+{
+    json j;
+
+    j["game_phase"] = game_phase;
+
+    return j;
+}
+
+GameState * GameState::from_json(json j)
+{
+    GameState * gs = new GameState();
+
+    gs->game_phase = j["game_phase"];
+
+    return gs;
+}
+
 /*
 
 from enum import Enum, auto

@@ -18,6 +18,24 @@ Outcome * AIAction::execute()
     return 0;
 }
 
+json MonsterAi::to_json()
+{
+    json j;
+
+    // TODO just so that the json is note empty
+    j["null"] = false;
+
+    return j;
+}
+
+MonsterAi * MonsterAi::from_json(json j)
+{
+    MonsterAi * c = new MonsterAi();
+
+    return c;
+}
+
+
 /*
 import random
 

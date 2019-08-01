@@ -1,20 +1,34 @@
 #ifndef ROGUE_20177_ITEM
 #define ROGUE_20177_ITEM
 
+#include "../nlohmann/json.hpp"
+
+using json = nlohmann::json;
+
 class Item
 {
 
     private:
 
-        bool _equipped;
         int _item_letter;
+        bool _equipped;
 
     public:
-        Item();
+
+        Item(int item_letter);
+        Item(int item_letter, bool equipped);
+
         ~Item();
 
         bool equipped();
         int item_letter();
+
+        /**
+         * Creates a json representation of the component
+         */
+        json to_json();
+
+        static Item * from_json(json j);
 };
 
 /*

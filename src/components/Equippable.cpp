@@ -1,3 +1,31 @@
+#include "Equippable.hpp"
+
+Equippable::Equippable()
+{
+}
+
+Equippable::~Equippable()
+{
+}
+
+json Equippable::to_json()
+{
+    json j;
+
+    // TODO just so that there is something
+    j["null"] = true;
+
+    return j;
+}
+
+Equippable * Equippable::from_json(json j)
+{
+    // TODO There is nothing in this component so far
+    Equippable * c = new Equippable();
+
+    return c;
+}
+
 /*
 import random
 

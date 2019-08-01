@@ -5,8 +5,6 @@
                  STR=0, DEX=0, INT=0):
 
         # TODO Old stuff, to change/update/remove
-        self.base_max_hp = hp
-        self.hp = hp
         self.base_defense = defense
         self.base_power = power
         self.xp = xp
@@ -21,6 +19,10 @@
             'base_int': INT,
         }
 */
+
+Fighter::Fighter(int max_hp, int hp) : _max_hp(max_hp), _hp(hp)
+{
+}
 
 Fighter::Fighter(int max_hp) : _max_hp(max_hp), _hp(max_hp)
 {
@@ -38,6 +40,22 @@ int Fighter::max_hp() const
     return _max_hp;
 }
 
+json Fighter::to_json()
+{
+    json j;
+
+    j["_hp"] = _hp;
+    j["_max_hp"] = _max_hp;
+
+    return j;
+}
+
+Fighter * Fighter::from_json(json j)
+{
+    Fighter * c = new Fighter(j["_max_hp"], j["_hp"]);
+
+    return c;
+}
 
 /*
 import libtcodpy as libtcod

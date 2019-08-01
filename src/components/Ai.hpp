@@ -1,6 +1,10 @@
 #ifndef ROGUE_2077_AI
 #define ROGUE_2077_AI
 
+#include "../nlohmann/json.hpp"
+
+using json = nlohmann::json;
+
 // Forward declarations
 class Entity;
 class GameMap;
@@ -28,6 +32,14 @@ class MonsterAi
     public:
 
         AIAction * pick_action(Entity * player, GameMap * game_map);
+
+        /**
+         * Creates a json representation of the component
+         */
+        json to_json();
+
+        static MonsterAi * from_json(json j);
+
 };
 
 #endif /* ROGUE_2077_AI */

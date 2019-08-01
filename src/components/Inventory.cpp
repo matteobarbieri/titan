@@ -27,9 +27,29 @@ std::vector<Entity *> Inventory::items()
     return _items;
 }
 
-/*
-import tcod as libtcod
+json Inventory::to_json()
+{
+    json j;
 
+    j["_capacity"] = _capacity;
+
+    // TODO items
+
+    return j;
+}
+
+Inventory * Inventory::from_json(json j)
+{
+    Inventory * c = new Inventory(j["_capacity"]);
+
+    // TODO items
+    
+    return c;
+}
+
+
+
+/*
 from game_messages import Message
 
 

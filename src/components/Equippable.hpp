@@ -1,3 +1,31 @@
+#ifndef ROGUE_20177_EQUIPPABLE
+#define ROGUE_20177_EQUIPPABLE
+
+#include "../nlohmann/json.hpp"
+
+using json = nlohmann::json;
+
+class Equippable
+{
+
+    private:
+
+
+    public:
+        Equippable();
+        ~Equippable();
+
+        /**
+         * Creates a json representation of the component
+         */
+        json to_json();
+
+        static Equippable * from_json(json j);
+};
+
+
+#endif /* ifndef ROGUE_20177_EQUIPPABLE */
+/*
 import random
 
 
@@ -62,3 +90,4 @@ class Equippable:
         # TODO improve this
         if self.damage_range is not None:
             return random.randint(*self.damage_range)
+*/

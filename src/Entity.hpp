@@ -88,10 +88,6 @@ class Entity
 
         /**
          * Creates a json representation of the entity
-         *
-         * json_data = {
-         *   "name" : name,
-         * }
          */
         json to_json();
 

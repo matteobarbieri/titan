@@ -8,6 +8,24 @@ Equipment::~Equipment()
 {
 }
 
+json Equipment::to_json()
+{
+    json j;
+
+    // TODO just so that the json is not empty
+    j["null"] = false;
+
+    return j;
+}
+
+Equipment * Equipment::from_json(json j)
+{
+    Equipment * c = new Equipment();
+
+    return c;
+}
+
+
 /*
 from game_messages import Message
 

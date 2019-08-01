@@ -4,6 +4,7 @@
 #include "SaveGame.hpp"
 
 #include "Entity.hpp"
+#include "GameState.hpp"
 #include "map/GameMap.hpp"
 
 #include "libtcod.hpp"
@@ -41,18 +42,46 @@ void SaveVisitor::visit(Entity & el)
 }
 */
 
-void SaveGame::save(const char * save_file,
-     Entity * player, GameMap * game_map)
+void SaveGame::load(const char * save_file,
+     Entity ** player, GameMap ** game_map, GameState ** game_state)
 {
 
-    std::cout << "Inside SaveGame::save(): Must implement game save!" << std::endl;
+    std::cout << "Inside SaveGame::load(): Must implement load save!" << std::endl;
+    json save_data;
+
+    // Read JSON from save file
+    std::ifstream i(save_file);
+
+    i >> save_data;
+
+    // Load player data
+    * player = Entity::from_json(save_data["player"]);
+
+    //std::cout << "Name: " << (*player)->name << std::endl;
+    //std::cout << "x: " << (*player)->x << std::endl;
+    //std::cout << "y: " << (*player)->y << std::endl;
+
+    // Load map data
+    * game_map = GameMap::from_json(save_data["game_map"]);
+
+    // Load game state
+    * game_state = GameState::from_json(save_data["game_state"]);
+
+    
+}
+void SaveGame::save(const char * save_file,
+     Entity * player, GameMap * game_map, GameState * game_state)
+{
+
+    //std::cout << "Inside SaveGame::save(): Must implement game save!" << std::endl;
+    
     json save_data;
     //SaveVisitor sv;
 
     // Save player data
     save_data["player"] = player->to_json();
     save_data["game_map"] = game_map->to_json();
-
+    save_data["game_state"] = game_state->to_json();
 
     // write prettified JSON to another file
     std::ofstream o(save_file);

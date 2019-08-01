@@ -1,8 +1,14 @@
 #include "Item.hpp"
 
-Item::Item()
+Item::Item(int item_letter) : 
+    _item_letter(item_letter), _equipped(false)
 {
     _equipped = false;
+}
+
+Item::Item(int item_letter, bool equipped) : 
+    _item_letter(item_letter), _equipped(equipped)
+{
 }
 
 Item::~Item()
@@ -18,6 +24,24 @@ int Item::item_letter()
 {
     return _item_letter;
 }
+
+json Item::to_json()
+{
+    json j;
+
+    j["_item_letter"] = _item_letter;
+    j["_equipped"] = _equipped;
+
+    return j;
+}
+
+Item * Item::from_json(json j)
+{
+    Item * c = new Item(j["_item_letter"], j["_equipped"]);
+
+    return c;
+}
+
 
 /*
 """
