@@ -33,6 +33,9 @@ class Entity
 
     private:
 
+        // Unique id
+        unsigned long int _id;
+
         // The color of the entity's symbol
         TCODColor _color;
 
@@ -73,7 +76,8 @@ class Entity
         Entity(int x, int y, int symbol,
                TCODColor color, std::string name,
                RenderOrder render_order=CORPSE,
-               bool blocks=false, bool blocks_sight=false);
+               bool blocks=false, bool blocks_sight=false,
+               unsigned long int id=0);
 
         ~Entity();
 

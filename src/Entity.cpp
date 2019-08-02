@@ -6,6 +6,7 @@
 #include "RenderOrder.hpp"
 
 #include "SaveGame.hpp"
+#include "Uid.hpp"
 
 // Components
 #include "components/Fighter.hpp"
@@ -17,9 +18,22 @@
 #include "components/Equippable.hpp"
 #include "components/Inventory.hpp"
 
+/*
 Entity::Entity(int x, int y, int symbol,
     TCODColor color, std::string name, RenderOrder render_order,
-    bool blocks, bool blocks_sight) :
+    bool blocks, bool blocks_sight) : 
+    Entity(x, y, symbol,
+    color, name, render_order,
+    blocks, blocks_sight)
+
+{
+}
+*/
+
+Entity::Entity(int x, int y, int symbol,
+    TCODColor color, std::string name, RenderOrder render_order,
+    bool blocks, bool blocks_sight,
+    unsigned long int id) :
     x(x), y(y), _render_order(render_order), name(name),
     symbol(symbol), _color(color),
     _blocks(blocks), _blocks_sight(blocks_sight)
@@ -34,6 +48,13 @@ Entity::Entity(int x, int y, int symbol,
         equipment = nullptr;
         equippable = nullptr;
         inventory = nullptr;
+
+        // If parameter id is default, initialize it with a progressive one
+        if (id == 0)
+            _id = Uid::singleton().next_id();
+        else
+            _id = id;
+
 }
 
 /*
@@ -67,6 +88,9 @@ json Entity::to_json()
 {
     // TODO to complete
     json json_data;
+
+    // Unique Id
+    json_data["_id"] = _id;
 
     // Base entity features
     json_data["_blocks"] = _blocks;
@@ -134,7 +158,8 @@ Entity * Entity::from_json(json j)
     Entity * e = new Entity(j["x"], j["y"], j["symbol"],
            json_to_tcodcolor(j["_color"]),  j["name"],
            j["_render_order"],
-           j["_blocks"], j["_blocks_sight"]);
+           j["_blocks"], j["_blocks_sight"], 
+           j["_id"]);
 
     // Then reconstruct and assign all components
     if (j["fighter"] != nullptr)
