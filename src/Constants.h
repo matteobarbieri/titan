@@ -38,6 +38,7 @@
 #define MAP_WIDTH 110
 #define MAP_HEIGHT 100
 
+#define DEBUG(T) std::cout << T << std::endl
 /*
 
 

@@ -128,7 +128,7 @@ json Entity::to_json()
 Entity * Entity::from_json(json j)
 {
 
-    std::cout << "Reconstructing entity" << std::endl;
+    //DEBUG("Reconstructing entity");
 
     // First create base object
     Entity * e = new Entity(j["x"], j["y"], j["symbol"],

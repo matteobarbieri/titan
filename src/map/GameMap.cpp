@@ -230,26 +230,47 @@ void GameMap::dig(MapPart * map_part, int padding)
 
 json GameMap::to_json()
 {
-    json json_data;
-    json json_tiles;
+    json j_data;
+    json j_tiles;
+    json j_entities;
 
     for (int i=0; i<width*height; i++)
     {
-        json_tiles.push_back(tiles[i]->to_json());
+        j_tiles.push_back(tiles[i]->to_json());
     }
 
-    json_data["dungeon_level"] = dungeon_level;
-    json_data["width"] = width;
-    json_data["height"] = height;
-    json_data["tiles"] = json_tiles;
+    //DEBUG("Saving entities");
+    //DEBUG("N of entities: " << entities().size());
 
-    return json_data;
+    // Save entities (assumes player has been removed)
+    //for (auto it = entities().begin(); it != entities().end(); ++it)
+    //{
+        //DEBUG("Saving entity: " << (*it)->name);
+
+        //j_entities.push_back((*it)->to_json());
+    //}
+
+    for (int i=0; i< (int)_entities.size(); i++)
+    {
+        //DEBUG("Saving entity: " << _entities[i]->name);
+        j_entities.push_back(_entities[i]->to_json());
+    }
+
+    //DEBUG("After");
+
+    j_data["dungeon_level"] = dungeon_level;
+    j_data["width"] = width;
+    j_data["height"] = height;
+    j_data["tiles"] = j_tiles;
+    j_data["entities"] = j_entities;
+
+    return j_data;
 }
 
 GameMap * GameMap::from_json(json j)
 {
 
-    std::cout << "Reconstructing game_map" << std::endl;
+    //DEBUG("Reconstructing game_map");
 
     //std::cout << "Checkpoint 1" << std::endl;
 
@@ -275,6 +296,12 @@ GameMap * GameMap::from_json(json j)
     }
     
     //std::cout << "Checkpoint 5" << std::endl;
+   
+    // Restore list of entities
+    for (json::iterator it = j["entities"].begin(); it != j["entities"].end(); ++it)
+    {
+        game_map->add_entity(Entity::from_json(*it));
+    }
 
     return game_map;
 }
@@ -300,12 +327,14 @@ def add_walls(level):
 */
 
 
+/*
 void GameMap::add_walls()
 {
     // TODO implement
     std::cout << "Implement GameMap::add_walls" << std::endl;
     float a = 1/0;
 }
+*/
 
 // Compares two entities according to render_order
 bool compare_render_order(Entity * e1, Entity * e2)
@@ -335,14 +364,17 @@ void GameMap::remove_entity(Entity * entity)
     // https://stackoverflow.com/questions/3385229/c-erase-vector-element-by-value-rather-than-by-position
 
     // TODO implement
-    std::cout << "Implement GameMap::remove_entity" << std::endl;
-    float a = 1/0;
+    //std::cout << "Implement GameMap::remove_entity" << std::endl;
+    //float a = 1/0;
+
+    //DEBUG("Entities before: " << _entities.size());
 
     // TODO check this code...
-    //_entities.erase(
-        //std::remove(_entities.begin(), _entities.end(), 8),
-        //_entities.end());
+    _entities.erase(
+        std::remove(_entities.begin(), _entities.end(), entity),
+        _entities.end());
 
+    //DEBUG("Entities after: " << _entities.size());
 }
 
 /*

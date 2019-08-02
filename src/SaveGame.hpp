@@ -16,28 +16,6 @@ class Entity;
 class GameMap;
 class GameState;
 
-// Abstract class for visitor
-
-/*
-class Visitor
-{
-    public:
-        virtual void visit(Entity & el) = 0;
-        virtual void visit(GameMap & el) = 0;
-
-};
-
-class SaveVisitor : public Visitor
-{
-    public:
-
-        json save_data;
-
-        void visit(Entity & el) override;
-        void visit(GameMap & el) override;
-};
-*/
-
 class SaveGame
 {
     private:
