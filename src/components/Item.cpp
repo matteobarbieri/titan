@@ -1,13 +1,87 @@
 #include "Item.hpp"
 
-Item::Item(int item_letter) : 
-    _item_letter(item_letter), _equipped(false)
+//////////////////////////////////////
+/////// ITEM TYPE OPERATORS //////////
+//////////////////////////////////////
+
+// Enable bitwise comparison for ItemType
+ItemType operator &(ItemType lhs, ItemType rhs)
 {
-    _equipped = false;
+    return static_cast<ItemType> (
+        static_cast<std::underlying_type<ItemType>::type>(lhs) &
+        static_cast<std::underlying_type<ItemType>::type>(rhs)
+    );
 }
 
-Item::Item(int item_letter, bool equipped) : 
-    _item_letter(item_letter), _equipped(equipped)
+ItemType operator ^(ItemType lhs, ItemType rhs)
+{
+    return static_cast<ItemType> (
+        static_cast<std::underlying_type<ItemType>::type>(lhs) ^
+        static_cast<std::underlying_type<ItemType>::type>(rhs)
+    );
+}
+
+ItemType operator ~(ItemType rhs)
+{
+    return static_cast<ItemType> (
+        ~static_cast<std::underlying_type<ItemType>::type>(rhs)
+    );
+}
+
+ItemType& operator &=(ItemType &lhs, ItemType rhs)
+{
+    lhs = static_cast<ItemType> (
+        static_cast<std::underlying_type<ItemType>::type>(lhs) &
+        static_cast<std::underlying_type<ItemType>::type>(rhs)
+    );
+
+    return lhs;
+}
+
+//////////////////////////////////////
+////// ITEM SUBTYPE OPERATORS ////////
+//////////////////////////////////////
+
+// Enable bitwise comparison for ItemSubtype
+ItemSubtype operator &(ItemSubtype lhs, ItemSubtype rhs)
+{
+    return static_cast<ItemSubtype> (
+        static_cast<std::underlying_type<ItemSubtype>::type>(lhs) &
+        static_cast<std::underlying_type<ItemSubtype>::type>(rhs)
+    );
+}
+
+ItemSubtype operator ^(ItemSubtype lhs, ItemSubtype rhs)
+{
+    return static_cast<ItemSubtype> (
+        static_cast<std::underlying_type<ItemSubtype>::type>(lhs) ^
+        static_cast<std::underlying_type<ItemSubtype>::type>(rhs)
+    );
+}
+
+ItemSubtype operator ~(ItemSubtype rhs)
+{
+    return static_cast<ItemSubtype> (
+        ~static_cast<std::underlying_type<ItemSubtype>::type>(rhs)
+    );
+}
+
+ItemSubtype& operator &=(ItemSubtype &lhs, ItemSubtype rhs)
+{
+    lhs = static_cast<ItemSubtype> (
+        static_cast<std::underlying_type<ItemSubtype>::type>(lhs) &
+        static_cast<std::underlying_type<ItemSubtype>::type>(rhs)
+    );
+
+    return lhs;
+}
+
+//////////////////////////////////////
+//////// ITEM CLASS METHODS //////////
+//////////////////////////////////////
+
+Item::Item(ItemType item_type, ItemSubtype item_subtype) :
+    item_type(item_type), item_subtype(item_subtype)
 {
 }
 
@@ -31,45 +105,23 @@ json Item::to_json()
 
     j["_item_letter"] = _item_letter;
     j["_equipped"] = _equipped;
+    j["item_subtype"] = item_subtype;
+    j["item_type"] = item_type;
 
     return j;
 }
 
 Item * Item::from_json(json j)
 {
-    Item * c = new Item(j["_item_letter"], j["_equipped"]);
+    Item * c = new Item(j["item_type"], j["item_subtype"]);
+
+    // TODO complete with letter and equipped status
 
     return c;
 }
 
 
 /*
-"""
-The item class represents items and their properties "while they are in the
-backpack". Meaning that for instance the info about their properties as items
-that can be equipped must be stored in an instance of the  `Equippable` class.
-"""
-
-from enum import Enum, auto
-
-
-class ItemType(Enum):
-    """
-    The main type of the item.
-    """
-    WEAPON = auto()
-    ARMOR = auto()
-    DEVICE = auto()
-    CONSUMABLE = auto()
-
-
-class ItemSubtype(Enum):
-    """
-    Additional item properties.
-    """
-    RANGED = auto()
-    MELEE = auto()
-
 
 class Item:
     """

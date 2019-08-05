@@ -5,20 +5,52 @@
 
 using json = nlohmann::json;
 
+/*
+ * The main type of the item.
+ */
+enum class ItemType
+{
+    WEAPON = 0x1,
+    ARMOR = 0x2,
+    DEVICE = 0x4,
+    CONSUMABLE = 0x8
+};
+
+
+/*
+ * Additional item properties.
+ */
+enum class ItemSubtype
+{
+    MELEE = 0x1,
+    RANGED = 0x2
+};
+
+
+/**
+ * The item class represents items and their properties "while they are in the
+ * backpack". Meaning that for instance the info about their properties as items
+ * that can be equipped must be stored in an instance of the  `Equippable` class.
+ */
 class Item
 {
 
     private:
 
         int _item_letter;
-        bool _equipped;
+        bool _equipped = false;
 
     public:
 
-        Item(int item_letter);
-        Item(int item_letter, bool equipped);
+        //Item(int item_letter);
+        //Item(int item_letter, bool equipped);
+        
+        Item(ItemType, ItemSubtype);
 
         ~Item();
+
+        ItemType item_type;
+        ItemSubtype item_subtype;
 
         bool equipped();
         int item_letter();
@@ -32,31 +64,10 @@ class Item
 };
 
 /*
-"""
-The item class represents items and their properties "while they are in the
-backpack". Meaning that for instance the info about their properties as items
-that can be equipped must be stored in an instance of the  `Equippable` class.
-"""
 
 from enum import Enum, auto
 
 
-class ItemType(Enum):
-    """
-    The main type of the item.
-    """
-    WEAPON = auto()
-    ARMOR = auto()
-    DEVICE = auto()
-    CONSUMABLE = auto()
-
-
-class ItemSubtype(Enum):
-    """
-    Additional item properties.
-    """
-    RANGED = auto()
-    MELEE = auto()
 
 
 class Item:

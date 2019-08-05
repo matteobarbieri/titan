@@ -13,6 +13,8 @@
 
 // Prefabs
 #include "../../prefabs/enemies.hpp"
+#include "../../prefabs/weapons/melee.hpp"
+#include "../../prefabs/weapons/ranged.hpp"
 
 
 /**
@@ -20,7 +22,9 @@
  */
 void add_monsters(GameMap * level);
 
-// TODO implement
+/**
+ * Add a dagger in the room
+ */
 void add_items(GameMap * level);
 
 //GameMap generate_dungeon_level(width, height, min_room_length, max_room_length)
@@ -59,12 +63,11 @@ GameMap * generate_room(int width, int height)
     level->add_entity(up_stairs);
 
     // Monsters
-    // TODO enable
     add_monsters(level);
 
     // Add some items in the room
     // TODO enable
-    //add_items(level);
+    add_items(level);
 
     return level;
 }
@@ -82,8 +85,18 @@ void add_monsters(GameMap * level)
 // TODO implement
 void add_items(GameMap * level)
 {
-    std::cout << "Implement add_items!" << std::endl;
-    float a = 1/0;
+    //std::cout << "Implement add_items!" << std::endl;
+    //float a = 1/0;
+
+    int x = level->width/2 - 2;
+    int y = level->height/2 - 2;
+
+    Entity * dagger = make_dagger();
+    dagger->x = x;
+    dagger->y = y;
+
+    level->add_entity(dagger);
+
 }
 
 /*
