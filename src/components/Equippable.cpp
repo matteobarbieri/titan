@@ -1,19 +1,63 @@
 #include "Equippable.hpp"
 
-Equippable::Equippable()
+//////////////////////////////////////
+///// EQUIPMENT SLOT OPERATORS ///////
+//////////////////////////////////////
+
+// Enable bitwise comparison for ItemType
+EquipmentSlot operator |(EquipmentSlot lhs, EquipmentSlot rhs)
+{
+    return static_cast<EquipmentSlot> (
+        static_cast<std::underlying_type<EquipmentSlot>::type>(lhs) |
+        static_cast<std::underlying_type<EquipmentSlot>::type>(rhs)
+    );
+}
+
+EquipmentSlot operator &(EquipmentSlot lhs, EquipmentSlot rhs)
+{
+    return static_cast<EquipmentSlot> (
+        static_cast<std::underlying_type<EquipmentSlot>::type>(lhs) &
+        static_cast<std::underlying_type<EquipmentSlot>::type>(rhs)
+    );
+}
+
+EquipmentSlot operator ^(EquipmentSlot lhs, EquipmentSlot rhs)
+{
+    return static_cast<EquipmentSlot> (
+        static_cast<std::underlying_type<EquipmentSlot>::type>(lhs) ^
+        static_cast<std::underlying_type<EquipmentSlot>::type>(rhs)
+    );
+}
+
+EquipmentSlot operator ~(EquipmentSlot rhs)
+{
+    return static_cast<EquipmentSlot> (
+        ~static_cast<std::underlying_type<EquipmentSlot>::type>(rhs)
+    );
+}
+
+EquipmentSlot& operator &=(EquipmentSlot &lhs, EquipmentSlot rhs)
+{
+    lhs = static_cast<EquipmentSlot> (
+        static_cast<std::underlying_type<EquipmentSlot>::type>(lhs) &
+        static_cast<std::underlying_type<EquipmentSlot>::type>(rhs)
+    );
+
+    return lhs;
+}
+
+Equippable::Equippable(EquipmentSlot valid_slots) :
+    valid_slots(valid_slots)
 {
 }
 
-Equippable::~Equippable()
-{
-}
 
 json Equippable::to_json()
 {
     json j;
 
     // TODO just so that there is something
-    j["null"] = true;
+    j["valid_slots"] = valid_slots;
 
     return j;
 }
@@ -21,7 +65,7 @@ json Equippable::to_json()
 Equippable * Equippable::from_json(json j)
 {
     // TODO There is nothing in this component so far
-    Equippable * c = new Equippable();
+    Equippable * c = new Equippable(j["valid_slots"]);
 
     return c;
 }

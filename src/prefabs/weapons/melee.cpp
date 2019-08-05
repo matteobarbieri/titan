@@ -22,7 +22,12 @@ Entity * make_dagger()
     dagger->item = item_component;
 
     // Create equippable component
+    Equippable * equippable_component = new Equippable(
+        EquipmentSlot::MAIN_HAND | EquipmentSlot::OFF_HAND);
 
+    // TODO Add damage function
+
+    dagger->equippable = equippable_component;
     return dagger;
 }
 

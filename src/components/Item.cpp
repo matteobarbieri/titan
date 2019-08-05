@@ -5,6 +5,14 @@
 //////////////////////////////////////
 
 // Enable bitwise comparison for ItemType
+ItemType operator |(ItemType lhs, ItemType rhs)
+{
+    return static_cast<ItemType> (
+        static_cast<std::underlying_type<ItemType>::type>(lhs) |
+        static_cast<std::underlying_type<ItemType>::type>(rhs)
+    );
+}
+
 ItemType operator &(ItemType lhs, ItemType rhs)
 {
     return static_cast<ItemType> (
@@ -43,6 +51,14 @@ ItemType& operator &=(ItemType &lhs, ItemType rhs)
 //////////////////////////////////////
 
 // Enable bitwise comparison for ItemSubtype
+ItemSubtype operator |(ItemSubtype lhs, ItemSubtype rhs)
+{
+    return static_cast<ItemSubtype> (
+        static_cast<std::underlying_type<ItemSubtype>::type>(lhs) |
+        static_cast<std::underlying_type<ItemSubtype>::type>(rhs)
+    );
+}
+
 ItemSubtype operator &(ItemSubtype lhs, ItemSubtype rhs)
 {
     return static_cast<ItemSubtype> (
