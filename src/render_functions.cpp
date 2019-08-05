@@ -12,6 +12,7 @@
 #include "map/map_utils.hpp"
 
 #include "GameState.hpp"
+#include "GameMessages.hpp"
 
 #include "Consoles.hpp"
 
@@ -393,23 +394,28 @@ void render_all(
     Consoles::singleton().panel->setDefaultBackground(TCODColor::black);
     Consoles::singleton().panel->clear();
 
-    // TODO enable print message logs
-/*
+    // Retrieve the list of visible messages
+    std::vector<Message> visible_messages =
+        game_state->message_log->visible_messages();
 
-    # Print the game messages, one line at a time
-    y = 1
-    for message in message_log.messages:
-        libtcod.console_set_default_foreground(panel, message.color)
-        libtcod.console_print_ex(
-            panel,
-            message_log.x,
-            y,
-            libtcod.BKGND_NONE,
-            libtcod.LEFT,
-            message.text)
-        y += 1
+    // Initialize message height
+    int y = 1;
 
-*/
+    // TODO consider including timestamp for message (turn no)
+    for (int i=0; i<(int)visible_messages.size(); i++)
+    {
+        // Set text color
+        Consoles::singleton().panel->setDefaultForeground(
+            visible_messages[i].color);
+
+        // TODO replace deprecated function
+        Consoles::singleton().panel->printEx(
+            BAR_WIDTH + 1, y, TCOD_BKGND_NONE, TCOD_LEFT,
+            "%s", visible_messages[i].text.c_str());
+
+        // Increment height of next message
+        y++;
+    }
 
     render_bar(
         Consoles::singleton().panel, 1, 1, BAR_WIDTH,

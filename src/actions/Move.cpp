@@ -1,8 +1,10 @@
 #include "Move.hpp"
 
 #include "../GamePhase.hpp"
-
 #include "../Entity.hpp"
+#include "../GameMessages.hpp"
+#include "../GameState.hpp"
+
 #include "../map/GameMap.hpp"
 
 #include "Outcome.hpp"
@@ -72,6 +74,11 @@ Outcome * MoveAction::_execute()
             //messages.append(
                 //Message(random.choice(possible_messages), libtcod.yellow))
 
+            //game_state->message_log->add_message(
+                //Message("Ouch!", TCODColor::yellow));
+            
+            // TODO replace with a random one
+            game_state->message_log->add_message({"Ouch!", TCODColor::yellow});
         }
 
         // Check if the position has changed

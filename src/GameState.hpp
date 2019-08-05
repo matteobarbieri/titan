@@ -6,6 +6,7 @@
 #include "Constants.h"
 
 #include "GamePhase.hpp"
+#include "GameMessages.hpp"
 
 #include "nlohmann/json.hpp"
 
@@ -28,6 +29,8 @@ class GameState
         
         GamePhase game_phase;
         
+        MessageLog * message_log;
+
         // Entity being inspected
         Entity * entity_focused = nullptr;
 

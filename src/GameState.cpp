@@ -4,6 +4,8 @@
 
 GameState::GameState()
 {
+    // TODO make the number of visible message come from constants
+    message_log = new MessageLog(5);
 }
 
 bool GameState::is_players_turn()
