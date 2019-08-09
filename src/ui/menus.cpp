@@ -50,7 +50,7 @@ void inventory_menu(
             Consoles::singleton().inventory_frame->printf(
                 3, item_y,
                 "(%c) %s",
-                e->item->item_letter(), e->name.c_str());
+                e->item->item_letter, e->name.c_str());
 
             // Increment y coordinate of next menu item by one
             item_y++;

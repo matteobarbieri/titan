@@ -110,16 +110,11 @@ bool Item::equipped()
     return _equipped;
 }
 
-int Item::item_letter()
-{
-    return _item_letter;
-}
-
 json Item::to_json()
 {
     json j;
 
-    j["_item_letter"] = _item_letter;
+    j["item_letter"] = item_letter;
     j["_equipped"] = _equipped;
     j["item_subtype"] = item_subtype;
     j["item_type"] = item_type;

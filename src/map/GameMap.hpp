@@ -203,6 +203,10 @@ class GameMap
 
         void get_player_starting_coords(int & x, int & y);
 
+        /**
+         * If there is an item on the floor at coordinates x, y return it,
+         * else return None.
+         */
         Entity * get_item_at(int x, int y);
 
         void place_player(Entity * player);

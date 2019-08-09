@@ -37,7 +37,6 @@ class Item
 
     private:
 
-        int _item_letter;
         bool _equipped = false;
 
     public:
@@ -45,6 +44,7 @@ class Item
         //Item(int item_letter);
         //Item(int item_letter, bool equipped);
         
+        int item_letter;
         Item(ItemType, ItemSubtype);
 
         ~Item();
@@ -53,7 +53,6 @@ class Item
         ItemSubtype item_subtype;
 
         bool equipped();
-        int item_letter();
 
         /**
          * Creates a json representation of the component

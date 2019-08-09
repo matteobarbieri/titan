@@ -1,5 +1,10 @@
 #include "Inventory.hpp"
+
 #include "../Entity.hpp"
+#include "../map/GameMap.hpp"
+
+#include "Item.hpp"
+
 
 /*
 
@@ -20,12 +25,60 @@
 
 Inventory::Inventory(int capacity) : _capacity(capacity)
 {
+
+        // The list of all letters available for an item
+        // TODO limit to the maximum number of items a player can have on him,
+        // between equipped and in inventory
+        
+        for (int i='a'; i<='z'; i++)
+        {
+            available_letters.push_back(i);
+        }
+        
+
 }
 
 std::vector<Entity *> Inventory::items()
 {
     return _items;
 }
+
+void Inventory::pickup(Entity * item, GameMap * level)
+{
+    // If at full capacity, throw exception
+    if ((int)_items.size() == _capacity)
+    {
+        throw InventoryFullException();
+    }
+
+    // Set item's coordinates to invalid values, since they do not make any
+    // sense while the item is in player's inventory
+    item->x = -1;
+    item->y = -1;
+
+    // Actually add the item to the inventory, Associating it with the
+    // first available letter
+
+    // "Manual" pop(0)
+    char item_letter = available_letters[0];
+    available_letters.erase(available_letters.begin());
+
+    // Assign item letter to item component
+    item->item->item_letter = item_letter;
+
+    // Add to the vector of items
+    _items.push_back(item);
+
+    // TODO is this line below needed anymore?
+    //self.item_letters.append(item_letter)
+    
+    level->remove_entity(item);
+}
+
+/*
+
+
+*/
 
 json Inventory::to_json()
 {
@@ -52,9 +105,6 @@ Inventory * Inventory::from_json(json j)
 /*
 from game_messages import Message
 
-
-class InventoryFullException(Exception):
-    pass
 
 
 class Inventory:
@@ -110,31 +160,6 @@ class Inventory:
         return Message("You drop a {} on the floor.".format(item),
                 libtcod.white)
 
-    def pickup(self, item, level):
-
-        # Should just be equal, but just in case...
-        if len(self.items) >= self.capacity:
-            raise InventoryFullException()
-
-        # Remove item coordinates (they do not make sense once they're in the
-        # player's inventory
-        item.x = None
-        item.y = None
-
-        # Actually add the item to the inventory, Associating it with the
-        # first available letter
-        item_letter = self.available_letters.pop(0)
-        item.item_letter = item_letter
-        self.items.append(item)
-        self.item_letters.append(item_letter)
-        print("Item letter: {}".format(item_letter))
-
-        # And remove it from the map
-        level.entities.remove(item)
-
-        # Return a feedback message
-        return Message("You pick up a {}".format(item),
-                libtcod.white)
 
     def get_item_position_in_list(self, item):
         """

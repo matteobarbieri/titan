@@ -117,7 +117,28 @@ GameMap::GameMap(int width, int height, bool _initialize_tiles) :
     // TODO implement
 }
 
+Entity * GameMap::get_item_at(int x, int y)
+{
+    for (int i=0; i<(int)_entities.size(); i++)
+    {
+        if (_entities[i]->x == x && _entities[i]->y == y)
+            return _entities[i];
+    }
+
+    return nullptr;
+}
+
 /*
+
+    def get_item_at(self, x, y):
+
+        for e in self.entities:
+            if e.x == x and e.y == y and e.item:
+                return e
+
+        else:
+            return None
+
 
 
 */
@@ -766,19 +787,6 @@ class GameMap:
         """
         return self.junctions + self.corridors + self.rooms
 
-
-    def get_item_at(self, x, y):
-        """
-        If there is an item on the floor at coordinates x, y return it, else
-        return None.
-        """
-
-        for e in self.entities:
-            if e.x == x and e.y == y and e.item:
-                return e
-
-        else:
-            return None
 
 
     def add_part(self, part):
