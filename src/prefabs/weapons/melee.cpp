@@ -30,28 +30,3 @@ Entity * make_dagger()
     dagger->equippable = equippable_component;
     return dagger;
 }
-
-/*
-
-from components.item import Item, ItemType, ItemSubtype  # noqa
-from components.equippable import Equippable
-
-from equipment_slots import EquipmentSlots
-
-from render_functions import RenderOrder
-
-import tcod as libtcodpy
-
-
-def make_dagger():
-
-
-    # The equippable component of the entity
-    equippable_component = Equippable(
-        valid_slots=[EquipmentSlots.MAIN_HAND, EquipmentSlots.OFF_HAND],
-        damage_range=[3, 4],
-    )
-
-
-    return dagger
-*/
