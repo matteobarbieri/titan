@@ -3,10 +3,7 @@
 
 AIAction * MonsterAi::pick_action(Entity * player, GameMap * game_map)
 {
-
-    std::cout << "Must implement MonsterAi::pick_action" << std::endl;
-    // TODO implement
-    return 0;
+    return nullptr;
 }
 
 

@@ -39,10 +39,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
     // TODO is this one really needed?
     TCOD_event_t ev;
     
-    // TODO move this
-    // The current turn
-    int current_turn = 1;
-
+    // TODO move this?
     int top_x, top_y;
 
     // Objects required for Player Actions
@@ -110,7 +107,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
         render_all(
             player, game_map, fov_map,
             fov_recompute, redraw_terrain,
-            &mouse, game_state, current_turn,
+            &mouse, game_state,
             top_x, top_y);
 
         //std::cout << "play_game: Checkpoint 5" << std::endl;
@@ -191,22 +188,25 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
             // Each entity takes a turn
             for (int i=0; i<(int)(game_map->entities().size()); i++)
             {
-                if (game_map->entities()[i]->ai != 0)
+                if (game_map->entities()[i]->ai != nullptr)
                 {
 
                     // Pick an action for each entity
                     entity_action = game_map->entities()[i]->ai->pick_action(
                         player, game_map);
 
-                    // XXX no need to set context, asit was needed previously to
+                    // XXX no need to set context, as it was needed previously to
                     // choose the action
 
                     // Execute the action
-                    outcome = entity_action->execute();
+                    if (entity_action != nullptr)
+                        outcome = entity_action->execute();
+                    else
+                        outcome = nullptr;
 
                     // TODO
                     // Should we use the same method?
-                    if (outcome != 0)
+                    if (outcome != nullptr)
                     {
                         // TODO also need message log parameter?
                         game_state->update(outcome, fov_recompute, redraw_terrain);
@@ -222,7 +222,8 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
             game_state->game_phase = PLAYERS_TURN;
             redraw_entities = true;
 
-            current_turn++;
+            // Increase turn number
+            game_state->current_turn++;
 
         } // if (game_state->is_enemies_turn())
 

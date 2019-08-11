@@ -28,6 +28,8 @@ class GameState
         /////////////////////////////////
         
         GamePhase game_phase;
+
+        int current_turn;
         
         MessageLog * message_log;
 

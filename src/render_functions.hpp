@@ -20,7 +20,7 @@ void render_all(
     GameMap * game_map, TCODMap * fov_map,
     bool fov_recompute, bool redraw_terrain, 
     TCOD_mouse_t * mouse, GameState * game_state,
-    int current_turn, int & top_x, int & top_y);
+    int & top_x, int & top_y);
 
 /*
  * Draw an entity on the terrain layer

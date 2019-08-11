@@ -88,8 +88,8 @@ Outcome * MoveAction::_execute()
         // Return outcome
         // TODO enable message log
         Outcome * outcome = new Outcome(
-            //ENEMY_TURN, // TODO this is the right one
-            PLAYERS_TURN, // TODO this is the WRONG one (for debug purposes)
+            ENEMY_TURN, // TODO this is the right one
+            //PLAYERS_TURN, // TODO this is the WRONG one (for debug purposes)
             position_changed,
             position_changed);
 

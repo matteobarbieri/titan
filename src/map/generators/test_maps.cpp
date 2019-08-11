@@ -32,6 +32,7 @@ GameMap * generate_room(int width, int height)
 {
 
     GameMap * level = new GameMap(width, height);
+    level->dungeon_level = 1;
 
     int xc = width/2;
     int yc = height/2;

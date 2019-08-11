@@ -259,7 +259,7 @@ void render_all(
     GameMap * game_map, TCODMap * fov_map,
     bool fov_recompute, bool redraw_terrain, 
     TCOD_mouse_t * mouse, GameState * game_state,
-    int current_turn, int & top_x, int & top_y)
+    int & top_x, int & top_y)
 {
 
     //std::cout << "render_all: Checkpoint 1" << std::endl;
@@ -434,7 +434,7 @@ void render_all(
     // TODO change with non deprecated function?
     Consoles::singleton().panel->printEx(
         1, 5, TCOD_BKGND_NONE, TCOD_LEFT, "Time: %d",
-        game_map->dungeon_level);
+        game_state->current_turn);
 
     Consoles::singleton().panel->setDefaultForeground(TCODColor::lightGrey);
     Consoles::singleton().panel->printEx(

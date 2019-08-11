@@ -6,20 +6,17 @@ GameState::GameState()
 {
     // TODO make the number of visible message come from constants
     message_log = new MessageLog(5);
+    current_turn = 1;
 }
 
 bool GameState::is_players_turn()
 {
-
-    // TODO implement
-    return true;
+    return game_phase == PLAYERS_TURN;
 }
 
 bool GameState::is_enemies_turn()
 {
-
-    // TODO implement
-    return false;
+    return game_phase == ENEMY_TURN;
 }
 
 // TODO does it need also message_log ?
@@ -78,6 +75,7 @@ json GameState::to_json()
     json j;
 
     j["game_phase"] = game_phase;
+    j["current_turn"] = current_turn;
 
     return j;
 }
@@ -87,6 +85,7 @@ GameState * GameState::from_json(json j)
     GameState * gs = new GameState();
 
     gs->game_phase = j["game_phase"];
+    gs->current_turn = j["current_turn"];
 
     return gs;
 }
