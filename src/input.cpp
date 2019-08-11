@@ -98,9 +98,6 @@ Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     /////////////////////////////////////////
 
     /*
-    elif key_char == 'i':
-        return ShowInventoryAction()
-
     elif key_char == 'c':
         return ShowCharacterScreenAction()
 
@@ -109,9 +106,51 @@ Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     if (key_char == 'g')
         return new PickupAction();
 
+    if (key_char == 'i')
+        return new ShowInventoryAction();
+
     // No key was pressed
     return nullptr;
 }
+
+Action * handle_inventory_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
+{
+
+    char key_char = -1;
+
+    // Code to prevent double input
+    if (key.vk == TCODK_CHAR)
+        key_char = key.c;
+
+    /////////////////////////////////////////
+    /*
+    # letter_index = key.c - ord('a') if key.vk == libtcod.KEY_CHAR else -1
+    letter_index = key.c if key.vk == libtcod.KEY_CHAR else -1
+
+    # TODO To enable again
+    if letter_index >= 0:
+        return SelectInventoryItemAction(chr(letter_index))
+
+    if key.vk == libtcod.KEY_ENTER and key.lalt:
+        # Alt+Enter: toggle full screen
+        return ToggleFullscreenAction()
+    elif key.vk == libtcod.KEY_ESCAPE:
+        # Exit the menu, go back to main game
+        return BackToGameAction()
+
+    # No key was pressed
+    return NoopAction()
+    */
+
+    if (key.vk == TCODK_ESCAPE)
+    {
+        return new BackToGameAction();
+    }
+
+    return nullptr;
+}
+
+
 
 /*
 def handle_player_turn_keys(key, mouse):
@@ -185,11 +224,15 @@ Action * handle_input(
         //////////// PLAYER'S TURN //////////////
         /////////////////////////////////////////
         case PLAYERS_TURN:
+            //DEBUG("PLAYERS_MENU here");
             return handle_player_turn_keys(key, mouse);
+            break;
+        case INVENTORY_MENU:
+            return handle_inventory_menu_keys(key, mouse);
             break;
 
         default:
-            return 0;
+            return nullptr;
             break;
     }
 }
@@ -264,27 +307,6 @@ def handle_inventory_item_keys(key, mouse):
 
     # No key was pressed
     return NoopAction()
-
-def handle_inventory_keys(key, mouse):
-
-    # letter_index = key.c - ord('a') if key.vk == libtcod.KEY_CHAR else -1
-    letter_index = key.c if key.vk == libtcod.KEY_CHAR else -1
-
-    # TODO To enable again
-    if letter_index >= 0:
-        return SelectInventoryItemAction(chr(letter_index))
-
-    if key.vk == libtcod.KEY_ENTER and key.lalt:
-        # Alt+Enter: toggle full screen
-        return ToggleFullscreenAction()
-    elif key.vk == libtcod.KEY_ESCAPE:
-        # Exit the menu, go back to main game
-        return BackToGameAction()
-
-    # No key was pressed
-    return NoopAction()
-
-
 
 
 def handle_level_up_menu(key):

@@ -520,6 +520,15 @@ void render_all(
         game_state->game_phase == INVENTORY_ITEM_MENU)
     {
         inventory_menu(player);
+        
+        // Blit inventory frame on root console
+        TCODConsole::blit(
+            Consoles::singleton().inventory_frame,
+            0, 0,
+            FRAME_WIDTH, FRAME_HEIGHT,
+            TCODConsole::root,
+            0, 0);
+
     }
 
 /*

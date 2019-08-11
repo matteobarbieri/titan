@@ -20,7 +20,8 @@ void inventory_menu(
     int h = Consoles::singleton().inventory_frame->getHeight();
 
     // Draw frame
-    // TODO check this one
+    // Reset the color to white, just in case
+    Consoles::singleton().inventory_frame->setDefaultForeground(TCODColor::white);
     Consoles::singleton().inventory_frame->printFrame(
         1, 1,
         w-2, h-2,

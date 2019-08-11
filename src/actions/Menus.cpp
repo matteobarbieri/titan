@@ -4,12 +4,29 @@
 
 Outcome * ShowMenuAction::_execute()
 {
-    // TODO implement this
-    //save_game(self.player, self.game_map, self.message_log,
-              //GamePhase.PLAYERS_TURN)
-
+    // Throw exception to go to main menu;
     throw ShowMenuException();
-    return 0;
+    return nullptr;
+}
+
+Outcome * ShowInventoryAction::_execute()
+{
+
+    // Return outcome
+    Outcome * outcome = new Outcome(
+        //INVENTORY_MENU, false, false);
+        INVENTORY_MENU, true, true);
+
+    return outcome;
+}
+
+Outcome * BackToGameAction::_execute()
+{
+    // Return outcome
+    Outcome * outcome = new Outcome(
+        PLAYERS_TURN, true, true);
+
+    return outcome;
 }
 
 /*
@@ -67,18 +84,6 @@ class SelectInventoryItemAction(Action):
         return outcome
 
 
-class ShowInventoryAction(Action):
-
-    def _execute(self):
-
-        # Return outcome
-        outcome = {
-            'selected_inventory_item': None,
-            'next_state': GamePhase.INVENTORY_MENU,
-        }
-
-        return outcome
-
 
 class BackToInventoryMenuAction(Action):
 
@@ -96,18 +101,4 @@ class BackToInventoryMenuAction(Action):
         return outcome
 
 
-class BackToGameAction(Action):
-
-    def _execute(self):
-        """
-        Simply reset the state to player's turn
-        """
-
-        # Return outcome
-        outcome = {
-            'next_state': GamePhase.PLAYERS_TURN,
-            'redraw_terrain': True,
-        }
-
-        return outcome
 */

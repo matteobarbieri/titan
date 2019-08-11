@@ -47,6 +47,9 @@ class BackToInventoryMenuAction : public Action
 
 };
 
+/**
+ * Simply reset the state to player's turn
+ */
 class BackToGameAction : public Action
 {
 

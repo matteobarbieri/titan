@@ -33,8 +33,6 @@ Outcome * PickupAction::_execute()
         //return Message("You pick up a {}".format(item),
                 //libtcod.white)
 
-        DEBUG("There's something here!");
-
         try
         {
             player->inventory->pickup(item_on_floor, game_map);

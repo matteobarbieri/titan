@@ -49,6 +49,9 @@ class GameState
         GameState();
         //~GameState();
 
+        /**
+         * Used to determine whether to read player's input
+         */
         bool is_players_turn();
 
         bool is_enemies_turn();

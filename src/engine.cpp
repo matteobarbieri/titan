@@ -72,8 +72,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
                 player->x, player->y, FOV_RADIUS,
                 FOV_LIGHT_WALLS, FOV_ALGORITHM);
 
-        //std::cout << "play_game: Checkpoint 2" << std::endl;
-
         }
 
         // If the player move, check if targeted entity is still in sight
@@ -93,8 +91,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
                 game_state->entity_targeted->fighter == nullptr)
             {
 
-            //std::cout << "play_game: Checkpoint 4" << std::endl;
-
                 game_state->entity_targeted = nullptr;
             }
 
@@ -102,15 +98,12 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 
         }
 
-        //std::cout << "play_game: Checkpoint 2b" << std::endl;
 
         render_all(
             player, game_map, fov_map,
             fov_recompute, redraw_terrain,
             &mouse, game_state,
             top_x, top_y);
-
-        //std::cout << "play_game: Checkpoint 5" << std::endl;
 
         // TODO find a better place
         game_map->top_x = top_x;
@@ -141,10 +134,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
             if (action != nullptr)
             {
 
-                //std::cout << "play_game: Checkpoint 7" << std::endl;
-
                 // Add all objects required to perform any action
-
                 action->set_context(
                     game_map, player, fov_map, game_state);
 
@@ -232,15 +222,10 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 
 /*
 
-from loader_functions.initialize_new_game import get_constants, get_game_variables
-from loader_functions.data_loaders import load_game, save_game
 from menus import main_menu, message_box
 from fov_functions import initialize_fov, recompute_fov
 
-from game_state import GamePhase, GameState
 from death_functions import kill_monster, kill_player
-
-from actions import ShowMenuException
 
 */
 
@@ -354,64 +339,6 @@ int main(int argc, char *argv[])
         // Display the main title menu
         main_menu(&main_menu_background_image);
     }
-
-
-    //show_main_menu = True
-    //show_load_error_message = False
-
-
-    //key = libtcod.Key()
-    //mouse = libtcod.Mouse()
-
-    //while not libtcod.console_is_window_closed():
-
-        //if show_main_menu:
-
-            //if show_load_error_message:
-                //message_box(
-                    //terrain_layer, 'No save game to load', 50,
-                    //constants['screen_width'], constants['screen_height'])
-
-            //libtcod.console_flush()
-
-            //action = handle_main_menu(key)
-
-            //new_game = action.get('new_game')
-            //load_saved_game = action.get('load_game')
-            //exit_game = action.get('exit')
-
-            //if (show_load_error_message and
-                //(new_game or load_saved_game or exit_game)):
-                //# TODO wut?
-                //show_load_error_message = False
-            //elif new_game:
-            // XXX removed code
-            //elif load_saved_game:
-                //# Load a previously saved game
-                //try:
-                    //player, game_map, message_log, game_phase = load_game()
-                    //show_main_menu = False
-                //except FileNotFoundError:
-                    //show_load_error_message = True
-            //elif exit_game:
-                //break
-
-        //else:
-            //# migrating to tcod
-            //# libtcod.console_clear(terrain_layer)
-            //terrain_layer.clear()
-
-            //game_state = GameState()
-            //# game_state.player = player
-            //game_state.game_phase = game_phase
-            //# game_state.game_map = game_map
-
-            //play_game(player, game_map,
-                //game_state, message_log,
-                //terrain_layer, panel, entity_frame, inventory_frame,
-                //main_window, constants)
-
-            //show_main_menu = True
 
     return 0;
 }
