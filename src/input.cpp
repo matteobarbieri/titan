@@ -4,6 +4,7 @@
 #include "actions/Action.hpp"
 #include "actions/Move.hpp"
 #include "actions/Menus.hpp"
+#include "actions/items.hpp"
 
 #include "GameState.hpp"
 #include "GamePhase.hpp"
@@ -92,9 +93,24 @@ Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
         return WaitAction()
     */
 
+    /////////////////////////////////////////
+    ///////////////// MISC //////////////////
+    /////////////////////////////////////////
+
+    /*
+    elif key_char == 'i':
+        return ShowInventoryAction()
+
+    elif key_char == 'c':
+        return ShowCharacterScreenAction()
+
+    */
+
+    if (key_char == 'g')
+        return new PickupAction();
 
     // No key was pressed
-    return 0;
+    return nullptr;
 }
 
 /*
@@ -125,19 +141,6 @@ def handle_player_turn_keys(key, mouse):
     elif key.vk == libtcod.KEY_ENTER and key.lalt:
         # Alt+Enter: toggle full screen
         return ToggleFullscreenAction()
-
-    #########################################
-    ################# MISC ##################
-    #########################################
-
-    elif key_char == 'i':
-        return ShowInventoryAction()
-
-    elif key_char == 'c':
-        return ShowCharacterScreenAction()
-
-    elif key_char == 'g':
-        return PickupAction()
 
     #########################################
     ############ MOUSE ACTIONS ##############

@@ -121,7 +121,8 @@ Entity * GameMap::get_item_at(int x, int y)
 {
     for (int i=0; i<(int)_entities.size(); i++)
     {
-        if (_entities[i]->x == x && _entities[i]->y == y)
+        if (_entities[i]->x == x && _entities[i]->y == y && // check position
+            _entities[i]->item != nullptr) // check that it is actually an item
             return _entities[i];
     }
 
