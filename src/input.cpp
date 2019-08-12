@@ -4,7 +4,9 @@
 #include "actions/Action.hpp"
 #include "actions/Move.hpp"
 #include "actions/Menus.hpp"
+
 #include "actions/items.hpp"
+#include "actions/inspect.hpp"
 
 #include "GameState.hpp"
 #include "GamePhase.hpp"
@@ -109,6 +111,22 @@ Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     if (key_char == 'i')
         return new ShowInventoryAction();
 
+    /////////////////////////////////////////
+    //////////// MOUSE ACTIONS //////////////
+    /////////////////////////////////////////
+
+    //(x, y) = (mouse.cx, mouse.cy)
+
+    if (mouse.lbutton_pressed)
+    {
+        return new InspectAction(mouse.cx, mouse.cy);
+    }
+
+    /*
+     *elif mouse.rbutton_pressed:
+     *    return {'right_click': (x, y)}
+     */
+
     // No key was pressed
     return nullptr;
 }
@@ -150,7 +168,23 @@ Action * handle_inventory_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     return nullptr;
 }
 
+Action * handle_entity_info_keys(TCOD_key_t key, TCOD_mouse_t mouse)
+{
 
+    //if key.vk == libtcod.KEY_ENTER and key.lalt:
+        //# Alt+Enter: toggle full screen
+        //return ToggleFullscreenAction()
+
+    // Return to normal game
+    if (key.vk == TCODK_ESCAPE)
+    {
+        return new BackToGameAction();
+    }
+
+    // No key was pressed
+    return nullptr;
+
+}
 
 /*
 def handle_player_turn_keys(key, mouse):
@@ -181,16 +215,6 @@ def handle_player_turn_keys(key, mouse):
         # Alt+Enter: toggle full screen
         return ToggleFullscreenAction()
 
-    #########################################
-    ############ MOUSE ACTIONS ##############
-    #########################################
-
-    (x, y) = (mouse.cx, mouse.cy)
-
-    if mouse.lbutton_pressed:
-        return InspectAction(x, y)
-    # elif mouse.rbutton_pressed:
-        # return {'right_click': (x, y)}
 
     #########################################
     ############ SELECT ENTITY ##############
@@ -227,9 +251,20 @@ Action * handle_input(
             //DEBUG("PLAYERS_MENU here");
             return handle_player_turn_keys(key, mouse);
             break;
+
+        /////////////////////////////////////////
+        //////////// INVENTORY MENU /////////////
+        /////////////////////////////////////////
         case INVENTORY_MENU:
             return handle_inventory_menu_keys(key, mouse);
             break;
+
+        /////////////////////////////////////////
+        ////////////// ENTITY INFO //////////////
+        /////////////////////////////////////////
+        case ENTITY_INFO:
+            return handle_entity_info_keys(key, mouse);
+                break;
 
         default:
             return nullptr;
@@ -246,11 +281,6 @@ def handle_input(key, mouse, game_state):
 
 
     #########################################
-    ############ INVENTORY MENU #############
-    #########################################
-    elif game_state in (GamePhase.INVENTORY_MENU, ):
-        return handle_inventory_keys(key, mouse)
-    #########################################
     ########## INVENTORY ITEM MENU ##########
     #########################################
     elif game_state == GamePhase.INVENTORY_ITEM_MENU:
@@ -260,12 +290,6 @@ def handle_input(key, mouse, game_state):
     #########################################
     elif game_state == GamePhase.CHARACTER_SCREEN:
         return handle_character_screen(key, mouse)
-    #########################################
-    ############## ENTITY INFO ##############
-    #########################################
-    elif game_state == GamePhase.ENTITY_INFO:
-        return handle_entity_info(key, mouse)
-
     # Return empty outcome dict
     return {}
 
@@ -273,17 +297,6 @@ def handle_input(key, mouse, game_state):
 
 /*
 
-def handle_entity_info(key, mouse):
-
-    if key.vk == libtcod.KEY_ENTER and key.lalt:
-        # Alt+Enter: toggle full screen
-        return ToggleFullscreenAction()
-    elif key.vk == libtcod.KEY_ESCAPE:
-        # Exit the menu, go back to main game
-        return BackToGameAction()
-
-    # No key was pressed
-    return NoopAction()
 
 def handle_inventory_item_keys(key, mouse):
 

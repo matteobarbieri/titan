@@ -60,12 +60,15 @@ void render_entity_frame(Entity * entity)
     int h = Consoles::singleton().entity_frame->getHeight();
 
     // Draw frame
+    // Reset the color to white, just in case
+    //Consoles::singleton().inventory_frame->setDefaultForeground(TCODColor::white);
+    Consoles::singleton().inventory_frame->setDefaultBackground(TCODColor::white);
     Consoles::singleton().entity_frame->printFrame(
         1, 1, 
         w -2, h -2,
         true, TCOD_BKGND_DEFAULT, "Info");
 
-    // Print the entiy's name
+    // Print the entity's name
     Consoles::singleton().entity_frame->printf(
         3, 3, "%s", entity->name.c_str());
 

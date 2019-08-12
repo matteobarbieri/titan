@@ -117,6 +117,17 @@ GameMap::GameMap(int width, int height, bool _initialize_tiles) :
     // TODO implement
 }
 
+Entity * GameMap::get_inspectable_entity_at(int x, int y)
+{
+    for (int i=0; i<(int)_entities.size(); i++)
+    {
+        if (_entities[i]->x == x && _entities[i]->y == y) // check position
+            return _entities[i];
+    }
+
+    return nullptr;
+}
+
 Entity * GameMap::get_item_at(int x, int y)
 {
     for (int i=0; i<(int)_entities.size(); i++)

@@ -204,8 +204,14 @@ class GameMap
         void get_player_starting_coords(int & x, int & y);
 
         /**
+         * Return an entity that can be inspected at given position.
+         * Entity must be visible.
+         */
+        Entity * get_inspectable_entity_at(int x, int y);
+
+        /**
          * If there is an item on the floor at coordinates x, y return it,
-         * else return None.
+         * else return nullptr.
          */
         Entity * get_item_at(int x, int y);
 
