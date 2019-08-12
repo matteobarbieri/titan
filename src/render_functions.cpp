@@ -61,29 +61,21 @@ void render_entity_frame(Entity * entity)
 
     // Draw frame
     // Reset the color to white, just in case
-    //Consoles::singleton().inventory_frame->setDefaultForeground(TCODColor::white);
-    Consoles::singleton().inventory_frame->setDefaultBackground(TCODColor::white);
+    Consoles::singleton().entity_frame->setDefaultForeground(TCODColor::white);
+    Consoles::singleton().entity_frame->setDefaultBackground(TCODColor::black);
     Consoles::singleton().entity_frame->printFrame(
         1, 1, 
         w -2, h -2,
         true, TCOD_BKGND_DEFAULT, "Info");
 
     // Print the entity's name
+    //Consoles::singleton().entity_frame->setDefaultForeground(TCODColor::amber);
     Consoles::singleton().entity_frame->printf(
         3, 3, "%s", entity->name.c_str());
 
-    // Draw entity graphics
-    // TODO
-    // Mockup for entity detail
-    //# entity_frame.draw_rect(
-        //# 3, 5, 10, 10, 0, bg=libtcod.red)
-    
-    // Print a rectangle of the same color of the entity
-    Consoles::singleton().entity_frame->setDefaultBackground(
-        entity->color());
+    Consoles::singleton().entity_frame->setDefaultBackground(entity->color());
     Consoles::singleton().entity_frame->rect(
-        3, 5, 10, 10, true);
-   
+        3, 5, 10, 10, true, TCOD_BKGND_SET);
 }
 
 /*
