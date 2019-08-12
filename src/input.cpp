@@ -138,26 +138,20 @@ Action * handle_inventory_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 
     // Code to prevent double input
     if (key.vk == TCODK_CHAR)
+    {
         key_char = key.c;
+        if (key_char >= 'a' && key_char <= 'z')
+        {
+            return new SelectInventoryItemAction(key_char);
+        }
+        //DEBUG("Pressed key " << key_char);
 
-    /////////////////////////////////////////
+    }
+
     /*
-    # letter_index = key.c - ord('a') if key.vk == libtcod.KEY_CHAR else -1
-    letter_index = key.c if key.vk == libtcod.KEY_CHAR else -1
-
-    # TODO To enable again
-    if letter_index >= 0:
-        return SelectInventoryItemAction(chr(letter_index))
-
     if key.vk == libtcod.KEY_ENTER and key.lalt:
         # Alt+Enter: toggle full screen
         return ToggleFullscreenAction()
-    elif key.vk == libtcod.KEY_ESCAPE:
-        # Exit the menu, go back to main game
-        return BackToGameAction()
-
-    # No key was pressed
-    return NoopAction()
     */
 
     if (key.vk == TCODK_ESCAPE)
@@ -166,6 +160,50 @@ Action * handle_inventory_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     }
 
     return nullptr;
+}
+
+Action * handle_inventory_item_keys(TCOD_key_t key, TCOD_mouse_t mouse)
+{
+    char key_char = -1;
+
+    // Code to prevent double input
+    if (key.vk == TCODK_CHAR)
+    {
+        key_char = key.c;
+
+        /*
+         *if (key_char >= 'a' && key_char <= 'z')
+         *{
+         *    return new SelectInventoryItemAction(key_char);
+         *}
+         */
+
+        //DEBUG("Pressed key " << key_char);
+
+    }
+
+    if (key.vk == TCODK_ESCAPE)
+    {
+        return new BackToInventoryMenuAction();
+    }
+
+    return nullptr;
+
+    /*
+    # Code to prevent double input
+    key_char = chr(key.c) if key.vk == libtcod.KEY_CHAR else ""
+
+    if key.vk == libtcod.KEY_ENTER and key.lalt:
+        # Alt+Enter: toggle full screen
+        return ToggleFullscreenAction()
+
+    if key_char == "d":
+        return DropItemAction()
+    elif key_char == "e":
+        return EquipItemAction()
+    elif key_char == "t":
+        return UnequipItemAction()
+    */
 }
 
 Action * handle_entity_info_keys(TCOD_key_t key, TCOD_mouse_t mouse)
@@ -222,17 +260,10 @@ def handle_player_turn_keys(key, mouse):
 
 
     """
-    elif key_char == 'g':
-        return {'pickup': True}
     elif key_char == 'd':
         return {'drop_inventory': True}
     elif key.vk == libtcod.KEY_ENTER:
         return {'take_stairs': True}
-
-    # Updated
-    elif key.vk == libtcod.KEY_ESCAPE:
-        # Exit the game
-        return {'exit': True}
     """
 
 */
@@ -266,6 +297,13 @@ Action * handle_input(
             return handle_entity_info_keys(key, mouse);
                 break;
 
+        /////////////////////////////////////////
+        ////////// INVENTORY ITEM MENU //////////
+        /////////////////////////////////////////
+        case INVENTORY_ITEM_MENU:
+            return handle_inventory_item_keys(key, mouse);
+            break;
+
         default:
             return nullptr;
             break;
@@ -281,11 +319,6 @@ def handle_input(key, mouse, game_state):
 
 
     #########################################
-    ########## INVENTORY ITEM MENU ##########
-    #########################################
-    elif game_state == GamePhase.INVENTORY_ITEM_MENU:
-        return handle_inventory_item_keys(key, mouse)
-    #########################################
     ########### CHARACTER SCREEN ############
     #########################################
     elif game_state == GamePhase.CHARACTER_SCREEN:
@@ -298,28 +331,6 @@ def handle_input(key, mouse, game_state):
 /*
 
 
-def handle_inventory_item_keys(key, mouse):
-
-    # Code to prevent double input
-    key_char = chr(key.c) if key.vk == libtcod.KEY_CHAR else ""
-
-    if key.vk == libtcod.KEY_ENTER and key.lalt:
-        # Alt+Enter: toggle full screen
-        return ToggleFullscreenAction()
-
-    elif key.vk == libtcod.KEY_ESCAPE:
-        # Exit the menu, go back to main game
-        return BackToInventoryMenuAction()
-
-    if key_char == "d":
-        return DropItemAction()
-    elif key_char == "e":
-        return EquipItemAction()
-    elif key_char == "t":
-        return UnequipItemAction()
-
-    # No key was pressed
-    return NoopAction()
 
 
 def handle_level_up_menu(key):

@@ -194,11 +194,9 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
                     else
                         outcome = nullptr;
 
-                    // TODO
-                    // Should we use the same method?
+                    // Side effect of action outcome
                     if (outcome != nullptr)
                     {
-                        // TODO also need message log parameter?
                         game_state->update(outcome, fov_recompute, redraw_terrain);
                     }
 
@@ -221,9 +219,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 }
 
 /*
-
-from menus import main_menu, message_box
-from fov_functions import initialize_fov, recompute_fov
 
 from death_functions import kill_monster, kill_player
 

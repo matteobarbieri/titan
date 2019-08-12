@@ -23,8 +23,7 @@ class Outcome
         Entity * selected_inventory_item;
 
         Outcome(GamePhase next_phase, bool fov_recompute, bool redraw_terrain,
-                Entity * entity_focused=nullptr, Entity * entity_targeted=nullptr,
-                Entity * selected_inventory_item=nullptr);
+                Entity * entity_focused=nullptr, Entity * entity_targeted=nullptr);
 
 };
 

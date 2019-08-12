@@ -1,6 +1,11 @@
 #include "Menus.hpp"
 #include "Outcome.hpp"
 
+#include "../Entity.hpp"
+#include "../GameState.hpp"
+
+#include "../components/Inventory.hpp"
+#include "../components/Item.hpp"
 
 Outcome * ShowMenuAction::_execute()
 {
@@ -20,6 +25,18 @@ Outcome * ShowInventoryAction::_execute()
     return outcome;
 }
 
+Outcome * BackToInventoryMenuAction::_execute()
+{
+    // Clear selected inventory item
+    game_state->selected_inventory_item = nullptr;
+
+    // Return outcome
+    Outcome * outcome = new Outcome(
+        INVENTORY_MENU, true, true);
+
+    return outcome;
+}
+
 Outcome * BackToGameAction::_execute()
 {
     // Return outcome
@@ -29,9 +46,45 @@ Outcome * BackToGameAction::_execute()
     return outcome;
 }
 
-/*
+SelectInventoryItemAction::SelectInventoryItemAction(char item_letter) :
+    item_letter(item_letter)
+{
+}
 
-from game_state import GamePhase
+Outcome * SelectInventoryItemAction::_execute()
+{
+
+    Entity * aux;
+    bool found = false;
+
+    for (int i=0; i<(int)player->inventory->items().size(); i++)
+    {
+        // shortcut to entity
+        aux = player->inventory->items()[i];
+
+        // Check if the letter coincides and the item is not currently equipped
+        if (aux->item->item_letter == item_letter && !aux->item->equipped())
+        {
+            game_state->selected_inventory_item = aux;
+            found = true;
+            break;
+        }
+    }
+    
+    if (found)
+    {
+        Outcome * outcome = new Outcome(
+            INVENTORY_ITEM_MENU, false, false);
+
+        return outcome;
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+/*
 
 from loader_functions.data_loaders import save_game
 

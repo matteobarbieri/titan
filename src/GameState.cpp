@@ -33,16 +33,12 @@ void GameState::update(Outcome * outcome, bool & fov_recompute,
     game_phase = outcome->next_phase;
 
     // Update focused entity
-    if (outcome->entity_focused != 0)
+    if (outcome->entity_focused != nullptr)
         entity_focused = outcome->entity_focused;
 
     // Update targeted entity
-    if (outcome->entity_targeted != 0)
+    if (outcome->entity_targeted != nullptr)
         entity_targeted = outcome->entity_targeted;
-
-    // Update selected inventory item
-    if (outcome->selected_inventory_item != 0)
-        selected_inventory_item = outcome->selected_inventory_item;
 
     /*
     TODO this was the original python code

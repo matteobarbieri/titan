@@ -23,4 +23,6 @@ void menu(TCODConsole * con, std::vector<MenuOption> options, const char * heade
 void inventory_menu(
     Entity * player, std::string header="Inventory");
 
+void item_submenu(Entity * player, Entity * item);
+
 #endif /* ifndef R20177_MENUS */

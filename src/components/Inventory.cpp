@@ -43,6 +43,35 @@ std::vector<Entity *> Inventory::items()
     return _items;
 }
 
+int Inventory::get_item_position_in_list(Entity * item)
+{
+
+    // TODO must change, doesn't work well because of equipped status
+    for (int i=0; i<(int)items().size(); i++)
+    {
+        if (items()[i] == item)
+        {
+            return i;
+        }
+    }
+
+    // Should really never arrive here
+    throw new std::exception();
+
+    /*
+    def get_item_position_in_list(self, item):
+        """
+        """
+
+        viable_list = [x for x in self.items
+            if x.item.equipped == item.item.equipped]
+
+        # return self.items.index(item)
+        return viable_list.index(item)
+    */
+
+}
+
 void Inventory::pickup(Entity * item, GameMap * level)
 {
     // If at full capacity, throw exception
@@ -161,15 +190,6 @@ class Inventory:
                 libtcod.white)
 
 
-    def get_item_position_in_list(self, item):
-        """
-        """
-
-        viable_list = [x for x in self.items
-            if x.item.equipped == item.item.equipped]
-
-        # return self.items.index(item)
-        return viable_list.index(item)
 
     """
 

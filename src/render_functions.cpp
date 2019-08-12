@@ -502,6 +502,12 @@ void render_all(
             SCREEN_WIDTH - FRAME_WIDTH, 0);
     }
 
+    // Inventory item submenu
+    if (game_state->game_phase == INVENTORY_ITEM_MENU)
+    {
+        item_submenu(player, game_state->selected_inventory_item);
+    }
+
     // Finally blit main window console on root console
     TCODConsole::blit(
         Consoles::singleton().main_window,
@@ -534,13 +540,6 @@ void render_all(
 
 /*
 
-    # Inventory item submenu
-    if game_phase == GamePhase.INVENTORY_ITEM_MENU:
-
-        item_submenu(
-            terrain_layer, 'Actions', player,
-            game_state.selected_inventory_item,
-            screen_width, screen_height)
 
     # Show character screen
     elif game_phase == GamePhase.CHARACTER_SCREEN:

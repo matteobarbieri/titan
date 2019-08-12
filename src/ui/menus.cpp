@@ -44,6 +44,8 @@ void inventory_menu(
                 //3, item_y, '({}) {}'.format(e.item_letter, e.name),
                 //fg=e.color)
             
+            // TODO Highlight item line if item is selected
+            //Consoles::singleton().inventory_frame->setDefaultBackground(TCODColor::lightGrey);
             // Set the color first
             Consoles::singleton().inventory_frame->setDefaultForeground(e->color());
 
@@ -60,41 +62,6 @@ void inventory_menu(
     } 
 
 }
-
-/*
-def inventory_menu(con, header, player, inventory_frame,
-                   screen_width, screen_height):
-
-
-
-    # List equipped items
-    if player.equipment.slots:
-
-        inventory_frame.print(
-                3, 28, 'Equipped items:',
-            fg=libtcod.white)
-
-        item_y = 30
-        for slot, e in player.equipment.slots.items():
-            inventory_frame.print(
-                3, item_y, '({}) {} ({})'.format(
-                    e.item_letter, e.name, SLOT_NAMES[slot]),
-                fg=e.color)
-
-            item_y += 1
-
-    else:
-        inventory_frame.print(
-                3, 28, 'No items equipped!',
-            fg=libtcod.white)
-
-    # Blit panel console on root console
-    libtcod.console_blit(
-        inventory_frame,
-        0, 0, w, h,
-        con,
-        0, 0)
-*/
 
 void menu(TCODConsole * con, std::vector<MenuOption> options, const char * header,
           int width,
@@ -177,27 +144,47 @@ void main_menu(TCODImage * background_image)
 
 }
 
+void item_submenu(Entity * player, Entity * item)
+{
+
+    int menu_y;
+    
+    // Start from a different height, based on whether the item is currently
+    // equipped or not
+    if (item->item->equipped())
+    {
+        menu_y = 30;
+    }
+    else
+    {
+        menu_y = 5;
+    }
+
+    // TODO limit the height of the submenu
+    //item_position = min(item_position, 20000)
+    
+    // TODO refactor as singleton
+    std::vector<MenuOption> options;
+    options.push_back({'d', "Drop"});
+    options.push_back({'e', "Equip"});
+    options.push_back({'u', "Use"});
+
+    // TODO compute dinamically?
+    int submenu_width = 15;
+    int submenu_height = 5;
+
+    menu(Consoles::singleton().submenu, options, " ",
+         submenu_width, 0, 0);
+
+    // Blit here
+    TCODConsole::blit(
+        Consoles::singleton().submenu, 0, 0,
+        submenu_width, submenu_height,
+        Consoles::singleton().main_window,
+        FRAME_WIDTH, menu_y);
+    
+
 /*
-
-from equipment_slots import SLOT_NAMES
-
-    ###############################
-    ########### FIN QUI ###########
-    ###############################
-
-def item_submenu(con, header, player, item, screen_width, screen_height):
-
-    if item.item.equipped:
-        starting_menu_y = 30
-    else:
-        starting_menu_y = 5
-
-    item_position = (
-        player.inventory.get_item_position_in_list(item) +
-        starting_menu_y)
-
-    # TODO limit the height of the submenu
-    item_position = min(item_position, 20000)
 
     # TODO
     # Get the right list of options for specific item
@@ -209,12 +196,20 @@ def item_submenu(con, header, player, item, screen_width, screen_height):
 
     item_options = item.item.get_inventory_options()
 
-    width = 15
-
     # TODO
     # X position should depend on frame's width
     menu(con, header, item_options, width, screen_width, screen_height,
          x=31, y=item_position)
+
+*/
+}
+
+/*
+
+###############################
+########### FIN QUI ###########
+###############################
+
 
 
 

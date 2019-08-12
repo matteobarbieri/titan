@@ -41,6 +41,10 @@ class Inventory
 
         std::vector<Entity *> items();
 
+        /**
+         * Return the position of the item in the inventory's items list
+         */
+        int get_item_position_in_list(Entity * item);
 
         /**
          * Creates a json representation of the component
@@ -109,15 +113,6 @@ class Inventory:
 
 
 
-    def get_item_position_in_list(self, item):
-        """
-        """
-
-        viable_list = [x for x in self.items
-            if x.item.equipped == item.item.equipped]
-
-        # return self.items.index(item)
-        return viable_list.index(item)
 
     """
 
