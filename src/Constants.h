@@ -39,6 +39,8 @@
 #define MAP_HEIGHT 100
 
 #define DEBUG(T) std::cout << T << std::endl
+
+#define MESSAGE_LOG_N_ROWS 5
 /*
 
 

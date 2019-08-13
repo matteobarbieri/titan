@@ -46,7 +46,7 @@ Outcome * PickupAction::_execute()
             stringStream << "You pick up a " << item_on_floor->name << ".";
 
             // Add message to message log
-            game_state->message_log->add_message(
+            MessageLog::singleton().add_message(
                 {stringStream.str(), TCODColor::white});
 
         }
@@ -57,7 +57,7 @@ Outcome * PickupAction::_execute()
             stringStream << "Unable to pick up " << item_on_floor->name << ": inventory full.";
 
             // Add message to message log
-            game_state->message_log->add_message(
+            MessageLog::singleton().add_message(
                 {stringStream.str(), TCODColor::yellow});
 
             next_phase = PLAYERS_TURN;
@@ -67,7 +67,7 @@ Outcome * PickupAction::_execute()
     {
         // No item on ground
         // Add message to message log
-        game_state->message_log->add_message(
+        MessageLog::singleton().add_message(
             {"There's nothing here to pick up!", TCODColor::yellow});
 
         next_phase = PLAYERS_TURN;

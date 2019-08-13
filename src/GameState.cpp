@@ -5,7 +5,6 @@
 GameState::GameState()
 {
     // TODO make the number of visible message come from constants
-    message_log = new MessageLog(5);
     current_turn = 1;
 }
 

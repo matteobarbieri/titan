@@ -16,13 +16,18 @@ typedef struct {
 
 class MessageLog
 {
+
+    private:
+
+        MessageLog();
+        ~MessageLog();
+
     public:
 
         int n_visible_messages;
 
         std::vector<Message> messages;
 
-        MessageLog(int);
 
         /**
          * Add a message to the log
@@ -33,6 +38,9 @@ class MessageLog
          * Show the last N messages
          */
         std::vector<Message> visible_messages();
+
+        /*! The static method to access the singleton */
+        static MessageLog & singleton();
 };
 
 #endif /* ifndef ROGUE_20177_GAME_MESSAGES */

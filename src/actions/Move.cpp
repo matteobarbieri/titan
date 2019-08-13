@@ -77,7 +77,7 @@ Outcome * MoveAction::_execute()
                 //Message("Ouch!", TCODColor::yellow));
             
             // TODO replace with a random one
-            game_state->message_log->add_message({"Ouch!", TCODColor::yellow});
+            MessageLog::singleton().add_message({"Ouch!", TCODColor::yellow});
         }
 
         // Check if the position has changed

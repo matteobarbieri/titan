@@ -1,15 +1,29 @@
+#include "Constants.h"
 #include "GameMessages.hpp"
 
 #include <algorithm>
 
-MessageLog::MessageLog(int n_visible_messages) :
-    n_visible_messages(n_visible_messages)
+// Private constructor/destructor
+MessageLog::MessageLog() :
+    n_visible_messages(MESSAGE_LOG_N_ROWS)
+{
+}
+
+MessageLog::~MessageLog()
 {
 }
 
 void MessageLog::add_message(Message m)
 {
     messages.push_back(m);
+}
+
+/*! The static method to access the singleton */
+MessageLog & MessageLog::singleton()
+{
+    static MessageLog instance;
+
+    return instance;
 }
 
 // TODO improve this one

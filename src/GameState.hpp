@@ -31,8 +31,6 @@ class GameState
 
         int current_turn;
         
-        MessageLog * message_log;
-
         // Entity being inspected
         Entity * entity_focused = nullptr;
 

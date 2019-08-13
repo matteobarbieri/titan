@@ -390,8 +390,10 @@ void render_all(
     Consoles::singleton().panel->clear();
 
     // Retrieve the list of visible messages
+    //std::vector<Message> visible_messages =
+        //game_state->message_log->visible_messages();
     std::vector<Message> visible_messages =
-        game_state->message_log->visible_messages();
+        MessageLog::singleton().visible_messages();
 
     // Initialize message height
     int y = 1;
