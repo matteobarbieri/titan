@@ -207,16 +207,10 @@ class Entity:
     A generic object to represent players, enemies, items, etc.
     """
 
-
-    @property
-    def color(self):
-        return self._color
-
     def move(self, dx, dy):
         # Move the entity by a given amount
         self.x += dx
         self.y += dy
-
 
     def move_towards(self, target_x, target_y, game_map, entities):
         dx = target_x - self.x
