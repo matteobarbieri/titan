@@ -58,7 +58,17 @@ Fighter * Fighter::from_json(json j)
     return c;
 }
 
-void Fighter::attack(Entity * other)
+void Fighter::attack_melee(Entity * target)
+{
+
+    /*
+     *for weapon in self.owner.equipment.melee_weapons:
+     *    self.attack_melee_with_weapon(target, weapon);
+     */
+
+}
+
+void Fighter::shoot(Entity * target)
 {
 }
 
@@ -235,12 +245,6 @@ class Fighter:
         # damage = self.power - target.fighter.defense
         # return 3
 
-    def attack(self, target):
-        # TODO temp renaming, to remove
-
-        # TODO DEBUG remove
-        # print("Attacking")
-        return self.attack_melee(target)
 
     def attack_melee_with_weapon(self, target, weapon):
         """
@@ -281,14 +285,4 @@ class Fighter:
         Perform an attack with all equipped melee weapons
         """
 
-        # TODO DEBUG remove
-        # print("Attacking melee")
-        # TODO Completely rewrite this
-        messages = []
-
-        for weapon in self.owner.equipment.melee_weapons:
-            messages.extend(
-                self.attack_melee_with_weapon(target, weapon))
-
-        return messages
 */

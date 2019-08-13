@@ -161,7 +161,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
                 
                 if (outcome != 0)
                 {
-                    // TODO also need message log parameter?
                     game_state->update(outcome, fov_recompute, redraw_terrain);
                 }
 

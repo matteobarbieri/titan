@@ -75,7 +75,7 @@ void Entity::interact_with(Entity * other)
     // TODO must be more complex than this!
     if (other->fighter != nullptr)
     {
-        fighter->attack(other);
+        fighter->attack_melee(other);
     }
 }
 
@@ -198,11 +198,6 @@ Entity * Entity::from_json(json j)
     
     return e;
 }
-
-//void Entity::accept(Visitor * v)
-//{
-    //v->visit(*this);
-//}
 
 /*
 
