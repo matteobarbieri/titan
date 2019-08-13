@@ -54,8 +54,7 @@ Outcome * MoveAction::_execute()
 
             if (target != 0)
             {
-                // TODO enable message log
-                //messages.extend(self.player.interact_with(target))
+                player->interact_with(target);
             }
             else
             {

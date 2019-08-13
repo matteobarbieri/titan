@@ -1,4 +1,5 @@
 #include "Fighter.hpp"
+#include "../Entity.hpp"
 
 /*
     def __init__(self, hp, defense, power, xp=0,
@@ -55,6 +56,10 @@ Fighter * Fighter::from_json(json j)
     Fighter * c = new Fighter(j["_max_hp"], j["_hp"]);
 
     return c;
+}
+
+void Fighter::attack(Entity * other)
+{
 }
 
 /*

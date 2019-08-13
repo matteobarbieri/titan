@@ -5,6 +5,9 @@
 
 using json = nlohmann::json;
 
+// Forward declarations
+class Entity;
+
 class Fighter
 {
 
@@ -28,6 +31,8 @@ class Fighter
          * Creates a json representation of the component
          */
         json to_json();
+
+        void attack(Entity * other);
 
         static Fighter * from_json(json j);
 

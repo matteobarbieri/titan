@@ -69,6 +69,16 @@ bool Entity::operator < (const Entity & other) const
 }
 */
 
+void Entity::interact_with(Entity * other)
+{
+
+    // TODO must be more complex than this!
+    if (other->fighter != nullptr)
+    {
+        fighter->attack(other);
+    }
+}
+
 RenderOrder Entity::render_order() const
 {
     return _render_order;
@@ -212,20 +222,6 @@ class Entity:
         self.x += dx
         self.y += dy
 
-    def interact_with(self, other):
-        """
-        Default interaction with another entity
-
-        player <-> monster: attack
-        player  -> door: interact
-        """
-
-        # TODO check if hostile
-        if other.fighter is not None:
-            # TODO DEBUG remove
-            # print("Interacting with!")
-            messages = self.fighter.attack(other)
-            return messages
 
     def move_towards(self, target_x, target_y, game_map, entities):
         dx = target_x - self.x
