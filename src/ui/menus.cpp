@@ -33,7 +33,7 @@ void inventory_menu(
 
     // List the items in the inventory
     // Starting menu item height
-    int item_y = 5;
+    int item_y = INVENTORY_ITEMS_Y;
 
     for (int i=0; i<(int)player->inventory->items().size(); i++)
     {
@@ -65,7 +65,13 @@ void inventory_menu(
         }
     } 
 
-    item_y = 30;
+    // Print equipped items section title
+    Consoles::singleton().inventory_frame->setDefaultForeground(TCODColor::white);
+    Consoles::singleton().inventory_frame->printf(
+        3,EQUIPPED_ITEMS_Y - 2,
+        "== EQUIPPED ITEMS ==");
+
+    item_y = EQUIPPED_ITEMS_Y;
     
     // Loop through equipment slots
     std::map<EquipmentSlot, Entity *>::iterator it;

@@ -41,6 +41,9 @@
 #define DEBUG(T) std::cout << T << std::endl
 
 #define MESSAGE_LOG_N_ROWS 5
+
+#define INVENTORY_ITEMS_Y 5
+#define EQUIPPED_ITEMS_Y 32
 /*
 
 
