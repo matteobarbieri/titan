@@ -1,12 +1,16 @@
 #include "Equipment.hpp"
+#include "Equippable.hpp"
+#include "Item.hpp"
+
+#include "../EquipmentSlots.hpp"
+#include "../Entity.hpp"
 
 Equipment::Equipment()
 {
+    slots[EquipmentSlot::MAIN_HAND] = nullptr;
+    slots[EquipmentSlot::OFF_HAND] = nullptr;
 }
 
-Equipment::~Equipment()
-{
-}
 
 json Equipment::to_json()
 {
@@ -25,6 +29,35 @@ Equipment * Equipment::from_json(json j)
     return c;
 }
 
+
+EquipmentSlot Equipment::equip(Entity * item)
+{
+
+    EquipmentSlot free_slot = EquipmentSlot::NONE;
+
+    // Loop through equipment slots
+    std::map<EquipmentSlot, Entity *>::iterator it;
+    for (it=slots.begin(); it!=slots.end(); ++it)
+    {
+        if ((it->first & item->equippable->valid_slots) != EquipmentSlot::NONE && // right slot
+            it->second == nullptr) // slot empty
+        {
+            free_slot = it->first;
+            break;
+        }
+    }
+
+    if (free_slot != EquipmentSlot::NONE)
+    {
+        slots[free_slot] = item;
+        item->item->equipped = true;
+    }
+    else
+    {
+    }
+
+    return free_slot;
+}
 
 /*
 from game_messages import Message
@@ -142,54 +175,6 @@ class Equipment:
         else:
             # TODO should not really happen actually...
             pass
-
-    def equip(self, equippable_entity, slot=None):
-        """
-        Parameters
-        ----------
-
-        equippable_entity : Entity
-            The entity that is being equipped.
-        """
-
-        messages = list()
-
-        if slot is not None:
-            # TODO implement this
-            pass
-
-        # Try to equip the entity in an available slot
-        for slot in equippable_entity.c['equippable'].valid_slots:
-
-            # First check if slot is present and free
-            if (slot not in self.available_slots or
-                self.slots.get(slot) is not None):  # noqa
-
-                # Slot unavailable, move on
-                continue
-            else:
-
-                # Slot available, equip the item!
-
-                # Set the `equippable` property as true
-                equippable_entity.item.equipped = True
-
-                # Add the entity to slots
-                self.slots[slot] = equippable_entity
-
-                messages.append(Message(
-                    "Equipped {} in {}".format(
-                        equippable_entity, SLOT_NAMES[slot]),
-                    libtcod.white))
-
-                return messages
-                # break
-
-        else:
-            # Unable to equip the entity
-            raise UnableToEquipException(
-                "No equipment slots available for {}!".format(
-                    equippable_entity))
 
 
     @property

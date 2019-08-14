@@ -15,6 +15,20 @@ class PickupAction : public Action
 
 };
 
+class EquipItemAction : public Action
+{
+
+    public:
+
+        // Constructors
+        //EquipItemAction();
+        //~EquipItemAction();
+
+        Outcome * _execute();
+
+};
+
+
 /*
 class DropItemAction : public Action
 {
@@ -24,19 +38,6 @@ class DropItemAction : public Action
         // Constructors
         DropItemAction();
         ~DropItemAction();
-
-        Outcome * _execute();
-
-};
-
-class EquipItemAction : public Action
-{
-
-    public:
-
-        // Constructors
-        EquipItemAction();
-        ~EquipItemAction();
 
         Outcome * _execute();
 

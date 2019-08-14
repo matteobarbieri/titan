@@ -5,6 +5,19 @@
 
 using json = nlohmann::json;
 
+// Forward declarations
+class Entity;
+enum class EquipmentSlot;
+
+/*
+ * Exception raised whenever it is impossible to equip a piece of equipment
+ * for whatever reason.
+ */
+class UnableToEquipException : public std::exception
+{
+};
+
+
 class Equipment
 {
 
@@ -13,7 +26,9 @@ class Equipment
 
     public:
         Equipment();
-        ~Equipment();
+
+        // The equipment slots
+        std::map<EquipmentSlot, Entity *> slots;
 
         /**
          * Creates a json representation of the component
@@ -21,6 +36,9 @@ class Equipment
         json to_json();
 
         static Equipment * from_json(json j);
+
+        EquipmentSlot equip(Entity * item);
+        //void unequip(Entity * item);
 
 };
 
@@ -33,13 +51,6 @@ from game_messages import Message
 import tcod as libtcod
 
 from equipment_slots import SLOT_NAMES
-
-class UnableToEquipException(Exception):
-    """
-    Exception raised whenever it is impossible to equip a piece of equipment
-    for whatever reason.
-    """
-    pass
 
 
 class Equipment:
@@ -119,78 +130,6 @@ class Equipment:
             # bonus += self.off_hand.c['equippable'].defense_bonus
 
         # return bonus
-
-    def unequip(self, equippable_entity):
-        """
-        Unequip a currently equipped item.
-        """
-
-        messages = list()
-
-        # Search for the item among equipped items
-        for slot, item in self.slots.items():
-            if item == equippable_entity:
-                item.item.equipped = False
-                # self.slots[slot] = None
-                del self.slots[slot]
-
-                messages.append(Message(
-                    "{} unequipped (was in {})".format(
-                        equippable_entity, SLOT_NAMES[slot]),
-                    libtcod.white))
-                return messages
-            pass
-        else:
-            # TODO should not really happen actually...
-            pass
-
-    def equip(self, equippable_entity, slot=None):
-        """
-        Parameters
-        ----------
-
-        equippable_entity : Entity
-            The entity that is being equipped.
-        """
-
-        messages = list()
-
-        if slot is not None:
-            # TODO implement this
-            pass
-
-        # Try to equip the entity in an available slot
-        for slot in equippable_entity.c['equippable'].valid_slots:
-
-            # First check if slot is present and free
-            if (slot not in self.available_slots or
-                self.slots.get(slot) is not None):  # noqa
-
-                # Slot unavailable, move on
-                continue
-            else:
-
-                # Slot available, equip the item!
-
-                # Set the `equippable` property as true
-                equippable_entity.item.equipped = True
-
-                # Add the entity to slots
-                self.slots[slot] = equippable_entity
-
-                messages.append(Message(
-                    "Equipped {} in {}".format(
-                        equippable_entity, SLOT_NAMES[slot]),
-                    libtcod.white))
-
-                return messages
-                # break
-
-        else:
-            # Unable to equip the entity
-            raise UnableToEquipException(
-                "No equipment slots available for {}!".format(
-                    equippable_entity))
 
 
     @property

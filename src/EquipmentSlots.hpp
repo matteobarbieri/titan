@@ -5,9 +5,6 @@
 #include <vector>
 
 /*
- * The main type of the item.
- */
-//enum class EquipmentSlots
 class EquipmentSlots
 {
     public:
@@ -23,5 +20,21 @@ class EquipmentSlots
         static const std::vector<std::string> slot_names;
 
 };
+*/
+
+/*
+ * 
+ */
+enum class EquipmentSlot
+{
+    NONE = 0x0,
+    MAIN_HAND = 0x1,
+    OFF_HAND = 0x2,
+    HEAD = 0x4,
+    CHEST = 0x8
+};
+
+EquipmentSlot operator | (EquipmentSlot lhs, EquipmentSlot rhs);
+EquipmentSlot operator & (EquipmentSlot lhs, EquipmentSlot rhs);
 
 #endif /* ifndef ROGUE_20177_EQUIPMENT_SLOTS */

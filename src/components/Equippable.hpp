@@ -5,16 +5,7 @@
 
 using json = nlohmann::json;
 
-/*
- * The main type of the item.
- */
-enum class EquipmentSlot
-{
-    MAIN_HAND = 0x1,
-    OFF_HAND = 0x2
-};
-
-EquipmentSlot operator |(EquipmentSlot lhs, EquipmentSlot rhs);
+#include "../EquipmentSlots.hpp"
 
 class Equippable
 {
@@ -28,7 +19,7 @@ class Equippable
 
         //~Equippable();
 
-        EquipmentSlot valid_slots;
+        const EquipmentSlot valid_slots;
 
         /**
          * Creates a json representation of the component

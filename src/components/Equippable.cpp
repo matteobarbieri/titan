@@ -4,47 +4,6 @@
 ///// EQUIPMENT SLOT OPERATORS ///////
 //////////////////////////////////////
 
-// Enable bitwise comparison for ItemType
-EquipmentSlot operator |(EquipmentSlot lhs, EquipmentSlot rhs)
-{
-    return static_cast<EquipmentSlot> (
-        static_cast<std::underlying_type<EquipmentSlot>::type>(lhs) |
-        static_cast<std::underlying_type<EquipmentSlot>::type>(rhs)
-    );
-}
-
-EquipmentSlot operator &(EquipmentSlot lhs, EquipmentSlot rhs)
-{
-    return static_cast<EquipmentSlot> (
-        static_cast<std::underlying_type<EquipmentSlot>::type>(lhs) &
-        static_cast<std::underlying_type<EquipmentSlot>::type>(rhs)
-    );
-}
-
-EquipmentSlot operator ^(EquipmentSlot lhs, EquipmentSlot rhs)
-{
-    return static_cast<EquipmentSlot> (
-        static_cast<std::underlying_type<EquipmentSlot>::type>(lhs) ^
-        static_cast<std::underlying_type<EquipmentSlot>::type>(rhs)
-    );
-}
-
-EquipmentSlot operator ~(EquipmentSlot rhs)
-{
-    return static_cast<EquipmentSlot> (
-        ~static_cast<std::underlying_type<EquipmentSlot>::type>(rhs)
-    );
-}
-
-EquipmentSlot& operator &=(EquipmentSlot &lhs, EquipmentSlot rhs)
-{
-    lhs = static_cast<EquipmentSlot> (
-        static_cast<std::underlying_type<EquipmentSlot>::type>(lhs) &
-        static_cast<std::underlying_type<EquipmentSlot>::type>(rhs)
-    );
-
-    return lhs;
-}
 
 Equippable::Equippable(EquipmentSlot valid_slots) :
     valid_slots(valid_slots)

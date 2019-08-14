@@ -5,13 +5,70 @@
 
 #include "../GamePhase.hpp"
 #include "../Entity.hpp"
+
 #include "../components/Inventory.hpp"
+#include "../components/Equipment.hpp"
+
 //#include "../GameMessages.hpp"
 #include "../GameState.hpp"
+#include "../EquipmentSlots.hpp"
 
 #include "../map/GameMap.hpp"
 
 #include "Outcome.hpp"
+
+Outcome * EquipItemAction::_execute()
+{
+
+    // Retrieve item on floor at player's coordinates
+    //Entity * item_on_floor = game_map->get_item_at(
+        //player->x, player->y);
+
+    GamePhase next_phase;
+
+    // Build message
+    std::ostringstream stringStream;
+
+    try
+    {
+        EquipmentSlot slot = player->equipment->equip(
+            game_state->selected_inventory_item);
+
+        if (slot != EquipmentSlot::NONE)
+        {
+            next_phase = ENEMY_TURN;
+
+            stringStream << "You equip a " << 
+                game_state->selected_inventory_item->name << ".";
+
+            // Add message to message log
+            MessageLog::singleton().add_message(
+                {stringStream.str(), TCODColor::white});
+        }
+        else
+        {
+            next_phase = PLAYERS_TURN;
+        }
+
+    }
+    catch (const UnableToEquipException& e) 
+    {
+        next_phase = PLAYERS_TURN;
+    }
+
+    /*
+    */
+
+    // Return outcome
+    // TODO enable message log
+    Outcome * outcome = new Outcome(
+        next_phase, // TODO this is the WRONG one (for debug purposes)
+        false,
+        false);
+
+    return outcome;
+
+}
 
 Outcome * PickupAction::_execute()
 {

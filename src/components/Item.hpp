@@ -37,7 +37,6 @@ class Item
 
     private:
 
-        bool _equipped = false;
 
     public:
 
@@ -52,7 +51,7 @@ class Item
         ItemType item_type;
         ItemSubtype item_subtype;
 
-        bool equipped();
+        bool equipped;
 
         /**
          * Creates a json representation of the component

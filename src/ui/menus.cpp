@@ -6,9 +6,13 @@
 #include "../Constants.h"
 #include "../Consoles.hpp"
 
+#include "../Entity.hpp"
+#include "../EquipmentSlots.hpp"
+
 #include "../components/Inventory.hpp"
 #include "../components/Item.hpp"
-#include "../Entity.hpp"
+#include "../components/Equipment.hpp"
+
 
 #include "menus.hpp"
 
@@ -25,10 +29,10 @@ void inventory_menu(
     Consoles::singleton().inventory_frame->printFrame(
         1, 1,
         w-2, h-2,
-        false, TCOD_BKGND_NONE, header.c_str());
+        true, TCOD_BKGND_NONE, header.c_str());
 
     // List the items in the inventory
-    // Starting
+    // Starting menu item height
     int item_y = 5;
 
     for (int i=0; i<(int)player->inventory->items().size(); i++)
@@ -36,7 +40,7 @@ void inventory_menu(
         Entity * e = player->inventory->items()[i];
 
         // If it isn't equipped
-        if (!e->item->equipped())
+        if (!e->item->equipped)
         {
 
             // Old python code
@@ -60,6 +64,39 @@ void inventory_menu(
 
         }
     } 
+
+    item_y = 30;
+    
+    // Loop through equipment slots
+    std::map<EquipmentSlot, Entity *>::iterator it;
+    for (it=player->equipment->slots.begin(); it!=player->equipment->slots.end(); ++it)
+    {
+        if (it->second != nullptr) // if there is something equipped
+        {
+            // Set the color first
+            Consoles::singleton().inventory_frame->setDefaultForeground(it->second->color());
+
+            // Then print menu item
+            Consoles::singleton().inventory_frame->printf(
+                3, item_y,
+                "(%c) %s [SLOT]",
+                it->second->item->item_letter, it->second->name.c_str());
+        }
+        else
+        {
+            // Set the color first
+            Consoles::singleton().inventory_frame->setDefaultForeground(TCODColor::white);
+
+            // Then print menu item
+            Consoles::singleton().inventory_frame->printf(
+                3, item_y,
+                "EMPTY [SLOT]"
+                );
+           //it->first;
+        }
+        
+        item_y++;
+    }
 
 }
 
@@ -151,7 +188,7 @@ void item_submenu(Entity * player, Entity * item)
     
     // Start from a different height, based on whether the item is currently
     // equipped or not
-    if (item->item->equipped())
+    if (item->item->equipped)
     {
         menu_y = 30;
     }
@@ -181,7 +218,9 @@ void item_submenu(Entity * player, Entity * item)
         Consoles::singleton().submenu, 0, 0,
         submenu_width, submenu_height,
         Consoles::singleton().main_window,
-        FRAME_WIDTH, menu_y);
+        //FRAME_WIDTH, menu_y);
+        FRAME_WIDTH, menu_y,
+        1.0, 0.4);
     
 
 /*

@@ -105,17 +105,20 @@ Item::~Item()
 {
 }
 
+/*
 bool Item::equipped()
 {
     return _equipped;
 }
+*/
 
 json Item::to_json()
 {
     json j;
 
     j["item_letter"] = item_letter;
-    j["_equipped"] = _equipped;
+    //j["_equipped"] = _equipped;
+    j["equipped"] = equipped;
     j["item_subtype"] = item_subtype;
     j["item_type"] = item_type;
 
