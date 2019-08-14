@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include <map>
+
 /*
 class EquipmentSlots
 {
@@ -32,6 +34,22 @@ enum class EquipmentSlot
     OFF_HAND = 0x2,
     HEAD = 0x4,
     CHEST = 0x8
+};
+
+class SlotName
+{
+
+    private:
+        SlotName();
+        ~SlotName();
+
+    public:
+
+        std::map<EquipmentSlot, std::string> slot_names;
+
+        /*! The static method to access the singleton */
+        static SlotName & singleton();
+
 };
 
 EquipmentSlot operator | (EquipmentSlot lhs, EquipmentSlot rhs);

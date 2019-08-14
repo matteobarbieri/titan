@@ -42,6 +42,24 @@ EquipmentSlot& operator &=(EquipmentSlot &lhs, EquipmentSlot rhs)
     return lhs;
 }
 
+/*! The static method to access the singleton */
+SlotName & SlotName::singleton()
+{
+    static SlotName instance;
+
+    return instance;
+}
+
+SlotName::~SlotName()
+{
+}
+
+SlotName::SlotName()
+{
+    slot_names[EquipmentSlot::MAIN_HAND] = "Main hand";
+    slot_names[EquipmentSlot::OFF_HAND] = "Off hand";
+}
+
 
 /*
 const std::vector<std::string> EquipmentSlots::slot_names = {

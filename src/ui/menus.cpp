@@ -79,8 +79,9 @@ void inventory_menu(
             // Then print menu item
             Consoles::singleton().inventory_frame->printf(
                 3, item_y,
-                "(%c) %s [SLOT]",
-                it->second->item->item_letter, it->second->name.c_str());
+                "(%c) %s [%s]",
+                it->second->item->item_letter, it->second->name.c_str(),
+                SlotName::singleton().slot_names[it->first].c_str());
         }
         else
         {
@@ -90,8 +91,8 @@ void inventory_menu(
             // Then print menu item
             Consoles::singleton().inventory_frame->printf(
                 3, item_y,
-                "EMPTY [SLOT]"
-                );
+                "EMPTY [%s]",
+                SlotName::singleton().slot_names[it->first].c_str());
            //it->first;
         }
         
