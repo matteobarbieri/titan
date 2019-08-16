@@ -1,4 +1,8 @@
+#include <vector>
+
 #include "Item.hpp"
+
+#include "../ui/menus.hpp"
 
 //////////////////////////////////////
 /////// ITEM TYPE OPERATORS //////////
@@ -134,6 +138,18 @@ Item * Item::from_json(json j)
     return c;
 }
 
+
+std::vector<MenuOption> Item::item_inventory_options()
+{
+    std::vector<MenuOption> subitem_options;
+
+    // TODO change options based on item type and condition
+    subitem_options.push_back({'d', "Drop"});
+    subitem_options.push_back({'e', "Equip"});
+    subitem_options.push_back({'u', "Use"});
+
+    return subitem_options;
+}
 
 /*
 

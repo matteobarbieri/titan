@@ -207,17 +207,11 @@ void item_submenu(Entity * player, Entity * item)
     // TODO limit the height of the submenu
     //item_position = min(item_position, 20000)
     
-    // TODO refactor as singleton
-    std::vector<MenuOption> options;
-    options.push_back({'d', "Drop"});
-    options.push_back({'e', "Equip"});
-    options.push_back({'u', "Use"});
-
     // TODO compute dinamically?
     int submenu_width = 15;
     int submenu_height = 5;
 
-    menu(Consoles::singleton().submenu, options, " ",
+    menu(Consoles::singleton().submenu, item->item->item_inventory_options(), " ",
          submenu_width, 0, 0);
 
     // Blit here

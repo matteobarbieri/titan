@@ -5,6 +5,11 @@
 
 using json = nlohmann::json;
 
+// Forward declarations
+//struct MenuOption;
+
+#include "../ui/menus.hpp"
+
 /*
  * The main type of the item.
  */
@@ -52,6 +57,8 @@ class Item
         ItemSubtype item_subtype;
 
         bool equipped;
+
+        std::vector<MenuOption> item_inventory_options();
 
         /**
          * Creates a json representation of the component
