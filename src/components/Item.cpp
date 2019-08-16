@@ -97,7 +97,7 @@ ItemSubtype& operator &=(ItemSubtype &lhs, ItemSubtype rhs)
 //////////////////////////////////////
 
 Item::Item(ItemType item_type, ItemSubtype item_subtype) :
-    item_type(item_type), item_subtype(item_subtype)
+    item_type(item_type), item_subtype(item_subtype), equipped(false)
 {
 }
 

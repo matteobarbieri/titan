@@ -68,7 +68,7 @@ void inventory_menu(
     // Print equipped items section title
     Consoles::singleton().inventory_frame->setDefaultForeground(TCODColor::white);
     Consoles::singleton().inventory_frame->printf(
-        3,EQUIPPED_ITEMS_Y - 2,
+        5, EQUIPPED_ITEMS_Y - 2,
         "== EQUIPPED ITEMS ==");
 
     item_y = EQUIPPED_ITEMS_Y;
@@ -197,11 +197,11 @@ void item_submenu(Entity * player, Entity * item)
     // equipped or not
     if (item->item->equipped)
     {
-        menu_y = 30;
+        menu_y = EQUIPPED_ITEMS_Y;
     }
     else
     {
-        menu_y = 5;
+        menu_y = INVENTORY_ITEMS_Y;
     }
 
     // TODO limit the height of the submenu
