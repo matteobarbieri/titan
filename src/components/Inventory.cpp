@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "Inventory.hpp"
 
 #include "../Entity.hpp"
@@ -30,7 +32,8 @@ Inventory::Inventory(int capacity) : _capacity(capacity)
         // TODO limit to the maximum number of items a player can have on him,
         // between equipped and in inventory
         
-        for (int i='a'; i<='z'; i++)
+        //for (int i='a'; i<='z'; i++)
+        for (int i='a'; i<='c'; i++)
         {
             available_letters.push_back(i);
         }
@@ -69,6 +72,42 @@ int Inventory::get_item_position_in_list(Entity * item)
         # return self.items.index(item)
         return viable_list.index(item)
     */
+
+}
+
+void Inventory::drop(Entity * item, GameMap * level, Entity * player)
+{
+
+    // TODO obtain coordinates by map (get closest free tile
+    item->x = player->x;
+    item->y = player->y;
+
+    // Add item letter back to the pool of available letters
+    available_letters.push_back(item->item->item_letter);
+
+    // Reset item letter assigned to item
+    item->item->item_letter = -1;
+
+    // Sort available item letters
+    std::sort(available_letters.begin(), available_letters.end());
+    
+    // Mark item as unequipped
+    item->item->equipped = false;
+
+    // Add to the vector of items
+    remove_item(item);
+
+    level->add_entity(item);
+}
+
+void Inventory::remove_item(Entity * item)
+{
+
+    // Solution taken from
+    // https://stackoverflow.com/questions/3385229/c-erase-vector-element-by-value-rather-than-by-position
+    _items.erase(
+        std::remove(_items.begin(), _items.end(), item),
+        _items.end());
 
 }
 

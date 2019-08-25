@@ -396,18 +396,9 @@ void GameMap::remove_entity(Entity * entity)
     // Solution taken from
     // https://stackoverflow.com/questions/3385229/c-erase-vector-element-by-value-rather-than-by-position
 
-    // TODO implement
-    //std::cout << "Implement GameMap::remove_entity" << std::endl;
-    //float a = 1/0;
-
-    //DEBUG("Entities before: " << _entities.size());
-
-    // TODO check this code...
     _entities.erase(
         std::remove(_entities.begin(), _entities.end(), entity),
         _entities.end());
-
-    //DEBUG("Entities after: " << _entities.size());
 }
 
 /*

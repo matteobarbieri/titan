@@ -6,6 +6,15 @@
 // Forward declarations
 class Outcome;
 
+class DropItemAction : public Action
+{
+
+    public:
+
+        Outcome * _execute();
+
+};
+
 class PickupAction : public Action
 {
 

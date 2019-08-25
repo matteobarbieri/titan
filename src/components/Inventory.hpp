@@ -38,6 +38,9 @@ class Inventory
         
         // TODO return message?
         void pickup(Entity * item, GameMap * level);
+        void drop(Entity * item, GameMap * level, Entity * player);
+
+        void remove_item(Entity * item);
 
         std::vector<Entity *> items();
 

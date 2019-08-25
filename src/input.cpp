@@ -172,6 +172,9 @@ Action * handle_inventory_item_keys(TCOD_key_t key, TCOD_mouse_t mouse)
         key_char = key.c;
 
 
+        if (key_char == 'd')
+            return new DropItemAction();
+
         if (key_char == 'e')
             return new ItemEquipToggleAction();
 

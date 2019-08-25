@@ -30,6 +30,37 @@ Outcome * ItemEquipToggleAction::_execute()
     }
 }
 
+Outcome * DropItemAction::_execute()
+{
+
+    GamePhase next_phase;
+
+    // Build message
+    std::ostringstream stringStream;
+
+    player->inventory->drop(
+        game_state->selected_inventory_item, game_map, player);
+
+    next_phase = ENEMY_TURN;
+
+    stringStream << "You drop a " << 
+        game_state->selected_inventory_item->name << ".";
+
+    // Add message to message log
+    MessageLog::singleton().add_message(
+        {stringStream.str(), TCODColor::white});
+
+    // Return outcome
+    // TODO enable message log
+    Outcome * outcome = new Outcome(
+        next_phase,
+        false,
+        false);
+
+    return outcome;
+
+}
+
 Outcome * ItemEquipToggleAction::unequip()
 {
 
@@ -180,150 +211,3 @@ Outcome * PickupAction::_execute()
     return outcome;
 
 }
-
-/*
-from .action import Action
-
-from game_state import GamePhase
-
-from entity import get_blocking_entities_at_location
-
-import libtcodpy as libtcod
-
-from game_messages import Message
-
-import random
-
-from components.inventory import InventoryFullException
-from components.equipment import UnableToEquipException
-
-
-class UnequipItemAction(Action):
-
-    def __init__(self, **kwargs):
-        pass
-
-    def _execute(self):
-
-        # raise Exception("Not implemented")
-
-        messages = list()
-
-        try:
-
-            item_to_unequip = self.game_state.selected_inventory_item
-
-            if not item_to_unequip.item.can_perform_action('unequip'):
-                return {'messages': messages}
-
-            # (try to) equip the item
-            messages.extend(self.player.inventory.unequip(
-                item_to_unequip))
-
-            # Reset selection
-            self.game_state.selected_inventory_item = None
-
-            # Change game phase (enemies' turn)
-            # next_phase = GamePhase.ENEMY_TURN
-            # TODO changing equipment should require some time, but keep the
-            # menu open
-            next_phase = GamePhase.INVENTORY_MENU
-        except UnableToEquipException:
-            next_phase = GamePhase.PLAYERS_TURN
-        except Exception as e:
-            raise e
-            # next_phase = GamePhase.PLAYERS_TURN
-
-        # Return outcome
-        outcome = {
-            "next_state": next_phase,
-            'messages': messages,
-        }
-
-        return outcome
-
-
-class EquipItemAction(Action):
-
-    def __init__(self, **kwargs):
-        pass
-
-    def _execute(self):
-
-        messages = list()
-
-        try:
-
-            item_to_equip = self.game_state.selected_inventory_item
-
-            if not item_to_equip.item.can_perform_action('equip'):
-                return {'messages': messages}
-
-            # (try to) equip the item
-            messages.extend(self.player.inventory.equip(
-                item_to_equip))
-
-            # Reset selection
-            self.game_state.selected_inventory_item = None
-
-            # Change game phase (enemies' turn)
-            # next_phase = GamePhase.ENEMY_TURN
-            # TODO changing equipment should require some time, but keep the
-            # menu open
-            next_phase = GamePhase.INVENTORY_MENU
-        except UnableToEquipException:
-            next_phase = GamePhase.PLAYERS_TURN
-        except Exception as e:
-            raise e
-            # next_phase = GamePhase.PLAYERS_TURN
-
-
-        # Return outcome
-        outcome = {
-            "next_state": next_phase,
-            'messages': messages,
-        }
-
-        return outcome
-
-
-class DropItemAction(Action):
-
-    def __init__(self, **kwargs):
-        pass
-
-    def _execute(self):
-
-        messages = list()
-
-        try:
-
-            item_to_equip = self.game_state.selected_inventory_item
-
-            # (try to) add the item to the player's inventory
-            messages.append(self.player.inventory.drop(
-                item_to_equip, self.game_map))
-
-            # Reset selection
-            self.game_state.selected_inventory_item = None
-
-            # Change game phase (enemies' turn)
-            next_phase = GamePhase.ENEMY_TURN
-        except Exception as e:
-            raise e
-            # next_phase = GamePhase.PLAYERS_TURN
-
-
-        # Return outcome
-        outcome = {
-            "next_state": next_phase,
-            'messages': messages,
-        }
-
-        # TODO check terrain/enemies!!!
-
-        return outcome
-
-class PickupAction(Action):
-
-*/
