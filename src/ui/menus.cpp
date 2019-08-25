@@ -211,6 +211,8 @@ void item_submenu(Entity * player, Entity * item)
     int submenu_width = 15;
     int submenu_height = 5;
 
+    Consoles::singleton().submenu->clear();
+
     menu(Consoles::singleton().submenu, item->item->item_inventory_options(), " ",
          submenu_width, 0, 0);
 
@@ -223,25 +225,6 @@ void item_submenu(Entity * player, Entity * item)
         FRAME_WIDTH, menu_y,
         1.0, 0.4);
     
-
-/*
-
-    # TODO
-    # Get the right list of options for specific item
-    # item_options = [
-        # ('d', 'Drop'),
-        # ('e', 'Equip'),
-        # ('u', 'Use'),
-    # ]
-
-    item_options = item.item.get_inventory_options()
-
-    # TODO
-    # X position should depend on frame's width
-    menu(con, header, item_options, width, screen_width, screen_height,
-         x=31, y=item_position)
-
-*/
 }
 
 /*
