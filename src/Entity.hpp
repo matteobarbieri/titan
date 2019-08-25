@@ -21,9 +21,8 @@ class Item;
 class Level;
 class Equipment;
 class Equippable;
+class Usable;
 class Inventory;
-
-class Visitor;
 
 /** A container for all consoles that are used in the game, except for the root
  * one, which is accessed directly via TCODConsole::root.
@@ -68,6 +67,7 @@ class Entity
         Level * level;
         Equipment * equipment;
         Equippable * equippable;
+        Usable * usable;
         Inventory * inventory;
 
         // Methods

@@ -47,6 +47,7 @@ Entity::Entity(int x, int y, int symbol,
         level = nullptr;
         equipment = nullptr;
         equippable = nullptr;
+        usable = nullptr;
         inventory = nullptr;
 
         // If parameter id is default, initialize it with a progressive one
