@@ -67,7 +67,7 @@ class Entity
         Level * level;
         Equipment * equipment;
         Equippable * equippable;
-        Usable * usable;
+        //Usable * usable;
         Inventory * inventory;
 
         // Methods

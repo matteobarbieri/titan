@@ -1,5 +1,13 @@
 #include "Usable.hpp"
 
+Usable::Usable()
+{
+}
+
+Usable::~Usable()
+{
+}
+
 json Usable::to_json()
 {
     json j;

@@ -18,18 +18,6 @@
 #include "components/Equippable.hpp"
 #include "components/Inventory.hpp"
 
-/*
-Entity::Entity(int x, int y, int symbol,
-    TCODColor color, std::string name, RenderOrder render_order,
-    bool blocks, bool blocks_sight) : 
-    Entity(x, y, symbol,
-    color, name, render_order,
-    blocks, blocks_sight)
-
-{
-}
-*/
-
 Entity::Entity(int x, int y, int symbol,
     TCODColor color, std::string name, RenderOrder render_order,
     bool blocks, bool blocks_sight,
@@ -47,7 +35,7 @@ Entity::Entity(int x, int y, int symbol,
         level = nullptr;
         equipment = nullptr;
         equippable = nullptr;
-        usable = nullptr;
+        //usable = nullptr;
         inventory = nullptr;
 
         // If parameter id is default, initialize it with a progressive one

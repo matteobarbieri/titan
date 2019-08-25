@@ -1,6 +1,7 @@
 #include <vector>
 
 #include "Item.hpp"
+#include "../Entity.hpp"
 
 #include "../ui/menus.hpp"
 
@@ -121,7 +122,6 @@ json Item::to_json()
     json j;
 
     j["item_letter"] = item_letter;
-    //j["_equipped"] = _equipped;
     j["equipped"] = equipped;
     j["item_subtype"] = item_subtype;
     j["item_type"] = item_type;
@@ -144,13 +144,24 @@ std::vector<MenuOption> Item::item_inventory_options()
     std::vector<MenuOption> subitem_options;
 
     // TODO change options based on item type and condition
+
+    // Every item can be dropped
     subitem_options.push_back({'d', "Drop"});
+
+    // Change option displayed based on "equipped" status
     if (equipped) {
         subitem_options.push_back({'e', "UnEquip"});
     } else {
         subitem_options.push_back({'e', "Equip"});
     }
-    subitem_options.push_back({'u', "Use"});
+
+    // Only usable items can be used (no shit!)
+    /*
+     *if (owner->usable != nullptr)
+     *{
+     *    subitem_options.push_back({'u', "Use"});
+     *}
+     */
 
     return subitem_options;
 }
@@ -161,70 +172,6 @@ class Item:
     """
     Class describing an item
     """
-
-    def __init__(
-            self, item_types=[], item_subtypes=[],
-            ):
-
-        # Set item type[s] and subtype[s]
-        self.item_types = item_types
-        self.item_subtypes = item_subtypes
-
-        # Is the item being equipped?
-        self.equipped = False
-
-    def get_inventory_options(self):
-        """
-        Return a list of possible actions for the item once it is selected
-        from the inventory.
-        """
-        options = list()
-
-        if self.is_equippable():
-            if self.owner.item.equipped:
-                # TODO change letter!
-                options.append(('t', 'Unequip'))
-            else:
-                options.append(('e', 'Equip'))
-
-        if self.is_consumable():
-            options.append(('u', 'Use'))
-
-        # Any item can be dropped
-        options.append(('d', 'Drop'))
-
-        return options
-
-    def can_perform_action(self, action):
-
-        if action == 'unequip':
-            return self.is_equippable() and self.owner.item.equipped
-        if action == 'equip':
-            return self.is_equippable() and not self.owner.item.equipped
-        if action == 'use':
-            # TODO not only consumables can be used
-            return self.is_consumable
-
-
-
-    # def __init__(
-            # self, item_types=[], item_subtypes=[],
-            # use_function=None, targeting=False, targeting_message=None,
-            # **kwargs):
-
-        # # The function called when the item is used
-        # self.use_function = use_function
-
-        # # Other things that might be used by the use_function
-        # self.function_kwargs = kwargs
-
-        # # Set item type[s] and subtype[s]
-        # self.item_types = item_types
-        # self.item_subtypes = item_subtypes
-
-        # # TODO these things must be probably reworked
-        # self.targeting = targeting
-        # self.targeting_message = targeting_message
 
     def is_armor(self):
         return ItemType.ARMOR in self.item_types

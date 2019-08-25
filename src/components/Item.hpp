@@ -8,6 +8,8 @@ using json = nlohmann::json;
 // Forward declarations
 //struct MenuOption;
 
+class Entity;
+
 #include "../ui/menus.hpp"
 
 /*
@@ -42,8 +44,9 @@ class Item
 
     private:
 
-
     public:
+
+        //Entity * owner;
 
         //Item(int item_letter);
         //Item(int item_letter, bool equipped);
@@ -71,9 +74,6 @@ class Item
 /*
 
 from enum import Enum, auto
-
-
-
 
 class Item:
     """

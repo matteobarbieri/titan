@@ -11,8 +11,8 @@ class Usable
 
     public:
 
-        //Usable();
-        //~Usable();
+        Usable();
+        ~Usable();
 
         /**
          * Creates a json representation of the component
