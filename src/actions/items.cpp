@@ -38,6 +38,13 @@ Outcome * DropItemAction::_execute()
     // Build message
     std::ostringstream stringStream;
 
+    // Remove from equipment slots before unequipping
+    if (game_state->selected_inventory_item->item->equipped)
+    {
+        player->equipment->unequip(
+            game_state->selected_inventory_item);
+    }
+
     player->inventory->drop(
         game_state->selected_inventory_item, game_map, player);
 
