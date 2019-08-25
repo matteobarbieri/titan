@@ -145,7 +145,11 @@ std::vector<MenuOption> Item::item_inventory_options()
 
     // TODO change options based on item type and condition
     subitem_options.push_back({'d', "Drop"});
-    subitem_options.push_back({'e', "Equip"});
+    if (equipped) {
+        subitem_options.push_back({'e', "UnEquip"});
+    } else {
+        subitem_options.push_back({'e', "Equip"});
+    }
     subitem_options.push_back({'u', "Use"});
 
     return subitem_options;

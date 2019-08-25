@@ -38,6 +38,7 @@ class Equipment
         static Equipment * from_json(json j);
 
         EquipmentSlot equip(Entity * item);
+        void unequip(Entity * item);
         //void unequip(Entity * item);
 
 };

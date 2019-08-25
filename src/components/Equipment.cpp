@@ -30,6 +30,33 @@ Equipment * Equipment::from_json(json j)
 }
 
 
+void Equipment::unequip(Entity * item)
+{
+
+    EquipmentSlot slot = EquipmentSlot::NONE;
+
+    // Loop through equipment slots
+    std::map<EquipmentSlot, Entity *>::iterator it;
+    for (it=slots.begin(); it!=slots.end(); ++it)
+    {
+        if (it->second == item)
+        {
+            slot = it->first;
+            break;
+        }
+    }
+
+    if (slot != EquipmentSlot::NONE)
+    {
+        slots[slot] = nullptr;
+        item->item->equipped = false;
+    }
+    else
+    {
+    }
+
+}
+
 EquipmentSlot Equipment::equip(Entity * item)
 {
 

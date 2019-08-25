@@ -8,6 +8,7 @@
 
 #include "../components/Inventory.hpp"
 #include "../components/Equipment.hpp"
+#include "../components/Item.hpp"
 
 //#include "../GameMessages.hpp"
 #include "../GameState.hpp"
@@ -17,12 +18,51 @@
 
 #include "Outcome.hpp"
 
-Outcome * EquipItemAction::_execute()
+Outcome * ItemEquipToggleAction::_execute()
+{
+    if (game_state->selected_inventory_item->item->equipped)
+    {
+        return unequip();
+    }
+    else
+    {
+        return equip();
+    }
+}
+
+Outcome * ItemEquipToggleAction::unequip()
 {
 
-    // Retrieve item on floor at player's coordinates
-    //Entity * item_on_floor = game_map->get_item_at(
-        //player->x, player->y);
+    GamePhase next_phase;
+
+    // Build message
+    std::ostringstream stringStream;
+
+    player->equipment->unequip(
+        game_state->selected_inventory_item);
+
+    next_phase = ENEMY_TURN;
+
+    stringStream << "You unequip a " << 
+        game_state->selected_inventory_item->name << ".";
+
+    // Add message to message log
+    MessageLog::singleton().add_message(
+        {stringStream.str(), TCODColor::white});
+
+    // Return outcome
+    // TODO enable message log
+    Outcome * outcome = new Outcome(
+        next_phase,
+        false,
+        false);
+
+    return outcome;
+
+}
+
+Outcome * ItemEquipToggleAction::equip()
+{
 
     GamePhase next_phase;
 

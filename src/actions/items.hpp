@@ -15,7 +15,7 @@ class PickupAction : public Action
 
 };
 
-class EquipItemAction : public Action
+class ItemEquipToggleAction : public Action
 {
 
     public:
@@ -25,6 +25,9 @@ class EquipItemAction : public Action
         //~EquipItemAction();
 
         Outcome * _execute();
+
+        Outcome * equip();
+        Outcome * unequip();
 
 };
 

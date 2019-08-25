@@ -173,7 +173,7 @@ Action * handle_inventory_item_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 
 
         if (key_char == 'e')
-            return new EquipItemAction();
+            return new ItemEquipToggleAction();
 
         /*
          *if (key_char >= 'a' && key_char <= 'z')

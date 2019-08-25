@@ -92,6 +92,9 @@ void Inventory::pickup(Entity * item, GameMap * level)
     char item_letter = available_letters[0];
     available_letters.erase(available_letters.begin());
 
+    // Mark item as unequipped
+    item->item->equipped = false;
+
     // Assign item letter to item component
     item->item->item_letter = item_letter;
 
