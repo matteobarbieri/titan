@@ -313,7 +313,6 @@ int main(int argc, char *argv[])
             //player, game_map, message_log, game_phase = get_game_variables(
                 //constants)
             //game_phase = GamePhase.PLAYERS_TURN
-            //
             
             init_new_game(
                  &game_map,  &player,  &game_state);
@@ -323,7 +322,6 @@ int main(int argc, char *argv[])
             //show_main_menu = False
             play_game(player, game_map, game_state);
 
-                
             // When returning to main menu, reset play_game variable to false
             play_game_ = false;
         }

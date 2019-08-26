@@ -158,6 +158,5 @@ void init_new_game(
 
     return player, game_map, message_log, game_state
 
-
     */
 }

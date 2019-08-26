@@ -16,6 +16,7 @@
 #include "components/Level.hpp"
 #include "components/Equipment.hpp"
 #include "components/Equippable.hpp"
+#include "components/Usable.hpp"
 #include "components/Inventory.hpp"
 
 Entity::Entity(int x, int y, int symbol,
@@ -35,7 +36,7 @@ Entity::Entity(int x, int y, int symbol,
         level = nullptr;
         equipment = nullptr;
         equippable = nullptr;
-        //usable = nullptr;
+        usable = nullptr;
         inventory = nullptr;
 
         // If parameter id is default, initialize it with a progressive one
