@@ -12,13 +12,13 @@ class Consoles
 {
     public:
 
-        TCODConsole * terrain_layer = NULL;
-        TCODConsole * main_window = NULL ;
-        TCODConsole * menu = NULL ;
-        TCODConsole * submenu = NULL ;
-        TCODConsole * panel = NULL ;
-        TCODConsole * entity_frame = NULL ;
-        TCODConsole * inventory_frame = NULL ;
+        TCODConsole * terrain_layer;
+        TCODConsole * main_window;
+        TCODConsole * menu;
+        TCODConsole * submenu;
+        TCODConsole * panel;
+        TCODConsole * entity_frame;
+        TCODConsole * inventory_frame;
 
         /*! The static method to access the singleton */
         static Consoles & singleton();

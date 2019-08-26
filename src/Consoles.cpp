@@ -20,21 +20,13 @@ Consoles::Consoles()
 {
     /*! Initialize pointers for consoles */
     
-    /*! The main window */
-    main_window = new TCODConsole(
-        TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
-
-    /*! The panel below the main console, containig HP and other info */
-    panel = new TCODConsole(
-        PANEL_WIDTH, PANEL_HEIGHT);
-
     /*! The main console, where terrain is displayed */
     terrain_layer = new TCODConsole(
         TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
 
-    /*! The panel at the bottom of the screen, where info are displayed */
-    panel = new TCODConsole(
-        PANEL_WIDTH, PANEL_HEIGHT);
+    /*! The main window */
+    main_window = new TCODConsole(
+        TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
 
     /*! The auxiliary console for the list menu */
     menu = new TCODConsole(
@@ -43,6 +35,10 @@ Consoles::Consoles()
     /*! The auxiliary console for the submenu */
     submenu = new TCODConsole(
         TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
+
+    /*! The panel below the main console, containig HP and other info */
+    panel = new TCODConsole(
+        PANEL_WIDTH, PANEL_HEIGHT);
 
     /*! The console for entity details */
     entity_frame = new TCODConsole(
