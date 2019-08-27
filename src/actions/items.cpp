@@ -48,7 +48,8 @@ Outcome * DropItemAction::_execute()
     player->inventory->drop(
         game_state->selected_inventory_item, game_map, player);
 
-    next_phase = ENEMY_TURN;
+    //next_phase = ENEMY_TURN;
+    next_phase = INVENTORY_MENU;
 
     stringStream << "You drop a " << 
         game_state->selected_inventory_item->name << ".";
@@ -79,7 +80,8 @@ Outcome * ItemEquipToggleAction::unequip()
     player->equipment->unequip(
         game_state->selected_inventory_item);
 
-    next_phase = ENEMY_TURN;
+    //next_phase = ENEMY_TURN;
+    next_phase = INVENTORY_MENU;
 
     stringStream << "You unequip a " << 
         game_state->selected_inventory_item->name << ".";
@@ -114,7 +116,8 @@ Outcome * ItemEquipToggleAction::equip()
 
         if (slot != EquipmentSlot::NONE)
         {
-            next_phase = ENEMY_TURN;
+            //next_phase = ENEMY_TURN;
+            next_phase = INVENTORY_MENU;
 
             stringStream << "You equip a " << 
                 game_state->selected_inventory_item->name << ".";
