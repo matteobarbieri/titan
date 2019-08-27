@@ -174,7 +174,6 @@ void draw_entity(TCODConsole * terrain_layer, Entity * entity,
              ]->explored())
        )
 
-
     {
 
         // TODO evaluate whether to use Consoles::singleton() or pass the
@@ -298,29 +297,22 @@ void render_all(
                 // Compute array index of current tile
                 int tile_index = compute_tile_index(x, y, game_map->width);
 
-                // TODO check this code, possible code duplication in ifs
                 if (visible)
                 {
 
-                    // Render it as visible
-                    // Old python version:
-                    // game_map.tiles[x][y].render_at(terrain_layer, x, y, visible)
-                    
                     (game_map->tiles[tile_index])->render_at(
                         Consoles::singleton().terrain_layer,
                         x-top_x, y-top_y, visible);
 
                     (game_map->tiles[tile_index])->explored(true);
-
                 }
 
-                else if ((game_map->tiles[tile_index])->explored()) {
-                    
+                else if ((game_map->tiles[tile_index])->explored())
+                {
                     // Render as currently out of sight
                     (game_map->tiles[tile_index])->render_at(
                         Consoles::singleton().terrain_layer,
                         x-top_x, y-top_y, visible);
-
                 }
             }
         }

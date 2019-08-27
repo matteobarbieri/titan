@@ -1,3 +1,4 @@
+#include "../Constants.h"
 #include "Tile.hpp"
 
 #include "../libtcod.hpp"
@@ -42,24 +43,41 @@ int Tile::fg_symbol() const
     return _fg_symbol;
 }
 
-TCODColor Tile::fg_color() const
+TCODColor Tile::fg_color(bool visible) const
 {
-    return _fg_color;
+    if (visible)
+    {
+        return _fg_color;
+    }
+    else
+    {
+        // Return a slightly darker version of the color
+        TCODColor fg_nonvisible = _fg_color;
+        fg_nonvisible.scaleHSV(0, 0.5);
+        return fg_nonvisible;
+    }
 }
 
-TCODColor Tile::bg_color() const
+TCODColor Tile::bg_color(bool visible) const
 {
-    return _bg_color;
+    if (visible)
+    {
+        return _bg_color;
+    }
+    else
+    {
+        // Return a slightly darker version of the color
+        TCODColor bg_nonvisible = _bg_color;
+        bg_nonvisible.scaleHSV(0, 0.5);
+        return bg_nonvisible;
+    }
 }
 
 void Tile::render_at(TCODConsole * con, int x, int y, bool visible)
 {
-
-    // TODO use also 'visible' argument
-    
-    con->setCharBackground(x, y, bg_color());
     con->putChar(x, y, fg_symbol(), TCOD_BKGND_NONE);
-    con->setCharForeground(x, y, fg_color());
+    con->setCharBackground(x, y, bg_color(visible));
+    con->setCharForeground(x, y, fg_color(visible));
 }
 
 void Tile::explored(bool v)
