@@ -38,7 +38,8 @@ GameMap * generate_room(int width, int height)
     int yc = height/2;
 
     // Collect coordinates in a variable
-    Rect xy(xc-10, yc-6, xc+10, yc+6);
+    //Rect xy(xc-10, yc-6, xc+10, yc+6);
+    Rect xy(xc-14, yc-10, xc+14, yc+10);
 
     // Add room to level
     Room * entry_room = new Room(xy, Direction::FourD());
@@ -67,7 +68,6 @@ GameMap * generate_room(int width, int height)
     add_monsters(level);
 
     // Add some items in the room
-    // TODO enable
     add_items(level);
 
     return level;
@@ -117,18 +117,7 @@ import logging
 
 import random
 
-# import libtcodpy as libtcod
-import tcod as libtcod
-
-from render_functions import RenderOrder
-
 from entity import Entity
-
-from prefabs.orc import make_orc
-from prefabs.weapons.pistol import make_pistol
-
-from components.ai import MonsterAi
-
 
 def add_monsters(level):
     """
@@ -142,22 +131,5 @@ def add_monsters(level):
             monster = make_orc(room, MonsterAi)
 
             level.entities.append(monster)
-
-
-def add_items(level):
-    """
-    Add a ranged weapon on the floor
-    """
-
-    x = int(level.width/2) - 2
-    y = int(level.height/2) - 2
-
-    pistol = make_pistol()
-    pistol.x = x
-    pistol.y = y
-
-    level.entities.append(pistol)
-
-
 
 */
