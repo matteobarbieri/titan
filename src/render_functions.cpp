@@ -399,7 +399,7 @@ void render_all(
 
         // TODO replace deprecated function
         Consoles::singleton().panel->printEx(
-            BAR_WIDTH + 1, y, TCOD_BKGND_NONE, TCOD_LEFT,
+            BAR_WIDTH + 2, y, TCOD_BKGND_NONE, TCOD_LEFT,
             "%s", visible_messages[i].text.c_str());
 
         // Increment height of next message
