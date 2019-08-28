@@ -62,13 +62,15 @@ bool Entity::operator < (const Entity & other) const
 void Entity::interact_with(Entity * other)
 {
 
-    // TODO must be more complex than this!
+    // TODO must be more complex than this (i.e., take into account factions 
+    // etc)!
     if (other->fighter != nullptr)
     {
         fighter->attack_melee(other);
     }
 }
 
+// GETTERS
 RenderOrder Entity::render_order() const
 {
     return _render_order;
@@ -82,6 +84,22 @@ TCODColor Entity::color() const
 bool Entity::blocks() const
 {
     return _blocks;
+}
+
+// SETTERS
+void Entity::render_order(RenderOrder ro)
+{
+    _render_order = ro;
+}
+
+void Entity::color(TCODColor c)
+{
+    _color = c;
+}
+
+void Entity::blocks(bool b)
+{
+    _blocks = b;
 }
 
 json Entity::to_json()

@@ -31,6 +31,8 @@ class MonsterAi
 
     public:
 
+        Entity * owner;
+
         AIAction * pick_action(Entity * player, GameMap * game_map);
 
         /**

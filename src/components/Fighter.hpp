@@ -19,6 +19,9 @@ class Fighter
 
     public:
 
+        // Reference to entity
+        Entity * owner;
+
         Fighter(int max_hp);
         Fighter(int max_hp, int hp);
 
@@ -35,6 +38,15 @@ class Fighter
         void attack_melee(Entity * other);
 
         void shoot(Entity * other);
+
+        void take_damage(int amount);
+
+        bool is_dead() const;
+
+        // Used to update status of the entity after taking damage, etc.
+        void update_status();
+
+        void die();
 
         static Fighter * from_json(json j);
 
@@ -96,15 +108,6 @@ class Fighter:
         return self.get_adjusted_stat('int')
 
     @property
-    def max_hp(self):
-        if self.owner and self.owner.equipment:
-            bonus = self.owner.equipment.max_hp_bonus
-        else:
-            bonus = 0
-
-        return self.base_max_hp + bonus
-
-    @property
     def power(self):
         if self.owner and self.owner.equipment:
             bonus = self.owner.equipment.power_bonus
@@ -122,36 +125,6 @@ class Fighter:
 
         return self.base_defense + bonus
 
-
-    def die(self):
-
-        # Create message for the log
-        death_message = Message(
-            '{0} is dead!'.format(
-                self.owner.name.capitalize()),
-            libtcod.orange)
-
-        self.owner.char = '%'
-        self.owner._color = libtcod.dark_red
-        self.owner.blocks = False
-        self.owner.fighter = None
-        self.owner.ai = None
-        self.owner.name = 'remains of ' + self.owner.name
-        self.owner.render_order = RenderOrder.CORPSE
-
-        return death_message
-
-    def take_damage(self, amount):
-        messages = []
-
-        self.hp -= amount
-
-        if self.hp <= 0:
-            # messages.append(
-                # {'dead': self.owner, 'xp': self.xp})
-            messages.append(self.die())
-
-        return messages
 
     def heal(self, amount):
         self.hp += amount

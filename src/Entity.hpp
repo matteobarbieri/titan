@@ -84,11 +84,15 @@ class Entity
         // Required for sorting
         //bool operator < (const Entity & other) const;
 
-        RenderOrder render_order() const;
-
         // Getters
+        RenderOrder render_order() const;
         TCODColor color() const;
         bool blocks() const;
+
+        // Setters
+        void render_order(RenderOrder);
+        void color(TCODColor);
+        void blocks(bool);
 
         /**
          * Creates a json representation of the entity

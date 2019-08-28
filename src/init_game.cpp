@@ -117,6 +117,8 @@ void init_new_game(
 
     // Add components
     (* player)->fighter = fighter_component; 
+    fighter_component->owner = (* player);
+
     (* player)->inventory = inventory_component; 
     (* player)->level = level_component; 
     (* player)->equipment = equipment_component; 

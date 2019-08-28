@@ -42,6 +42,9 @@ Outcome * MoveAction::_execute()
         int destination_x = player->x + dx;
         int destination_y = player->y + dy;
 
+        bool position_changed = false;
+        bool interacted_with_something = false;
+
         // TODO enable messages
         //messages = list()
 
@@ -55,6 +58,7 @@ Outcome * MoveAction::_execute()
             if (target != 0)
             {
                 player->interact_with(target);
+                interacted_with_something = true;
             }
             else
             {
@@ -81,16 +85,19 @@ Outcome * MoveAction::_execute()
         }
 
         // Check if the position has changed
-        bool position_changed = (
+        position_changed = (
             source_x != player->x or source_y != player->y);
+
+        bool redraw_terrain = position_changed || interacted_with_something;
+        bool fov_recompute = redraw_terrain;
 
         // Return outcome
         // TODO enable message log
         Outcome * outcome = new Outcome(
             ENEMY_TURN, // TODO this is the right one
             //PLAYERS_TURN, // TODO this is the WRONG one (for debug purposes)
-            position_changed,
-            position_changed);
+            fov_recompute,
+            redraw_terrain);
 
         //# TODO check terrain/enemies!!!
 

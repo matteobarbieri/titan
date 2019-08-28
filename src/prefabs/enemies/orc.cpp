@@ -25,18 +25,23 @@ Entity * make_orc(Room * room, MonsterAi * ai_component)
     int x = rand() % dx + x1 + 1;
     int y = rand() % dy + y1 + 1;
 
-    Fighter * fighter_component = new Fighter(20);
-
-    // Create the AI for the monster if it is not passed
-    if (ai_component == nullptr)
-        ai_component = new MonsterAi();
-
     Entity * orc = new Entity(
         x, y, 'o',  TCODColor::desaturatedGreen,
         "Orc", ACTOR, true);
 
+    // Fighter
+    Fighter * fighter_component = new Fighter(20);
     orc->fighter = fighter_component;
+    fighter_component->owner = orc;
+
+    // AI
+    // Create the AI for the monster if it is not passed
+    if (ai_component == nullptr)
+    {
+        ai_component = new MonsterAi();
+    }
     orc->ai = ai_component;
+    ai_component->owner = orc;
 
     return orc;
 

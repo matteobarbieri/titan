@@ -1,5 +1,12 @@
+#include <string>
+#include <sstream>
+
+#include "../libtcod.hpp"
+
 #include "Fighter.hpp"
 #include "../Entity.hpp"
+
+#include "../GameMessages.hpp"
 
 /*
     def __init__(self, hp, defense, power, xp=0,
@@ -66,6 +73,77 @@ void Fighter::attack_melee(Entity * target)
      *    self.attack_melee_with_weapon(target, weapon);
      */
 
+    // TODO stub
+    int amount = 5;
+    target->fighter->take_damage(amount);
+
+    // Build message
+    std::ostringstream stringStream;
+
+    stringStream << "You punch the " << 
+        target->name << " in the face for " << amount << " damage!";
+
+    // Add message to message log
+    MessageLog::singleton().add_message(
+        {stringStream.str(), TCODColor::white});
+
+    // Update fighter's status
+    target->fighter->update_status();
+    
+}
+
+void Fighter::take_damage(int amount)
+{
+    _hp -= amount;
+}
+
+bool Fighter::is_dead() const
+{
+    return _hp <= 0;
+}
+
+void Fighter::die()
+{
+
+
+    // Build message
+    std::ostringstream stringStream;
+
+    stringStream << "The " << 
+        owner->name << " is dead!";
+
+    // Add message to message log
+    MessageLog::singleton().add_message(
+        {stringStream.str(), TCODColor::yellow});
+
+    // Update components
+    owner->symbol = '%';
+    owner->color(TCODColor::darkRed);
+    owner->render_order(CORPSE);
+    owner->blocks(false);
+
+    // Name
+    stringStream.str("");
+    stringStream << "remains of " << owner->name;
+    owner->name = stringStream.str();
+
+    // TODO check these guys
+    free(owner->fighter);
+    owner->fighter = nullptr;
+
+    free(owner->ai);
+    owner->ai = nullptr;
+
+}
+
+void Fighter::update_status()
+{
+    if (is_dead())
+    {
+        die();
+    }
+
+    // TODO do other stuff as well
 }
 
 void Fighter::shoot(Entity * target)
@@ -73,14 +151,9 @@ void Fighter::shoot(Entity * target)
 }
 
 /*
-import libtcodpy as libtcod
-
-from game_messages import Message
-
 from render_functions import RenderOrder
 
 from .item import ItemType, ItemSubtype
-
 
 class NoMeleeWeaponsEquippedException(Exception):
     pass
@@ -132,37 +205,6 @@ class Fighter:
             bonus = 0
 
         return self.base_defense + bonus
-
-
-    def die(self):
-
-        # Create message for the log
-        death_message = Message(
-            '{0} is dead!'.format(
-                self.owner.name.capitalize()),
-            libtcod.orange)
-
-        self.owner.char = '%'
-        self.owner._color = libtcod.dark_red
-        self.owner.blocks = False
-        self.owner.fighter = None
-        self.owner.ai = None
-        self.owner.name = 'remains of ' + self.owner.name
-        self.owner.render_order = RenderOrder.CORPSE
-
-        return death_message
-
-    def take_damage(self, amount):
-        messages = []
-
-        self.hp -= amount
-
-        if self.hp <= 0:
-            # messages.append(
-                # {'dead': self.owner, 'xp': self.xp})
-            messages.append(self.die())
-
-        return messages
 
     def heal(self, amount):
         self.hp += amount
