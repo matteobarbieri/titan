@@ -5,7 +5,7 @@
 
 #include "map/GameMap.hpp"
 
-TCODMap * initialize_fov(GameMap * game_map);
+//TCODMap * initialize_fov(GameMap * game_map);
 
 #endif /* ifndef ROGUE_20177_FOV_FUNCTIONS */
 

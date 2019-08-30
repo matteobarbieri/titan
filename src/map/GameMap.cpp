@@ -110,6 +110,8 @@ GameMap::GameMap(int width, int height, bool _initialize_tiles) :
     width(width), height(height)
 {
 
+    fov_map = nullptr;
+
     // Decide whether to initialize tiles or not
     if (_initialize_tiles)
         initialize_tiles();
@@ -192,6 +194,44 @@ void GameMap::place_player(Entity * player)
 
 }
 
+void GameMap::initialize_fov_map()
+{
+
+    fov_map = new TCODMap(width, height);
+    int tile_index;
+
+    for (int y = 0; y < height; y++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            // Compute tile index
+            tile_index = compute_tile_index(x, y, width);
+
+            // Set tile properties
+            // blocks and blocks_sight must be negated, as the fov properties
+            // correspond to their opposites (`walkable` and `transparent`
+            // respectively)
+            fov_map->setProperties(
+                x, y,
+                !(tiles[tile_index])->block_sight(),
+                !(tiles[tile_index])->blocked());
+        }
+    }
+
+    for (int i=0; i<(int)_entities.size(); i++)
+    {
+
+        // Set cell as blocking sight
+        if (_entities[i]->blocks_sight())
+        {
+            int x =_entities[i]->x;
+            int y =_entities[i]->y;
+
+            fov_map->setProperties(x, y, false, fov_map->isWalkable(x, y));
+        }
+    }
+
+}
 
 void GameMap::initialize_tiles()
 {

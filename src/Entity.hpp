@@ -89,6 +89,7 @@ class Entity
         RenderOrder render_order() const;
         TCODColor color() const;
         bool blocks() const;
+        bool blocks_sight() const;
 
         // Setters
         void render_order(RenderOrder);

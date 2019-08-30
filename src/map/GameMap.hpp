@@ -1,7 +1,8 @@
 #ifndef R20177_GAME_MAP
 #define R20177_GAME_MAP
 
-//#include "libtcod.hpp"
+#include "../libtcod.hpp"
+
 //#include "Entity.hpp"
 
 #include "../nlohmann/json.hpp"
@@ -106,16 +107,6 @@ class MapPart
 
 };
 
-class Door : public MapPart
-{
-    public:
-
-        Door(int x, int y, bool is_open);
-
-        // TODO check if needed
-        //void dig(GameMap game_map);
-};
-
 class Room : public MapPart
 {
 
@@ -188,6 +179,8 @@ class GameMap
 
         int dungeon_level;
 
+        TCODMap * fov_map;
+
         // Lists of map parts
         std::vector<Room *> rooms;
         
@@ -225,11 +218,11 @@ class GameMap
         void make_floor(int x, int y);
 
         void create_dijkstra_map(MapPart * part);
+        void initialize_fov_map();
 
         void add_part(Corridor *);
         void add_part(Junction *);
         void add_part(Room *);
-        void add_part(Door *);
 
         //void add_walls();
 

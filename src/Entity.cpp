@@ -86,6 +86,11 @@ bool Entity::blocks() const
     return _blocks;
 }
 
+bool Entity::blocks_sight() const
+{
+    return _blocks_sight;
+}
+
 // SETTERS
 void Entity::render_order(RenderOrder ro)
 {
