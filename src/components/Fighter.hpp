@@ -25,7 +25,7 @@ class Fighter
         Fighter(int max_hp);
         Fighter(int max_hp, int hp);
 
-        ~Fighter();
+        //~Fighter();
 
         int max_hp() const;
         int hp() const;

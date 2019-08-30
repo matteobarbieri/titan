@@ -4,6 +4,7 @@
 #include "../libtcod.hpp"
 
 #include "Fighter.hpp"
+#include "Ai.hpp"
 #include "../Entity.hpp"
 
 #include "../GameMessages.hpp"
@@ -128,10 +129,10 @@ void Fighter::die()
     owner->name = stringStream.str();
 
     // TODO check these guys
-    free(owner->fighter);
+    delete owner->fighter;
     owner->fighter = nullptr;
 
-    free(owner->ai);
+    delete owner->ai;
     owner->ai = nullptr;
 
 }
