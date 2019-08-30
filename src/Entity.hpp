@@ -23,6 +23,9 @@ class Equipment;
 class Equippable;
 class Usable;
 class Inventory;
+class Interactive;
+
+class GameMap;
 
 /** A container for all consoles that are used in the game, except for the root
  * one, which is accessed directly via TCODConsole::root.
@@ -70,6 +73,7 @@ class Entity
         Equippable * equippable;
         Usable * usable;
         Inventory * inventory;
+        Interactive * interactive;
 
         // Methods
         
@@ -95,6 +99,7 @@ class Entity
         void render_order(RenderOrder);
         void color(TCODColor);
         void blocks(bool);
+        void blocks_sight(bool);
 
         /**
          * Creates a json representation of the entity
@@ -109,7 +114,7 @@ class Entity
          * player <-> monster: attack
          * player  -> door: interact
          */
-        void interact_with(Entity * other);
+        void interact_with(Entity * other, GameMap * game_map);
 };
 
 #endif

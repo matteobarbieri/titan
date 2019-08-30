@@ -57,7 +57,7 @@ Outcome * MoveAction::_execute()
 
             if (target != 0)
             {
-                player->interact_with(target);
+                player->interact_with(target, game_map);
                 interacted_with_something = true;
             }
             else

@@ -10,6 +10,7 @@
 
 // Components
 #include "../../components/Stairs.hpp"
+#include "../../components/Interactive.hpp"
 
 // Prefabs
 #include "../../prefabs/enemies.hpp"
@@ -54,7 +55,11 @@ GameMap * generate_room(int width, int height)
 
     // Make a door
     level->make_floor(xc+5+1, yc);
+
     Entity * d1 = make_door(xc+5+1, yc);
+    d1->interactive = new Interactive();
+    d1->interactive->owner = d1;
+
     level->add_entity(d1);
 
 
