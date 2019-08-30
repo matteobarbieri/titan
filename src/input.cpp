@@ -54,34 +54,44 @@ Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     ////////////// MOVEMENT /////////////////
     /////////////////////////////////////////
 
-    // Cross movement
-    if (key.vk == TCODK_UP || key_char == 'k')
+    // Cross movement (arrow keys or WASD)
+    if (key.vk == TCODK_UP || key_char == 'w')
         return new MoveAction(0, -1);
 
-    if (key.vk == TCODK_DOWN || key_char == 'j')
+    if (key.vk == TCODK_DOWN || key_char == 's')
         return new MoveAction(0, 1);
 
-    if (key.vk == TCODK_LEFT || key_char == 'h')
+    if (key.vk == TCODK_LEFT || key_char == 'a')
         return new MoveAction(-1, 0);
 
-    if (key.vk == TCODK_RIGHT || key_char == 'l')
+    if (key.vk == TCODK_RIGHT || key_char == 'd')
         return new MoveAction(1, 0);
 
-    if (key.vk == TCODK_RIGHT || key_char == 'l')
-        return new MoveAction(1, 0);
+    //if (key.vk == TCODK_UP || key_char == 'k')
+        //return new MoveAction(0, -1);
+
+    //if (key.vk == TCODK_DOWN || key_char == 'j')
+        //return new MoveAction(0, 1);
+
+    //if (key.vk == TCODK_LEFT || key_char == 'h')
+        //return new MoveAction(-1, 0);
+
+    //if (key.vk == TCODK_RIGHT || key_char == 'l')
+        //return new MoveAction(1, 0);
 
     // Diagonal movements
-    if (key_char == 'y')
-        return new MoveAction(-1, -1);
+    // XXX DISABLED
+    //if (key_char == 'y')
+        //return new MoveAction(-1, -1);
 
-    if (key_char == 'u')
-        return new MoveAction(1, -1);
+    //if (key_char == 'u')
+        //return new MoveAction(1, -1);
 
-    if (key_char == 'b')
-        return new MoveAction(-1, 1);
+    //if (key_char == 'b')
+        //return new MoveAction(-1, 1);
 
-    if (key_char == 'n')
-        return new MoveAction(1, 1);
+    //if (key_char == 'n')
+        //return new MoveAction(1, 1);
 
     /////////////////////////////////////////
     /////////// GO TO MAIN MENU /////////////
