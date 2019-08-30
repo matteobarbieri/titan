@@ -219,6 +219,11 @@ class GameMap
 
         void dig(MapPart * part, int pad=0);
 
+        /**
+         * Turn a single tile to floor
+         */
+        void make_floor(int x, int y);
+
         void create_dijkstra_map(MapPart * part);
 
         void add_part(Corridor *);

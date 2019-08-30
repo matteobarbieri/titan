@@ -13,10 +13,11 @@
 
 // Prefabs
 #include "../../prefabs/enemies.hpp"
+#include "../../prefabs/misc/doors.hpp"
 #include "../../prefabs/weapons/melee.hpp"
 #include "../../prefabs/weapons/ranged.hpp"
 
-namespace test_room {
+namespace tutorial {
 
 /**
  * Add a single immobile orc in the room
@@ -39,19 +40,25 @@ GameMap * generate_room(int width, int height)
     int yc = height/2;
 
     // Collect coordinates in a variable
-    //Rect xy(xc-10, yc-6, xc+10, yc+6);
-    Rect xy(xc-14, yc-10, xc+14, yc+10);
+    Rect xy(xc-5, yc-3, xc+5, yc+3);
+    Room * entry_room = new Room(xy, Direction::FourD());
 
     // Add room to level
-    Room * entry_room = new Room(xy, Direction::FourD());
     level->add_part(entry_room);
 
-    // Add an external layer of walls to rooms
-    //std::cout << "Adding walls" << std::endl;
-    //level->add_walls();
+    Rect xy2(xc+5+2, yc-5, xc+5+2+10, yc+5);
+    Room * r2 = new Room(xy2, Direction::FourD());
+
+    // Add room to level
+    level->add_part(r2);
+
+    // Make a door
+    level->make_floor(xc+5+1, yc);
+    Entity * d1 = make_door(xc+5+1, yc);
+    level->add_entity(d1);
+
 
     // Populate Dungeon with entities
-    
     // Create and add entry stairs '<'
     Stairs * up_stairs_component = new Stairs(level->dungeon_level - 1);
 

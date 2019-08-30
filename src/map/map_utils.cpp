@@ -45,7 +45,6 @@ void dig_rect(GameMap * game_map, Rect xy)
             tile_index = compute_tile_index(x, y, game_map->width);
 
             // Free up object
-            // TODO incomplete type?
             delete game_map->tiles[tile_index];
 
             // Create a Floor tile in that spot

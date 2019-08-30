@@ -37,6 +37,7 @@ class Entity
 
         // The color of the entity's symbol
         TCODColor _color;
+        TCODColor _bg_color;
 
         // Is it a blocking entity?
         bool _blocks;

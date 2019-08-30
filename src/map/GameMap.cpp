@@ -247,6 +247,17 @@ void GameMap::add_part(Room * room)
     dig(room);
 }
 
+void GameMap::make_floor(int x, int y)
+{
+
+    int i = compute_tile_index(x, y, width);
+
+    // Remove old tile
+    delete tiles[i];
+
+    tiles[i] = new Floor();
+}
+
 void GameMap::dig(MapPart * map_part, int padding)
 {
 
@@ -424,8 +435,6 @@ import shelve
 # from random_utils import from_dungeon_level, random_choice_from_dict
 
 from .directions import Direction
-
-from .map_utils import dig_rect, _intersection_area
 
 from dijkstra_map import DijkstraMap
 
