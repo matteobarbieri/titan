@@ -18,14 +18,16 @@
 #include "components/Equippable.hpp"
 #include "components/Usable.hpp"
 #include "components/Inventory.hpp"
+#include "components/Interactive.hpp"
 
 Entity::Entity(int x, int y, int symbol,
     TCODColor color, std::string name, RenderOrder render_order,
-    bool blocks, bool blocks_sight,
+    bool blocks, bool blocks_sight, bool _fixed,
     unsigned long int id) :
     x(x), y(y), _render_order(render_order), name(name),
     symbol(symbol), _color(color),
-    _blocks(blocks), _blocks_sight(blocks_sight)
+    _blocks(blocks), _blocks_sight(blocks_sight),
+    _fixed(_fixed)
 {
     
         // Initialize pointers to NULL
@@ -38,6 +40,7 @@ Entity::Entity(int x, int y, int symbol,
         equippable = nullptr;
         usable = nullptr;
         inventory = nullptr;
+        interactive = nullptr;
 
         // If parameter id is default, initialize it with a progressive one
         if (id == 0)
@@ -59,7 +62,7 @@ bool Entity::operator < (const Entity & other) const
 }
 */
 
-void Entity::interact_with(Entity * other)
+void Entity::interact_with(Entity * other, GameMap * game_map)
 {
 
     // TODO must be more complex than this (i.e., take into account factions 
@@ -68,6 +71,13 @@ void Entity::interact_with(Entity * other)
     {
         fighter->attack_melee(other);
     }
+
+    else if (other->interactive != nullptr)
+    {
+        other->interactive->interact(this, game_map);
+    }
+
+
 }
 
 // GETTERS
@@ -81,9 +91,19 @@ TCODColor Entity::color() const
     return _color;
 }
 
+bool Entity::fixed() const
+{
+    return _fixed;
+}
+
 bool Entity::blocks() const
 {
     return _blocks;
+}
+
+bool Entity::blocks_sight() const
+{
+    return _blocks_sight;
 }
 
 // SETTERS
@@ -97,9 +117,19 @@ void Entity::color(TCODColor c)
     _color = c;
 }
 
+void Entity::fixed(bool f)
+{
+    _fixed = f;
+}
+
 void Entity::blocks(bool b)
 {
     _blocks = b;
+}
+
+void Entity::blocks_sight(bool b)
+{
+    _blocks_sight = b;
 }
 
 json Entity::to_json()

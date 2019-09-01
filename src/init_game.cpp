@@ -46,19 +46,27 @@ def get_game_variables(constants):
 
 */
 
+namespace tutorial {
+    GameMap * generate_room(int, int);
+}
 
-GameMap * generate_room(int, int);
+namespace test_room {
+    GameMap * generate_room(int, int);
+}
 
 void init_new_game(
     GameMap ** game_map, Entity ** player, GameState ** game_state)
 {
 
     // Generate a small room
-    * game_map = generate_room(
+    //* game_map = test_room::generate_room(
+        //MAP_WIDTH, MAP_HEIGHT);
+
+    // Generate tutorial map
+    * game_map = tutorial::generate_room(
         MAP_WIDTH, MAP_HEIGHT);
 
     /*
-
 
     */
 
@@ -144,7 +152,6 @@ void init_new_game(
     (*game_map)->place_player(* player);
 
     /*
-
     // TODO activate this
     # Initialize message log
     message_log = MessageLog(
@@ -157,8 +164,6 @@ void init_new_game(
     (* game_state)->game_phase = PLAYERS_TURN;
 
     /*
-
     return player, game_map, message_log, game_state
-
     */
 }

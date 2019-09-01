@@ -4,6 +4,7 @@
 #include "map/Tile.hpp"
 #include "map/map_utils.hpp"
 
+/*
 TCODMap * initialize_fov(GameMap * game_map)
 {
 
@@ -30,3 +31,4 @@ TCODMap * initialize_fov(GameMap * game_map)
 
     return fov_map;
 }
+*/

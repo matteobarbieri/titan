@@ -168,7 +168,7 @@ void draw_entity(TCODConsole * terrain_layer, Entity * entity,
     // (e.g., stairs) on an explored tile.
     if (
             fov_map->isInFov(entity->x, entity->y) ||
-            (entity->stairs != 0 and
+            (entity->fixed() and
              game_map->tiles[
                 compute_tile_index(entity->x, entity->y, game_map->width)
              ]->explored())

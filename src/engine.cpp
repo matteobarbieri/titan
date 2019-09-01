@@ -30,7 +30,8 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
     bool redraw_entities = true;
 
     // Initialize fov map
-    TCODMap * fov_map = initialize_fov(game_map);
+    //TCODMap * fov_map = initialize_fov(game_map);
+    game_map->initialize_fov_map();
 
     // TODO needs initialization?
     TCOD_key_t key;
@@ -68,7 +69,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
         
         if (fov_recompute)
         {
-            fov_map->computeFov(
+            game_map->fov_map->computeFov(
                 player->x, player->y, FOV_RADIUS,
                 FOV_LIGHT_WALLS, FOV_ALGORITHM);
 
@@ -81,7 +82,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
             //std::cout << "play_game: Checkpoint 3" << std::endl;
 
             game_state->entity_targeted = check_if_still_in_sight(
-                fov_map, game_state->entity_targeted);
+                game_map->fov_map, game_state->entity_targeted);
 
             // Check if by any chance target is dead
             // TODO more generally, if it is no longer targetable for any
@@ -100,7 +101,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 
 
         render_all(
-            player, game_map, fov_map,
+            player, game_map, game_map->fov_map,
             fov_recompute, redraw_terrain,
             &mouse, game_state,
             top_x, top_y);
@@ -136,7 +137,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 
                 // Add all objects required to perform any action
                 action->set_context(
-                    game_map, player, fov_map, game_state);
+                    game_map, player, game_map->fov_map, game_state);
 
                 //std::cout << "play_game: Checkpoint 8" << std::endl;
                 // TODO explicitly destroy action?

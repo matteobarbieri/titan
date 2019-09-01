@@ -23,6 +23,9 @@ class Equipment;
 class Equippable;
 class Usable;
 class Inventory;
+class Interactive;
+
+class GameMap;
 
 /** A container for all consoles that are used in the game, except for the root
  * one, which is accessed directly via TCODConsole::root.
@@ -37,12 +40,16 @@ class Entity
 
         // The color of the entity's symbol
         TCODColor _color;
+        TCODColor _bg_color;
 
         // Is it a blocking entity?
         bool _blocks;
 
         // Does it blocks sight?
         bool _blocks_sight;
+
+        // Is it a fixed entity (e.g. doors, stairs...)
+        bool _fixed;
 
         // In which order the entity is rendered
         RenderOrder _render_order;
@@ -69,6 +76,7 @@ class Entity
         Equippable * equippable;
         Usable * usable;
         Inventory * inventory;
+        Interactive * interactive;
 
         // Methods
         
@@ -77,6 +85,7 @@ class Entity
                TCODColor color, std::string name,
                RenderOrder render_order=CORPSE,
                bool blocks=false, bool blocks_sight=false,
+               bool _fixed=false,
                unsigned long int id=0);
 
         ~Entity();
@@ -87,12 +96,16 @@ class Entity
         // Getters
         RenderOrder render_order() const;
         TCODColor color() const;
+        bool fixed() const;
         bool blocks() const;
+        bool blocks_sight() const;
 
         // Setters
         void render_order(RenderOrder);
         void color(TCODColor);
+        void fixed(bool);
         void blocks(bool);
+        void blocks_sight(bool);
 
         /**
          * Creates a json representation of the entity
@@ -107,7 +120,7 @@ class Entity
          * player <-> monster: attack
          * player  -> door: interact
          */
-        void interact_with(Entity * other);
+        void interact_with(Entity * other, GameMap * game_map);
 };
 
 #endif
