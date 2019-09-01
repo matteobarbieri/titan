@@ -3,6 +3,6 @@
 
 class Entity;
 
-Entity * make_door(int x, int y);
+Entity * make_door(int x, int y, bool locked=false, unsigned int key_id=0);
 
 #endif /* ifndef ROGUE_20177_PREFABS_MISC_DOORS */

@@ -87,8 +87,6 @@ GameMap * generate_room(int width, int height)
     level->make_floor(x1-1, yc);
 
     Entity * d2 = make_door(x1-1, yc);
-    d2->interactive = new InteractiveDoor();
-    d2->interactive->owner = d2;
 
     level->add_entity(d2);
     
@@ -96,22 +94,39 @@ GameMap * generate_room(int width, int height)
     /////////// ROOM 3 ///////////
     //////////////////////////////
     
-    /*
-    Rect xy3(xc+5+4+10, xc+5+2, yc-5, yc+5);
+    y1 -= 8;
+    w = 15; h = 7;
+    
+    Rect xy3(x1, y1, x1+w-1, y1+h-1);
     Room * r3 = new Room(xy3, Direction::FourD());
 
     // Add room to level
     level->add_part(r3);
 
     // Make a door
-    level->make_floor(xc+5+1, yc);
-
-    Entity * d3 = make_door(xc+5+1, yc);
-    d3->interactive = new InteractiveDoor();
-    d3->interactive->owner = d3;
+    level->make_floor(x1+w/2, y1+h);
+    Entity * d3 = make_door(x1+w/2, y1+h);
 
     level->add_entity(d3);
-    */
+
+    //////////////////////////////
+    /////////// ROOM 4 ///////////
+    //////////////////////////////
+    
+    y1 += 20;
+    w = 15; h = 7;
+    
+    Rect xy4(x1, y1, x1+w-1, y1+h-1);
+    Room * r4 = new Room(xy4, Direction::FourD());
+
+    // Add room to level
+    level->add_part(r4);
+
+    // Make a door
+    level->make_floor(x1+w/2, y1-1);
+    Entity * d4 = make_door(x1+w/2, y1-1, true);
+
+    level->add_entity(d4);
 
     // Monsters
     //add_monsters(level);

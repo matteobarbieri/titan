@@ -43,6 +43,14 @@ class InteractiveDoor : public Interactive
 {
     public:
 
+        // Whether the door is locked or unlocked
+        bool locked;
+
+        // The ID of the key which will open the door
+        unsigned int key_id;
+
+        InteractiveDoor(bool locked=false, unsigned int key_id=0);
+
         virtual void interact(Entity *, GameMap *);
 };
 
