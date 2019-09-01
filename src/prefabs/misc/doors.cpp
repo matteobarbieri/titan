@@ -9,7 +9,7 @@ Entity * make_door(int x, int y)
         x, y, '+',
         TCODColor::orange, "Door",
         STAIRS,
-        true, true);
+        true, true, true);
 
     return door;
 }

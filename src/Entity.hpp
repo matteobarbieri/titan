@@ -48,6 +48,9 @@ class Entity
         // Does it blocks sight?
         bool _blocks_sight;
 
+        // Is it a fixed entity (e.g. doors, stairs...)
+        bool _fixed;
+
         // In which order the entity is rendered
         RenderOrder _render_order;
 
@@ -82,6 +85,7 @@ class Entity
                TCODColor color, std::string name,
                RenderOrder render_order=CORPSE,
                bool blocks=false, bool blocks_sight=false,
+               bool _fixed=false,
                unsigned long int id=0);
 
         ~Entity();
@@ -92,12 +96,14 @@ class Entity
         // Getters
         RenderOrder render_order() const;
         TCODColor color() const;
+        bool fixed() const;
         bool blocks() const;
         bool blocks_sight() const;
 
         // Setters
         void render_order(RenderOrder);
         void color(TCODColor);
+        void fixed(bool);
         void blocks(bool);
         void blocks_sight(bool);
 

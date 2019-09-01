@@ -3,7 +3,7 @@
 #include "../Entity.hpp"
 #include "../map/GameMap.hpp"
 
-void Interactive::interact(Entity * player, GameMap * game_map)
+void InteractiveDoor::interact(Entity * player, GameMap * game_map)
 {
 
     // TODO works for door only!

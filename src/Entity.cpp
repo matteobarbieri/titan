@@ -22,11 +22,12 @@
 
 Entity::Entity(int x, int y, int symbol,
     TCODColor color, std::string name, RenderOrder render_order,
-    bool blocks, bool blocks_sight,
+    bool blocks, bool blocks_sight, bool _fixed,
     unsigned long int id) :
     x(x), y(y), _render_order(render_order), name(name),
     symbol(symbol), _color(color),
-    _blocks(blocks), _blocks_sight(blocks_sight)
+    _blocks(blocks), _blocks_sight(blocks_sight),
+    _fixed(_fixed)
 {
     
         // Initialize pointers to NULL
@@ -90,6 +91,11 @@ TCODColor Entity::color() const
     return _color;
 }
 
+bool Entity::fixed() const
+{
+    return _fixed;
+}
+
 bool Entity::blocks() const
 {
     return _blocks;
@@ -109,6 +115,11 @@ void Entity::render_order(RenderOrder ro)
 void Entity::color(TCODColor c)
 {
     _color = c;
+}
+
+void Entity::fixed(bool f)
+{
+    _fixed = f;
 }
 
 void Entity::blocks(bool b)

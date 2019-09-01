@@ -40,42 +40,78 @@ GameMap * generate_room(int width, int height)
     int xc = width/2;
     int yc = height/2;
 
+    //////////////////////////////
+    ///////// FIRST ROOM /////////
+    //////////////////////////////
+    
+    int x1 = xc-5, y1 = yc - 3;
+    int w = 11, h = 7;
+
     // Collect coordinates in a variable
-    Rect xy(xc-5, yc-3, xc+5, yc+3);
+    Rect xy(x1, y1, x1+w-1, y1+h-1);
     Room * entry_room = new Room(xy, Direction::FourD());
 
     // Add room to level
     level->add_part(entry_room);
 
-    Rect xy2(xc+5+2, yc-5, xc+5+2+10, yc+5);
-    Room * r2 = new Room(xy2, Direction::FourD());
-
-    // Add room to level
-    level->add_part(r2);
-
-    // Make a door
-    level->make_floor(xc+5+1, yc);
-
-    Entity * d1 = make_door(xc+5+1, yc);
-    d1->interactive = new Interactive();
-    d1->interactive->owner = d1;
-
-    level->add_entity(d1);
-
-
-    // Populate Dungeon with entities
     // Create and add entry stairs '<'
     Stairs * up_stairs_component = new Stairs(level->dungeon_level - 1);
 
     // Create entity object
     Entity * up_stairs = new Entity(
         xc, yc, '<',
-        TCODColor::white, "Stairs up", STAIRS);
+        TCODColor::white, "Stairs up", STAIRS, false, false, true);
 
     // Add stairs component to entity
     up_stairs->stairs = up_stairs_component;
-
     level->add_entity(up_stairs);
+
+    //////////////////////////////
+    /////////// ROOM 2 ///////////
+    //////////////////////////////
+
+    x1 += w + 1;
+    y1 -= 2;
+
+    w = 15; h = 11;
+    
+    Rect xy2(x1, y1, x1+w-1, y1+h-1);
+
+    //Rect xy2(xc+5+2, yc-5, xc+5+2+10, yc+5);
+    Room * r2 = new Room(xy2, Direction::FourD());
+
+    // Add room to level
+    level->add_part(r2);
+
+    // Make a door
+    level->make_floor(x1-1, yc);
+
+    Entity * d2 = make_door(x1-1, yc);
+    d2->interactive = new InteractiveDoor();
+    d2->interactive->owner = d2;
+
+    level->add_entity(d2);
+    
+    //////////////////////////////
+    /////////// ROOM 3 ///////////
+    //////////////////////////////
+    
+    /*
+    Rect xy3(xc+5+4+10, xc+5+2, yc-5, yc+5);
+    Room * r3 = new Room(xy3, Direction::FourD());
+
+    // Add room to level
+    level->add_part(r3);
+
+    // Make a door
+    level->make_floor(xc+5+1, yc);
+
+    Entity * d3 = make_door(xc+5+1, yc);
+    d3->interactive = new InteractiveDoor();
+    d3->interactive->owner = d3;
+
+    level->add_entity(d3);
+    */
 
     // Monsters
     //add_monsters(level);
@@ -99,8 +135,6 @@ void add_monsters(GameMap * level)
 // TODO implement
 void add_items(GameMap * level)
 {
-    //std::cout << "Implement add_items!" << std::endl;
-    //float a = 1/0;
 
     int x = level->width/2 - 2;
     int y = level->height/2 - 2;
