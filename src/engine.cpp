@@ -242,7 +242,8 @@ int main(int argc, char *argv[])
     // Init root console
     TCODConsole::initRoot(
         SCREEN_WIDTH, SCREEN_HEIGHT,
-        WINDOW_TITLE, false, TCOD_RENDERER_SDL);
+        WINDOW_TITLE, false, TCOD_RENDERER_GLSL);
+        //WINDOW_TITLE, false, TCOD_RENDERER_SDL);
 
     // Load the background image
     TCODImage main_menu_background_image("menu_background2.png");
