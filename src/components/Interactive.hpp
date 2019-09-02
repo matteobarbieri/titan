@@ -51,6 +51,18 @@ class InteractiveDoor : public Interactive
 
         InteractiveDoor(bool locked=false, unsigned int key_id=0);
 
+        /**
+         * Set the door as unlocked, changing its symbol and updating the FOV
+         * map accordingly.
+         */
+        void unlock(GameMap * game_map);
+
+        /**
+         * Checks if the player has in its inventory an appropriate key to open
+         * the door.
+         */
+        bool player_has_key(Entity * player);
+
         virtual void interact(Entity *, GameMap *);
 };
 

@@ -11,6 +11,7 @@
 // Components
 #include "../../components/Stairs.hpp"
 #include "../../components/Interactive.hpp"
+#include "../../components/Item.hpp"
 
 // Prefabs
 #include "../../prefabs/enemies.hpp"
@@ -85,11 +86,29 @@ GameMap * generate_room(int width, int height)
 
     // Make a door
     level->make_floor(x1-1, yc);
-
     Entity * d2 = make_door(x1-1, yc);
 
     level->add_entity(d2);
     
+    // Add key for room 4
+    Entity * door_key = new Entity(
+        x1+2, y1+2, 208, 
+        TCODColor::green, "Key card", ITEM, false, false, true);
+
+    // Create item component
+    Item * item_component = new Item(
+        ItemType::MISC, ItemSubtype::NONE);
+
+    // The key for the locked door
+    unsigned int key_id = 1;
+    item_component->key_id = key_id;
+
+    // Attach item component to entity
+    door_key->item = item_component;
+    item_component->owner = door_key;
+
+    level->add_entity(door_key);
+
     //////////////////////////////
     /////////// ROOM 3 ///////////
     //////////////////////////////
@@ -124,7 +143,7 @@ GameMap * generate_room(int width, int height)
 
     // Make a door
     level->make_floor(x1+w/2, y1-1);
-    Entity * d4 = make_door(x1+w/2, y1-1, true);
+    Entity * d4 = make_door(x1+w/2, y1-1, true, key_id);
 
     level->add_entity(d4);
 

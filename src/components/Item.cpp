@@ -102,13 +102,17 @@ ItemSubtype& operator &=(ItemSubtype &lhs, ItemSubtype rhs)
 //////////////////////////////////////
 
 Item::Item(ItemType item_type, ItemSubtype item_subtype) :
-    item_type(item_type), item_subtype(item_subtype), equipped(false)
+    item_type(item_type), item_subtype(item_subtype)
 {
+
+    // Owner must be set manually
+    owner = nullptr;
+
+    // Set default values for items
+    equipped = false;
+    key_id = 0;
 }
 
-Item::~Item()
-{
-}
 
 /*
 bool Item::equipped()
@@ -143,16 +147,18 @@ std::vector<MenuOption> Item::item_inventory_options()
 {
     std::vector<MenuOption> subitem_options;
 
-    // TODO change options based on item type and condition
-
     // Every item can be dropped
     subitem_options.push_back({'d', "Drop"});
 
-    // Change option displayed based on "equipped" status
-    if (equipped) {
-        subitem_options.push_back({'e', "UnEquip"});
-    } else {
-        subitem_options.push_back({'e', "Equip"});
+    // Only for actually equippable items
+    if (owner->equippable != nullptr)
+    {
+        // Change option displayed based on "equipped" status
+        if (equipped) {
+            subitem_options.push_back({'e', "UnEquip"});
+        } else {
+            subitem_options.push_back({'e', "Equip"});
+        }
     }
 
     // Only usable items can be used (no shit!)

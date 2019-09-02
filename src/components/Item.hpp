@@ -17,10 +17,13 @@ class Entity;
  */
 enum class ItemType
 {
+    NONE = 0x0,
     WEAPON = 0x1,
     ARMOR = 0x2,
     DEVICE = 0x4,
-    CONSUMABLE = 0x8
+    CONSUMABLE = 0x8,
+    QUEST = 0x16,
+    MISC = 0x32
 };
 
 
@@ -29,6 +32,7 @@ enum class ItemType
  */
 enum class ItemSubtype
 {
+    NONE = 0x0,
     MELEE = 0x1,
     RANGED = 0x2
 };
@@ -46,7 +50,7 @@ class Item
 
     public:
 
-        //Entity * owner;
+        Entity * owner;
 
         //Item(int item_letter);
         //Item(int item_letter, bool equipped);
@@ -54,13 +58,26 @@ class Item
         int item_letter;
         Item(ItemType, ItemSubtype);
 
-        ~Item();
-
+        // Base item properties
         ItemType item_type;
         ItemSubtype item_subtype;
 
+        // Misc properties (not all make sense for a single item, it depends on
+        // which kind of item it is).
+
+        // Self explanatory equipped status
         bool equipped;
 
+        // Used for key-like items, they control which doors/mechanisms they
+        // unlock.
+        unsigned int key_id;
+
+        /**
+         * Returns the list of meaninful item inventory options for the item.
+         * For instance, all of them can be dropped on the ground, but only
+         * weapons can be equipped, items with a valid usable component can be
+         * used etc.
+         */
         std::vector<MenuOption> item_inventory_options();
 
         /**

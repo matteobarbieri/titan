@@ -20,6 +20,7 @@ Entity * make_dagger()
 
     // Attach item component to entity
     dagger->item = item_component;
+    item_component->owner = dagger;
 
     // Create equippable component
     Equippable * equippable_component = new Equippable(
