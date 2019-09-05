@@ -16,7 +16,12 @@
 #include "render_functions.hpp"
 
 #include "libtcod.hpp"
+#include "libtcod/console/console.h"
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_render.h>
+
+#include "sdl/custom_renderer.cpp"
 
 using namespace std;
 
@@ -53,8 +58,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
     ////////////////////////////////////////////
     /////////////// MAIN LOOP //////////////////
     ////////////////////////////////////////////
-
-    //std::cout << "play_game: Checkpoint 1" << std::endl;
 
     while (!TCODConsole::root->isWindowClosed())
     {
@@ -242,8 +245,11 @@ int main(int argc, char *argv[])
     // Init root console
     TCODConsole::initRoot(
         SCREEN_WIDTH, SCREEN_HEIGHT,
-        WINDOW_TITLE, false, TCOD_RENDERER_GLSL);
-        //WINDOW_TITLE, false, TCOD_RENDERER_SDL);
+        //WINDOW_TITLE, false, TCOD_RENDERER_SDL2);
+        //WINDOW_TITLE, false, TCOD_RENDERER_GLSL);
+        WINDOW_TITLE, false, TCOD_RENDERER_SDL);
+
+    TCODSystem::setFps(30);
 
     // Load the background image
     TCODImage main_menu_background_image("menu_background2.png");
@@ -265,6 +271,37 @@ int main(int argc, char *argv[])
     // TODO enable message log again
     //message_log = None
     
+    //TCODSystem::registerSDLRenderer(new SampleRenderer());
+
+    DEBUG("Before!");
+    SDL_Renderer * renderer = TCOD_sys_get_SDL_renderer();
+    SDL_Window * sdl_window = TCOD_sys_get_SDL_window();
+
+    bool bbb = renderer == NULL;
+    bool aaa = sdl_window == NULL;
+    DEBUG(bbb);
+    DEBUG(aaa);
+    DEBUG("After!");
+
+    SDL_Rect sdl_rect;
+
+    sdl_rect.x = 0;
+    sdl_rect.y = 0;
+    sdl_rect.w = 256;
+    sdl_rect.h = 256;
+
+    int rr = 0;
+
+    TCOD_Console * messages_layer = TCOD_console_new(20, 20);
+    //messages_layer->setCustomFont(
+            //"data/fonts/Alloy-curses-12x12.png",
+            //TCOD_FONT_LAYOUT_ASCII_INROW);
+
+    //TCOD_sys_get_sdl_window();
+    //TCOD_sys_accumulate_console(messages_layer);
+
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
     while (!TCODConsole::root->isWindowClosed())
     {
 
@@ -326,6 +363,23 @@ int main(int argc, char *argv[])
 
             // When returning to main menu, reset play_game variable to false
             play_game_ = false;
+        }
+
+        
+        rr++;
+        DEBUG(rr);
+
+        if (rr > 20)
+        {
+
+        SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+        SDL_RenderClear(renderer);
+
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 127);
+        SDL_RenderFillRect(renderer, &sdl_rect);
+
+        SDL_RenderPresent(renderer);
+        //DEBUG("Presenting!");
         }
 
         TCODConsole::root->flush();

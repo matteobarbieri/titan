@@ -2,6 +2,7 @@
 
 CXX = g++
 
+# Main list of files
 ccsrc = $(wildcard src/*.cpp) \
         $(wildcard src/components/*.cpp) \
         $(wildcard src/ui/*.cpp) \
@@ -14,6 +15,12 @@ ccsrc = $(wildcard src/*.cpp) \
 
 obj = $(ccsrc:.cpp=.o)
 
+# Files for sdl
+sdl_samples_ccsrc = $(wildcard src/samples/*.cpp)
+
+sdl_samples_obj = $(sdl_samples_ccsrc:.cpp=.o)
+
+# to delete
 text := hello a b c
 
 comma := ${null},${null}
@@ -24,7 +31,7 @@ ${space} := ${space} # ${ } is a space. Neat huh?
 sobj = $(subst  $(space),$(comma),$(strip $(obj)))
 
 # TODO check this guy
-LDFLAGS = -Isrc -L. -ltcod -g -Wl,-rpath=.
+LDFLAGS = -Isrc -L. -ltcod -lSDL2 -g -Wl,-rpath=.
 
 titan: $(obj)
 	$(CXX) -o $@ $^ $(LDFLAGS)
@@ -34,6 +41,9 @@ clean:
 
 wclean:
 	rm -Force -ErrorAction Ignore $(sobj)
+
+sdl_samples: $(sdl_samples_obj)
+	$(CXX) -o $@ $^ $(LDFLAGS)
 
 testc:
 	cmd /c del /q -ErrorAction Ignore .\\src\\Consoles.o
