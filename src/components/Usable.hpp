@@ -29,7 +29,18 @@ class Usable
         static Usable * from_json(json j);
 };
 
-class AOEUsable : public Usable
+class Targetable
+{
+    public:
+
+        int radius;
+
+        bool is_in_radius(int src_x, int _src_y, int trg_x, int trg_y);
+
+
+};
+
+class AOEUsable : public Usable, public Targetable
 {
 
     void _use() override;

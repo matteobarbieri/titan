@@ -5,7 +5,9 @@
 #include "Constants.h"
 
 #include "Entity.hpp"
+
 #include "components/Fighter.hpp"
+#include "components/Usable.hpp"
 
 #include "map/GameMap.hpp"
 #include "map/Tile.hpp"
@@ -308,9 +310,21 @@ void render_all(
                 // TODO improve
                 int target_flag = 0;
 
-                if (x-top_x == target_x and y-top_y == target_y)
+                //if (x-top_x == target_x and y-top_y == target_y)
+                if (game_state->game_phase == TARGETING)
                 {
-                    target_flag = 1;
+
+
+                    AOEUsable * a = (AOEUsable *)game_state->selected_inventory_item->usable;
+                    if (a->is_in_radius(target_x, target_y, x-top_x, y-top_y))
+                    {
+                        target_flag = 1;
+                    }
+
+                    //if (x-top_x == target_x and y-top_y == target_y)
+                    //{
+                        //target_flag = 1;
+                    //}
                 }
 
                 if (visible)

@@ -1,5 +1,7 @@
 #include "Usable.hpp"
 
+#include <math.h>
+
 Usable::Usable()
 {
 }
@@ -29,4 +31,18 @@ Usable * Usable::from_json(json j)
 
 void AOEUsable::_use()
 {
+}
+
+bool Targetable::is_in_radius(int src_x, int src_y, int trg_x, int trg_y)
+{
+
+    // TODO must change
+
+    if (sqrt(pow(src_x-trg_x, 2) + pow(src_y-trg_y, 2)) < radius)
+    {
+        return true;
+    }
+
+    return false;
+
 }
