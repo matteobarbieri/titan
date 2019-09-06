@@ -45,10 +45,10 @@ int Tile::fg_symbol() const
     return _fg_symbol;
 }
 
-TCODColor Tile::fg_color(bool visible, int target_flag) const
+TCODColor adjust_tile_color(TCODColor base, bool visible, int target_flag)
 {
 
-    TCODColor c = _fg_color;
+    TCODColor c = base;
 
     // TODO add different colors
     if (target_flag > 0)
@@ -63,26 +63,17 @@ TCODColor Tile::fg_color(bool visible, int target_flag) const
     }
 
     return c;
+
+}
+
+TCODColor Tile::fg_color(bool visible, int target_flag) const
+{
+    return adjust_tile_color(_fg_color, visible, target_flag);
 }
 
 TCODColor Tile::bg_color(bool visible, int target_flag) const
 {
-
-    TCODColor c = _bg_color;
-
-    // TODO add different colors
-    if (target_flag > 0)
-    {
-        c.g += 30;
-        c.g = std::min((int)c.g, 255);
-    }
-
-    if (!visible)
-    {
-        c.scaleHSV(0, 0.5);
-    }
-
-    return c;
+    return adjust_tile_color(_bg_color, visible, target_flag);
 }
 
 void Tile::render_at(TCODConsole * con, int x, int y, bool visible, int target_flag)
