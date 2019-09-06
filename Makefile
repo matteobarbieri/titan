@@ -16,7 +16,8 @@ ccsrc = $(wildcard src/*.cpp) \
 obj = $(ccsrc:.cpp=.o)
 
 # Files for sdl
-sdl_samples_ccsrc = $(wildcard src/samples/*.cpp)
+sdl_samples_ccsrc = $(wildcard src/samples/*.cpp) \
+					$(wildcard src/sdl/*.cpp)
 
 sdl_samples_obj = $(sdl_samples_ccsrc:.cpp=.o)
 

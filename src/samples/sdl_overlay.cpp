@@ -1,3 +1,6 @@
+#include <string>
+#include <sstream>
+
 #include "../Constants.h"
 
 #include "../libtcod.hpp"
@@ -6,20 +9,36 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_render.h>
 
+#include "../sdl/timer.hpp"
+
+const int SCREEN_FPS = 60;
+const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
+
 //#include "sdl/custom_renderer.cpp"
 
 using namespace std;
 
-/*
 
-*/
-
+char handle_main_menu(TCOD_key_t key)
+{
+    switch(key.c)
+    {
+        case 'a':
+        case 'b':
+        case 'c':
+            return key.c;
+            break;
+        default:
+            return '\0';
+            break;
+    }
+}
 int main(int argc, char *argv[])
 {
 
     // Set Custom font to use
     TCODConsole::setCustomFont(
-            "../data/fonts/16x16-sb-ascii.png",
+            "data/fonts/16x16-sb-ascii.png",
             TCOD_FONT_LAYOUT_ASCII_INROW);
 
     // Init root console
@@ -63,6 +82,20 @@ int main(int argc, char *argv[])
     sdl_rect.w = 256;
     sdl_rect.h = 256;
 
+    //The frames per second timer
+    LTimer fpsTimer;
+
+    //The frames per second cap timer
+    LTimer capTimer;
+
+    //In memory text stream
+    stringstream timeText;
+
+    //Start counting frames per second
+    int countedFrames = 0;
+
+    fpsTimer.start();
+
     int rr = 0;
 
     //TCOD_Console * messages_layer = TCOD_console_new(20, 20);
@@ -77,6 +110,9 @@ int main(int argc, char *argv[])
 
     while (!TCODConsole::root->isWindowClosed())
     {
+
+        //Start cap timer
+        capTimer.start();
 
         // Check for a mouse or keyboard event
         ev = TCODSystem::checkForEvent(
@@ -104,20 +140,6 @@ int main(int argc, char *argv[])
             break;
         }
 
-        // Continue last game
-        if (load_game)
-        {
-            // TODO implement
-            // Load game
-            SaveGame sg;
-            sg.load("latest.json", &player, &game_map, &game_state);
-
-            play_game(player, game_map, game_state);
-
-            load_game = false;
-            //break;
-        }
-
         if (play_game_)
         {
 
@@ -133,6 +155,8 @@ int main(int argc, char *argv[])
 
         if (rr > 20)
         {
+        sdl_rect.x = rr % 200;
+        sdl_rect.y = rr % 200;
 
         SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF );
         SDL_RenderClear(renderer);
@@ -140,30 +164,20 @@ int main(int argc, char *argv[])
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 127);
         SDL_RenderFillRect(renderer, &sdl_rect);
 
+        int frameTicks = capTimer.getTicks();
+        if( frameTicks < SCREEN_TICKS_PER_FRAME )
+        {
+            //Wait remaining time
+            SDL_Delay( SCREEN_TICKS_PER_FRAME - frameTicks );
+        }
+
         SDL_RenderPresent(renderer);
         //DEBUG("Presenting!");
         }
 
-        TCODConsole::root->flush();
+        //TCODConsole::root->flush();
 
-        // Display the main title menu
-        main_menu(&main_menu_background_image);
     }
 
     return 0;
 }
-
-/*
-
-def main():
-
-    args = parse_args()
-
-    if args.seed is None:
-        args.seed = random.randrange(sys.maxsize)
-
-    # Initialize random number generator
-    print("Seed was:", args.seed)
-    random.seed(args.seed)
-
-*/

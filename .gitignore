@@ -32,6 +32,7 @@
 
 # Main executable
 titan
+sdl_samples
 
 # Vim swp files
 *.swp
