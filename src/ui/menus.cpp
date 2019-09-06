@@ -35,9 +35,9 @@ void inventory_menu(
     // Starting menu item height
     int item_y = INVENTORY_ITEMS_Y;
 
-    for (int i=0; i<(int)player->inventory->items().size(); i++)
+    for (int i=0; i<(int)player->inventory->items.size(); i++)
     {
-        Entity * e = player->inventory->items()[i];
+        Entity * e = player->inventory->items[i];
 
         // If it isn't equipped
         if (!e->item->equipped)

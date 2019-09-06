@@ -256,13 +256,6 @@ void render_all(
     int & top_x, int & top_y)
 {
 
-    //std::cout << "render_all: Checkpoint 1" << std::endl;
-
-    /*
-    // TODO tmp workaround
-    game_phase = game_state.game_phase
-    */
-
     /////////////////////////////////////////
     ///////// Render terrain first //////////
     /////////////////////////////////////////
@@ -278,14 +271,26 @@ void render_all(
     top_y = std::max(0, top_y);
     top_y = std::min(game_map->height - SCREEN_HEIGHT + PANEL_HEIGHT, top_y);
 
+    int target_x = -100;
+    int target_y = -100;
+
+    if (game_state->game_phase == TARGETING)
+    {
+        redraw_terrain = true;
+
+        target_x = mouse->cx;
+        target_y = mouse->cy;
+    }
+
     // Only redraw terrain if needed
     if (redraw_terrain)
     {
 
-        //std::cout << "render_all: Checkpoint 2" << std::endl;
-
         // Clear the console before drawing on it
         Consoles::singleton().terrain_layer->clear();
+
+        // If targeting, highlight target area
+        //if (game_state->game_phase == TARGETING)
 
         for (int y=top_y; y<top_y + SCREEN_HEIGHT - PANEL_HEIGHT; y++)
         {
@@ -297,12 +302,23 @@ void render_all(
                 // Compute array index of current tile
                 int tile_index = compute_tile_index(x, y, game_map->width);
 
+
+                // Determine if tile must be highlighted in a special way
+                // because targeted
+                // TODO improve
+                int target_flag = 0;
+
+                if (x-top_x == target_x and y-top_y == target_y)
+                {
+                    target_flag = 1;
+                }
+
                 if (visible)
                 {
 
                     (game_map->tiles[tile_index])->render_at(
                         Consoles::singleton().terrain_layer,
-                        x-top_x, y-top_y, visible);
+                        x-top_x, y-top_y, visible, target_flag);
 
                     (game_map->tiles[tile_index])->explored(true);
                 }
@@ -312,7 +328,7 @@ void render_all(
                     // Render as currently out of sight
                     (game_map->tiles[tile_index])->render_at(
                         Consoles::singleton().terrain_layer,
-                        x-top_x, y-top_y, visible);
+                        x-top_x, y-top_y, visible, target_flag);
                 }
             }
         }

@@ -21,7 +21,12 @@ json Usable::to_json()
 Usable * Usable::from_json(json j)
 {
     // TODO There is nothing in this component so far
-    Usable * c = new Usable();
+    //Usable * c = new Usable();
+    Usable * c;
 
     return c;
+}
+
+void AOEUsable::_use()
+{
 }

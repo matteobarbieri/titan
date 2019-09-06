@@ -218,12 +218,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
     }
 }
 
-/*
-
-from death_functions import kill_monster, kill_player
-
-*/
-
 /**
  * Initialize a new game
  *

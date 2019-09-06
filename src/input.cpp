@@ -149,7 +149,15 @@ Action * handle_inventory_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     // Code to prevent double input
     if (key.vk == TCODK_CHAR)
     {
+
         key_char = key.c;
+
+        // TODO must prevent i being a valid item letter
+        //if (key_char == 'i')
+        //{
+            //return new BackToGameAction();
+        //}
+
         if (key_char >= 'a' && key_char <= 'z')
         {
             return new SelectInventoryItemAction(key_char);
@@ -172,6 +180,53 @@ Action * handle_inventory_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     return nullptr;
 }
 
+Action * handle_targeting_keys(TCOD_key_t key, TCOD_mouse_t mouse)
+{
+    char key_char = -1;
+
+    // Code to prevent double input
+    if (key.vk == TCODK_CHAR)
+    {
+        key_char = key.c;
+
+
+        //if (key_char == 'd')
+            //return new DropItemAction();
+
+        //if (key_char == 'e')
+            //return new ItemEquipToggleAction();
+
+        //if (key_char == 'u')
+            //return new ItemUseAction();
+
+    }
+
+    if (key.vk == TCODK_ESCAPE)
+    {
+        return new BackToInventoryMenuAction();
+    }
+
+    return nullptr;
+
+    /*
+    # Code to prevent double input
+    key_char = chr(key.c) if key.vk == libtcod.KEY_CHAR else ""
+
+    if key.vk == libtcod.KEY_ENTER and key.lalt:
+        # Alt+Enter: toggle full screen
+        return ToggleFullscreenAction()
+
+    if key_char == "d":
+        return DropItemAction()
+    elif key_char == "e":
+        return EquipItemAction()
+    elif key_char == "t":
+        return UnequipItemAction()
+    */
+}
+
+
+
 Action * handle_inventory_item_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 {
     char key_char = -1;
@@ -187,6 +242,9 @@ Action * handle_inventory_item_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 
         if (key_char == 'e')
             return new ItemEquipToggleAction();
+
+        if (key_char == 'u')
+            return new ItemUseAction();
 
         /*
          *if (key_char >= 'a' && key_char <= 'z')
@@ -319,6 +377,13 @@ Action * handle_input(
         /////////////////////////////////////////
         case INVENTORY_ITEM_MENU:
             return handle_inventory_item_keys(key, mouse);
+            break;
+
+        /////////////////////////////////////////
+        ////////// INVENTORY ITEM MENU //////////
+        /////////////////////////////////////////
+        case TARGETING:
+            return handle_targeting_keys(key, mouse);
             break;
 
         default:

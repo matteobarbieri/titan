@@ -4,6 +4,8 @@
 #include "../libtcod.hpp"
 #include "../SaveGame.hpp"
 
+#include <algorithm>
+
 #include "../nlohmann/json.hpp"
 
 using json = nlohmann::json;
@@ -43,41 +45,51 @@ int Tile::fg_symbol() const
     return _fg_symbol;
 }
 
-TCODColor Tile::fg_color(bool visible) const
+TCODColor Tile::fg_color(bool visible, int target_flag) const
 {
-    if (visible)
+
+    TCODColor c = _fg_color;
+
+    // TODO add different colors
+    if (target_flag > 0)
     {
-        return _fg_color;
+        c.g += 30;
+        c.g = std::min((int)c.g, 255);
     }
-    else
+
+    if (!visible)
     {
-        // Return a slightly darker version of the color
-        TCODColor fg_nonvisible = _fg_color;
-        fg_nonvisible.scaleHSV(0, 0.5);
-        return fg_nonvisible;
+        c.scaleHSV(0, 0.5);
     }
+
+    return c;
 }
 
-TCODColor Tile::bg_color(bool visible) const
+TCODColor Tile::bg_color(bool visible, int target_flag) const
 {
-    if (visible)
+
+    TCODColor c = _bg_color;
+
+    // TODO add different colors
+    if (target_flag > 0)
     {
-        return _bg_color;
+        c.g += 30;
+        c.g = std::min((int)c.g, 255);
     }
-    else
+
+    if (!visible)
     {
-        // Return a slightly darker version of the color
-        TCODColor bg_nonvisible = _bg_color;
-        bg_nonvisible.scaleHSV(0, 0.5);
-        return bg_nonvisible;
+        c.scaleHSV(0, 0.5);
     }
+
+    return c;
 }
 
-void Tile::render_at(TCODConsole * con, int x, int y, bool visible)
+void Tile::render_at(TCODConsole * con, int x, int y, bool visible, int target_flag)
 {
     con->putChar(x, y, fg_symbol(), TCOD_BKGND_NONE);
-    con->setCharBackground(x, y, bg_color(visible));
-    con->setCharForeground(x, y, fg_color(visible));
+    con->setCharBackground(x, y, bg_color(visible, target_flag));
+    con->setCharForeground(x, y, fg_color(visible, target_flag));
 }
 
 void Tile::explored(bool v)
@@ -119,33 +131,6 @@ Tile * Tile::from_json(json j)
 /////////////////////////////////
 ///////////// FLOOR /////////////
 /////////////////////////////////
-
-
-/*
-
-   // TODO add the remaining code!
-    def __init__(self, bg_color=libtcod.Color(20, 20, 20), fg_symbol=250,
-                 alternate_fg_symbols=['[', ']', '{', '}', '*', '%'],
-                 alternate_symbol_chance=0.1,
-                 # fg_color=libtcod.Color(70, 70, 70)):
-                 fg_color=libtcod.Color(65, 65, 65)):
-
-        # self.bg_color = libtcod.black
-        # self.bg_color = libtcod.Color(10, 10, 10)
-        # self.bg_color = libtcod.Color(32, 32, 32)
-        # self.bg_color = libtcod.Color(16, 16, 16)
-        self.bg_color = bg_color
-        self.fg_color = fg_color
-
-        # Choose one of the available symbols every once in a while
-        if random.random() < alternate_symbol_chance:
-            # The alternate symbol
-            self._fg_symbol = random.choice(alternate_fg_symbols)
-        else:
-            # The default symbol
-            self._fg_symbol = fg_symbol
-
-*/
 
 Floor::Floor(TCODColor bg_color, TCODColor fg_color, int fg_symbol) : 
     Tile(false, false) 
