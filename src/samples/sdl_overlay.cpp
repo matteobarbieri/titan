@@ -8,8 +8,10 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_image.h>
 
 #include "../sdl/timer.hpp"
+#include "../sdl/text.hpp"
 
 const int SCREEN_FPS = 60;
 const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
@@ -18,6 +20,9 @@ const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
 using namespace std;
 
+
+//Rendered texture
+LTexture gTextTexture;
 
 char handle_main_menu(TCOD_key_t key)
 {
@@ -33,6 +38,99 @@ char handle_main_menu(TCOD_key_t key)
             break;
     }
 }
+
+bool init()
+{
+	//Initialization flag
+	bool success = true;
+
+	//Initialize SDL
+	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+	{
+		printf( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
+		success = false;
+	}
+	else
+	{
+		//Set texture filtering to linear
+		if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
+		{
+			printf( "Warning: Linear texture filtering not enabled!" );
+		}
+    }
+
+    //Initialize PNG loading
+    int imgFlags = IMG_INIT_PNG;
+    if( !( IMG_Init( imgFlags ) & imgFlags ) )
+    {
+        printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+        success = false;
+    }
+
+     //Initialize SDL_ttf
+    if( TTF_Init() == -1 )
+    {
+        printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+        success = false;
+    }
+
+    //SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "2" );
+
+	return success;
+}
+
+bool loadMedia(SDL_Renderer * renderer)
+{
+	//Loading success flag
+	bool success = true;
+
+	//Open the font
+	//gFont = TTF_OpenFont( "16_true_type_fonts/lazy.ttf", 28 );
+
+    TTF_Font *gFont = NULL;
+
+	gFont = TTF_OpenFont( "DobkinPlain.ttf", 50 );
+	if( gFont == NULL )
+	{
+		printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError() );
+		success = false;
+	}
+	else
+	{
+		//Render text
+        SDL_Color textColor = { 0, 255, 0, 0xFF };
+		if( !gTextTexture.loadFromRenderedText( "The quick brown fox jumps over the lazy dog", textColor , gFont, renderer) )
+		{
+			printf( "Failed to render text texture!\n" );
+			success = false;
+		}
+	}
+
+	return success;
+}
+
+void close()
+{
+	//Free loaded images
+	gTextTexture.free();
+
+	//Free global font
+	//TTF_CloseFont( gFont );
+	//gFont = NULL;
+
+	////Destroy window	
+	//SDL_DestroyRenderer( gRenderer );
+	//SDL_DestroyWindow( gWindow );
+	//gWindow = NULL;
+	//gRenderer = NULL;
+
+	//Quit SDL subsystems
+	TTF_Quit();
+	IMG_Quit();
+	SDL_Quit();
+}
+
+
 int main(int argc, char *argv[])
 {
 
@@ -90,6 +188,8 @@ int main(int argc, char *argv[])
 
     //In memory text stream
     stringstream timeText;
+
+    init();
 
     //Start counting frames per second
     int countedFrames = 0;
@@ -158,7 +258,8 @@ int main(int argc, char *argv[])
         sdl_rect.x = rr % 200;
         sdl_rect.y = rr % 200;
 
-        SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+        //SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+        SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF );
         SDL_RenderClear(renderer);
 
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 127);
@@ -170,6 +271,10 @@ int main(int argc, char *argv[])
             //Wait remaining time
             SDL_Delay( SCREEN_TICKS_PER_FRAME - frameTicks );
         }
+
+        //Render current frame
+        loadMedia(renderer);
+        gTextTexture.render( 300, 300 , renderer);
 
         SDL_RenderPresent(renderer);
         //DEBUG("Presenting!");

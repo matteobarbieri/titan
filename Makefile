@@ -33,6 +33,7 @@ sobj = $(subst  $(space),$(comma),$(strip $(obj)))
 
 # TODO check this guy
 LDFLAGS = -Isrc -L. -ltcod -lSDL2 -g -Wl,-rpath=.
+LDFLAGS_SDL = -Isrc -L. -ltcod -lSDL2 -lSDL2_image -lSDL2_ttf -g -Wl,-rpath=.
 
 titan: $(obj)
 	$(CXX) -o $@ $^ $(LDFLAGS)
@@ -44,7 +45,7 @@ wclean:
 	rm -Force -ErrorAction Ignore $(sobj)
 
 sdl_samples: $(sdl_samples_obj)
-	$(CXX) -o $@ $^ $(LDFLAGS)
+	$(CXX) -o $@ $^ $(LDFLAGS_SDL)
 
 testc:
 	cmd /c del /q -ErrorAction Ignore .\\src\\Consoles.o
