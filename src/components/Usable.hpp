@@ -34,8 +34,10 @@ class Targetable
     public:
 
         int radius;
+        int range;
 
-        bool is_in_radius(int src_x, int _src_y, int trg_x, int trg_y);
+        bool is_in_radius(int src_x, int src_y, int trg_x, int trg_y);
+        bool is_in_range(int src_x, int src_y, int trg_x, int trg_y);
 
 
 };

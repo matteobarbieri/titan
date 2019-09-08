@@ -1,6 +1,7 @@
 #include "Usable.hpp"
 
-#include <math.h>
+
+#include "../utils.hpp"
 
 Usable::Usable()
 {
@@ -33,12 +34,26 @@ void AOEUsable::_use()
 {
 }
 
+bool Targetable::is_in_range(int src_x, int src_y, int trg_x, int trg_y)
+{
+
+    // TODO must change
+
+    if (l2(src_x, src_y, trg_x, trg_y ) <= range)
+    {
+        return true;
+    }
+
+    return false;
+
+}
+
 bool Targetable::is_in_radius(int src_x, int src_y, int trg_x, int trg_y)
 {
 
     // TODO must change
 
-    if (sqrt(pow(src_x-trg_x, 2) + pow(src_y-trg_y, 2)) < radius)
+    if (l2(src_x, src_y, trg_x, trg_y ) <= radius)
     {
         return true;
     }

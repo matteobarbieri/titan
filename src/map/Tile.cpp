@@ -51,10 +51,24 @@ TCODColor adjust_tile_color(TCODColor base, bool visible, int target_flag)
     TCODColor c = base;
 
     // TODO add different colors
-    if (target_flag > 0)
+    //if (target_flag > 0)
+    //{
+        //c = c + TCODColor(0, 30, 0);
+    //}
+
+    switch (target_flag)
     {
-        c = c + TCODColor(0, 30, 0);
+        case 1:
+            c = c + TCODColor(0, 30, 0);
+            break;
+        case 3:
+            c = c + TCODColor(30, 0, 0);
+            break;
+        case 0:
+        default:
+            break;
     }
+
 
     if (!visible)
     {

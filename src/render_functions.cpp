@@ -145,23 +145,6 @@ std::string get_names_under_mouse(
     return names;
 }
 
-/*
-
-def draw_entity(terrain_layer, entity,
-                fov_map, game_map, top_x=0, top_y=0):
-
-    # Only draw entities that are in player's fov
-    if (libtcod.map_is_in_fov(fov_map, entity.x, entity.y) or
-        (entity.stairs and game_map.tiles[entity.x][entity.y].explored)):
-        # (entity.c['stairs'] and game_map.tiles[entity.x][entity.y].explored):
-        # TODO include case for doors
-
-        # print("Bgcolor: {}".format(bg_color))
-
-
-
-*/
-
 void draw_entity(TCODConsole * terrain_layer, Entity * entity,
                  TCODMap * fov_map, GameMap * game_map, int top_x, int top_y)
 {
@@ -201,18 +184,6 @@ void draw_entity(TCODConsole * terrain_layer, Entity * entity,
 
 
 }
-
-/*
-def render_all(terrain_layer, panel, entity_frame, inventory_frame,
-               main_window,
-               player,
-               game_map, fov_map, fov_recompute,
-               redraw_terrain, redraw_entities, message_log,
-               constants, mouse,
-               game_state, current_turn):
-
-
-*/
 
 void render_bar(TCODConsole * console, int x, int y, int total_width,
                std::string name, int value, int maximum,
@@ -276,12 +247,28 @@ void render_all(
     int target_x = -100;
     int target_y = -100;
 
+    int range_flag = 1;
+    AOEUsable * a;
+
+    // Force terrain redrawing on targeting
     if (game_state->game_phase == TARGETING)
     {
         redraw_terrain = true;
 
         target_x = mouse->cx;
         target_y = mouse->cy;
+
+        a = (AOEUsable *)game_state->selected_inventory_item->usable;
+        //Targetable * a = (Targetable *)game_state->selected_inventory_item->usable;
+        
+        if (a->is_in_range(target_x, target_y, player->x-top_x, player->y-top_y))
+        {
+            range_flag = 1;
+        }
+        else
+        {
+            range_flag = 3;
+        }
     }
 
     // Only redraw terrain if needed
@@ -290,9 +277,6 @@ void render_all(
 
         // Clear the console before drawing on it
         Consoles::singleton().terrain_layer->clear();
-
-        // If targeting, highlight target area
-        //if (game_state->game_phase == TARGETING)
 
         for (int y=top_y; y<top_y + SCREEN_HEIGHT - PANEL_HEIGHT; y++)
         {
@@ -314,11 +298,9 @@ void render_all(
                 if (game_state->game_phase == TARGETING)
                 {
 
-
-                    AOEUsable * a = (AOEUsable *)game_state->selected_inventory_item->usable;
                     if (a->is_in_radius(target_x, target_y, x-top_x, y-top_y))
                     {
-                        target_flag = 1;
+                        target_flag = range_flag;
                     }
 
                     //if (x-top_x == target_x and y-top_y == target_y)
