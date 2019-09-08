@@ -1,6 +1,10 @@
 #include "Ai.hpp"
 #include <iostream>
 
+#include "../utils.hpp"
+#include "../Entity.hpp"
+
+#include "../map/GameMap.hpp"
 
 
 AIAction * MonsterAi::pick_action(Entity * player, GameMap * game_map)
@@ -10,6 +14,11 @@ AIAction * MonsterAi::pick_action(Entity * player, GameMap * game_map)
 
 AIAction * SeekerAi::pick_action(Entity * player, GameMap * game_map)
 {
+    // First check if he sees the player
+    if (game_map->aux_fov_map_100->isInFov(owner->x, owner->y) && \
+        l2(owner->x, owner->y, player->x, player->y) <=100)
+    {
+    }
     return nullptr;
 }
 

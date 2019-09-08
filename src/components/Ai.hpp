@@ -13,15 +13,15 @@ class Outcome;
 // TODO move somewhere else
 class AIAction
 {
-    private:
-        
 
     public:
-        AIAction();
-        virtual ~AIAction();
 
         Outcome * execute();
     
+};
+
+class ChaseAIAction : public AIAction
+{
 };
 
 class MonsterAi
