@@ -53,8 +53,7 @@ TCODColor adjust_tile_color(TCODColor base, bool visible, int target_flag)
     // TODO add different colors
     if (target_flag > 0)
     {
-        c.g += 30;
-        c.g = std::min((int)c.g, 255);
+        c = c + TCODColor(0, 30, 0);
     }
 
     if (!visible)
