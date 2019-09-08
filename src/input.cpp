@@ -152,12 +152,13 @@ Action * handle_inventory_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 
         key_char = key.c;
 
-        // TODO must prevent i being a valid item letter
-        //if (key_char == 'i')
-        //{
-            //return new BackToGameAction();
-        //}
+        // First check the 'i', in case the player wants to close the inventory
+        if (key_char == 'i')
+        {
+            return new BackToGameAction();
+        }
 
+        // Then check if the letter is one of the valid inventory items
         if (key_char >= 'a' && key_char <= 'z')
         {
             return new SelectInventoryItemAction(key_char);
