@@ -30,6 +30,11 @@ Usable * Usable::from_json(json j)
     return c;
 }
 
+void Usable::use()
+{
+    return _use();
+}
+
 void AOEUsable::_use()
 {
 }
