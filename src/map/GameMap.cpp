@@ -238,6 +238,18 @@ void GameMap::initialize_fov_map()
     aux_fov_map_100->copy(fov_map);
 }
 
+void GameMap::update_fov_map_properties(int x, int y, bool walkable, bool transparent)
+{
+    // Update main map (for player vision)
+    fov_map->setProperties(
+        x, y, walkable, transparent);
+
+    // Update auxiliary map
+    aux_fov_map_100->setProperties(
+        x, y, walkable, transparent);
+
+}
+
 void GameMap::recompute_fov(Entity * player)
 {
     

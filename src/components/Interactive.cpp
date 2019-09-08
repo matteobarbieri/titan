@@ -21,7 +21,7 @@ void InteractiveDoor::unlock(GameMap * game_map)
         owner->blocks(false);
 
         owner->symbol = '-';
-        game_map->fov_map->setProperties(
+        game_map->update_fov_map_properties(
             owner->x, owner->y, true, true);
 }
 

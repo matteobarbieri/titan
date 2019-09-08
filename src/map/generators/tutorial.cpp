@@ -75,7 +75,7 @@ GameMap * generate_room(int width, int height)
 
     AOEUsable * usable_component = new AOEUsable();
     usable_component->radius = 4;
-    usable_component->range = 5;
+    usable_component->range = 10;
 
     grenade->usable = usable_component;
     usable_component->owner = grenade;

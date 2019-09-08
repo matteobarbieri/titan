@@ -218,6 +218,7 @@ class GameMap
         void dig(MapPart * part, int pad=0);
 
         void recompute_fov(Entity * player);
+        void update_fov_map_properties(int x, int y, bool walkable, bool transparent);
 
         /**
          * Turn a single tile to floor
