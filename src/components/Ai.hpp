@@ -33,7 +33,7 @@ class MonsterAi
 
         Entity * owner;
 
-        AIAction * pick_action(Entity * player, GameMap * game_map);
+        virtual AIAction * pick_action(Entity * player, GameMap * game_map);
 
         /**
          * Creates a json representation of the component
@@ -42,6 +42,17 @@ class MonsterAi
 
         static MonsterAi * from_json(json j);
 
+};
+
+/**
+ * A monster which will try and get in melee range of the player as soon as he
+ * sees him.
+ */
+class SeekerAi : public MonsterAi
+{
+    public:
+
+        AIAction * pick_action(Entity * player, GameMap * game_map) override;
 };
 
 #endif /* ROGUE_2077_AI */

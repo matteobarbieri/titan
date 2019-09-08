@@ -1,11 +1,17 @@
 #include "Ai.hpp"
 #include <iostream>
 
+
+
 AIAction * MonsterAi::pick_action(Entity * player, GameMap * game_map)
 {
     return nullptr;
 }
 
+AIAction * SeekerAi::pick_action(Entity * player, GameMap * game_map)
+{
+    return nullptr;
+}
 
 Outcome * AIAction::execute()
 {

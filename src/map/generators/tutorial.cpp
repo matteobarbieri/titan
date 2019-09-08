@@ -147,6 +147,9 @@ GameMap * generate_room(int width, int height)
 
     level->add_entity(d4);
 
+    Entity * droid = make_security_droid(r4);
+    level->add_entity(droid);
+
     // Monsters
     //add_monsters(level);
 

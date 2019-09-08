@@ -95,7 +95,6 @@ Outcome * MoveAction::_execute()
         // TODO enable message log
         Outcome * outcome = new Outcome(
             ENEMY_TURN, // TODO this is the right one
-            //PLAYERS_TURN, // TODO this is the WRONG one (for debug purposes)
             fov_recompute,
             redraw_terrain);
 
