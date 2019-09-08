@@ -32,8 +32,13 @@ Inventory::Inventory(int capacity) : _capacity(capacity)
         // TODO limit to the maximum number of items a player can have on him,
         // between equipped and in inventory
         
-        //for (int i='a'; i<='z'; i++)
-        for (int i='a'; i<='c'; i++)
+        // Skip the 'i'
+        for (int i='a'; i<'h'; i++)
+        {
+            available_letters.push_back(i);
+        }
+        
+        for (int i='j'; i<='z'; i++)
         {
             available_letters.push_back(i);
         }

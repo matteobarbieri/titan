@@ -150,6 +150,14 @@ Action * handle_inventory_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     if (key.vk == TCODK_CHAR)
     {
         key_char = key.c;
+
+        // First check the 'i', in case the player wants to close the inventory
+        if (key_char == 'i')
+        {
+            return new BackToGameAction();
+        }
+
+        // Then check if the letter is one of the valid inventory items
         if (key_char >= 'a' && key_char <= 'z')
         {
             return new SelectInventoryItemAction(key_char);
