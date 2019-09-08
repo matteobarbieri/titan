@@ -162,12 +162,10 @@ std::vector<MenuOption> Item::item_inventory_options()
     }
 
     // Only usable items can be used (no shit!)
-    /*
-     *if (owner->usable != nullptr)
-     *{
-     *    subitem_options.push_back({'u', "Use"});
-     *}
-     */
+    if (owner->usable != nullptr)
+    {
+        subitem_options.push_back({'u', "Use"});
+    }
 
     return subitem_options;
 }

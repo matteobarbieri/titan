@@ -69,10 +69,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
         
         if (fov_recompute)
         {
-            game_map->fov_map->computeFov(
-                player->x, player->y, FOV_RADIUS,
-                FOV_LIGHT_WALLS, FOV_ALGORITHM);
-
+            game_map->recompute_fov(player);
         }
 
         // If the player move, check if targeted entity is still in sight
@@ -217,12 +214,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 
     }
 }
-
-/*
-
-from death_functions import kill_monster, kill_player
-
-*/
 
 /**
  * Initialize a new game

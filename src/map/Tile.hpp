@@ -62,10 +62,10 @@ class Tile
         // Set value
         void explored(bool v);
 
-        TCODColor bg_color(bool visible=true) const;
-        TCODColor fg_color(bool visible=true) const;
+        TCODColor bg_color(bool visible=true, int target_flag=0) const;
+        TCODColor fg_color(bool visible=true, int target_flag=0) const;
 
-        virtual void render_at(TCODConsole * con, int x, int y, bool visible);
+        virtual void render_at(TCODConsole * con, int x, int y, bool visible, int target_flag);
         virtual json to_json();
 
         static Tile * from_json(json);

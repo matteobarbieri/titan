@@ -30,6 +30,42 @@ Outcome * ItemEquipToggleAction::_execute()
     }
 }
 
+
+Outcome * ItemUseAction::_execute()
+{
+
+    GamePhase next_phase;
+
+    // Build message
+    std::ostringstream stringStream;
+
+    // Remove from equipment slots before unequipping
+    if (game_state->selected_inventory_item->item->equipped)
+    {
+    }
+
+    // TODO must come from item's usable component
+    //next_phase = ENEMY_TURN;
+    next_phase = TARGETING;
+
+    // TODO must come from item's usable component
+    stringStream << "Select target ";
+
+    // Add message to message log
+    MessageLog::singleton().add_message(
+        {stringStream.str(), TCODColor::yellow});
+
+    // Return outcome
+    // TODO enable message log
+    Outcome * outcome = new Outcome(
+        next_phase,
+        false,
+        false);
+
+    return outcome;
+}
+
+
 Outcome * DropItemAction::_execute()
 {
 

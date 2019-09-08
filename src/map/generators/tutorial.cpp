@@ -12,6 +12,7 @@
 #include "../../components/Stairs.hpp"
 #include "../../components/Interactive.hpp"
 #include "../../components/Item.hpp"
+#include "../../components/Usable.hpp"
 
 // Prefabs
 #include "../../prefabs/enemies.hpp"
@@ -67,6 +68,25 @@ GameMap * generate_room(int width, int height)
     up_stairs->stairs = up_stairs_component;
     level->add_entity(up_stairs);
 
+    // Create grenade
+    Entity * grenade = new Entity(
+        xc+2, yc, 162,
+        TCODColor::darkerGreen, "Frag grenade", ITEM, false, false, false);
+
+    AOEUsable * usable_component = new AOEUsable();
+    usable_component->radius = 4;
+    usable_component->range = 10;
+
+    grenade->usable = usable_component;
+    usable_component->owner = grenade;
+
+    Item * grenade_item_component = new Item(
+        ItemType::CONSUMABLE, ItemSubtype::NONE);
+    grenade->item = grenade_item_component;
+    grenade_item_component->owner = grenade;
+
+    level->add_entity(grenade);
+
     //////////////////////////////
     /////////// ROOM 2 ///////////
     //////////////////////////////
@@ -96,16 +116,16 @@ GameMap * generate_room(int width, int height)
         TCODColor::green, "Key card", ITEM, false, false, true);
 
     // Create item component
-    Item * item_component = new Item(
+    Item * key_item_component = new Item(
         ItemType::MISC, ItemSubtype::NONE);
 
     // The key for the locked door
     unsigned int key_id = 1;
-    item_component->key_id = key_id;
+    key_item_component->key_id = key_id;
 
     // Attach item component to entity
-    door_key->item = item_component;
-    item_component->owner = door_key;
+    door_key->item = key_item_component;
+    key_item_component->owner = door_key;
 
     level->add_entity(door_key);
 

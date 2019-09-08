@@ -46,18 +46,13 @@ Inventory::Inventory(int capacity) : _capacity(capacity)
 
 }
 
-std::vector<Entity *> Inventory::items()
-{
-    return _items;
-}
-
 int Inventory::get_item_position_in_list(Entity * item)
 {
 
     // TODO must change, doesn't work well because of equipped status
-    for (int i=0; i<(int)items().size(); i++)
+    for (int i=0; i<(int)items.size(); i++)
     {
-        if (items()[i] == item)
+        if (items[i] == item)
         {
             return i;
         }
@@ -110,16 +105,16 @@ void Inventory::remove_item(Entity * item)
 
     // Solution taken from
     // https://stackoverflow.com/questions/3385229/c-erase-vector-element-by-value-rather-than-by-position
-    _items.erase(
-        std::remove(_items.begin(), _items.end(), item),
-        _items.end());
+    items.erase(
+        std::remove(items.begin(), items.end(), item),
+        items.end());
 
 }
 
 void Inventory::pickup(Entity * item, GameMap * level)
 {
     // If at full capacity, throw exception
-    if ((int)_items.size() == _capacity)
+    if ((int)items.size() == _capacity)
     {
         throw InventoryFullException();
     }
@@ -142,12 +137,11 @@ void Inventory::pickup(Entity * item, GameMap * level)
     // Assign item letter to item component
     item->item->item_letter = item_letter;
 
-    // Add to the vector of items
-    _items.push_back(item);
+    //DEBUG("Assigned letter " << item_letter);
 
-    // TODO is this line below needed anymore?
-    //self.item_letters.append(item_letter)
-    
+    // Add to the vector of items
+    items.push_back(item);
+
     level->remove_entity(item);
 }
 
