@@ -261,9 +261,16 @@ void render_all(
         a = (AOEUsable *)game_state->selected_inventory_item->usable;
         //Targetable * a = (Targetable *)game_state->selected_inventory_item->usable;
         
-        if (a->is_in_range(target_x, target_y, player->x-top_x, player->y-top_y))
+        if (game_map->aux_fov_map_100->isInFov(target_x+top_x, target_y+top_y))
         {
-            range_flag = 1;
+            if (a->is_in_range(target_x, target_y, player->x-top_x, player->y-top_y))
+            {
+                range_flag = 1;
+            }
+            else
+            {
+                range_flag = 3;
+            }
         }
         else
         {

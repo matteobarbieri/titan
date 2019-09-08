@@ -111,6 +111,7 @@ GameMap::GameMap(int width, int height, bool _initialize_tiles) :
 {
 
     fov_map = nullptr;
+    aux_fov_map_100 = nullptr;
 
     // Decide whether to initialize tiles or not
     if (_initialize_tiles)
@@ -198,6 +199,8 @@ void GameMap::initialize_fov_map()
 {
 
     fov_map = new TCODMap(width, height);
+    aux_fov_map_100 = new TCODMap(width, height);
+
     int tile_index;
 
     for (int y = 0; y < height; y++)
@@ -215,6 +218,7 @@ void GameMap::initialize_fov_map()
                 x, y,
                 !(tiles[tile_index])->block_sight(),
                 !(tiles[tile_index])->blocked());
+
         }
     }
 
@@ -231,7 +235,22 @@ void GameMap::initialize_fov_map()
         }
     }
 
+    aux_fov_map_100->copy(fov_map);
 }
+
+void GameMap::recompute_fov(Entity * player)
+{
+    
+    // Recompute main FOV map
+    fov_map->computeFov(
+        player->x, player->y, FOV_RADIUS,
+        FOV_LIGHT_WALLS, FOV_ALGORITHM);
+
+    aux_fov_map_100->computeFov(
+        player->x, player->y, 100,
+        FOV_LIGHT_WALLS, FOV_ALGORITHM);
+}
+
 
 void GameMap::initialize_tiles()
 {
