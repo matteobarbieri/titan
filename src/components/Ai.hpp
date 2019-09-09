@@ -52,7 +52,13 @@ class SeekerAi : public MonsterAi
 {
     public:
 
+        int player_last_seen_x;
+        int player_last_seen_y;
+
         AIAction * pick_action(Entity * player, GameMap * game_map) override;
+
+
+        SeekerAi();
 };
 
 #endif /* ROGUE_2077_AI */

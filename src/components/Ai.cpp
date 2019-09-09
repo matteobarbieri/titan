@@ -12,13 +12,30 @@ AIAction * MonsterAi::pick_action(Entity * player, GameMap * game_map)
     return nullptr;
 }
 
+SeekerAi::SeekerAi()
+{
+    // Init coordinates of player's last known position to invalid values,
+    // meaning that the current monster has no memory of such position.
+    player_last_seen_x = -1;
+    player_last_seen_y = -1;
+}
+
 AIAction * SeekerAi::pick_action(Entity * player, GameMap * game_map)
 {
     // First check if he sees the player
+    // TODO replace 100 with actual sight range
     if (game_map->aux_fov_map_100->isInFov(owner->x, owner->y) && \
         l2(owner->x, owner->y, player->x, player->y) <=100)
     {
+        
+        // Update player's last known position
+        player_last_seen_x = player->x;
+        player_last_seen_y = player->y;
+
     }
+
+    //DEBUG("I last saw the player at (" << player_last_seen_x << ", " << player_last_seen_y << ")");
+
     return nullptr;
 }
 
