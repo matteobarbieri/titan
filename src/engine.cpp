@@ -206,6 +206,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
             // Go back to player's turn state
             game_state->game_phase = PLAYERS_TURN;
             redraw_entities = true;
+            redraw_terrain = true;
 
             // Increase turn number
             game_state->current_turn++;

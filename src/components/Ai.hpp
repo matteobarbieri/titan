@@ -10,6 +10,11 @@ class Entity;
 class GameMap;
 class Outcome;
 
+enum class AIState {
+    IDLE,
+    HUNTING
+};
+
 // TODO move somewhere else
 class AIAction
 {
@@ -31,6 +36,8 @@ class MonsterAi
 
     public:
 
+        AIState state;
+
         Entity * owner;
 
         virtual AIAction * pick_action(Entity * player, GameMap * game_map);
@@ -39,6 +46,9 @@ class MonsterAi
          * Creates a json representation of the component
          */
         json to_json();
+
+
+        MonsterAi();
 
         static MonsterAi * from_json(json j);
 

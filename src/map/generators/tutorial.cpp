@@ -171,7 +171,7 @@ GameMap * generate_room(int width, int height)
     level->add_entity(droid);
 
     // Monsters
-    //add_monsters(level);
+    add_monsters(level);
 
     // Add some items in the room
     //add_items(level);

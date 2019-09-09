@@ -6,13 +6,17 @@
 
 #include "../map/GameMap.hpp"
 
+MonsterAi::MonsterAi()
+{
+    state = AIState::IDLE;
+}
 
 AIAction * MonsterAi::pick_action(Entity * player, GameMap * game_map)
 {
     return nullptr;
 }
 
-SeekerAi::SeekerAi()
+SeekerAi::SeekerAi() : MonsterAi()
 {
     // Init coordinates of player's last known position to invalid values,
     // meaning that the current monster has no memory of such position.
@@ -26,10 +30,13 @@ AIAction * SeekerAi::pick_action(Entity * player, GameMap * game_map)
 {
     // First check if he sees the player
     // TODO replace 100 with actual sight range
+    
+    // Save the distance from player
+    float dist = l2(owner->x, owner->y, player->x, player->y);
+
     if (game_map->aux_fov_map_100->isInFov(owner->x, owner->y) && \
-        l2(owner->x, owner->y, player->x, player->y) <=100)
+         dist <= 100)
     {
-        
         // Update player's last known position
         player_last_seen_x = player->x;
         player_last_seen_y = player->y;
@@ -41,14 +48,17 @@ AIAction * SeekerAi::pick_action(Entity * player, GameMap * game_map)
     {
         // TODO move in separate action object
         
-        game_map->path_astar->compute(
-            owner->x, owner->y, player_last_seen_x, player_last_seen_y);
+        if (dist >= 2)
+        {
+            game_map->path_astar->compute(
+                owner->x, owner->y, player_last_seen_x, player_last_seen_y);
 
-        int new_x, new_y;
+            int new_x, new_y;
 
-        game_map->path_astar->get(0, &new_x, &new_y);
-        owner->x = new_x;
-        owner->y = new_y;
+            game_map->path_astar->get(0, &new_x, &new_y);
+            owner->x = new_x;
+            owner->y = new_y;
+        }
 
         //return new ChaseAIAction();
     }
