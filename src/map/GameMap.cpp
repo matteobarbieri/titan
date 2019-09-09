@@ -235,7 +235,11 @@ void GameMap::initialize_fov_map()
         }
     }
 
+    // Copy properties for auxiliary fov map
     aux_fov_map_100->copy(fov_map);
+
+    // Initialize path variable
+    path_astar = new TCODPath(fov_map, 0.0f);
 }
 
 void GameMap::update_fov_map_properties(int x, int y, bool walkable, bool transparent)

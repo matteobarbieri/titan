@@ -20,6 +20,8 @@ SeekerAi::SeekerAi()
     player_last_seen_y = -1;
 }
 
+
+
 AIAction * SeekerAi::pick_action(Entity * player, GameMap * game_map)
 {
     // First check if he sees the player
@@ -32,6 +34,23 @@ AIAction * SeekerAi::pick_action(Entity * player, GameMap * game_map)
         player_last_seen_x = player->x;
         player_last_seen_y = player->y;
 
+    }
+
+    // If there is a last position
+    if (player_last_seen_x != -1 && (owner->x != player_last_seen_x || owner->y != player_last_seen_y))
+    {
+        // TODO move in separate action object
+        
+        game_map->path_astar->compute(
+            owner->x, owner->y, player_last_seen_x, player_last_seen_y);
+
+        int new_x, new_y;
+
+        game_map->path_astar->get(0, &new_x, &new_y);
+        owner->x = new_x;
+        owner->y = new_y;
+
+        //return new ChaseAIAction();
     }
 
     //DEBUG("I last saw the player at (" << player_last_seen_x << ", " << player_last_seen_y << ")");

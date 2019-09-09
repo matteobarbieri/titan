@@ -186,6 +186,8 @@ class GameMap
         // vision range and other things
         TCODMap * aux_fov_map_100;
 
+        TCODPath * path_astar;
+
         // Lists of map parts
         std::vector<Room *> rooms;
         
