@@ -33,6 +33,17 @@ class AIAction
     
 };
 
+class AttackPlayerAIAction : public AIAction
+{
+    protected:
+
+        void _execute();
+
+    public:
+
+        AttackPlayerAIAction(Entity * monster, Entity * player, GameMap * game_map);
+};
+
 class MoveTowardsAIAction : public AIAction
 {
     protected:

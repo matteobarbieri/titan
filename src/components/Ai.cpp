@@ -6,6 +6,8 @@
 
 #include "../map/GameMap.hpp"
 
+#include "../components/Fighter.hpp"
+
 MonsterAi::MonsterAi()
 {
     state = AIState::IDLE;
@@ -38,6 +40,18 @@ SeekerAi::SeekerAi() : MonsterAi()
     player_last_seen_x = -1;
     player_last_seen_y = -1;
 }
+
+void AttackPlayerAIAction::_execute()
+{
+    monster->fighter->attack_melee(player);
+}
+
+AttackPlayerAIAction::AttackPlayerAIAction(
+        Entity * monster, Entity * player, GameMap * game_map) :
+    AIAction(monster, player, game_map)
+{
+}
+
 
 MoveTowardsAIAction::MoveTowardsAIAction(
         Entity * monster, Entity * player, GameMap * game_map,
@@ -90,9 +104,9 @@ AIAction * SeekerAi::pick_action(Entity * player, GameMap * game_map)
         }
         else
         {
+            return new AttackPlayerAIAction(owner, player, game_map);
         }
 
-        //return new ChaseAIAction();
     }
 
     //DEBUG("I last saw the player at (" << player_last_seen_x << ", " << player_last_seen_y << ")");
