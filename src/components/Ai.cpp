@@ -11,6 +11,21 @@ MonsterAi::MonsterAi()
     state = AIState::IDLE;
 }
 
+AIAction::AIAction(
+    Entity * monster, Entity * player, GameMap * game_map) :
+        monster(monster), player(player), game_map(game_map)
+{
+}
+
+void AIAction::execute()
+{
+    return _execute();
+}
+
+void AIAction::_execute()
+{
+}
+
 AIAction * MonsterAi::pick_action(Entity * player, GameMap * game_map)
 {
     return nullptr;
@@ -24,7 +39,26 @@ SeekerAi::SeekerAi() : MonsterAi()
     player_last_seen_y = -1;
 }
 
+MoveTowardsAIAction::MoveTowardsAIAction(
+        Entity * monster, Entity * player, GameMap * game_map,
+        int target_x, int target_y) :
+    AIAction(monster, player, game_map),
+    target_x(target_x), target_y(target_y)
+{
+}
 
+void MoveTowardsAIAction::_execute()
+{
+    game_map->path_astar->compute(
+    monster->x, monster->y, target_x, target_y);
+
+    int new_x, new_y;
+
+    game_map->path_astar->get(0, &new_x, &new_y);
+    monster->x = new_x;
+    monster->y = new_y;
+
+}
 
 AIAction * SeekerAi::pick_action(Entity * player, GameMap * game_map)
 {
@@ -50,14 +84,12 @@ AIAction * SeekerAi::pick_action(Entity * player, GameMap * game_map)
         
         if (dist >= 2)
         {
-            game_map->path_astar->compute(
-                owner->x, owner->y, player_last_seen_x, player_last_seen_y);
-
-            int new_x, new_y;
-
-            game_map->path_astar->get(0, &new_x, &new_y);
-            owner->x = new_x;
-            owner->y = new_y;
+            return new MoveTowardsAIAction(
+                owner, player, game_map,
+                player_last_seen_x, player_last_seen_y);
+        }
+        else
+        {
         }
 
         //return new ChaseAIAction();
@@ -66,14 +98,6 @@ AIAction * SeekerAi::pick_action(Entity * player, GameMap * game_map)
     //DEBUG("I last saw the player at (" << player_last_seen_x << ", " << player_last_seen_y << ")");
 
     return nullptr;
-}
-
-Outcome * AIAction::execute()
-{
-
-    std::cout << "Must implement AIAction::execute" << std::endl;
-    // TODO implement
-    return 0;
 }
 
 json MonsterAi::to_json()

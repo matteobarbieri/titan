@@ -18,15 +18,33 @@ enum class AIState {
 // TODO move somewhere else
 class AIAction
 {
+    protected:
+
+        virtual void _execute();
 
     public:
 
-        Outcome * execute();
+        Entity * monster;
+        Entity * player;
+        GameMap * game_map;
+
+        AIAction(Entity * monster, Entity * player, GameMap * game_map);
+        void execute();
     
 };
 
-class ChaseAIAction : public AIAction
+class MoveTowardsAIAction : public AIAction
 {
+    protected:
+
+        void _execute();
+
+    public:
+
+        int target_x;
+        int target_y;
+
+        MoveTowardsAIAction(Entity * monster, Entity * player, GameMap * game_map, int, int);
 };
 
 class MonsterAi

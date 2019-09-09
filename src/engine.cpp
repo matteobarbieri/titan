@@ -186,16 +186,21 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
                     // choose the action
 
                     // Execute the action
+                    //if (entity_action != nullptr)
+                        //outcome = entity_action->execute();
+                    //else
+                        //outcome = nullptr;
+
                     if (entity_action != nullptr)
-                        outcome = entity_action->execute();
-                    else
-                        outcome = nullptr;
+                    {
+                        entity_action->execute();
+                    }
 
                     // Side effect of action outcome
-                    if (outcome != nullptr)
-                    {
-                        game_state->update(outcome, fov_recompute, redraw_terrain);
-                    }
+                    //if (outcome != nullptr)
+                    //{
+                        //game_state->update(outcome, fov_recompute, redraw_terrain);
+                    //}
 
                     // TODO destroy entity_action?
                     // TODO destroy outcome?

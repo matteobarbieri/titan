@@ -54,7 +54,6 @@ Outcome * MoveAction::_execute()
 
             if (target != nullptr)
             {
-                DEBUG("There is a " << target->name);
                 player->interact_with(target, game_map);
                 interacted_with_something = true;
             }
