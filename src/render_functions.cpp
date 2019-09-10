@@ -55,6 +55,38 @@ void render_entity_label(
 
 }
 
+void render_death_screen(Entity * player)
+{
+
+    // XXX Use submenu console
+
+    // Extract width and height
+    int w = Consoles::singleton().submenu->getWidth();
+    int h = Consoles::singleton().submenu->getHeight();
+
+    int ds_x = (int)((w - DEATH_SCREEN_WIDTH))/2;
+    int ds_y = (int)((h - DEATH_SCREEN_HEIGHT))/2;
+
+    // Draw frame
+    // Reset the color to white, just in case
+    Consoles::singleton().submenu->setDefaultForeground(TCODColor::white);
+    Consoles::singleton().submenu->setDefaultBackground(TCODColor::black);
+    Consoles::singleton().submenu->printFrame(
+        ds_x, ds_y,
+        DEATH_SCREEN_WIDTH, DEATH_SCREEN_HEIGHT,
+        true, TCOD_BKGND_DEFAULT, "You dead");
+
+    // Print the entity's name
+    //Consoles::singleton().submenu->setDefaultForeground(TCODColor::amber);
+    //Consoles::singleton().submenu->printf(
+        //3, 3, "%s", player->name.c_str());
+
+    //Consoles::singleton().submenu->setDefaultBackground(player->color());
+    //Consoles::singleton().submenu->rect(
+        //3, 5, 10, 10, true, TCOD_BKGND_SET);
+}
+
+
 void render_entity_frame(Entity * entity)
 {
     // Extract width and height
@@ -517,6 +549,21 @@ void render_all(
     if (game_state->game_phase == INVENTORY_ITEM_MENU)
     {
         item_submenu(player, game_state->selected_inventory_item);
+    }
+
+    // Inventory item submenu
+    if (game_state->game_phase == PLAYER_DEAD)
+    {
+        // First, clear the console
+        Consoles::singleton().submenu->clear();
+
+        render_death_screen(player);
+        TCODConsole::blit(
+            Consoles::singleton().submenu, 0, 0,
+            TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT,
+            Consoles::singleton().main_window,
+            0, 0,
+            1.0f, 0.8f);
     }
 
     // Finally blit main window console on root console

@@ -57,4 +57,10 @@ void render_entity_label(
 void render_entity_frame(
     Entity * entity);
 
+/**
+ * Print a frame containing information about the entity.
+ */
+void render_death_screen(
+    Entity * player);
+
 #endif
