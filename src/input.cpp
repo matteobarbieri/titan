@@ -42,6 +42,19 @@ char handle_main_menu(TCOD_key_t key)
     }
 }
 
+Action * handle_player_dead_keys(TCOD_key_t key, TCOD_mouse_t mouse)
+{
+    /////////////////////////////////////////
+    /////////// GO TO MAIN MENU /////////////
+    /////////////////////////////////////////
+
+    if (key.vk == TCODK_ESCAPE)
+        return new ShowMenuAction();
+
+    return nullptr;
+
+}
+
 Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 {
     char key_char = -1;
@@ -227,7 +240,6 @@ Action * handle_targeting_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 }
 
 
-
 Action * handle_inventory_item_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 {
     char key_char = -1;
@@ -385,6 +397,13 @@ Action * handle_input(
         /////////////////////////////////////////
         case TARGETING:
             return handle_targeting_keys(key, mouse);
+            break;
+
+        /////////////////////////////////////////
+        ////////////// PLAYER DEAD //////////////
+        /////////////////////////////////////////
+        case PLAYER_DEAD:
+            return handle_player_dead_keys(key, mouse);
             break;
 
         default:

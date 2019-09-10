@@ -381,8 +381,6 @@ void render_all(
                 fov_map, game_map, top_x, top_y);
         }
 
-        //std::cout << "render_all: Checkpoint 5" << std::endl;
-
         // Blit terrain layer on root console
         TCODConsole::blit(
             Consoles::singleton().terrain_layer,

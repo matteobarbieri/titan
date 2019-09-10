@@ -106,7 +106,6 @@ bool Fighter::is_dead() const
 void Fighter::die()
 {
 
-
     // Build message
     std::ostringstream stringStream;
 
@@ -117,7 +116,7 @@ void Fighter::die()
     MessageLog::singleton().add_message(
         {stringStream.str(), TCODColor::yellow});
 
-    // Update components
+    // Update appearance
     owner->symbol = '%';
     owner->color(TCODColor::darkRed);
     owner->render_order(CORPSE);
@@ -128,12 +127,17 @@ void Fighter::die()
     stringStream << "remains of " << owner->name;
     owner->name = stringStream.str();
 
-    // TODO check these guys
-    delete owner->fighter;
-    owner->fighter = nullptr;
+    // Only monsters (that is, entities which are not the players) have the ai
+    // component.
+    if (owner->ai != nullptr)
+    {
+        delete owner->ai;
+        owner->ai = nullptr;
+        
+        delete owner->fighter;
+        owner->fighter = nullptr;
 
-    delete owner->ai;
-    owner->ai = nullptr;
+    }
 
 }
 

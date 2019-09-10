@@ -10,6 +10,7 @@
 #include "actions/Action.hpp"
 
 #include "components/Ai.hpp"
+#include "components/Fighter.hpp"
 
 #include "input.hpp"
 #include "fov_functions.hpp"
@@ -76,8 +77,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
         if (game_state->entity_targeted != 0 && redraw_terrain)
         {
 
-            //std::cout << "play_game: Checkpoint 3" << std::endl;
-
             game_state->entity_targeted = check_if_still_in_sight(
                 game_map->fov_map, game_state->entity_targeted);
 
@@ -95,7 +94,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
             // TODO same for focused entity?
 
         }
-
 
         render_all(
             player, game_map, game_map->fov_map,
@@ -196,6 +194,15 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
                         entity_action->execute();
                     }
 
+                    // Check if player is dead after each entity action
+                    // Since the fighter component of an entity is deleted on
+                    // death, this is a way to check if the player is dead.
+                    if (player->fighter->is_dead())
+                    {
+                        game_state->game_phase = PLAYER_DEAD;
+                        break;
+                    }
+
                     // Side effect of action outcome
                     //if (outcome != nullptr)
                     //{
@@ -203,23 +210,26 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
                     //}
 
                     // TODO destroy entity_action?
-                    // TODO destroy outcome?
 
                 }
             }
 
-            // Go back to player's turn state
-            game_state->game_phase = PLAYERS_TURN;
+            if (game_state->game_phase != PLAYER_DEAD)
+            {
+                // Go back to player's turn state
+                game_state->game_phase = PLAYERS_TURN;
+                // Increase turn number
+                game_state->current_turn++;
+            }
+
             redraw_entities = true;
             redraw_terrain = true;
 
-            // Increase turn number
-            game_state->current_turn++;
-
         } // if (game_state->is_enemies_turn())
 
-    }
-}
+    } // while (!TCODConsole::root->isWindowClosed())
+
+} // play_game()
 
 /**
  * Initialize a new game
