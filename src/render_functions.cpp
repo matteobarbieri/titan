@@ -60,6 +60,9 @@ void render_death_screen(Entity * player)
 
     // XXX Use submenu console
 
+    // First, clear the console
+    Consoles::singleton().submenu->clear();
+
     // Extract width and height
     int w = Consoles::singleton().submenu->getWidth();
     int h = Consoles::singleton().submenu->getHeight();
@@ -429,6 +432,10 @@ void render_all(
     // Now render the health bar
     Consoles::singleton().panel->setDefaultBackground(TCODColor::black);
     Consoles::singleton().panel->clear();
+    //Consoles::singleton().panel->rect(
+        //BAR_WIDTH + 2, 0,
+        //PANEL_WIDTH-BAR_WIDTH-2, PANEL_HEIGHT,
+        //TCOD_BKGND_NONE);
 
     // Retrieve the list of visible messages
     //std::vector<Message> visible_messages =
@@ -448,7 +455,7 @@ void render_all(
 
         // TODO replace deprecated function
         Consoles::singleton().panel->printEx(
-            BAR_WIDTH + 2, y, TCOD_BKGND_NONE, TCOD_LEFT,
+            BAR_WIDTH + 2, y, TCOD_BKGND_SET, TCOD_LEFT,
             "%s", visible_messages[i].text.c_str());
 
         // Increment height of next message
@@ -459,8 +466,6 @@ void render_all(
         Consoles::singleton().panel, 1, 1, BAR_WIDTH,
         "HP", player->fighter->hp() , player->fighter->max_hp(),
         TCODColor::lightRed, TCODColor::darkerRed);
-
-        //std::cout << "render_all: Checkpoint 6" << std::endl;
 
     // Show current dungeon level
     // TODO change with non deprecated function?
@@ -554,9 +559,6 @@ void render_all(
     // Inventory item submenu
     if (game_state->game_phase == PLAYER_DEAD)
     {
-        // First, clear the console
-        Consoles::singleton().submenu->clear();
-
         render_death_screen(player);
         TCODConsole::blit(
             Consoles::singleton().submenu, 0, 0,
