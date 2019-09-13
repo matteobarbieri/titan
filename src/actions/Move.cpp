@@ -92,14 +92,27 @@ Outcome * MoveAction::_execute()
         bool fov_recompute = redraw_terrain;
 
         // Return outcome
-        // TODO enable message log
         Outcome * outcome = new Outcome(
             ENEMY_TURN, // TODO this is the right one
-            //PLAYERS_TURN, // TODO this is the WRONG one (for debug purposes)
             fov_recompute,
             redraw_terrain);
 
         //# TODO check terrain/enemies!!!
+
+        return outcome;
+
+}
+
+
+Outcome * WaitAction::_execute()
+{
+
+
+        // Return outcome
+        Outcome * outcome = new Outcome(
+            ENEMY_TURN, // TODO this is the right one
+            true,
+            true);
 
         return outcome;
 

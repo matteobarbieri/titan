@@ -6,6 +6,19 @@
 // Forward declarations
 class Outcome;
 
+class WaitAction : public Action
+{
+
+    public:
+
+        // Constructors
+
+        // The two integers determining direction
+
+        Outcome * _execute();
+
+};
+
 class MoveAction : public Action
 {
 
