@@ -256,7 +256,6 @@ void render_bar(TCODConsole * console, int x, int y, int total_width,
 
 */
 
-// TODO missing message_log parameter
 void render_all(
     Entity * player,
     GameMap * game_map, TCODMap * fov_map,
@@ -596,18 +595,14 @@ void render_all(
 /*
 
 
-*/
-
-
-/*
-
-
     # Show character screen
     elif game_phase == GamePhase.CHARACTER_SCREEN:
         character_screen(player, 30, 10, screen_width, screen_height)
 
     return top_x, top_y
 */
+
+    TCODConsole::root->flush();
 
 }
 

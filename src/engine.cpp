@@ -107,8 +107,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
         redraw_terrain = false;
         redraw_entities = false;
 
-        TCODConsole::root->flush();
-
         ////////////////////////////////////////////
         ////////////// PLAYER'S TURN ///////////////
         ////////////////////////////////////////////
