@@ -55,8 +55,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
     /////////////// MAIN LOOP //////////////////
     ////////////////////////////////////////////
 
-    //std::cout << "play_game: Checkpoint 1" << std::endl;
-
     while (!TCODConsole::root->isWindowClosed())
     {
 
@@ -117,8 +115,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 
         if (game_state->is_players_turn())
         {
-
-            //std::cout << "play_game: Checkpoint 6" << std::endl;
 
             ////////////////////////////////////////////
             ///////////// EXECUTE ACTIONS //////////////
