@@ -48,7 +48,8 @@ void render_entity_label(
     terrain_layer->printEx(
         entity->x - top_x - 1,
         entity->y - top_y - 2,
-        TCOD_BKGND_NONE,
+        //TCOD_BKGND_NONE,
+        TCOD_BKGND_SET,
         TCOD_LEFT,
         "%s",
         entity->name.c_str());
