@@ -264,6 +264,9 @@ void render_all(
     int & top_x, int & top_y)
 {
 
+    // Clear root console
+    TCODConsole::root->clear();
+
     /////////////////////////////////////////
     ///////// Render terrain first //////////
     /////////////////////////////////////////
@@ -371,8 +374,6 @@ void render_all(
             }
         }
 
-        //std::cout << "render_all: Checkpoint 3" << std::endl;
-
         if (game_state->entity_targeted != 0)
         {
 
@@ -393,7 +394,6 @@ void render_all(
 
         }
 
-
     }
 
 
@@ -403,8 +403,6 @@ void render_all(
 
     if (redraw_terrain)
     {
-
-        //std::cout << "render_all: Checkpoint 4" << std::endl;
 
         // Draw all entities in the list in the correct order
         // Entities are kept sorted in GameMap::add_entity
@@ -594,7 +592,6 @@ void render_all(
 
 /*
 
-
     # Show character screen
     elif game_phase == GamePhase.CHARACTER_SCREEN:
         character_screen(player, 30, 10, screen_width, screen_height)
@@ -605,15 +602,3 @@ void render_all(
     TCODConsole::root->flush();
 
 }
-
-
-/*
-
-from game_state import GamePhase
-
-from menus import (
-    character_screen, inventory_menu, item_submenu)
-
-*/
-
-
