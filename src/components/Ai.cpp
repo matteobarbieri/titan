@@ -1,18 +1,117 @@
 #include "Ai.hpp"
 #include <iostream>
 
+#include "../utils.hpp"
+#include "../Entity.hpp"
+
+#include "../map/GameMap.hpp"
+
+#include "../components/Fighter.hpp"
+
+MonsterAi::MonsterAi()
+{
+    state = AIState::IDLE;
+}
+
+AIAction::AIAction(
+    Entity * monster, Entity * player, GameMap * game_map) :
+        monster(monster), player(player), game_map(game_map)
+{
+}
+
+void AIAction::execute()
+{
+    return _execute();
+}
+
+void AIAction::_execute()
+{
+}
+
 AIAction * MonsterAi::pick_action(Entity * player, GameMap * game_map)
 {
     return nullptr;
 }
 
-
-Outcome * AIAction::execute()
+SeekerAi::SeekerAi() : MonsterAi()
 {
+    // Init coordinates of player's last known position to invalid values,
+    // meaning that the current monster has no memory of such position.
+    player_last_seen_x = -1;
+    player_last_seen_y = -1;
+}
 
-    std::cout << "Must implement AIAction::execute" << std::endl;
-    // TODO implement
-    return 0;
+void AttackPlayerAIAction::_execute()
+{
+    monster->fighter->attack_melee(player);
+}
+
+AttackPlayerAIAction::AttackPlayerAIAction(
+        Entity * monster, Entity * player, GameMap * game_map) :
+    AIAction(monster, player, game_map)
+{
+}
+
+
+MoveTowardsAIAction::MoveTowardsAIAction(
+        Entity * monster, Entity * player, GameMap * game_map,
+        int target_x, int target_y) :
+    AIAction(monster, player, game_map),
+    target_x(target_x), target_y(target_y)
+{
+}
+
+void MoveTowardsAIAction::_execute()
+{
+    game_map->path_astar->compute(
+    monster->x, monster->y, target_x, target_y);
+
+    int new_x, new_y;
+
+    game_map->path_astar->get(0, &new_x, &new_y);
+    monster->x = new_x;
+    monster->y = new_y;
+
+}
+
+AIAction * SeekerAi::pick_action(Entity * player, GameMap * game_map)
+{
+    // First check if he sees the player
+    // TODO replace 100 with actual sight range
+    
+    // Save the distance from player
+    float dist = l2(owner->x, owner->y, player->x, player->y);
+
+    if (game_map->aux_fov_map_100->isInFov(owner->x, owner->y) && \
+         dist <= 100)
+    {
+        // Update player's last known position
+        player_last_seen_x = player->x;
+        player_last_seen_y = player->y;
+
+    }
+
+    // If there is a last position
+    if (player_last_seen_x != -1 && (owner->x != player_last_seen_x || owner->y != player_last_seen_y))
+    {
+        // TODO move in separate action object
+        
+        if (dist >= 2)
+        {
+            return new MoveTowardsAIAction(
+                owner, player, game_map,
+                player_last_seen_x, player_last_seen_y);
+        }
+        else
+        {
+            return new AttackPlayerAIAction(owner, player, game_map);
+        }
+
+    }
+
+    //DEBUG("I last saw the player at (" << player_last_seen_x << ", " << player_last_seen_y << ")");
+
+    return nullptr;
 }
 
 json MonsterAi::to_json()

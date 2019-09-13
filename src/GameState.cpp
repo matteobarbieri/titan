@@ -14,8 +14,10 @@ bool GameState::is_players_turn()
         game_phase == PLAYERS_TURN ||
         game_phase == ENTITY_INFO ||
         game_phase == CHARACTER_SCREEN ||
+        game_phase == TARGETING ||
         game_phase == INVENTORY_ITEM_MENU ||
-        game_phase == INVENTORY_MENU;
+        game_phase == INVENTORY_MENU ||
+        game_phase == PLAYER_DEAD;
 }
 
 bool GameState::is_enemies_turn()

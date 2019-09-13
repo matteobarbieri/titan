@@ -45,9 +45,6 @@ Outcome * MoveAction::_execute()
         bool position_changed = false;
         bool interacted_with_something = false;
 
-        // TODO enable messages
-        //messages = list()
-
         // If it is not blocked, do something, either move to a new location,
         // attack an enemy or interact with an entity
         if (! game_map->is_blocked(destination_x, destination_y))
@@ -55,7 +52,7 @@ Outcome * MoveAction::_execute()
             Entity * target = get_blocking_entities_at_location(
                 game_map->entities(), destination_x, destination_y);
 
-            if (target != 0)
+            if (target != nullptr)
             {
                 player->interact_with(target, game_map);
                 interacted_with_something = true;
@@ -92,14 +89,27 @@ Outcome * MoveAction::_execute()
         bool fov_recompute = redraw_terrain;
 
         // Return outcome
-        // TODO enable message log
         Outcome * outcome = new Outcome(
             ENEMY_TURN, // TODO this is the right one
-            //PLAYERS_TURN, // TODO this is the WRONG one (for debug purposes)
             fov_recompute,
             redraw_terrain);
 
         //# TODO check terrain/enemies!!!
+
+        return outcome;
+
+}
+
+
+Outcome * WaitAction::_execute()
+{
+
+
+        // Return outcome
+        Outcome * outcome = new Outcome(
+            ENEMY_TURN, // TODO this is the right one
+            true,
+            true);
 
         return outcome;
 

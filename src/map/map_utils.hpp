@@ -1,3 +1,5 @@
+#ifndef ROGUE_20177_MAP_UTILS
+#define ROGUE_20177_MAP_UTILS
 
 // Forward declaration
 class GameMap;
@@ -69,3 +71,4 @@ def _intersection_area(xy1, xy2):
         return 0
 
 */
+#endif /* ifndef ROGUE_20177_MAP_UTILS */

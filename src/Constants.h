@@ -38,6 +38,10 @@
 #define MAP_WIDTH 110
 #define MAP_HEIGHT 100
 
+// Death screen frame geometry
+#define DEATH_SCREEN_WIDTH 70
+#define DEATH_SCREEN_HEIGHT 40
+
 #define DEBUG(T) std::cout << T << std::endl
 
 #define MESSAGE_LOG_N_ROWS 5

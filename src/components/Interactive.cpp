@@ -21,7 +21,7 @@ void InteractiveDoor::unlock(GameMap * game_map)
         owner->blocks(false);
 
         owner->symbol = '-';
-        game_map->fov_map->setProperties(
+        game_map->update_fov_map_properties(
             owner->x, owner->y, true, true);
 }
 
@@ -30,10 +30,10 @@ bool InteractiveDoor::player_has_key(Entity * player)
 
     // Go through every player's items and check if any of them has a matching
     // key_id
-    for (int i=0; i<(int)player->inventory->items().size(); i++)
+    for (int i=0; i<(int)player->inventory->items.size(); i++)
     {
         // Shortcut
-        Item * item_component = player->inventory->items()[i]->item;
+        Item * item_component = player->inventory->items[i]->item;
         if (item_component != nullptr && item_component->key_id == key_id)
         {
             return true;

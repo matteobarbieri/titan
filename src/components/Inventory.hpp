@@ -20,9 +20,6 @@ class Inventory
 
     private:
 
-        // Keep track separately of items and their associated letters
-        std::vector<Entity *> _items;
-        std::vector<char> _item_letters;
 
         int _capacity;
 
@@ -31,6 +28,7 @@ class Inventory
         Inventory(int capacity);
         ~Inventory();
 
+        std::vector<Entity *> items;
         std::vector<char> available_letters;
 
         // TODO return message?
@@ -41,8 +39,6 @@ class Inventory
         void drop(Entity * item, GameMap * level, Entity * player);
 
         void remove_item(Entity * item);
-
-        std::vector<Entity *> items();
 
         /**
          * Return the position of the item in the inventory's items list

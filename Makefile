@@ -21,16 +21,6 @@ sdl_samples_ccsrc = $(wildcard src/samples/*.cpp) \
 
 sdl_samples_obj = $(sdl_samples_ccsrc:.cpp=.o)
 
-# to delete
-text := hello a b c
-
-comma := ${null},${null}
-space := ${null} ${null}
-${space} := ${space} # ${ } is a space. Neat huh?
-
-
-sobj = $(subst  $(space),$(comma),$(strip $(obj)))
-
 # TODO check this guy
 LDFLAGS = -Isrc -L. -ltcod -lSDL2 -g -Wl,-rpath=.
 LDFLAGS_SDL = -Isrc -L. -ltcod -lSDL2 -lSDL2_image -lSDL2_ttf -g -Wl,-rpath=.
@@ -41,17 +31,5 @@ titan: $(obj)
 clean:
 	rm -f $(obj)
 
-wclean:
-	rm -Force -ErrorAction Ignore $(sobj)
-
 sdl_samples: $(sdl_samples_obj)
 	$(CXX) -o $@ $^ $(LDFLAGS_SDL)
-
-testc:
-	cmd /c del /q -ErrorAction Ignore .\\src\\Consoles.o
-
-testd:
-	powershell "Remove-Item -ErrorAction Ignore $(sobj)"
-
-teste:
-	powershell "echo aaa"

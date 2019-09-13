@@ -10,18 +10,52 @@ class Entity;
 class GameMap;
 class Outcome;
 
+enum class AIState {
+    IDLE,
+    HUNTING
+};
+
 // TODO move somewhere else
 class AIAction
 {
-    private:
-        
+    protected:
+
+        virtual void _execute();
 
     public:
-        AIAction();
-        virtual ~AIAction();
 
-        Outcome * execute();
+        Entity * monster;
+        Entity * player;
+        GameMap * game_map;
+
+        AIAction(Entity * monster, Entity * player, GameMap * game_map);
+        void execute();
     
+};
+
+class AttackPlayerAIAction : public AIAction
+{
+    protected:
+
+        void _execute();
+
+    public:
+
+        AttackPlayerAIAction(Entity * monster, Entity * player, GameMap * game_map);
+};
+
+class MoveTowardsAIAction : public AIAction
+{
+    protected:
+
+        void _execute();
+
+    public:
+
+        int target_x;
+        int target_y;
+
+        MoveTowardsAIAction(Entity * monster, Entity * player, GameMap * game_map, int, int);
 };
 
 class MonsterAi
@@ -31,17 +65,39 @@ class MonsterAi
 
     public:
 
+        AIState state;
+
         Entity * owner;
 
-        AIAction * pick_action(Entity * player, GameMap * game_map);
+        virtual AIAction * pick_action(Entity * player, GameMap * game_map);
 
         /**
          * Creates a json representation of the component
          */
         json to_json();
 
+
+        MonsterAi();
+
         static MonsterAi * from_json(json j);
 
+};
+
+/**
+ * A monster which will try and get in melee range of the player as soon as he
+ * sees him.
+ */
+class SeekerAi : public MonsterAi
+{
+    public:
+
+        int player_last_seen_x;
+        int player_last_seen_y;
+
+        AIAction * pick_action(Entity * player, GameMap * game_map) override;
+
+
+        SeekerAi();
 };
 
 #endif /* ROGUE_2077_AI */

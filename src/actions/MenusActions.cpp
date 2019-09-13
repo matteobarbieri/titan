@@ -57,13 +57,18 @@ Outcome * SelectInventoryItemAction::_execute()
     Entity * aux;
     bool found = false;
 
-    for (int i=0; i<(int)player->inventory->items().size(); i++)
+    //DEBUG((int)player->inventory->items().size());
+
+    for (int i=0; i<(int)player->inventory->items.size(); i++)
     {
         // shortcut to entity
-        aux = player->inventory->items()[i];
+        aux = player->inventory->items[i];
 
         // Check if the letter coincides and the item is not currently equipped
         //if (aux->item->item_letter == item_letter && !aux->item->equipped)
+        
+        //DEBUG(aux->item->item_letter);
+
         if (aux->item->item_letter == item_letter)
         {
             game_state->selected_inventory_item = aux;

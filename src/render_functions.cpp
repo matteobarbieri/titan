@@ -5,7 +5,9 @@
 #include "Constants.h"
 
 #include "Entity.hpp"
+
 #include "components/Fighter.hpp"
+#include "components/Usable.hpp"
 
 #include "map/GameMap.hpp"
 #include "map/Tile.hpp"
@@ -46,12 +48,48 @@ void render_entity_label(
     terrain_layer->printEx(
         entity->x - top_x - 1,
         entity->y - top_y - 2,
-        TCOD_BKGND_NONE,
+        //TCOD_BKGND_NONE,
+        TCOD_BKGND_SET,
         TCOD_LEFT,
         "%s",
         entity->name.c_str());
 
 }
+
+void render_death_screen(Entity * player)
+{
+
+    // XXX Use submenu console
+
+    // First, clear the console
+    Consoles::singleton().submenu->clear();
+
+    // Extract width and height
+    int w = Consoles::singleton().submenu->getWidth();
+    int h = Consoles::singleton().submenu->getHeight();
+
+    int ds_x = (int)((w - DEATH_SCREEN_WIDTH))/2;
+    int ds_y = (int)((h - DEATH_SCREEN_HEIGHT))/2;
+
+    // Draw frame
+    // Reset the color to white, just in case
+    Consoles::singleton().submenu->setDefaultForeground(TCODColor::white);
+    Consoles::singleton().submenu->setDefaultBackground(TCODColor::black);
+    Consoles::singleton().submenu->printFrame(
+        ds_x, ds_y,
+        DEATH_SCREEN_WIDTH, DEATH_SCREEN_HEIGHT,
+        true, TCOD_BKGND_DEFAULT, "You dead");
+
+    // Print the entity's name
+    //Consoles::singleton().submenu->setDefaultForeground(TCODColor::amber);
+    //Consoles::singleton().submenu->printf(
+        //3, 3, "%s", player->name.c_str());
+
+    //Consoles::singleton().submenu->setDefaultBackground(player->color());
+    //Consoles::singleton().submenu->rect(
+        //3, 5, 10, 10, true, TCOD_BKGND_SET);
+}
+
 
 void render_entity_frame(Entity * entity)
 {
@@ -143,23 +181,6 @@ std::string get_names_under_mouse(
     return names;
 }
 
-/*
-
-def draw_entity(terrain_layer, entity,
-                fov_map, game_map, top_x=0, top_y=0):
-
-    # Only draw entities that are in player's fov
-    if (libtcod.map_is_in_fov(fov_map, entity.x, entity.y) or
-        (entity.stairs and game_map.tiles[entity.x][entity.y].explored)):
-        # (entity.c['stairs'] and game_map.tiles[entity.x][entity.y].explored):
-        # TODO include case for doors
-
-        # print("Bgcolor: {}".format(bg_color))
-
-
-
-*/
-
 void draw_entity(TCODConsole * terrain_layer, Entity * entity,
                  TCODMap * fov_map, GameMap * game_map, int top_x, int top_y)
 {
@@ -200,18 +221,6 @@ void draw_entity(TCODConsole * terrain_layer, Entity * entity,
 
 }
 
-/*
-def render_all(terrain_layer, panel, entity_frame, inventory_frame,
-               main_window,
-               player,
-               game_map, fov_map, fov_recompute,
-               redraw_terrain, redraw_entities, message_log,
-               constants, mouse,
-               game_state, current_turn):
-
-
-*/
-
 void render_bar(TCODConsole * console, int x, int y, int total_width,
                std::string name, int value, int maximum,
                TCODColor bar_color, TCODColor back_color)
@@ -247,7 +256,6 @@ void render_bar(TCODConsole * console, int x, int y, int total_width,
 
 */
 
-// TODO missing message_log parameter
 void render_all(
     Entity * player,
     GameMap * game_map, TCODMap * fov_map,
@@ -256,12 +264,8 @@ void render_all(
     int & top_x, int & top_y)
 {
 
-    //std::cout << "render_all: Checkpoint 1" << std::endl;
-
-    /*
-    // TODO tmp workaround
-    game_phase = game_state.game_phase
-    */
+    // Clear root console
+    TCODConsole::root->clear();
 
     /////////////////////////////////////////
     ///////// Render terrain first //////////
@@ -278,11 +282,43 @@ void render_all(
     top_y = std::max(0, top_y);
     top_y = std::min(game_map->height - SCREEN_HEIGHT + PANEL_HEIGHT, top_y);
 
+    int target_x = -100;
+    int target_y = -100;
+
+    int range_flag = 1;
+    AOEUsable * a;
+
+    // Force terrain redrawing on targeting
+    if (game_state->game_phase == TARGETING)
+    {
+        redraw_terrain = true;
+
+        target_x = mouse->cx;
+        target_y = mouse->cy;
+
+        a = (AOEUsable *)game_state->selected_inventory_item->usable;
+        //Targetable * a = (Targetable *)game_state->selected_inventory_item->usable;
+        
+        if (game_map->aux_fov_map_100->isInFov(target_x+top_x, target_y+top_y))
+        {
+            if (a->is_in_range(target_x, target_y, player->x-top_x, player->y-top_y))
+            {
+                range_flag = 1;
+            }
+            else
+            {
+                range_flag = 3;
+            }
+        }
+        else
+        {
+            range_flag = 3;
+        }
+    }
+
     // Only redraw terrain if needed
     if (redraw_terrain)
     {
-
-        //std::cout << "render_all: Checkpoint 2" << std::endl;
 
         // Clear the console before drawing on it
         Consoles::singleton().terrain_layer->clear();
@@ -297,12 +333,33 @@ void render_all(
                 // Compute array index of current tile
                 int tile_index = compute_tile_index(x, y, game_map->width);
 
+
+                // Determine if tile must be highlighted in a special way
+                // because targeted
+                // TODO improve
+                int target_flag = 0;
+
+                //if (x-top_x == target_x and y-top_y == target_y)
+                if (game_state->game_phase == TARGETING)
+                {
+
+                    if (a->is_in_radius(target_x, target_y, x-top_x, y-top_y))
+                    {
+                        target_flag = range_flag;
+                    }
+
+                    //if (x-top_x == target_x and y-top_y == target_y)
+                    //{
+                        //target_flag = 1;
+                    //}
+                }
+
                 if (visible)
                 {
 
                     (game_map->tiles[tile_index])->render_at(
                         Consoles::singleton().terrain_layer,
-                        x-top_x, y-top_y, visible);
+                        x-top_x, y-top_y, visible, target_flag);
 
                     (game_map->tiles[tile_index])->explored(true);
                 }
@@ -312,12 +369,10 @@ void render_all(
                     // Render as currently out of sight
                     (game_map->tiles[tile_index])->render_at(
                         Consoles::singleton().terrain_layer,
-                        x-top_x, y-top_y, visible);
+                        x-top_x, y-top_y, visible, target_flag);
                 }
             }
         }
-
-        //std::cout << "render_all: Checkpoint 3" << std::endl;
 
         if (game_state->entity_targeted != 0)
         {
@@ -339,7 +394,6 @@ void render_all(
 
         }
 
-
     }
 
 
@@ -350,8 +404,6 @@ void render_all(
     if (redraw_terrain)
     {
 
-        //std::cout << "render_all: Checkpoint 4" << std::endl;
-
         // Draw all entities in the list in the correct order
         // Entities are kept sorted in GameMap::add_entity
         for (int i=0; i < (int)game_map->entities().size(); i++)
@@ -361,8 +413,6 @@ void render_all(
                 Consoles::singleton().terrain_layer, game_map->entities()[i],
                 fov_map, game_map, top_x, top_y);
         }
-
-        //std::cout << "render_all: Checkpoint 5" << std::endl;
 
         // Blit terrain layer on root console
         TCODConsole::blit(
@@ -380,6 +430,10 @@ void render_all(
     // Now render the health bar
     Consoles::singleton().panel->setDefaultBackground(TCODColor::black);
     Consoles::singleton().panel->clear();
+    //Consoles::singleton().panel->rect(
+        //BAR_WIDTH + 2, 0,
+        //PANEL_WIDTH-BAR_WIDTH-2, PANEL_HEIGHT,
+        //TCOD_BKGND_NONE);
 
     // Retrieve the list of visible messages
     //std::vector<Message> visible_messages =
@@ -399,7 +453,7 @@ void render_all(
 
         // TODO replace deprecated function
         Consoles::singleton().panel->printEx(
-            BAR_WIDTH + 2, y, TCOD_BKGND_NONE, TCOD_LEFT,
+            BAR_WIDTH + 2, y, TCOD_BKGND_SET, TCOD_LEFT,
             "%s", visible_messages[i].text.c_str());
 
         // Increment height of next message
@@ -410,8 +464,6 @@ void render_all(
         Consoles::singleton().panel, 1, 1, BAR_WIDTH,
         "HP", player->fighter->hp() , player->fighter->max_hp(),
         TCODColor::lightRed, TCODColor::darkerRed);
-
-        //std::cout << "render_all: Checkpoint 6" << std::endl;
 
     // Show current dungeon level
     // TODO change with non deprecated function?
@@ -502,6 +554,18 @@ void render_all(
         item_submenu(player, game_state->selected_inventory_item);
     }
 
+    // Inventory item submenu
+    if (game_state->game_phase == PLAYER_DEAD)
+    {
+        render_death_screen(player);
+        TCODConsole::blit(
+            Consoles::singleton().submenu, 0, 0,
+            TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT,
+            Consoles::singleton().main_window,
+            0, 0,
+            1.0f, 0.8f);
+    }
+
     // Finally blit main window console on root console
     TCODConsole::blit(
         Consoles::singleton().main_window,
@@ -528,13 +592,6 @@ void render_all(
 
 /*
 
-
-*/
-
-
-/*
-
-
     # Show character screen
     elif game_phase == GamePhase.CHARACTER_SCREEN:
         character_screen(player, 30, 10, screen_width, screen_height)
@@ -542,16 +599,6 @@ void render_all(
     return top_x, top_y
 */
 
+    TCODConsole::root->flush();
+
 }
-
-
-/*
-
-from game_state import GamePhase
-
-from menus import (
-    character_screen, inventory_menu, item_submenu)
-
-*/
-
-

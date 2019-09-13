@@ -179,7 +179,14 @@ class GameMap
 
         int dungeon_level;
 
+        // The main FOV map, used for vision
         TCODMap * fov_map;
+
+        // A series of auxiliary FOV maps, used to determine other entities's
+        // vision range and other things
+        TCODMap * aux_fov_map_100;
+
+        TCODPath * path_astar;
 
         // Lists of map parts
         std::vector<Room *> rooms;
@@ -211,6 +218,9 @@ class GameMap
         void place_player(Entity * player);
 
         void dig(MapPart * part, int pad=0);
+
+        void recompute_fov(Entity * player);
+        void update_fov_map_properties(int x, int y, bool walkable, bool transparent);
 
         /**
          * Turn a single tile to floor

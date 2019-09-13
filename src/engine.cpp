@@ -10,6 +10,7 @@
 #include "actions/Action.hpp"
 
 #include "components/Ai.hpp"
+#include "components/Fighter.hpp"
 
 #include "input.hpp"
 #include "fov_functions.hpp"
@@ -72,17 +73,12 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
         
         if (fov_recompute)
         {
-            game_map->fov_map->computeFov(
-                player->x, player->y, FOV_RADIUS,
-                FOV_LIGHT_WALLS, FOV_ALGORITHM);
-
+            game_map->recompute_fov(player);
         }
 
         // If the player move, check if targeted entity is still in sight
         if (game_state->entity_targeted != 0 && redraw_terrain)
         {
-
-            //std::cout << "play_game: Checkpoint 3" << std::endl;
 
             game_state->entity_targeted = check_if_still_in_sight(
                 game_map->fov_map, game_state->entity_targeted);
@@ -102,7 +98,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 
         }
 
-
         render_all(
             player, game_map, game_map->fov_map,
             fov_recompute, redraw_terrain,
@@ -117,16 +112,12 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
         redraw_terrain = false;
         redraw_entities = false;
 
-        TCODConsole::root->flush();
-
         ////////////////////////////////////////////
         ////////////// PLAYER'S TURN ///////////////
         ////////////////////////////////////////////
 
         if (game_state->is_players_turn())
         {
-
-            //std::cout << "play_game: Checkpoint 6" << std::endl;
 
             ////////////////////////////////////////////
             ///////////// EXECUTE ACTIONS //////////////
@@ -192,40 +183,52 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
                     // choose the action
 
                     // Execute the action
-                    if (entity_action != nullptr)
-                        outcome = entity_action->execute();
-                    else
-                        outcome = nullptr;
+                    //if (entity_action != nullptr)
+                        //outcome = entity_action->execute();
+                    //else
+                        //outcome = nullptr;
 
-                    // Side effect of action outcome
-                    if (outcome != nullptr)
+                    if (entity_action != nullptr)
                     {
-                        game_state->update(outcome, fov_recompute, redraw_terrain);
+                        entity_action->execute();
                     }
 
+                    // Check if player is dead after each entity action
+                    // Since the fighter component of an entity is deleted on
+                    // death, this is a way to check if the player is dead.
+                    if (player->fighter->is_dead())
+                    {
+                        game_state->game_phase = PLAYER_DEAD;
+                        break;
+                    }
+
+                    // Side effect of action outcome
+                    //if (outcome != nullptr)
+                    //{
+                        //game_state->update(outcome, fov_recompute, redraw_terrain);
+                    //}
+
                     // TODO destroy entity_action?
-                    // TODO destroy outcome?
 
                 }
             }
 
-            // Go back to player's turn state
-            game_state->game_phase = PLAYERS_TURN;
-            redraw_entities = true;
+            if (game_state->game_phase != PLAYER_DEAD)
+            {
+                // Go back to player's turn state
+                game_state->game_phase = PLAYERS_TURN;
+                // Increase turn number
+                game_state->current_turn++;
+            }
 
-            // Increase turn number
-            game_state->current_turn++;
+            redraw_entities = true;
+            redraw_terrain = true;
 
         } // if (game_state->is_enemies_turn())
 
-    }
-}
+    } // while (!TCODConsole::root->isWindowClosed())
 
-/*
-
-from death_functions import kill_monster, kill_player
-
-*/
+} // play_game()
 
 /**
  * Initialize a new game
