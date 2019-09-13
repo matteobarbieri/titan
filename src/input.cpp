@@ -113,10 +113,10 @@ Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     if (key.vk == TCODK_ESCAPE)
         return new ShowMenuAction();
 
-    /*
-    elif key_char == 'z':
-        return WaitAction()
-    */
+    
+    if (key_char == 'z')
+        return new WaitAction();
+    
 
     /////////////////////////////////////////
     ///////////////// MISC //////////////////
