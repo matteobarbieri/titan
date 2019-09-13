@@ -130,9 +130,29 @@ void close()
 	SDL_Quit();
 }
 
+void render_all(TCODConsole * a)
+{
+    TCODConsole::root->clear();
+    a->clear();
+
+
+    a->setDefaultBackground(TCODColor::green);
+    a->setDefaultBackground(TCODColor::yellow);
+    a->rect(0, 0, 10, 10, true);
+
+    TCODConsole::blit(
+        a,
+        0, 0, 20, 20,
+        TCODConsole::root,
+        50, 10);
+
+}
 
 int main(int argc, char *argv[])
 {
+    TCODConsole::root->setDefaultBackground(TCODColor::black);
+
+    TCODConsole * a = new TCODConsole(20, 20);
 
     // Set Custom font to use
     TCODConsole::setCustomFont(
@@ -210,6 +230,9 @@ int main(int argc, char *argv[])
 
     while (!TCODConsole::root->isWindowClosed())
     {
+
+        render_all(a);
+        TCODConsole::root->flush();
 
         //Start cap timer
         capTimer.start();
