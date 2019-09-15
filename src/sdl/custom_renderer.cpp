@@ -5,36 +5,58 @@
 
 #include "custom_renderer.hpp"
 
+#define SAMPLE_SCREEN_X 50
+#define SAMPLE_SCREEN_Y 10
+#define SAMPLE_SCREEN_W 20
+#define SAMPLE_SCREEN_H 20
+
 SampleRenderer::SampleRenderer() : effectNum(0), delay(3.0f) {
     noise=new TCODNoise(3);
+    renderer = NULL;
 }
 
 SampleRenderer::~SampleRenderer() {
     delete noise;
 }
 
+void render_square()
+{
+}
+
 void SampleRenderer::render(void *sdlSurface) {
-    DEBUG("Here!");
+
     SDL_Surface *screen = (SDL_Surface *)sdlSurface;
+
+    // Initialize/create renderer the first time
+    if (renderer == NULL)
+    {
+        DEBUG("Initilizing renderer!");
+        renderer = SDL_CreateSoftwareRenderer(screen);
+    }
+
+    //DEBUG("Here!");
     // now we have almighty access to the screen's precious pixels !!
     // get the font character size
     int charw,charh;
     TCODSystem::getCharSize(&charw,&charh);
+
     // compute the sample console position in pixels
-    //int samplex = SAMPLE_SCREEN_X * charw;
-    //int sampley = SAMPLE_SCREEN_Y * charh;
-    int samplex = 0 * charw;
-    int sampley = 0 * charh;
+    int samplex = SAMPLE_SCREEN_X * charw;
+    int sampley = SAMPLE_SCREEN_Y * charh;
+
+    //int samplex = 0 * charw;
+    //int sampley = 0 * charh;
+
     delay -= TCODSystem::getLastFrameLength();
     if ( delay < 0.0f ) {
         delay = 3.0f;
         effectNum = (effectNum + 1) % 3;
     }
     switch(effectNum) {
-        case 0 : blur(screen,samplex,sampley,SCREEN_WIDTH * charw,SCREEN_HEIGHT * charh); break;
-        case 1 : explode(screen,samplex,sampley,SCREEN_WIDTH * charw,SCREEN_HEIGHT * charh); break;
-        //case 2 : burn(screen,samplex,sampley,SCREEN_WIDTH * charw,SCREEN_HEIGHT * charh); break;
-        case 2 : explode(screen,samplex,sampley,SCREEN_WIDTH * charw,SCREEN_HEIGHT * charh); break;
+        case 0 : blur(screen,samplex,sampley,SAMPLE_SCREEN_W * charw, SAMPLE_SCREEN_H * charh); break;
+        case 1 : explode(screen,samplex,sampley, SAMPLE_SCREEN_W * charw, SAMPLE_SCREEN_H* charh); break;
+        //case 2 : burn(screen,samplex,sampley, SAMPLE_SCREEN_W * charw, SAMPLE_SCREEN_H* charh); break;
+        case 2 : explode(screen,samplex,sampley, SAMPLE_SCREEN_W * charw, SAMPLE_SCREEN_H* charh); break;
     }
 }
 
