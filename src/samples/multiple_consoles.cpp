@@ -8,6 +8,7 @@
 //#include "libtcod/console/console.h"
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_render.h>
 
 //#include "../sdl/custom_renderer.hpp"
 //#include "../sdl/timer.hpp"
@@ -53,7 +54,6 @@ void render_all(TCODConsole * a, TCODConsole * b, TCOD_Console * c, shared_ptr<t
         TCODConsole::root,
         50, 10);
 
-    
     //tcod::engine::set_tileset(ts1);
 
     b->setKeyColor(TCODColor::darkerRed);
@@ -78,9 +78,9 @@ void render_all(TCODConsole * a, TCODConsole * b, TCOD_Console * c, shared_ptr<t
     TCOD_console_clear(c);
     TCOD_console_set_alignment(c, TCOD_LEFT);
     TCOD_console_set_background_flag(c, TCOD_BKGND_SET);
-    //TCOD_console_printf(c, 1, 1, "%d, %d", 6, 7);
+    TCOD_console_printf(c, 1, 1, "%d, %d %s", 6, 7, "wewe");
 
-    //TCOD_console_blit(c, 0,0, 20, 20, NULL ,5,5, 1.0, 1.0);
+    TCOD_console_blit(c, 0,0, 20, 20, NULL ,5,5, 1.0, 1.0);
 
 }
 
@@ -88,8 +88,13 @@ int main(int argc, char *argv[])
 {
 
     bool whichts = true;
-
-    TCODSystem::setFps(30);
+    
+    // Init root console
+    TCODConsole::initRoot(
+        SCREEN_WIDTH, SCREEN_HEIGHT,
+        WINDOW_TITLE, false, TCOD_RENDERER_SDL2);
+        //WINDOW_TITLE, false, TCOD_RENDERER_GLSL);
+        //WINDOW_TITLE, false, TCOD_RENDERER_SDL);
 
     TCODConsole::root->setDefaultBackground(TCODColor::black);
 
@@ -98,8 +103,6 @@ int main(int argc, char *argv[])
 
     TCOD_Console * c = TCOD_console_new(20,20);
 
-    
-
     // Set Custom font to use
     TCODConsole::setCustomFont(
             "data/fonts/16x16-sb-ascii.png",
@@ -107,8 +110,6 @@ int main(int argc, char *argv[])
 
     //auto ts1 = tcod::engine::get_tileset();
     shared_ptr<tcod::tileset::Tileset> ts1= tcod::engine::get_tileset();
-
-        
 
     TCODConsole::setCustomFont(
             "data/fonts/terminal12x12_gs_ro.png",
@@ -122,15 +123,6 @@ int main(int argc, char *argv[])
     DEBUG(aa << " (should be 0)");
 
     tcod::engine::set_tileset(ts1);
-
-    //TCODConsole::get
-
-    // Init root console
-    TCODConsole::initRoot(
-        SCREEN_WIDTH, SCREEN_HEIGHT,
-        WINDOW_TITLE, false, TCOD_RENDERER_SDL2);
-        //WINDOW_TITLE, false, TCOD_RENDERER_GLSL);
-        //WINDOW_TITLE, false, TCOD_RENDERER_SDL);
 
     TCODSystem::setFps(30);
 
@@ -151,6 +143,10 @@ int main(int argc, char *argv[])
     stringstream timeText;
 
     int rr = 0;
+
+    SDL_Renderer * renderer = TCOD_sys_get_sdl_renderer();
+    bool renderer_check = (renderer == NULL);
+    DEBUG("Renderer check: " << renderer_check << " (should be 0)");
 
     while (!TCODConsole::root->isWindowClosed())
     {
