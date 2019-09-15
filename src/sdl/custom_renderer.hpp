@@ -18,6 +18,7 @@ class SampleRenderer : public ITCODSDLRenderer {
         SDL_Renderer * renderer;
 
         void burn(SDL_Surface *screen, int samplex, int sampley, int samplew, int sampleh); 
+        void render_square(int samplex, int sampley, int samplew, int sampleh); 
         void explode(SDL_Surface *screen, int samplex, int sampley, int samplew, int sampleh);
         void blur(SDL_Surface *screen, int samplex, int sampley, int samplew, int sampleh);
 
