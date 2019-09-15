@@ -50,7 +50,7 @@ template <typename IndexType, typename DistType = ptrdiff_t>
 class Pathfinder
 {
  public:
-  using heap_node = std::pair<DistType, IndexType>;
+  using heap_node = std::tuple<DistType, IndexType>;
   using heap_type = std::vector<heap_node>;
   Pathfinder() = default;
   /**
@@ -84,16 +84,21 @@ class Pathfinder
       Heuristic& heuristic,
       MarkPath& mark_path)
   {
+    auto compare = [&](const heap_node& a, const heap_node& b) {
+      return heuristic(std::get<0>(a), std::get<1>(a)) > heuristic(std::get<0>(b), std::get<1>(b));
+    };
     while (heap_.size()) {
-      const heap_node current_node = heap_.front();
-      if (is_goal(current_node.first, current_node.second)) { return; }
-      std::pop_heap(heap_.begin(), heap_.end(), heap_compare);
+      std::pop_heap(heap_.begin(), heap_.end(), compare);
+      const heap_node current_node = heap_.back();
       heap_.pop_back();
-      const DistType current_dist = current_node.first;
-      const IndexType current_pos = current_node.second;
+      if (is_goal(std::get<0>(current_node), std::get<1>(current_node))) {
+        return;
+      }
+      const DistType& current_dist = std::get<0>(current_node);
+      const IndexType& current_pos = std::get<1>(current_node);
       if (current_dist > distance_at(current_pos)) { continue; }
       auto edge_lambda = [&](IndexType dest, DistType cost) {
-          add_edge(current_pos, dest, cost, distance_at, heuristic, mark_path);
+          add_edge(current_pos, dest, cost, distance_at, heuristic, mark_path, compare);
       };
       get_edges(current_pos, edge_lambda);
     }
@@ -101,19 +106,23 @@ class Pathfinder
   /**
    *  Configure the heap.
    */
-  void set_heap(heap_type&& heap) noexcept
+  template <typename Heuristic>
+  void set_heap(heap_type&& heap, const Heuristic& heuristic) noexcept
   {
+    auto compare = [&](const heap_node& a, const heap_node& b) {
+      return heuristic(std::get<0>(a), std::get<1>(a)) < heuristic(std::get<0>(b), std::get<1>(b));
+    };
     heap_ = std::move(heap);
-    std::make_heap(heap_.begin(), heap_.end(), heap_compare);
+    std::make_heap(heap_.begin(), heap_.end(), compare);
   }
  private:
   /**
    *  Compute an edge, adding the results to the distance map and heap.
    */
-  template <typename DistanceAt, typename Heuristic, typename MarkPath>
+  template <typename DistanceAt, typename Heuristic, typename MarkPath, typename CompareFunc>
   void add_edge(IndexType origin, IndexType dest, DistType cost,
                 DistanceAt& distance_at, Heuristic& heuristic,
-                MarkPath& mark_path)
+                MarkPath& mark_path, CompareFunc& compare)
   {
     if (cost <= 0) { return; }
     DistType distance = distance_at(origin) + cost;
@@ -121,14 +130,7 @@ class Pathfinder
     distance_at(dest) = distance;
     mark_path(dest, origin);
     heap_.emplace_back(heuristic(distance, dest), dest);
-    std::push_heap(heap_.begin(), heap_.end(), heap_compare);
-  }
-  /**
-   *  Compare values in the heap.
-   */
-  static bool heap_compare(const heap_node& a, const heap_node& b) noexcept
-  {
-    return a.first < b.first;
+    std::push_heap(heap_.begin(), heap_.end(), compare);
   }
   /**
    *  A priority queue of which nodes to check next.
@@ -153,7 +155,7 @@ void path_clear(Vector2<IndexType>& path_grid) noexcept
 {
   for (ptrdiff_t y = 0; y < path_grid.height(); ++y) {
     for (ptrdiff_t x = 0; x < path_grid.width(); ++x) {
-      path_grid.at(x, y) = {x, y};
+      path_grid.at({ y, x }) = { y, x };
     }
   }
 }

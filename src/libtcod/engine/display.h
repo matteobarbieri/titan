@@ -143,6 +143,13 @@ class TerminalDisplay: public Display {
 namespace console {
 TCODLIB_API void init_root(int w, int h, const std::string& title,
                            bool fullscreen, TCOD_renderer_t renderer);
+TCODLIB_API void init_root(
+    int w,
+    int h,
+    const std::string& title,
+    bool fullscreen,
+    TCOD_renderer_t renderer,
+    bool vsync);
 } // namespace console
 } // namespace tcod
 #endif // __cplusplus
@@ -163,14 +170,37 @@ TCODLIB_API void init_root(int w, int h, const std::string& title,
  *
  *  Returns 0 on success, or -1 on an error, you can check the error with
  *  TCOD_sys_get_error()
+ *
+ *  `renderer` and vsync settings can be overridden by the `TCOD_RENDERER` or
+ *  `TCOD_VSYNC` environment variables.
+ *
+ *  Valid case-sensitive options for `TCOD_RENDERER` are:
+ *  - sdl
+ *  - opengl
+ *  - glsl
+ *  - sdl2
+ *  - opengl2
+ *
+ *  Valid options for `TCOD_VSYNC` are `0` or `1`.
+ *
  *  \rst
  *  .. versionchanged:: 1.12
  *      Now returns -1 on error instead of crashing.
+ *
+ *  .. versionchanged:: 1.13
+ *      Added the `TCOD_RENDERER` and `TCOD_VSYNC` overrides.
  *  \endrst
  */
-TCODLIB_CAPI int TCOD_console_init_root(int w, int h, const char* title,
-                                        bool fullscreen,
-                                        TCOD_renderer_t renderer);
+
+TCODLIB_CAPI TCOD_NODISCARD int TCOD_console_init_root(
+    int w, int h, const char* title, bool fullscreen, TCOD_renderer_t renderer);
+TCODLIB_CAPI TCOD_NODISCARD int TCOD_console_init_root_(
+    int w,
+    int h,
+    const char* title,
+    bool fullscreen,
+    TCOD_renderer_t renderer,
+    bool vsync);
 /**
  *  Shutdown libtcod.  This must be called before your program exits.
  *  \rst
@@ -248,4 +278,10 @@ TCODLIB_CAPI struct SDL_Renderer* TCOD_sys_get_sdl_renderer(void);
  */
 TCODLIB_CAPI int TCOD_sys_accumulate_console(const TCOD_Console* console);
 TCODLIB_CAPI int TCOD_sys_accumulate_console_(const TCOD_Console* console, const struct SDL_Rect* viewport);
+TCODLIB_CAPI TCOD_NODISCARD int TCOD_sys_init_sdl2_renderer_(
+    int width,
+    int height,
+    const char* title,
+    int window_flags,
+    int renderer_flags);
 #endif // LIBTCOD_ENGINE_DISPLAY_H_

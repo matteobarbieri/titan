@@ -51,6 +51,7 @@ class MatrixView {
   using size_type = ptrdiff_t;
   using shape_type = std::array<size_type, D>;
   using strides_type = std::array<size_type, D>;
+  using index_type = std::array<size_type, D>;
   MatrixView() = default;
   MatrixView(T* ptr, const shape_type& shape, const strides_type& strides)
   : data_{reinterpret_cast<char*>(ptr)}, shape_{shape}, strides_{strides}
@@ -58,20 +59,20 @@ class MatrixView {
   MatrixView(T* ptr, const shape_type& shape)
   : MatrixView(ptr, shape, get_contiguous_strides(shape))
   {}
-  T& operator[](shape_type index) noexcept
+  T& operator[](index_type index) noexcept
   {
     return *get_data_at(index);
   }
-  const T& operator[](shape_type index) const noexcept
+  const T& operator[](index_type index) const noexcept
   {
     return *get_data_at(index);
   }
-  T& at(shape_type index)
+  T& at(index_type index)
   {
     range_check(index);
     return (*this)[index];
   }
-  const T& at(shape_type index) const
+  const T& at(index_type index) const
   {
     range_check(index);
     return (*this)[index];
@@ -80,8 +81,29 @@ class MatrixView {
   {
     return shape_;
   }
+  bool in_range(size_type n) const noexcept
+  {
+    return 0 <= n && n < shape_.at(0);
+  }
+  bool in_range(index_type index) const noexcept
+  {
+    for (size_t i = 0; i < shape_.size(); ++i) {
+      if (index.at(i) < 0 || index.at(i) >= shape_.at(i)) {
+        return false;
+      }
+    }
+    return true;
+  }
  private:
-  T* get_data_at(shape_type index)
+  T* get_data_at(index_type index)
+  {
+    auto ptr = data_;
+    for (size_t i = 0; i < shape_.size(); ++i) {
+      ptr += index.at(i) * strides_.at(i);
+    }
+    return reinterpret_cast<T*>(ptr);
+  }
+  const T* get_data_at(index_type index) const
   {
     auto ptr = data_;
     for (size_t i = 0; i < shape_.size(); ++i) {
@@ -97,22 +119,9 @@ class MatrixView {
         pop_array(strides_)
     };
   }
-  bool in_bounds(size_type n) const noexcept
-  {
-    return 0 <= n && n < shape_.at(0);
-  }
-  bool in_bounds(shape_type index) const noexcept
-  {
-    for (size_t i = 0; i < shape_.size(); ++i) {
-      if (index.at(i) < 0 || index.at(i) >= shape_.at(i)) {
-        return false;
-      }
-    }
-    return true;
-  }
   void range_check(size_type n) const
   {
-    if (in_bounds(n)) { return; }
+    if (in_range(n)) { return; }
     throw std::out_of_range(
         std::string("Out of bounds lookup {")
         + std::to_string(n)
@@ -120,9 +129,9 @@ class MatrixView {
         + array_as_string(shape_)
         + ".");
   }
-  void range_check(shape_type index) const
+  void range_check(index_type index) const
   {
-    if (in_bounds(index)) { return; }
+    if (in_range(index)) { return; }
     throw std::out_of_range(
         std::string("Out of bounds lookup ")
         + array_as_string(index)
@@ -170,6 +179,7 @@ class Matrix {
   using size_type = typename view_type::size_type;
   using shape_type = typename view_type::shape_type;
   using strides_type = typename view_type::strides_type;
+  using index_type = typename view_type::shape_type;
   Matrix() = default;
   Matrix(const shape_type& shape)
   : data_(get_size_from_shape(shape)), view_(data_.data(), shape)
@@ -193,25 +203,33 @@ class Matrix {
   {
     return data_.cend();
   }
-  value_type& operator[](shape_type index) noexcept
+  value_type& operator[](index_type index) noexcept
   {
     return view_[index];
   }
-  const value_type& operator[](shape_type index) const noexcept
+  const value_type& operator[](index_type index) const noexcept
   {
     return view_[index];
   }
-  value_type& at(shape_type index)
+  value_type& at(index_type index)
   {
     return view_.at(index);
   }
-  const value_type& at(shape_type index) const
+  const value_type& at(index_type index) const
   {
     return view_.at(index);
   }
   shape_type get_shape() const
   {
     return view_.get_shape();
+  }
+  bool in_range(size_type n) const noexcept
+  {
+    return view_.in_range(n);
+  }
+  bool in_range(index_type index) const noexcept
+  {
+    return view_.in_range(index);
   }
  private:
   static size_t get_size_from_shape(const shape_type& shape) noexcept

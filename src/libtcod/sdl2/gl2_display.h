@@ -32,6 +32,10 @@
 #ifndef LIBTCOD_SDL2_GL2_DISPLAY_H_
 #define LIBTCOD_SDL2_GL2_DISPLAY_H_
 
+#ifdef __cplusplus
+#include <memory>
+#endif // __cplusplus
+
 #include "gl2_renderer.h"
 #include "sdl2_display.h"
 
@@ -43,15 +47,23 @@ class OpenGL2Display: public WindowedDisplay {
       std::shared_ptr<Tileset> tileset,
       std::array<int, 2> window_size,
       int window_flags,
-      const std::string& title);
+      const std::string& title,
+      bool vsync);
+
+  OpenGL2Display(const OpenGL2Display&) = delete;
+  OpenGL2Display& operator=(const OpenGL2Display&) = delete;
+  OpenGL2Display(OpenGL2Display&&) noexcept;
+  OpenGL2Display& operator=(OpenGL2Display&&) noexcept;
+  ~OpenGL2Display();
+
   virtual void set_tileset(std::shared_ptr<Tileset> tileset) override;
   virtual void accumulate(const TCOD_Console*) override;
   virtual void accumulate(const TCOD_Console*, const struct SDL_Rect*) override;
   virtual void present(const TCOD_Console*) override;
   virtual auto read_pixels() const -> Image override;
  private:
-  std::shared_ptr<void> glcontext_;
-  OpenGL2Renderer tcod_renderer_;
+  struct impl;
+  std::unique_ptr<impl> impl_;
 };
 } // namespace sdl2
 } // namespace tcod

@@ -162,14 +162,10 @@
 /* bool type */
 #include <stdbool.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* ansi C lacks support for those functions */
-TCODLIB_API char *TCOD_strdup(const char *s);
-TCODLIB_API int TCOD_strcasecmp(const char *s1, const char *s2);
-TCODLIB_API int TCOD_strncasecmp(const char *s1, const char *s2, size_t n);
+TCODLIB_CAPI char *TCOD_strdup(const char *s);
+TCODLIB_CAPI int TCOD_strcasecmp(const char *s1, const char *s2);
+TCODLIB_CAPI int TCOD_strncasecmp(const char *s1, const char *s2, size_t n);
 
 /* Define vswprintf across platforms. */
 #ifdef _WIN32
@@ -199,8 +195,20 @@ TCODLIB_API int TCOD_strncasecmp(const char *s1, const char *s2, size_t n);
 #define TCODLIB_FORMAT(str_index, first_arg)
 #endif
 
-#ifdef __cplusplus
-}
+#if defined(__cplusplus) && __cplusplus >= 201703L
+#define TCOD_NODISCARD [[nodiscard]]
+#elif defined(_MSC_VER)
+#define TCOD_NODISCARD _Check_return_
+#elif defined(__GNUC__)
+#define TCOD_NODISCARD __attribute__ ((warn_unused_result))
+#else
+#define TCOD_NODISCARD
+#endif
+
+#if defined(__GNUC__) && !defined(__clang__)
+#if __GNUC__ < 6 || (__GNUC__ == 6 && __GNUC_MINOR__ < 1)
+#error "GCC must be version 6.1 or later."
+#endif
 #endif
 
 #endif /* LIBTCOD_PORTABILITY_H */

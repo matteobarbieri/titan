@@ -36,7 +36,7 @@
 
 namespace tcod {
 namespace sdl2 {
-static std::shared_ptr<void> new_gl_context(OpenGL2Display& self)
+static std::shared_ptr<void> new_gl_context(OpenGL2Display& self, bool vsync)
 {
   std::shared_ptr<void> new_context(
       SDL_GL_CreateContext(self.get_sdl_window()),
@@ -45,22 +45,39 @@ static std::shared_ptr<void> new_gl_context(OpenGL2Display& self)
   if(!gladLoadGLLoader(SDL_GL_GetProcAddress)) {
     throw std::runtime_error("Failed to invoke the GLAD loader.");
   }
-  SDL_GL_SetSwapInterval(0);
+  SDL_GL_SetSwapInterval(vsync);
   return new_context;
 }
-OpenGL2Display::OpenGL2Display(std::shared_ptr<Tileset> tileset,
-                         std::array<int, 2> window_size, int window_flags,
-                         const std::string& title)
+
+struct OpenGL2Display::impl {
+  impl(OpenGL2Display& self, bool vsync, std::shared_ptr<Tileset> tileset)
+  : glcontext(new_gl_context(self, vsync)), tcod_renderer(tileset)
+  {}
+  std::shared_ptr<void> glcontext;
+  OpenGL2Renderer tcod_renderer;
+};
+
+OpenGL2Display::OpenGL2Display(
+    std::shared_ptr<Tileset> tileset,
+    std::array<int, 2> window_size,
+    int window_flags,
+    const std::string& title,
+    bool vsync)
 : WindowedDisplay(window_size, window_flags | SDL_WINDOW_OPENGL, title),
-  glcontext_(new_gl_context(*this)),
-  tcod_renderer_(tileset)
+  impl_(std::make_unique<impl>(*this, vsync, tileset))
 {}
+
+OpenGL2Display::OpenGL2Display(OpenGL2Display&&) noexcept = default;
+OpenGL2Display& OpenGL2Display::operator=(OpenGL2Display&&) noexcept = default;
+OpenGL2Display::~OpenGL2Display() = default;
+
+
 void OpenGL2Display::set_tileset(std::shared_ptr<Tileset> tileset)
 {
   if (!tileset) {
     throw std::invalid_argument("tileset must not be nullptr.");
   }
-  tcod_renderer_ = OpenGL2Renderer(tileset);
+  impl_->tcod_renderer = OpenGL2Renderer(tileset);
 }
 void OpenGL2Display::accumulate(const TCOD_Console* console)
 {
@@ -75,7 +92,7 @@ void OpenGL2Display::accumulate(const TCOD_Console* console, const struct SDL_Re
     return accumulate(console, &default_viewport);
   }
   glViewport(viewport->x, viewport->y, viewport->w, viewport->h);
-  tcod_renderer_.render(console);
+  impl_->tcod_renderer.render(console);
   update_pixel_to_tile_scale(console);
 }
 void OpenGL2Display::present(const TCOD_Console* console)
@@ -85,7 +102,7 @@ void OpenGL2Display::present(const TCOD_Console* console)
 }
 auto OpenGL2Display::read_pixels() const -> Image
 {
-  return tcod_renderer_.read_pixels();
+  return impl_->tcod_renderer.read_pixels();
 }
 } // namespace sdl2
 } // namespace tcod
