@@ -21,6 +21,9 @@ sdl_samples_ccsrc = $(wildcard src/samples/*.cpp) \
 
 sdl_samples_obj = $(sdl_samples_ccsrc:.cpp=.o)
 
+mc_ccsrc = src/samples/multiple_consoles.cpp
+mc_obj = $(mc_ccsrc:.cpp=.o)
+
 # TODO check this guy
 LDFLAGS = -Isrc -L. -ltcod -lSDL2 -g -Wl,-rpath=.
 LDFLAGS_SDL = -Isrc -L. -ltcod -lSDL2 -lSDL2_image -lSDL2_ttf -g -Wl,-rpath=.
@@ -30,6 +33,9 @@ titan: $(obj)
 
 clean:
 	rm -f $(obj)
+
+mc: $(mc_obj)
+	$(CXX) -o $@ $^ $(LDFLAGS_SDL)
 
 sdl_samples: $(sdl_samples_obj)
 	$(CXX) -o $@ $^ $(LDFLAGS_SDL)
