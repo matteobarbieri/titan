@@ -73,14 +73,10 @@ class OpenGLTilesetAlias::impl : public TilesetObserver {
   auto prepare_alias(const TCOD_Console& console) -> uint32_t
   {
     for (int i = 0; i < console.w * console.h; ++i) {
-      int codepoint = console.tiles[i].ch;
-      if (codepoint >= static_cast<int>(local_map_.size())
-          || local_map_.at(codepoint) < 0) {
-        if (ensure_tile(codepoint) == -1) {
-          // The texture alias was replaced by a bigger one.
-          i = -1; // Need to start over from the beginning.
-          continue;
-        }
+      if (ensure_tile(console.tiles[i].ch) == -1) {
+        // The texture alias was replaced by a bigger one.
+        i = -1; // Need to start over from the beginning.
+        continue;
       }
     }
     return gltexture_;
@@ -118,8 +114,7 @@ class OpenGLTilesetAlias::impl : public TilesetObserver {
   }
   static pool_type pool_;
  protected:
-  virtual void on_tileset_changed(
-      const std::vector<std::pair<int, Tile&>> &changes) override
+  virtual void on_tileset_changed(const changed_tiles &changes) override
   {
     for (const auto& changed : changes) {
       // If this glyph is already in this alias then free it.
@@ -157,6 +152,9 @@ class OpenGLTilesetAlias::impl : public TilesetObserver {
     if (codepoint >= static_cast<int>(local_map_.size())) {
       local_map_.resize(codepoint + 1, -1);
     }
+    if (local_map_.at(codepoint) >= 0) {
+      return 0; // Tile already assigned.
+    }
     if (next_alias_index_ == capacity()) {
       // Replace the current texture with a larger one.
       texture_size_ *= 2;
@@ -167,6 +165,7 @@ class OpenGLTilesetAlias::impl : public TilesetObserver {
     SDL_Rect alias_rect;
     if (unallocated_.size()) {
       alias_rect = get_alias_rect(unallocated_.back());
+      local_map_.at(codepoint) = unallocated_.back();
       unallocated_.pop_back();
     } else {
       alias_rect = get_alias_rect(next_alias_index_);

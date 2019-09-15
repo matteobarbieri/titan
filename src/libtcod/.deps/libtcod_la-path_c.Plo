@@ -26,8 +26,8 @@
  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
  /usr/lib/gcc/x86_64-linux-gnu/7/include/stdbool.h \
- ../../src/libtcod/fov_types.h /usr/include/stdlib.h \
- /usr/include/x86_64-linux-gnu/bits/waitflags.h \
+ ../../src/libtcod/fov_types.h ../../src/libtcod/list.h \
+ /usr/include/stdlib.h /usr/include/x86_64-linux-gnu/bits/waitflags.h \
  /usr/include/x86_64-linux-gnu/bits/waitstatus.h \
  /usr/include/x86_64-linux-gnu/sys/types.h \
  /usr/include/x86_64-linux-gnu/bits/types/clock_t.h \
@@ -78,8 +78,7 @@
  ../../src/libtcod/console/../color/color.h \
  ../../src/libtcod/console/../utility/matrix.h ../../src/libtcod/fov.h \
  ../../src/libtcod/mersenne_types.h ../../src/libtcod/sys.h \
- ../../src/libtcod/list.h ../../src/libtcod/image.h \
- ../../src/libtcod/mouse_types.h
+ ../../src/libtcod/image.h ../../src/libtcod/mouse_types.h
 
 /usr/include/stdc-predef.h:
 
@@ -144,6 +143,8 @@
 /usr/lib/gcc/x86_64-linux-gnu/7/include/stdbool.h:
 
 ../../src/libtcod/fov_types.h:
+
+../../src/libtcod/list.h:
 
 /usr/include/stdlib.h:
 
@@ -266,8 +267,6 @@
 ../../src/libtcod/mersenne_types.h:
 
 ../../src/libtcod/sys.h:
-
-../../src/libtcod/list.h:
 
 ../../src/libtcod/image.h:
 

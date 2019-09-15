@@ -520,7 +520,8 @@ void find_resolution(void) {
 	sdl->get_closest_mode(&TCOD_ctx.actual_fullscreen_width,&TCOD_ctx.actual_fullscreen_height);
 }
 
-SDL_Surface* TCOD_sys_create_bitmap_for_console(TCOD_Console* console) {
+SDL_Surface* TCOD_sys_create_bitmap_for_console(const TCOD_Console* console)
+{
   int w = TCOD_console_get_width(console) * TCOD_ctx.font_width;
   int h = TCOD_console_get_height(console) * TCOD_ctx.font_height;
   return TCOD_sys_get_surface(w, h, false);
@@ -553,7 +554,7 @@ static TCOD_color_t blend_fade_color_(
 
 void TCOD_sys_console_to_bitmap(
     SDL_Surface* vbitmap,
-    struct TCOD_Console* console,
+    const struct TCOD_Console* console,
     struct TCOD_Console* cache)
 {
   static SDL_Surface* charmap_backup = NULL;
@@ -804,7 +805,9 @@ void TCOD_sys_startup(void) {
  */
 void TCOD_sys_shutdown(void)
 {
-  TCOD_console_delete(TCOD_ctx.root);
+  if (TCOD_ctx.root) {
+    TCOD_console_delete(TCOD_ctx.root);
+  }
   if (tcod::engine::get_display()){
     tcod::engine::set_display(nullptr);
     return;
@@ -884,11 +887,15 @@ TCOD_renderer_t TCOD_sys_get_renderer(void) {
 	return TCOD_ctx.renderer;
 }
 
-void TCOD_sys_set_renderer(TCOD_renderer_t renderer) {
-  if ( renderer == TCOD_ctx.renderer ) return;
-  TCOD_console_init_root(TCOD_ctx.root->w, TCOD_ctx.root->h,
-                         TCOD_ctx.window_title, TCOD_console_is_fullscreen(),
-                         renderer);
+int TCOD_sys_set_renderer(TCOD_renderer_t renderer) {
+  if (renderer == TCOD_ctx.renderer) { return 0; }
+  return TCOD_console_init_root(
+      TCOD_ctx.root->w,
+      TCOD_ctx.root->h,
+      TCOD_ctx.window_title,
+      TCOD_console_is_fullscreen(),
+      renderer
+  );
 }
 
 void TCOD_sys_init_screen_offset(void) {

@@ -181,7 +181,6 @@
  ../../src/libtcod/console/../sys.h \
  ../../src/libtcod/console/../mouse_types.h \
  ../../src/libtcod/console/../utility.h \
- ../../src/libtcod/console/../../vendor/stb_sprintf.h \
  ../../src/libtcod/console/../../vendor/utf8proc/utf8proc.h \
  /usr/include/c++/7/stdlib.h /usr/include/inttypes.h \
  /usr/lib/gcc/x86_64-linux-gnu/7/include-fixed/limits.h \
@@ -650,8 +649,6 @@
 ../../src/libtcod/console/../mouse_types.h:
 
 ../../src/libtcod/console/../utility.h:
-
-../../src/libtcod/console/../../vendor/stb_sprintf.h:
 
 ../../src/libtcod/console/../../vendor/utf8proc/utf8proc.h:
 

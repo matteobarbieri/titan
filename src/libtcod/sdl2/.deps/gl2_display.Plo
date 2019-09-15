@@ -1,7 +1,6 @@
 ../../src/libtcod/sdl2/gl2_display.lo: \
  ../../src/libtcod/sdl2/gl2_display.cpp /usr/include/stdc-predef.h \
- ../../src/libtcod/sdl2/gl2_display.h \
- ../../src/libtcod/sdl2/gl2_renderer.h /usr/include/c++/7/memory \
+ ../../src/libtcod/sdl2/gl2_display.h /usr/include/c++/7/memory \
  /usr/include/c++/7/bits/stl_algobase.h \
  /usr/include/x86_64-linux-gnu/c++/7/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/7/bits/os_defines.h \
@@ -136,7 +135,8 @@
  /usr/include/c++/7/bits/shared_ptr_atomic.h \
  /usr/include/c++/7/bits/atomic_base.h \
  /usr/include/c++/7/bits/atomic_lockfree_defines.h \
- /usr/include/c++/7/backward/auto_ptr.h ../../src/libtcod/sdl2/gl_alias.h \
+ /usr/include/c++/7/backward/auto_ptr.h \
+ ../../src/libtcod/sdl2/gl2_renderer.h ../../src/libtcod/sdl2/gl_alias.h \
  ../../src/libtcod/sdl2/../console.h \
  ../../src/libtcod/sdl2/../portability.h \
  /usr/lib/gcc/x86_64-linux-gnu/7/include/stdbool.h \
@@ -280,8 +280,6 @@
 /usr/include/stdc-predef.h:
 
 ../../src/libtcod/sdl2/gl2_display.h:
-
-../../src/libtcod/sdl2/gl2_renderer.h:
 
 /usr/include/c++/7/memory:
 
@@ -618,6 +616,8 @@
 /usr/include/c++/7/bits/atomic_lockfree_defines.h:
 
 /usr/include/c++/7/backward/auto_ptr.h:
+
+../../src/libtcod/sdl2/gl2_renderer.h:
 
 ../../src/libtcod/sdl2/gl_alias.h:
 
