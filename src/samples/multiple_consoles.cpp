@@ -36,8 +36,24 @@ char handle_main_menu(TCOD_key_t key)
 }
 
 
+void render_sdl()
+{
+
+    SDL_Renderer * renderer = TCOD_sys_get_sdl_renderer();
+    //SDL_RenderPresent(renderer);
+
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 0xFF);
+    //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 10);
+    SDL_Rect sdl_rect = {0, 0, 100, 100};
+    SDL_RenderFillRect(renderer, &sdl_rect);
+
+}
+
 void render_all(TCODConsole * a, TCODConsole * b, TCOD_Console * c, shared_ptr<tcod::tileset::Tileset> ts1, shared_ptr<tcod::tileset::Tileset> ts2)
 {
+    SDL_Renderer * renderer = TCOD_sys_get_sdl_renderer();
+
+
     TCODConsole::root->clear();
     a->clear();
 
@@ -73,14 +89,44 @@ void render_all(TCODConsole * a, TCODConsole * b, TCOD_Console * c, shared_ptr<t
         TCODConsole::root,
         50, 30);
 
+    int charw,charh;
+    TCODSystem::getCharSize(&charw,&charh);
+
+    //DEBUG(charw << " " << charh);
+
+    // compute size in pixels
+    int W_p = SCREEN_WIDTH * charw;
+    int H_p = SCREEN_HEIGHT * charh;
+
+    //SDL_Rect r1 = {0, 0, W_p/2, H_p/2};
+    //SDL_Rect r2 = {W_p/2, 0, W_p/2, H_p/2};
+
+    TCOD_sys_accumulate_console(TCODConsole::root->get_data());
+    //TCOD_sys_accumulate_console_(TCODConsole::root->get_data(), &r1);
+    //TCOD_sys_accumulate_console_(TCODConsole::root->get_data(), &r2);
+    //SDL_RenderPresent(renderer);
+
     // C
-    TCOD_console_set_default_background(c ,TCOD_darker_yellow);
+    //tcod::engine::set_tileset(ts2);
+    
+    /*
+    TCOD_console_set_default_background(c, TCOD_black);
     TCOD_console_clear(c);
+    TCOD_console_set_default_background(c ,TCOD_darker_yellow);
+    TCOD_console_rect(c, 0, 0, 40, 20, true, TCOD_BKGND_SET);
+
+
     TCOD_console_set_alignment(c, TCOD_LEFT);
     TCOD_console_set_background_flag(c, TCOD_BKGND_SET);
-    TCOD_console_printf(c, 1, 1, "%d, %d %s", 6, 7, "wewe");
+    TCOD_console_printf(c, 1, 1, "%d, %d %s", 6, 7, "wewea");
+    */
 
-    TCOD_console_blit(c, 0,0, 20, 20, NULL ,5,5, 1.0, 1.0);
+    //TCOD_console_blit(c, 0,0, 20, 20, NULL ,5,5, 1.0, 1.0);
+
+    // Test accumulate console
+    //TCOD_sys_accumulate_console(c);
+
+    //tcod::engine::set_tileset(ts1);
 
 }
 
@@ -97,11 +143,13 @@ int main(int argc, char *argv[])
         //WINDOW_TITLE, false, TCOD_RENDERER_SDL);
 
     TCODConsole::root->setDefaultBackground(TCODColor::black);
+    TCODConsole::flush();
 
     TCODConsole * a = new TCODConsole(20, 20);
     TCODConsole * b = new TCODConsole(20, 20);
 
-    TCOD_Console * c = TCOD_console_new(20,20);
+    //TCOD_Console * c = TCOD_console_new(20,20);
+    TCOD_Console * c = TCOD_console_new(SCREEN_WIDTH, SCREEN_HEIGHT);
 
     // Set Custom font to use
     TCODConsole::setCustomFont(
@@ -111,9 +159,13 @@ int main(int argc, char *argv[])
     //auto ts1 = tcod::engine::get_tileset();
     shared_ptr<tcod::tileset::Tileset> ts1= tcod::engine::get_tileset();
 
-    TCODConsole::setCustomFont(
-            "data/fonts/terminal12x12_gs_ro.png",
-            TCOD_FONT_LAYOUT_ASCII_INROW);
+    //TCODConsole::setCustomFont(
+            //"data/fonts/terminal12x12_gs_ro.png",
+            //TCOD_FONT_LAYOUT_ASCII_INROW);
+    //TCODConsole::setCustomFont(
+            //"data/fonts/16x16-sb-ascii.png",
+            //TCOD_FONT_LAYOUT_ASCII_INROW);
+
 
     //auto ts2 = tcod::engine::get_tileset();
     shared_ptr<tcod::tileset::Tileset> ts2= tcod::engine::get_tileset();
@@ -122,7 +174,7 @@ int main(int argc, char *argv[])
 
     DEBUG(aa << " (should be 0)");
 
-    tcod::engine::set_tileset(ts1);
+    //tcod::engine::set_tileset(ts1);
 
     TCODSystem::setFps(30);
 
@@ -148,9 +200,11 @@ int main(int argc, char *argv[])
     bool renderer_check = (renderer == NULL);
     DEBUG("Renderer check: " << renderer_check << " (should be 0)");
 
+    aa = tcod::engine::get_display() == NULL;
+    DEBUG("tcod::engine::get_display(): " << renderer_check << "(1 -> equals NULL)");
+
     while (!TCODConsole::root->isWindowClosed())
     {
-        render_all(a, b, c, ts1, ts2);
 
         // Check for a mouse or keyboard event
         ev = TCODSystem::checkForEvent(
@@ -190,10 +244,10 @@ int main(int argc, char *argv[])
         rr++;
         DEBUG(rr);
 
-        if ((rr + 1)%30 == 0)
+        if (false && (rr + 1)%30 == 0)
         {
 
-            if (false && whichts)
+            if (whichts)
             {
                 tcod::engine::set_tileset(ts2);
             }
@@ -204,7 +258,12 @@ int main(int argc, char *argv[])
             whichts = !whichts;
         }
 
-        TCODConsole::flush();
+
+        render_all(a, b, c, ts1, ts2);
+        render_sdl();
+        
+        // TODO limit FPS manually
+        SDL_RenderPresent(renderer);
 
     }
 

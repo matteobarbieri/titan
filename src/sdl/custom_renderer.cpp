@@ -71,7 +71,7 @@ bool loadMedia(SDL_Renderer * renderer)
 
     TTF_Font *gFont = NULL;
 
-	gFont = TTF_OpenFont( "DobkinPlain.ttf", 50 );
+	gFont = TTF_OpenFont( "DobkinPlain.ttf", 10 );
 	if( gFont == NULL )
 	{
 		printf( "Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError() );
@@ -128,11 +128,13 @@ void SampleRenderer::render_square(int samplex, int sampley, int samplew, int sa
 
     sdl_rect.x = samplex + samplew/2;
     sdl_rect.y = sampley + sampleh/2;
-    sdl_rect.w = samplew;
-    sdl_rect.h = sampleh;
+    //sdl_rect.w = samplew;
+    //sdl_rect.h = sampleh;
+    sdl_rect.w = 20;
+    sdl_rect.h = 20;
 
-    //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 127);
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 10);
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 0xFF);
+    //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 10);
     SDL_RenderFillRect(renderer, &sdl_rect);
 
     loadMedia(renderer);
@@ -167,11 +169,13 @@ void SampleRenderer::render(void *sdlSurface) {
         effectNum = (effectNum + 1) % 3;
     }
     switch(effectNum) {
-        case 0 : blur(screen,samplex,sampley,SAMPLE_SCREEN_W * charw, SAMPLE_SCREEN_H * charh); break;
+        //case 0 : blur(screen,samplex,sampley,SAMPLE_SCREEN_W * charw, SAMPLE_SCREEN_H * charh); break;
         //case 1 : explode(screen,samplex,sampley, SAMPLE_SCREEN_W * charw, SAMPLE_SCREEN_H* charh); break;
+        case 0 : render_square(samplex,sampley, SAMPLE_SCREEN_W * charw, SAMPLE_SCREEN_H* charh); break;
         case 1 : render_square(samplex,sampley, SAMPLE_SCREEN_W * charw, SAMPLE_SCREEN_H* charh); break;
+        case 2 : render_square(samplex,sampley, SAMPLE_SCREEN_W * charw, SAMPLE_SCREEN_H* charh); break;
         //case 2 : burn(screen,samplex,sampley, SAMPLE_SCREEN_W * charw, SAMPLE_SCREEN_H* charh); break;
-        case 2 : explode(screen,samplex,sampley, SAMPLE_SCREEN_W * charw, SAMPLE_SCREEN_H* charh); break;
+        //case 2 : explode(screen,samplex,sampley, SAMPLE_SCREEN_W * charw, SAMPLE_SCREEN_H* charh); break;
     }
 }
 

@@ -40,12 +40,12 @@ char handle_main_menu(TCOD_key_t key)
 void render_all(TCODConsole * a)
 {
     TCODConsole::root->clear();
+
+    a->setDefaultBackground(TCODColor::black);
     a->clear();
 
-
-    a->setDefaultBackground(TCODColor::green);
     a->setDefaultBackground(TCODColor::yellow);
-    a->rect(0, 0, 10, 10, true);
+    a->rect(0, 0, 10, 10, true, TCOD_BKGND_SET);
 
     TCODConsole::blit(
         a,
@@ -58,6 +58,13 @@ void render_all(TCODConsole * a)
 int main(int argc, char *argv[])
 {
 
+    // Init root console
+    TCODConsole::initRoot(
+        SCREEN_WIDTH, SCREEN_HEIGHT,
+        //WINDOW_TITLE, false, TCOD_RENDERER_SDL2);
+        //WINDOW_TITLE, false, TCOD_RENDERER_GLSL);
+        WINDOW_TITLE, false, TCOD_RENDERER_SDL);
+
     TCODSystem::setFps(30);
 
     TCODConsole::root->setDefaultBackground(TCODColor::black);
@@ -68,15 +75,6 @@ int main(int argc, char *argv[])
     TCODConsole::setCustomFont(
             "data/fonts/16x16-sb-ascii.png",
             TCOD_FONT_LAYOUT_ASCII_INROW);
-
-    // Init root console
-    TCODConsole::initRoot(
-        SCREEN_WIDTH, SCREEN_HEIGHT,
-        //WINDOW_TITLE, false, TCOD_RENDERER_SDL2);
-        //WINDOW_TITLE, false, TCOD_RENDERER_GLSL);
-        WINDOW_TITLE, false, TCOD_RENDERER_SDL);
-
-    TCODSystem::setFps(30);
 
     // Load the background image
     //TCODImage main_menu_background_image("menu_background2.png");
