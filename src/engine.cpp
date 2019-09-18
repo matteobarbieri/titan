@@ -1,5 +1,7 @@
 #include "Constants.h"
 
+#include <SDL2/SDL_ttf.h>
+
 #include "ui/menus.hpp"
 #include "Entity.hpp"
 #include "GameState.hpp"
@@ -234,6 +236,11 @@ void init_new_game(
 
 int main(int argc, char *argv[])
 {
+
+    if(TTF_Init()==-1) {
+        DEBUG("TTF_Init: " << TTF_GetError());
+        exit(2);
+    }
 
     // Set Custom font to use
     TCODConsole::setCustomFont(
