@@ -16,9 +16,13 @@ obj = $(ccsrc:.cpp=.o)
 
 # TODO check this guy
 LDFLAGS = -Isrc -L. -ltcod -g -Wl,-rpath=.
+LDFLAGS_SDL = -Isrc -L. -ltcod -lSDL2 -lSDL2_image -lSDL2_ttf -g -Wl,-rpath=.
+
+#titan: $(obj)
+	#$(CXX) -o $@ $^ $(LDFLAGS)
 
 titan: $(obj)
-	$(CXX) -o $@ $^ $(LDFLAGS)
+	$(CXX) -o $@ $^ $(LDFLAGS_SDL)
 
 clean:
 	rm -f $(obj)

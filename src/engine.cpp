@@ -243,8 +243,9 @@ int main(int argc, char *argv[])
     // Init root console
     TCODConsole::initRoot(
         SCREEN_WIDTH, SCREEN_HEIGHT,
-        WINDOW_TITLE, false, TCOD_RENDERER_GLSL);
+        //WINDOW_TITLE, false, TCOD_RENDERER_GLSL);
         //WINDOW_TITLE, false, TCOD_RENDERER_SDL);
+        WINDOW_TITLE, false, TCOD_RENDERER_SDL2);
 
     // Load the background image
     TCODImage main_menu_background_image("menu_background2.png");
@@ -263,9 +264,6 @@ int main(int argc, char *argv[])
     GameMap * game_map;
     GameState * game_state;
 
-    // TODO enable message log again
-    //message_log = None
-    
     while (!TCODConsole::root->isWindowClosed())
     {
 
@@ -313,8 +311,6 @@ int main(int argc, char *argv[])
         {
 
             // Start a new game
-            //player, game_map, message_log, game_phase = get_game_variables(
-                //constants)
             //game_phase = GamePhase.PLAYERS_TURN
             
             init_new_game(
@@ -329,26 +325,12 @@ int main(int argc, char *argv[])
             play_game_ = false;
         }
 
-        TCODConsole::root->flush();
 
         // Display the main title menu
         main_menu(&main_menu_background_image);
+        
+        TCODConsole::flush();
     }
 
     return 0;
 }
-
-/*
-
-def main():
-
-    args = parse_args()
-
-    if args.seed is None:
-        args.seed = random.randrange(sys.maxsize)
-
-    # Initialize random number generator
-    print("Seed was:", args.seed)
-    random.seed(args.seed)
-
-*/

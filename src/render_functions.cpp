@@ -1,6 +1,13 @@
+#include <algorithm>    // std::max
+
+// SDL2 includes
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_render.h>
+
 #include "libtcod.hpp"
 
-#include <algorithm>    // std::max
+
+
 
 #include "Constants.h"
 
@@ -21,6 +28,8 @@
 #include "render_functions.hpp"
 
 #include "ui/menus.hpp"
+
+
 
 Entity * check_if_still_in_sight(TCODMap * fov_map, Entity * entity)
 {
@@ -599,6 +608,11 @@ void render_all(
     return top_x, top_y
 */
 
-    TCODConsole::root->flush();
+    TCOD_sys_accumulate_console(TCODConsole::root->get_data());
+
+    SDL_Renderer * renderer = TCOD_sys_get_sdl_renderer();
+    SDL_RenderPresent(renderer);
+
+    //TCODConsole::flush();
 
 }
