@@ -57,6 +57,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
     /////////////// MAIN LOOP //////////////////
     ////////////////////////////////////////////
 
+    // TODO DEBUG remove
     game_state->game_phase = POPUP_MESSAGE;
 
     while (!TCODConsole::root->isWindowClosed())

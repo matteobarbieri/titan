@@ -139,7 +139,7 @@ void render_popup_message_text_sdl(SDL_Renderer * renderer, int frame_w, int fra
 
     TCODSystem::getCharSize(&charw,&charh);
 
-    TTF_Font* font = TTF_OpenFont("data/fonts/ttf/SairaExtraCondensed/SairaExtraCondensed-Regular.ttf", 16);
+    TTF_Font * font = TTF_OpenFont("data/fonts/ttf/SairaExtraCondensed/SairaExtraCondensed-Regular.ttf", 20);
 
     // Auxiliary variables to store size values
     int w, h;
@@ -150,8 +150,12 @@ void render_popup_message_text_sdl(SDL_Renderer * renderer, int frame_w, int fra
 
     // As TTF_RenderText_Solid could only be used on SDL_Surface then you have to
     //  create the surface first.
-    const char * the_text = "This is a very very long line of text. Let's see at which point it gets broken because of the wrapper";
-    SDL_Surface* text_surface = TTF_RenderText_Blended_Wrapped(font, the_text, text_color, 400); 
+    const char * the_text = "This is a very very long line of text. Let's see at which point it gets broken because of the wrapper This is a very very long line of text. Let's see at which point it gets broken because of the wrapper This is a very very long line of text. Let's see at which point it gets broken because of the wrapper This is a very very long line of text. Let's see at which point it gets broken because of the wrapper";
+
+    // The text wrap value is computed keeping into account a padding of 1 on
+    // each size.
+    SDL_Surface* text_surface = TTF_RenderText_Blended_Wrapped(
+        font, the_text, text_color, (frame_w-4)*charw); 
 
     // Create texture
     SDL_Texture* text_texture = SDL_CreateTextureFromSurface(renderer, text_surface);
@@ -185,7 +189,7 @@ void render_message_log_sdl(SDL_Renderer * renderer)
 
     TCODSystem::getCharSize(&charw,&charh);
 
-    TTF_Font* font = TTF_OpenFont("data/fonts/ttf/SairaExtraCondensed/SairaExtraCondensed-Regular.ttf", 16);
+    TTF_Font* font = TTF_OpenFont("data/fonts/ttf/SairaExtraCondensed/SairaExtraCondensed-Regular.ttf", 20);
 
     // Auxiliary variables to store size values
     int w, h;
