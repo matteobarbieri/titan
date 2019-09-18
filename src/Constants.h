@@ -14,6 +14,12 @@
 #define PANEL_HEIGHT 7
 #define PANEL_Y (SCREEN_HEIGHT - PANEL_HEIGHT)
 
+// Define geometry parameters for message log
+#define MESSAGE_LOG_W 30
+#define MESSAGE_LOG_H 7
+#define MESSAGE_LOG_X (SCREEN_WIDTH - MESSAGE_LOG_W)
+#define MESSAGE_LOG_Y (SCREEN_HEIGHT - MESSAGE_LOG_H)
+
 // The main console geometry (where terrain and stuff is being displayed)
 #define TERRAIN_LAYER_WIDTH SCREEN_WIDTH
 #define TERRAIN_LAYER_HEIGHT (SCREEN_HEIGHT - PANEL_HEIGHT)

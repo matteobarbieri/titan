@@ -92,6 +92,91 @@ Entity * check_if_still_in_sight(TCODMap * fov_map, Entity * entity)
         return 0;
 }
 
+void render_message_log()
+{
+    std::vector<Message> visible_messages =
+        MessageLog::singleton().visible_messages();
+
+    // Initialize message height
+    int y = 1;
+
+    // TODO consider including timestamp for message (turn no)
+    for (int i=0; i<(int)visible_messages.size(); i++)
+    {
+        // Set text color
+        Consoles::singleton().panel->setDefaultForeground(
+            visible_messages[i].color);
+
+        // TODO replace deprecated function
+        Consoles::singleton().panel->printEx(
+            BAR_WIDTH + 2, y, TCOD_BKGND_SET, TCOD_LEFT,
+            "%s", visible_messages[i].text.c_str());
+
+        // Increment height of next message
+        y++;
+    }
+
+}
+
+/**
+ * Render message log using a custom font
+ */
+void render_message_log_sdl(SDL_Renderer * renderer)
+{
+
+    int charw, charh;
+
+    TCODSystem::getCharSize(&charw,&charh);
+
+    TTF_Font* font = TTF_OpenFont("data/fonts/ttf/SairaExtraCondensed/SairaExtraCondensed-Regular.ttf", 16);
+
+    // Auxiliary variables to store size values
+    int w, h;
+    SDL_Rect Message_rect; //create a rect
+
+    // Initialize message height
+    int y = 0;
+
+    std::vector<Message> visible_messages =
+        MessageLog::singleton().visible_messages();
+
+    // TODO consider including timestamp for message (turn no)
+    for (int i=0; i<(int)visible_messages.size(); i++)
+    {
+
+        // Set the color
+        TCODColor c = visible_messages[i].color;    
+        SDL_Color text_color = {c.r, c.g, c.b, 255};
+
+        // As TTF_RenderText_Solid could only be used on SDL_Surface then you have to
+        //  create the surface first.
+        SDL_Surface* text_surface = TTF_RenderText_Blended(font, visible_messages[i].text.c_str() , text_color); 
+
+        // Create texture
+        SDL_Texture* text_texture = SDL_CreateTextureFromSurface(renderer, text_surface);
+        SDL_SetTextureAlphaMod(text_texture, 255);
+
+        TTF_SizeText(font, visible_messages[i].text.c_str(), &w, &h);
+
+        Message_rect.x = MESSAGE_LOG_X * charw ;  //controls the rect's x coordinate
+        Message_rect.y = MESSAGE_LOG_Y * charh + (20 * y); // controls the rect's y coordinte
+        Message_rect.w = w; // controls the width of the rect
+        Message_rect.h = h; // controls the height of the rect
+
+        SDL_RenderCopy(renderer, text_texture, NULL, &Message_rect);
+
+        // Once copied, they can be destroyed
+        SDL_FreeSurface(text_surface);
+        SDL_DestroyTexture(text_texture);
+
+        // Increment height of next message
+        y++;
+    }
+
+    TTF_CloseFont(font);
+
+}
+
 // Print the name of the entity on the top left tile
 void render_entity_label(
     TCODConsole * terrain_layer, Entity * entity,
@@ -117,6 +202,7 @@ void render_entity_label(
 
 }
 
+/*
 void render_text(SDL_Renderer * renderer)
 {
     //TTF_Font* font = TTF_OpenFont("data/fonts/ttf/PressStart2P.ttf", 16); //this opens a font style and sets a size
@@ -145,14 +231,13 @@ void render_text(SDL_Renderer * renderer)
 
     // Now since it's a texture, you have to put RenderCopy in your game
     //  loop area, the area where the whole code executes.
-
     SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
 
     SDL_FreeSurface(surfaceMessage);
     SDL_DestroyTexture(Message);
     TTF_CloseFont(font);
 }
-
+*/
 
 void render_death_screen(Entity * player)
 {
@@ -533,30 +618,7 @@ void render_all(
         //PANEL_WIDTH-BAR_WIDTH-2, PANEL_HEIGHT,
         //TCOD_BKGND_NONE);
 
-    // Retrieve the list of visible messages
-    //std::vector<Message> visible_messages =
-        //game_state->message_log->visible_messages();
-    std::vector<Message> visible_messages =
-        MessageLog::singleton().visible_messages();
-
-    // Initialize message height
-    int y = 1;
-
-    // TODO consider including timestamp for message (turn no)
-    for (int i=0; i<(int)visible_messages.size(); i++)
-    {
-        // Set text color
-        Consoles::singleton().panel->setDefaultForeground(
-            visible_messages[i].color);
-
-        // TODO replace deprecated function
-        Consoles::singleton().panel->printEx(
-            BAR_WIDTH + 2, y, TCOD_BKGND_SET, TCOD_LEFT,
-            "%s", visible_messages[i].text.c_str());
-
-        // Increment height of next message
-        y++;
-    }
+    //render_message_log();
 
     render_bar(
         Consoles::singleton().panel, 1, 1, BAR_WIDTH,
@@ -699,15 +761,14 @@ void render_all(
 
     TCOD_sys_accumulate_console(TCODConsole::root->get_data());
 
-
     SDL_Renderer * renderer = TCOD_sys_get_sdl_renderer();
 
-    render_text(renderer);
+    //render_text(renderer);
+    render_message_log_sdl(renderer);
 
     SDL_RenderPresent(renderer);
 
     sync_time();
 
     //TCODConsole::flush();
-
 }
