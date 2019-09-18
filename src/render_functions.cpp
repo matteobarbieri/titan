@@ -129,6 +129,52 @@ void render_message_log()
 
 }
 
+void render_popup_message_text_sdl(SDL_Renderer * renderer, int frame_w, int frame_h)
+{
+
+    int x = (SCREEN_WIDTH - frame_w)/2 + 2;
+    int y = (SCREEN_HEIGHT - frame_h)/2 + 2;
+
+    int charw, charh;
+
+    TCODSystem::getCharSize(&charw,&charh);
+
+    TTF_Font* font = TTF_OpenFont("data/fonts/ttf/SairaExtraCondensed/SairaExtraCondensed-Regular.ttf", 16);
+
+    // Auxiliary variables to store size values
+    int w, h;
+    SDL_Rect Message_rect; //create a rect
+
+    // Set the color
+    SDL_Color text_color = {255, 255, 255, 255};
+
+    // As TTF_RenderText_Solid could only be used on SDL_Surface then you have to
+    //  create the surface first.
+    
+    const char * the_text = "Message text in popup!";
+    SDL_Surface* text_surface = TTF_RenderText_Blended(font, the_text, text_color); 
+
+    // Create texture
+    SDL_Texture* text_texture = SDL_CreateTextureFromSurface(renderer, text_surface);
+    SDL_SetTextureAlphaMod(text_texture, 255);
+
+    TTF_SizeText(font, the_text, &w, &h);
+
+    Message_rect.x = x * charw;  //controls the rect's x coordinate
+    Message_rect.y = y * charh; // controls the rect's y coordinte
+    Message_rect.w = w; // controls the width of the rect
+    Message_rect.h = h; // controls the height of the rect
+
+    SDL_RenderCopy(renderer, text_texture, NULL, &Message_rect);
+
+    // Once copied, they can be destroyed
+    SDL_FreeSurface(text_surface);
+    SDL_DestroyTexture(text_texture);
+
+    TTF_CloseFont(font);
+
+}
+
 /**
  * Render message log using a custom font
  */
@@ -777,6 +823,7 @@ void render_all(
     // First render the transparent frame with a console
     if (game_state->game_phase == POPUP_MESSAGE)
     {
+        // TODO change width/position
         render_popup_message_frame(50, 30);
 
         // Blit with transparency
@@ -794,6 +841,13 @@ void render_all(
 
     //render_text(renderer);
     render_message_log_sdl(renderer);
+
+    // First render the transparent frame with a console
+    if (game_state->game_phase == POPUP_MESSAGE)
+    {
+        // TODO change width/position
+        render_popup_message_text_sdl(renderer, 50, 30);
+    }
 
     SDL_RenderPresent(renderer);
 
