@@ -150,15 +150,15 @@ void render_popup_message_text_sdl(SDL_Renderer * renderer, int frame_w, int fra
 
     // As TTF_RenderText_Solid could only be used on SDL_Surface then you have to
     //  create the surface first.
-    
-    const char * the_text = "Message text in popup!";
-    SDL_Surface* text_surface = TTF_RenderText_Blended(font, the_text, text_color); 
+    const char * the_text = "This is a very very long line of text. Let's see at which point it gets broken because of the wrapper";
+    SDL_Surface* text_surface = TTF_RenderText_Blended_Wrapped(font, the_text, text_color, 400); 
 
     // Create texture
     SDL_Texture* text_texture = SDL_CreateTextureFromSurface(renderer, text_surface);
     SDL_SetTextureAlphaMod(text_texture, 255);
 
-    TTF_SizeText(font, the_text, &w, &h);
+    // Must retrieve size of rectangle from surface
+    SDL_QueryTexture(text_texture, NULL, NULL, &w, &h);
 
     Message_rect.x = x * charw;  //controls the rect's x coordinate
     Message_rect.y = y * charh; // controls the rect's y coordinte
