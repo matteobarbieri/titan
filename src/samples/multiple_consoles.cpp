@@ -98,12 +98,12 @@ void render_all(TCODConsole * a, TCODConsole * b, TCOD_Console * c, shared_ptr<t
     int W_p = SCREEN_WIDTH * charw;
     int H_p = SCREEN_HEIGHT * charh;
 
-    //SDL_Rect r1 = {0, 0, W_p/2, H_p/2};
-    //SDL_Rect r2 = {W_p/2, 0, W_p/2, H_p/2};
+    SDL_Rect r1 = {0, 0, W_p/2, H_p/2};
+    SDL_Rect r2 = {W_p/2, 0, W_p/2, H_p/2};
 
-    TCOD_sys_accumulate_console(TCODConsole::root->get_data());
-    //TCOD_sys_accumulate_console_(TCODConsole::root->get_data(), &r1);
-    //TCOD_sys_accumulate_console_(TCODConsole::root->get_data(), &r2);
+    //TCOD_sys_accumulate_console(TCODConsole::root->get_data());
+    TCOD_sys_accumulate_console_(TCODConsole::root->get_data(), &r1);
+    TCOD_sys_accumulate_console_(TCODConsole::root->get_data(), &r2);
     //SDL_RenderPresent(renderer);
 
     // C
@@ -135,6 +135,11 @@ int main(int argc, char *argv[])
 
     bool whichts = true;
     
+    // Set Custom font to use
+    TCODConsole::setCustomFont(
+            "data/fonts/16x16-sb-ascii.png",
+            TCOD_FONT_LAYOUT_ASCII_INROW);
+
     // Init root console
     TCODConsole::initRoot(
         SCREEN_WIDTH, SCREEN_HEIGHT,
@@ -151,10 +156,6 @@ int main(int argc, char *argv[])
     //TCOD_Console * c = TCOD_console_new(20,20);
     TCOD_Console * c = TCOD_console_new(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    // Set Custom font to use
-    TCODConsole::setCustomFont(
-            "data/fonts/16x16-sb-ascii.png",
-            TCOD_FONT_LAYOUT_ASCII_INROW);
 
     //auto ts1 = tcod::engine::get_tileset();
     shared_ptr<tcod::tileset::Tileset> ts1= tcod::engine::get_tileset();
