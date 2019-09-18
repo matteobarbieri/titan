@@ -263,42 +263,6 @@ void render_entity_label(
 
 }
 
-/*
-void render_text(SDL_Renderer * renderer)
-{
-    //TTF_Font* font = TTF_OpenFont("data/fonts/ttf/PressStart2P.ttf", 16); //this opens a font style and sets a size
-    //TTF_Font* font = TTF_OpenFont("data/fonts/ttf/RobotoMono/RobotoMono-Regular.ttf", 16); //this opens a font style and sets a size
-    TTF_Font* font = TTF_OpenFont("data/fonts/ttf/SairaExtraCondensed/SairaExtraCondensed-Regular.ttf", 16);
-    //TTF_Font* font = TTF_OpenFont("data/fonts/ttf/ShareTechMono/ShareTechMono-Regular.ttf", 16);
-
-    SDL_Color White = {255, 255, 255, 255};  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
-
-    const char* the_text = "put your text here";
-
-    //SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, the_text , White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
-    SDL_Surface* surfaceMessage = TTF_RenderText_Blended(font, the_text , White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
-
-    SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage); //now you can convert it into a texture
-    SDL_SetTextureAlphaMod(Message, 255);
-
-    int w,h;
-    TTF_SizeText(font, the_text, &w, &h);
-
-    SDL_Rect Message_rect; //create a rect
-    Message_rect.x = 600;  //controls the rect's x coordinate
-    Message_rect.y = 400; // controls the rect's y coordinte
-    Message_rect.w = w; // controls the width of the rect
-    Message_rect.h = h; // controls the height of the rect
-
-    // Now since it's a texture, you have to put RenderCopy in your game
-    //  loop area, the area where the whole code executes.
-    SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
-
-    SDL_FreeSurface(surfaceMessage);
-    SDL_DestroyTexture(Message);
-    TTF_CloseFont(font);
-}
-*/
 
 void render_death_screen(Entity * player)
 {
