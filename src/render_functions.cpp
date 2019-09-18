@@ -29,6 +29,58 @@
 
 #include "ui/menus.hpp"
 
+/* number of frames in the last second */
+// TODO must be coherent with the value set by TCODSystem::setFps();
+static int fps=60;
+/* current number of frames */
+static int cur_fps=0;
+/* length of the last rendering loop */
+static float last_frame_length=0.0f;
+
+/* minimum length for a frame (when fps are limited) */
+static int min_frame_length=1000/fps;
+//static int min_frame_length=0;
+
+/**
+ * Function to limit FPS
+ */
+void sync_time() {
+    static uint32_t old_time = 0;
+    static uint32_t new_time = 0;
+    static uint32_t elapsed = 0;
+    int32_t frame_time;
+    int32_t time_to_wait;
+
+    old_time = new_time;
+    new_time = TCOD_sys_elapsed_milli();
+    /* If TCOD has been terminated and restarted. */
+    if (old_time > new_time)
+    {
+        old_time = elapsed = 0;
+    }
+
+    if ( new_time / 1000 != elapsed ) {
+        /* update fps every second */
+        fps = cur_fps;
+        cur_fps = 0;
+        elapsed = new_time / 1000;
+    }
+
+    /* if too fast, wait */
+    frame_time = (new_time - old_time);
+    last_frame_length = frame_time * 0.001f;
+    cur_fps++;
+    time_to_wait = min_frame_length - frame_time;
+
+    if (old_time > 0 && time_to_wait > 0)
+    {
+        TCOD_sys_sleep_milli(time_to_wait);
+        new_time = TCOD_sys_elapsed_milli();
+        frame_time=(new_time - old_time);
+    }
+
+    last_frame_length = frame_time * 0.001f;
+}
 
 
 Entity * check_if_still_in_sight(TCODMap * fov_map, Entity * entity)
@@ -67,30 +119,38 @@ void render_entity_label(
 
 void render_text(SDL_Renderer * renderer)
 {
-    //TTF_Font* Sans = TTF_OpenFont("Sans.ttf", 24); //this opens a font style and sets a size
-    TTF_Font* Sans = TTF_OpenFont("data/fonts/ttf/PressStart2P.ttf", 24); //this opens a font style and sets a size
+    //TTF_Font* font = TTF_OpenFont("data/fonts/ttf/PressStart2P.ttf", 16); //this opens a font style and sets a size
+    //TTF_Font* font = TTF_OpenFont("data/fonts/ttf/RobotoMono/RobotoMono-Regular.ttf", 16); //this opens a font style and sets a size
+    TTF_Font* font = TTF_OpenFont("data/fonts/ttf/SairaExtraCondensed/SairaExtraCondensed-Regular.ttf", 16);
+    //TTF_Font* font = TTF_OpenFont("data/fonts/ttf/ShareTechMono/ShareTechMono-Regular.ttf", 16);
 
     SDL_Color White = {255, 255, 255, 255};  // this is the color in rgb format, maxing out all would give you the color white, and it will be your text's color
 
-    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, "put your text here", White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+    const char* the_text = "put your text here";
+
+    //SDL_Surface* surfaceMessage = TTF_RenderText_Solid(font, the_text , White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
+    SDL_Surface* surfaceMessage = TTF_RenderText_Blended(font, the_text , White); // as TTF_RenderText_Solid could only be used on SDL_Surface then you have to create the surface first
 
     SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage); //now you can convert it into a texture
+    SDL_SetTextureAlphaMod(Message, 255);
+
+    int w,h;
+    TTF_SizeText(font, the_text, &w, &h);
 
     SDL_Rect Message_rect; //create a rect
-    Message_rect.x = 0;  //controls the rect's x coordinate
-    Message_rect.y = 0; // controls the rect's y coordinte
-    Message_rect.w = 100; // controls the width of the rect
-    Message_rect.h = 100; // controls the height of the rect
+    Message_rect.x = 600;  //controls the rect's x coordinate
+    Message_rect.y = 400; // controls the rect's y coordinte
+    Message_rect.w = w; // controls the width of the rect
+    Message_rect.h = h; // controls the height of the rect
 
-    //Mind you that (0,0) is on the top left of the window/screen, think a rect as the text's box, that way it would be very simple to understance
-
-    //Now since it's a texture, you have to put RenderCopy in your game loop area, the area where the whole code executes
+    // Now since it's a texture, you have to put RenderCopy in your game
+    //  loop area, the area where the whole code executes.
 
     SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
 
     SDL_FreeSurface(surfaceMessage);
     SDL_DestroyTexture(Message);
-    TTF_CloseFont(Sans);
+    TTF_CloseFont(font);
 }
 
 
@@ -645,6 +705,8 @@ void render_all(
     render_text(renderer);
 
     SDL_RenderPresent(renderer);
+
+    sync_time();
 
     //TCODConsole::flush();
 
