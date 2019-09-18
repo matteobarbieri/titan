@@ -47,5 +47,9 @@ Consoles::Consoles()
     /*! The console for inventory and equipment */
     inventory_frame = new TCODConsole(
         FRAME_WIDTH, FRAME_HEIGHT);
+
+    /*! The console for popup messages */
+    popup_message = new TCODConsole(
+        SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 

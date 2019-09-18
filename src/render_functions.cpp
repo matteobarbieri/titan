@@ -89,7 +89,18 @@ Entity * check_if_still_in_sight(TCODMap * fov_map, Entity * entity)
     if (fov_map->isInFov(entity->x, entity->y))
         return entity;
     else
-        return 0;
+        return nullptr;
+}
+
+/**
+ * Render the black empty frame for the popup message
+ */
+void render_popup_message_frame(int w, int h)
+{
+    int x = (SCREEN_WIDTH - w)/2;
+    int y = (SCREEN_HEIGHT - h)/2;
+    Consoles::singleton().popup_message->clear();
+    Consoles::singleton().popup_message->printFrame(x, y, w, h, true, TCOD_BKGND_SET);
 }
 
 void render_message_log()
@@ -758,6 +769,24 @@ void render_all(
 
     return top_x, top_y
 */
+
+    /////////////////////////////////////////
+    //////// Render popup message  //////////
+    /////////////////////////////////////////
+
+    // First render the transparent frame with a console
+    if (game_state->game_phase == POPUP_MESSAGE)
+    {
+        render_popup_message_frame(50, 30);
+
+        // Blit with transparency
+        TCODConsole::blit(
+            Consoles::singleton().popup_message, 0, 0,
+            SCREEN_WIDTH, SCREEN_HEIGHT,
+            TCODConsole::root,
+            0, 0,
+            1.0f, 0.8f);
+    }
 
     TCOD_sys_accumulate_console(TCODConsole::root->get_data());
 

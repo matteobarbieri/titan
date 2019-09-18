@@ -400,6 +400,14 @@ Action * handle_input(
             break;
 
         /////////////////////////////////////////
+        ///////////// POPUP MESSAGE /////////////
+        /////////////////////////////////////////
+        case POPUP_MESSAGE:
+            // TODO create the right function for this
+            return handle_inventory_menu_keys(key, mouse);
+            break;
+
+        /////////////////////////////////////////
         ////////////// PLAYER DEAD //////////////
         /////////////////////////////////////////
         case PLAYER_DEAD:

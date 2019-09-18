@@ -11,6 +11,7 @@ enum GamePhase
     TARGETING,
     LEVEL_UP,
     CHARACTER_SCREEN,
+    POPUP_MESSAGE,
     ENTITY_INFO,
 };
 

@@ -19,6 +19,7 @@ class Consoles
         TCODConsole * panel;
         TCODConsole * entity_frame;
         TCODConsole * inventory_frame;
+        TCODConsole * popup_message;
 
         /*! The static method to access the singleton */
         static Consoles & singleton();
