@@ -13,18 +13,16 @@
 
 // TODO move somewhere else
 
-Outcome * AttackAction::_execute()
+int AttackAction::search_target_in_range(int range, Entity ** target)
 {
 
     std::vector<Entity *> enemies_in_range;
 
     // TODO expand for multiple options depending on player equipment
     // Look for targets in melee range
-    // TODO adapt range based on equipped weapon
-    int melee_weapon_range = 1;
-    for (int x = player->x-melee_weapon_range; x <=player->x+melee_weapon_range; x++)
+    for (int x = player->x-range; x <=player->x+range; x++)
     {
-        for (int y = player->y-melee_weapon_range; y <=player->y+melee_weapon_range; y++)
+        for (int y = player->y-range; y <=player->y+range; y++)
         {
             // First check if it is a visible tile, to avoid to target stuff
             // over walls with greater melee range
@@ -34,7 +32,7 @@ Outcome * AttackAction::_execute()
                     game_map->entities(), x, y);
 
                 // Check if it is actually a monster
-                if (target != nullptr && target->ai != nullptr)
+                if (target != nullptr && target->ai != nullptr && target->fighter != nullptr)
                 {
                     enemies_in_range.push_back(target);
                 }
@@ -42,22 +40,46 @@ Outcome * AttackAction::_execute()
         }
     }
 
+    int n_enemies_in_range = enemies_in_range.size();
+
+    // If there is only one enemy in range return it
+    if (n_enemies_in_range == 1)
+    {
+        (*target) = enemies_in_range[0];
+    }
+
+    return n_enemies_in_range;
+}
+
+Outcome * AttackAction::_execute()
+{
+
+    // TODO adapt range based on equipped weapon
+    int melee_weapon_range = 1;
+
+
     bool position_changed = false;
     bool interacted_with_something = false;
 
+    Entity * target = nullptr;
+    int n_enemies_in_range = search_target_in_range(melee_weapon_range, &target);
 
-    if (enemies_in_range.size() == 0)
+    if (n_enemies_in_range == 0)
     {
-        MessageLog::singleton().add_message({"No enemies in melee range!", TCODColor::yellow});
+        MessageLog::singleton().add_message(
+                {"No enemies in melee range!",
+                TCODColor::yellow});
     }
-    else if (enemies_in_range.size() == 1)
+    else if (n_enemies_in_range == 1)
     {
-        player->interact_with(enemies_in_range[0], game_map);
+        player->interact_with(target, game_map);
         interacted_with_something = true;
     }
     else
     {
-        MessageLog::singleton().add_message({"Multiple enemies in melee range, target one manually!", TCODColor::yellow});
+        MessageLog::singleton().add_message(
+                {"Multiple enemies in melee range, target one manually!",
+                TCODColor::yellow});
     }
 
     bool redraw_terrain = position_changed || interacted_with_something;
