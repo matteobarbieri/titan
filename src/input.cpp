@@ -5,6 +5,7 @@
 #include "actions/Move.hpp"
 #include "actions/Menus.hpp"
 
+#include "actions/combat.hpp"
 #include "actions/items.hpp"
 #include "actions/inspect.hpp"
 
@@ -105,6 +106,14 @@ Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 
     //if (key_char == 'n')
         //return new MoveAction(1, 1);
+
+    /////////////////////////////////////////
+    /////////////// COMBAT //////////////////
+    /////////////////////////////////////////
+
+    // Cross movement (arrow keys or WASD)
+    if (key_char == 'f')
+        return new AttackAction();
 
     /////////////////////////////////////////
     /////////// GO TO MAIN MENU /////////////
