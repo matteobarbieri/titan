@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 
 #include "libtcod.hpp"
 
@@ -176,6 +177,36 @@ void render_popup_message_text_sdl(SDL_Renderer * renderer, int frame_w, int fra
     SDL_DestroyTexture(text_texture);
 
     TTF_CloseFont(font);
+
+}
+
+void render_skill_icons_sdl(SDL_Renderer * renderer)
+{
+    // TODO test
+    SDL_Surface * icon_surface = IMG_Load("data/graphics/icons/skills/skill_stun.png");
+
+    // Create texture
+    SDL_Texture* icon_texture = SDL_CreateTextureFromSurface(renderer, icon_surface);
+    // TODO change alpha based on existing popups/menus
+    SDL_SetTextureAlphaMod(icon_texture, 255);
+
+    int charw, charh;
+
+    TCODSystem::getCharSize(&charw,&charh);
+    SDL_Rect skill_icon_rect; //create a rect
+
+    int x = 1;
+
+    skill_icon_rect.x = SKILLS_AREA_X * charw + 64 * x;  //controls the rect's x coordinate
+    skill_icon_rect.y = SKILLS_AREA_Y * charh + 20; // controls the rect's y coordinte
+    skill_icon_rect.w = 64; // controls the width of the rect
+    skill_icon_rect.h = 64; // controls the height of the rect
+
+    SDL_RenderCopy(renderer, icon_texture, NULL, &skill_icon_rect);
+
+    // Once copied, they can be destroyed
+    SDL_FreeSurface(icon_surface);
+    SDL_DestroyTexture(icon_texture);
 
 }
 
@@ -807,8 +838,8 @@ void render_all(
 
     SDL_Renderer * renderer = TCOD_sys_get_sdl_renderer();
 
-    //render_text(renderer);
     render_message_log_sdl(renderer);
+    render_skill_icons_sdl(renderer);
 
     // First render the transparent frame with a console
     if (game_state->game_phase == POPUP_MESSAGE)

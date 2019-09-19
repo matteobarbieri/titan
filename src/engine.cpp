@@ -1,6 +1,7 @@
 #include "Constants.h"
 
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 
 #include "ui/menus.hpp"
 #include "Entity.hpp"
@@ -240,10 +241,14 @@ void init_new_game(
 void init_engine()
 {
 
+    // Init SDL TTF
     if(TTF_Init()==-1) {
         DEBUG("TTF_Init: " << TTF_GetError());
         exit(2);
     }
+
+    // Init SDL Image module with PNG support
+    IMG_Init(IMG_INIT_PNG);
 
     // Set Custom font to use
     TCODConsole::setCustomFont(

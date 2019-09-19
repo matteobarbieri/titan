@@ -20,6 +20,12 @@
 #define MESSAGE_LOG_X (SCREEN_WIDTH - MESSAGE_LOG_W)
 #define MESSAGE_LOG_Y (SCREEN_HEIGHT - MESSAGE_LOG_H)
 
+// Define geometry parameters for active skills area
+#define SKILLS_AREA_W (SCREEN_WIDTH - BAR_WIDTH - MESSAGE_LOG_W)
+#define SKILLS_AREA_H 7
+#define SKILLS_AREA_X BAR_WIDTH  // Skills are on the right of the health bar
+#define SKILLS_AREA_Y (SCREEN_HEIGHT - SKILLS_AREA_H)
+
 // The main console geometry (where terrain and stuff is being displayed)
 #define TERRAIN_LAYER_WIDTH SCREEN_WIDTH
 #define TERRAIN_LAYER_HEIGHT (SCREEN_HEIGHT - PANEL_HEIGHT)
