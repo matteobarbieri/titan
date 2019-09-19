@@ -1,5 +1,7 @@
 #include "Move.hpp"
 
+#include "../utils.hpp"
+
 #include "../GamePhase.hpp"
 #include "../Entity.hpp"
 #include "../GameMessages.hpp"
@@ -9,22 +11,6 @@
 
 #include "Outcome.hpp"
 
-// TODO move somewhere else
-
-Entity * get_blocking_entities_at_location(
-        std::vector<Entity *> entities, int destination_x, int destination_y)
-{
-    for (int i=0; i<(int)entities.size(); i++)
-    {
-        if (entities[i]->blocks() &&
-            entities[i]->x == destination_x &&
-            entities[i]->y == destination_y)
-
-            return entities[i];
-    }
-
-    return 0;
-}
 
 MoveAction::MoveAction(int dx, int dy) :
     Action(), dx(dx), dy(dy)
