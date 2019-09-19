@@ -185,28 +185,32 @@ void render_skill_icons_sdl(SDL_Renderer * renderer)
     // TODO test
     SDL_Surface * icon_surface = IMG_Load("data/graphics/icons/skills/skill_stun.png");
 
-    // Create texture
-    SDL_Texture* icon_texture = SDL_CreateTextureFromSurface(renderer, icon_surface);
-    // TODO change alpha based on existing popups/menus
-    SDL_SetTextureAlphaMod(icon_texture, 255);
-
     int charw, charh;
 
     TCODSystem::getCharSize(&charw,&charh);
     SDL_Rect skill_icon_rect; //create a rect
+    
+    int center_offset = 37;
+    int SKILL_BOX_W = 128;
 
-    int x = 1;
+    for (int i=0; i<7; i++)
+    {
+        // Create texture
+        SDL_Texture* icon_texture = SDL_CreateTextureFromSurface(renderer, icon_surface);
+        // TODO change alpha based on existing popups/menus
+        SDL_SetTextureAlphaMod(icon_texture, 255);
 
-    skill_icon_rect.x = SKILLS_AREA_X * charw + 64 * x;  //controls the rect's x coordinate
-    skill_icon_rect.y = SKILLS_AREA_Y * charh + 20; // controls the rect's y coordinte
-    skill_icon_rect.w = 64; // controls the width of the rect
-    skill_icon_rect.h = 64; // controls the height of the rect
+        skill_icon_rect.x = SKILLS_AREA_X * charw + (SKILL_BOX_W * i) + center_offset;  //controls the rect's x coordinate
+        skill_icon_rect.y = SKILLS_AREA_Y * charh + 10; // controls the rect's y coordinte
+        skill_icon_rect.w = 64; // controls the width of the rect
+        skill_icon_rect.h = 64; // controls the height of the rect
 
-    SDL_RenderCopy(renderer, icon_texture, NULL, &skill_icon_rect);
+        SDL_RenderCopy(renderer, icon_texture, NULL, &skill_icon_rect);
+        SDL_DestroyTexture(icon_texture);
+    }
 
-    // Once copied, they can be destroyed
+    // Destroy surface
     SDL_FreeSurface(icon_surface);
-    SDL_DestroyTexture(icon_texture);
 
 }
 
