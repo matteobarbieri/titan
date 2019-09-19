@@ -237,7 +237,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 void init_new_game(
     GameMap ** game_map, Entity ** player, GameState ** game_state);
 
-int main(int argc, char *argv[])
+void init_engine()
 {
 
     if(TTF_Init()==-1) {
@@ -256,6 +256,13 @@ int main(int argc, char *argv[])
         //WINDOW_TITLE, false, TCOD_RENDERER_GLSL);
         //WINDOW_TITLE, false, TCOD_RENDERER_SDL);
         WINDOW_TITLE, false, TCOD_RENDERER_SDL2);
+
+}
+
+int main(int argc, char *argv[])
+{
+
+    init_engine();
 
     // Load the background image
     TCODImage main_menu_background_image("menu_background2.png");
