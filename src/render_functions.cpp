@@ -154,11 +154,8 @@ void split2(const std::string& str, Container& cont, char delim = ' ')
     }
 }
 
-void render_popup_message_text_sdl(SDL_Renderer * renderer, std::string text, int frame_w, int frame_h)
+void render_popup_message_text_sdl(SDL_Renderer * renderer, std::string text, int x, int y, int frame_w)
 {
-
-    int x = (SCREEN_WIDTH - frame_w)/2 + 2;
-    int y = (SCREEN_HEIGHT - frame_h)/2 + 2;
 
     int charw, charh;
 
@@ -882,22 +879,46 @@ void render_all(
     {
 
         std::string help_headline =  "Instructions";
-        std::string help_movement =  "WASD/arrows:         Movement";
-        std::string help_attack =    "F:                   Attack";
-        std::string help_inventory = "I:                   Show inventory";
-        std::string help_menu =      "ESC:                 Menu";
-        std::string help_inspect =   "LMB:                 Inspect";
-        
-        std::string help_text = "";
-        help_text += help_headline + "\n \n";
-        help_text += help_movement + "\n";
-        help_text += help_attack + "\n";
-        help_text += help_inventory + "\n";
-        help_text += help_inspect + "\n";
-        help_text += help_menu + "\n";
 
-        // TODO change width/position
-        render_popup_message_text_sdl(renderer, help_text, 50, 30);
+        //std::string help_movement_l =  "WASD/arrows:         Movement";
+        //std::string help_attack_l =    "F:                   Attack";
+        //std::string help_inventory_l = "I:                   Show inventory";
+        //std::string help_menu_l =      "ESC:                 Menu";
+        //std::string help_inspect_l =   "LMB:                 Inspect";
+        std::string help_movement_l =  "WASD/arrows:";
+        std::string help_attack_l =    "F:";
+        std::string help_inventory_l = "I:";
+        std::string help_menu_l =      "ESC:";
+        std::string help_inspect_l =   "LMB:";
+
+        std::string help_movement_r =  "Movement";
+        std::string help_attack_r =    "FAttack";
+        std::string help_inventory_r = "Show inventory";
+        std::string help_menu_r =      "Menu";
+        std::string help_inspect_r =   "Inspect";
+        
+        std::string help_text_l = "";
+        //help_text_l += help_headline + "\n \n";
+        help_text_l += help_movement_l + "\n";
+        help_text_l += help_attack_l + "\n";
+        help_text_l += help_inventory_l + "\n";
+        help_text_l += help_inspect_l + "\n";
+        help_text_l += help_menu_l + "\n";
+
+        std::string help_text_r = "";
+        //help_text_r += "\n";
+        help_text_r += help_movement_r + "\n";
+        help_text_r += help_attack_r + "\n";
+        help_text_r += help_inventory_r + "\n";
+        help_text_r += help_inspect_r + "\n";
+        help_text_r += help_menu_r + "\n";
+
+        int x = (SCREEN_WIDTH - 50)/2 + 2;
+        int y = (SCREEN_HEIGHT - 30)/2 + 2;
+
+        render_popup_message_text_sdl(renderer, help_headline, x, y, 50);
+        render_popup_message_text_sdl(renderer, help_text_l, x, y+2, 50);
+        render_popup_message_text_sdl(renderer, help_text_r, x+24, y+2, 50);
     }
 
     SDL_RenderPresent(renderer);
