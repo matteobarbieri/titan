@@ -5,12 +5,17 @@
 
 #include "../nlohmann/json.hpp"
 
+// Forward declaration
+class Entity;
+
 using json = nlohmann::json;
 
-class Stairs : public Component
+class Stairs
 {
     public:
         
+        Entity * owner;
+
         // Attributes
         int floor;
 

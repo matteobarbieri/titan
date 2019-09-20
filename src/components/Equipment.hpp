@@ -21,11 +21,11 @@ class UnableToEquipException : public std::exception
 class Equipment
 {
 
-    private:
-
-
     public:
+
         Equipment();
+
+        Entity * owner;
 
         // The equipment slots
         std::map<EquipmentSlot, Entity *> slots;

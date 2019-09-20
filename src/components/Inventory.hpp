@@ -20,13 +20,14 @@ class Inventory
 
     private:
 
-
         int _capacity;
 
     public:
 
         Inventory(int capacity);
         ~Inventory();
+
+        Entity * owner;
 
         std::vector<Entity *> items;
         std::vector<char> available_letters;

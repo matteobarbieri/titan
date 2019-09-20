@@ -76,8 +76,8 @@ class MonsterAi
          */
         json to_json();
 
-
         MonsterAi();
+        virtual ~MonsterAi();
 
         static MonsterAi * from_json(json j);
 

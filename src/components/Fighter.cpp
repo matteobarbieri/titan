@@ -87,9 +87,6 @@ void Fighter::attack_melee(Entity * target)
     // Add message to message log
     MessageLog::singleton().add_message(
         {stringStream.str(), TCODColor::white});
-
-    // Update fighter's status
-    target->fighter->update_status();
     
 }
 
@@ -101,54 +98,6 @@ void Fighter::take_damage(int amount)
 bool Fighter::is_dead() const
 {
     return _hp <= 0;
-}
-
-void Fighter::die()
-{
-
-    // Build message
-    std::ostringstream stringStream;
-
-    stringStream << "The " << 
-        owner->name << " is dead!";
-
-    // Add message to message log
-    MessageLog::singleton().add_message(
-        {stringStream.str(), TCODColor::yellow});
-
-    // Update appearance
-    owner->symbol = '%';
-    owner->color(TCODColor::darkRed);
-    owner->render_order(CORPSE);
-    owner->blocks(false);
-
-    // Name
-    stringStream.str("");
-    stringStream << "remains of " << owner->name;
-    owner->name = stringStream.str();
-
-    // Only monsters (that is, entities which are not the players) have the ai
-    // component.
-    if (owner->ai != nullptr)
-    {
-        delete owner->ai;
-        owner->ai = nullptr;
-        
-        delete owner->fighter;
-        owner->fighter = nullptr;
-
-    }
-
-}
-
-void Fighter::update_status()
-{
-    if (is_dead())
-    {
-        die();
-    }
-
-    // TODO do other stuff as well
 }
 
 void Fighter::shoot(Entity * target)

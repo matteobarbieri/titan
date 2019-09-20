@@ -121,6 +121,11 @@ class Entity
          * player  -> door: interact
          */
         void interact_with(Entity * other, GameMap * game_map);
+
+        /**
+         * Used for entities which represent living things, cleans up components
+         */
+        void die();
 };
 
 #endif

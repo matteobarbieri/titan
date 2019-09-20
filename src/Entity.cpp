@@ -1,9 +1,12 @@
 #include <string>
+#include <sstream>
 
 #include "libtcod.hpp"
 
 #include "Entity.hpp"
 #include "RenderOrder.hpp"
+
+#include "GameMessages.hpp"
 
 #include "SaveGame.hpp"
 #include "Uid.hpp"
@@ -70,13 +73,16 @@ void Entity::interact_with(Entity * other, GameMap * game_map)
     if (other->fighter != nullptr)
     {
         fighter->attack_melee(other);
+        if (other->fighter->is_dead())
+        {
+            other->die();
+        }
     }
 
     else if (other->interactive != nullptr)
     {
         other->interactive->interact(this, game_map);
     }
-
 
 }
 
@@ -131,6 +137,44 @@ void Entity::blocks_sight(bool b)
 {
     _blocks_sight = b;
 }
+
+void Entity::die()
+{
+
+    // Build message
+    std::ostringstream stringStream;
+
+    stringStream << "The " << 
+        name << " is dead!";
+
+    // Add message to message log
+    MessageLog::singleton().add_message(
+        {stringStream.str(), TCODColor::yellow});
+
+    // Update appearance
+    symbol = '%';
+    color(TCODColor::darkRed);
+    render_order(CORPSE);
+    blocks(false);
+
+    // Name
+    stringStream.str("");
+    stringStream << "remains of " << name;
+    name = stringStream.str();
+
+    // Only monsters (that is, entities which are not the players) have the ai
+    // component.
+    if (ai != nullptr)
+    {
+        delete ai;
+        ai = nullptr;
+
+        delete fighter;
+        fighter = nullptr;
+    }
+
+}
+
 
 json Entity::to_json()
 {

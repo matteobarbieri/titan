@@ -3,15 +3,18 @@
 
 #include "../nlohmann/json.hpp"
 
+// Forward declaration
+class Entity;
+
 using json = nlohmann::json;
 
 class Level
 {
 
-    private:
-
-
     public:
+
+        Entity * owner;
+
         Level();
         ~Level();
 

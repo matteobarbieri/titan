@@ -3,17 +3,19 @@
 
 #include "../nlohmann/json.hpp"
 
-using json = nlohmann::json;
-
 #include "../EquipmentSlots.hpp"
+
+// Forward declaration
+class Entity;
+
+using json = nlohmann::json;
 
 class Equippable
 {
 
-    private:
-
-
     public:
+
+        Entity * owner;
 
         Equippable(EquipmentSlot);
 

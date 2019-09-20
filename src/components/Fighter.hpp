@@ -25,8 +25,6 @@ class Fighter
         Fighter(int max_hp);
         Fighter(int max_hp, int hp);
 
-        //~Fighter();
-
         int max_hp() const;
         int hp() const;
 
@@ -44,7 +42,9 @@ class Fighter
         bool is_dead() const;
 
         // Used to update status of the entity after taking damage, etc.
-        void update_status();
+        // Returns an int that could trigger other actions (such as changing the
+        // entity in case a monster is dead etc.).
+        int update_status();
 
         void die();
 

@@ -13,6 +13,10 @@ MonsterAi::MonsterAi()
     state = AIState::IDLE;
 }
 
+MonsterAi::~MonsterAi()
+{
+}
+
 AIAction::AIAction(
     Entity * monster, Entity * player, GameMap * game_map) :
         monster(monster), player(player), game_map(game_map)
