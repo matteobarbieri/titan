@@ -19,10 +19,3 @@ Stairs * Stairs::from_json(json j)
 
     return c;
 }
-
-
-/*
-class Stairs:
-    def __init__(self, floor):
-        self.floor = floor
-*/

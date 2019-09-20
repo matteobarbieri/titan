@@ -1,8 +1,6 @@
 #ifndef ROGUE_20177_STAIRS
 #define ROGUE_20177_STAIRS
 
-#include "Component.hpp"
-
 #include "../nlohmann/json.hpp"
 
 // Forward declaration
