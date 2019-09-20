@@ -1,4 +1,6 @@
 #include <algorithm>    // std::max
+#include <vector>    // std::max
+#include <sstream>
 
 // SDL2 includes
 #include <SDL2/SDL.h>
@@ -130,7 +132,29 @@ void render_message_log()
 
 }
 
-void render_popup_message_text_sdl(SDL_Renderer * renderer, int frame_w, int frame_h)
+/*
+// As TTF_RenderText_Solid could only be used on SDL_Surface then you have to
+//  create the surface first.
+SDL_Surface* text_surface = TTF_RenderText_Blended(font, visible_messages[i].text.c_str() , text_color); 
+
+// Create texture
+SDL_Texture* text_texture = SDL_CreateTextureFromSurface(renderer, text_surface);
+SDL_SetTextureAlphaMod(text_texture, 255);
+
+TTF_SizeText(font, visible_messages[i].text.c_str(), &w, &h);
+*/
+
+template <class Container>
+void split2(const std::string& str, Container& cont, char delim = ' ')
+{
+    std::stringstream ss(str);
+    std::string token;
+    while (std::getline(ss, token, delim)) {
+        cont.push_back(token);
+    }
+}
+
+void render_popup_message_text_sdl(SDL_Renderer * renderer, std::string text, int frame_w, int frame_h)
 {
 
     int x = (SCREEN_WIDTH - frame_w)/2 + 2;
@@ -149,32 +173,40 @@ void render_popup_message_text_sdl(SDL_Renderer * renderer, int frame_w, int fra
     // Set the color
     SDL_Color text_color = {255, 255, 255, 255};
 
-    // As TTF_RenderText_Solid could only be used on SDL_Surface then you have to
-    //  create the surface first.
-    const char * the_text = "This is a very very long line of text. Let's see at which point it gets broken because of the wrapper This is a very very long line of text. Let's see at which point it gets broken because of the wrapper This is a very very long line of text. Let's see at which point it gets broken because of the wrapper This is a very very long line of text. Let's see at which point it gets broken because of the wrapper";
+    // Split the text in several lines
+    std::vector<std::string> text_lines;
+    split2(text, text_lines, '\n');
 
-    // The text wrap value is computed keeping into account a padding of 1 on
-    // each size.
-    SDL_Surface* text_surface = TTF_RenderText_Blended_Wrapped(
-        font, the_text, text_color, (frame_w-4)*charw); 
+    int line_y = y * charh;
 
-    // Create texture
-    SDL_Texture* text_texture = SDL_CreateTextureFromSurface(renderer, text_surface);
-    SDL_SetTextureAlphaMod(text_texture, 255);
+    for (int i=0; i<(int)text_lines.size(); i++)
+    {
+        // The text wrap value is computed keeping into account a padding of 1 on
+        // each size.
+        SDL_Surface* text_surface = TTF_RenderText_Blended_Wrapped(
+            font, text_lines[i].c_str(), text_color, (frame_w-4)*charw); 
 
-    // Must retrieve size of rectangle from surface
-    SDL_QueryTexture(text_texture, NULL, NULL, &w, &h);
+        // Create texture
+        SDL_Texture* text_texture = SDL_CreateTextureFromSurface(renderer, text_surface);
+        SDL_SetTextureAlphaMod(text_texture, 255);
 
-    Message_rect.x = x * charw;  //controls the rect's x coordinate
-    Message_rect.y = y * charh; // controls the rect's y coordinte
-    Message_rect.w = w; // controls the width of the rect
-    Message_rect.h = h; // controls the height of the rect
+        // Must retrieve size of rectangle from surface
+        SDL_QueryTexture(text_texture, NULL, NULL, &w, &h);
 
-    SDL_RenderCopy(renderer, text_texture, NULL, &Message_rect);
+        Message_rect.x = x * charw;  //controls the rect's x coordinate
+        Message_rect.y = line_y; // controls the rect's y coordinte
+        Message_rect.w = w; // controls the width of the rect
+        Message_rect.h = h; // controls the height of the rect
 
-    // Once copied, they can be destroyed
-    SDL_FreeSurface(text_surface);
-    SDL_DestroyTexture(text_texture);
+        SDL_RenderCopy(renderer, text_texture, NULL, &Message_rect);
+
+        // Once copied, they can be destroyed
+        SDL_FreeSurface(text_surface);
+        SDL_DestroyTexture(text_texture);
+
+        //line_y += h + 20;
+        line_y += h - 5;
+    }
 
     TTF_CloseFont(font);
 
@@ -848,8 +880,24 @@ void render_all(
     // First render the transparent frame with a console
     if (game_state->game_phase == POPUP_MESSAGE)
     {
+
+        std::string help_headline =  "Instructions";
+        std::string help_movement =  "WASD/arrows:         Movement";
+        std::string help_attack =    "F:                   Attack";
+        std::string help_inventory = "I:                   Show inventory";
+        std::string help_menu =      "ESC:                 Menu";
+        std::string help_inspect =   "LMB:                 Inspect";
+        
+        std::string help_text = "";
+        help_text += help_headline + "\n \n";
+        help_text += help_movement + "\n";
+        help_text += help_attack + "\n";
+        help_text += help_inventory + "\n";
+        help_text += help_inspect + "\n";
+        help_text += help_menu + "\n";
+
         // TODO change width/position
-        render_popup_message_text_sdl(renderer, 50, 30);
+        render_popup_message_text_sdl(renderer, help_text, 50, 30);
     }
 
     SDL_RenderPresent(renderer);
