@@ -1,10 +1,13 @@
-#include "Constants.h"
-
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 
+#include "libtcod.hpp"
+
+#include "Constants.h"
+
 #include "ui/menus.hpp"
 #include "Entity.hpp"
+#include "Player.hpp"
 #include "GameState.hpp"
 #include "GamePhase.hpp"
 #include "SaveGame.hpp"
@@ -18,8 +21,6 @@
 #include "input.hpp"
 #include "fov_functions.hpp"
 #include "render_functions.hpp"
-
-#include "libtcod.hpp"
 
 
 using namespace std;
@@ -54,7 +55,6 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
     // Objects required for Enemies' Actions
     AIAction * entity_action;
 
-    ////////////////////////////////////////////
     /////////////// MAIN LOOP //////////////////
     ////////////////////////////////////////////
 

@@ -10,11 +10,11 @@
 
 #include "libtcod.hpp"
 
-
-
 #include "Constants.h"
 
 #include "Entity.hpp"
+#include "Player.hpp"
+#include "Skill.hpp"
 
 #include "components/Fighter.hpp"
 #include "components/Usable.hpp"
@@ -154,21 +154,19 @@ void split2(const std::string& str, Container& cont, char delim = ' ')
     }
 }
 
-void render_popup_message_text_sdl(SDL_Renderer * renderer, std::string text, int x, int y, int frame_w)
+void render_popup_message_text_sdl(SDL_Renderer * renderer, std::string text,
+    int x, int y, int frame_w, int font_size=20, SDL_Color text_color={255, 255, 255, 255})
 {
 
     int charw, charh;
 
     TCODSystem::getCharSize(&charw,&charh);
 
-    TTF_Font * font = TTF_OpenFont("data/fonts/ttf/SairaExtraCondensed/SairaExtraCondensed-Regular.ttf", 20);
+    TTF_Font * font = TTF_OpenFont("data/fonts/ttf/SairaExtraCondensed/SairaExtraCondensed-Regular.ttf", font_size);
 
     // Auxiliary variables to store size values
     int w, h;
     SDL_Rect Message_rect; //create a rect
-
-    // Set the color
-    SDL_Color text_color = {255, 255, 255, 255};
 
     // Split the text in several lines
     std::vector<std::string> text_lines;
@@ -209,6 +207,7 @@ void render_popup_message_text_sdl(SDL_Renderer * renderer, std::string text, in
 
 }
 
+/*
 void render_skill_icons_sdl(SDL_Renderer * renderer)
 {
     // TODO test
@@ -241,6 +240,34 @@ void render_skill_icons_sdl(SDL_Renderer * renderer)
     // Destroy surface
     SDL_FreeSurface(icon_surface);
 
+}
+*/
+
+void render_skill_icons_sdl(SDL_Renderer * renderer)
+{
+    int charw, charh;
+
+    TCODSystem::getCharSize(&charw,&charh);
+
+    SDL_Rect skill_icon_rect; //create a rect
+    
+    int center_offset = 37;
+    int SKILL_BOX_W = 128;
+
+    for (unsigned int i=0; i<Player::singleton().skills.size(); i++)
+    {
+        Skill * skill = Player::singleton().skills[i];
+
+        // TODO change alpha based on existing popups/menus
+        SDL_SetTextureAlphaMod(skill->get_icon_texture(), 255);
+
+        skill_icon_rect.x = (SKILLS_AREA_X + 1) * charw + (SKILL_BOX_W * i) + center_offset;  //controls the rect's x coordinate
+        skill_icon_rect.y = (SKILLS_AREA_Y + 1) * charh; // controls the rect's y coordinte
+        skill_icon_rect.w = 64; // controls the width of the rect
+        skill_icon_rect.h = 64; // controls the height of the rect
+
+        SDL_RenderCopy(renderer, skill->get_icon_texture(), NULL, &skill_icon_rect);
+    }
 }
 
 /**
@@ -892,7 +919,7 @@ void render_all(
         std::string help_inspect_l =   "LMB:";
 
         std::string help_movement_r =  "Movement";
-        std::string help_attack_r =    "FAttack";
+        std::string help_attack_r =    "Attack";
         std::string help_inventory_r = "Show inventory";
         std::string help_menu_r =      "Menu";
         std::string help_inspect_r =   "Inspect";
@@ -916,9 +943,9 @@ void render_all(
         int x = (SCREEN_WIDTH - 50)/2 + 2;
         int y = (SCREEN_HEIGHT - 30)/2 + 2;
 
-        render_popup_message_text_sdl(renderer, help_headline, x, y, 50);
-        render_popup_message_text_sdl(renderer, help_text_l, x, y+2, 50);
-        render_popup_message_text_sdl(renderer, help_text_r, x+24, y+2, 50);
+        render_popup_message_text_sdl(renderer, help_headline, x, y, 50, 30, {255, 255, 102, 255});
+        render_popup_message_text_sdl(renderer, help_text_l, x, y+4, 50);
+        render_popup_message_text_sdl(renderer, help_text_r, x+36, y+4, 50);
     }
 
     SDL_RenderPresent(renderer);

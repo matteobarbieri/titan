@@ -3,6 +3,8 @@
 #include "map/GameMap.hpp"
 
 #include "Entity.hpp"
+#include "Player.hpp"
+#include "Skill.hpp"
 
 #include "RenderOrder.hpp"
 
@@ -151,19 +153,19 @@ void init_new_game(
     // Place player in the map
     (*game_map)->place_player(* player);
 
-    /*
-    // TODO activate this
-    # Initialize message log
-    message_log = MessageLog(
-        constants['message_x'], constants['message_width'],
-        constants['message_height'])
-    */
+    // Initialize player singleton
+    Player::singleton().entity = (*player);
 
+    // Add skills
+    Skill * skill_stun = new Skill("Stun", "data/graphics/icons/skills/skill_stun.png");
+    Skill * skill_parry = new Skill("Parry", "data/graphics/icons/skills/skill_parry.png");
+    Player::singleton().skills.push_back(skill_stun);
+    Player::singleton().skills.push_back(skill_parry);
+
+    Player::singleton().preload_skill_textures(TCOD_sys_get_sdl_renderer());
+
+    ////////////////////////////////////////////
     // Begin the game in player's turn
     * game_state = new GameState();
     (* game_state)->game_phase = PLAYERS_TURN;
-
-    /*
-    return player, game_map, message_log, game_state
-    */
 }
