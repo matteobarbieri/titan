@@ -29,5 +29,7 @@ Entity * make_dagger()
     // TODO Add damage function
 
     dagger->equippable = equippable_component;
+    equippable_component->owner = dagger;
+
     return dagger;
 }

@@ -66,6 +66,8 @@ GameMap * generate_room(int width, int height)
 
     // Add stairs component to entity
     up_stairs->stairs = up_stairs_component;
+    up_stairs_component->owner = up_stairs;
+
     level->add_entity(up_stairs);
 
     // Create grenade
