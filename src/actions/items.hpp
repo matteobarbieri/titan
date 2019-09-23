@@ -1,5 +1,5 @@
 #ifndef ROGUE_20177_ACTION_ITEMS
-#define ROGUE_20177_ACTION_ITEMS value
+#define ROGUE_20177_ACTION_ITEMS
 
 #include "Action.hpp"
 
