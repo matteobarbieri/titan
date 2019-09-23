@@ -4,7 +4,8 @@
 
 #include "Entity.hpp"
 #include "Player.hpp"
-#include "skills/Skill.hpp"
+//#include "skills/Skill.hpp"
+#include "skills/SkillStun.hpp"
 
 #include "RenderOrder.hpp"
 
@@ -140,7 +141,7 @@ void init_new_game(
     Player::singleton().entity = (*player);
 
     // Add skills
-    Skill * skill_stun = new Skill("Stun", "data/graphics/icons/skills/skill_stun.png");
+    Skill * skill_stun = new SkillStun("Stun", "data/graphics/icons/skills/skill_stun.png");
     Player::singleton().skills.push_back(skill_stun);
 
     //Skill * skill_parry = new Skill("Parry", "data/graphics/icons/skills/skill_parry.png");

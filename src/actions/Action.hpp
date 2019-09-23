@@ -19,7 +19,10 @@ class Action
 
         Action();
 
-        void set_context(
+        /**
+         * Add context required to execute the action.
+         */
+        virtual void set_context(
             GameMap * game_map, Entity * player, TCODMap * fov_map,
             GameState * game_state);
 

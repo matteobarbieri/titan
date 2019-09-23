@@ -1,3 +1,5 @@
+#include "../Constants.h"
+
 #include "Skill.hpp"
 
 #include <SDL2/SDL_image.h>
@@ -33,4 +35,20 @@ void Skill::load_texture(SDL_Renderer * renderer)
 SDL_Texture * Skill::get_icon_texture()
 {
     return icon_texture;
+}
+
+void Skill::set_context(
+    GameMap * game_map, Entity * player,
+    GameState * game_state)
+{
+    this->game_map = game_map;
+    this->player = player;
+    this->game_state = game_state;
+}
+
+
+Outcome * Skill::use()
+{
+    // Simply call actual function
+    return _use();
 }

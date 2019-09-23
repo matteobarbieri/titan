@@ -18,6 +18,12 @@ class UseSkillAction : public Action
 
         Outcome * _execute();
 
+        /**
+         * Also set context for the skill
+         */
+        void set_context(
+            GameMap * game_map, Entity * player, TCODMap * fov_map,
+            GameState * game_state);
 };
 
 #endif /* ifndef ROGUE_20177_ACTION_SKILLS */
