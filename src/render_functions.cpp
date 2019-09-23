@@ -14,7 +14,7 @@
 
 #include "Entity.hpp"
 #include "Player.hpp"
-#include "Skill.hpp"
+#include "skills/Skill.hpp"
 
 #include "components/Fighter.hpp"
 #include "components/Usable.hpp"

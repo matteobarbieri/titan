@@ -4,7 +4,7 @@
 
 #include "Entity.hpp"
 #include "Player.hpp"
-#include "Skill.hpp"
+#include "skills/Skill.hpp"
 
 #include "RenderOrder.hpp"
 
@@ -133,23 +133,6 @@ void init_new_game(
     (* player)->level = level_component; 
     (* player)->equipment = equipment_component; 
 
-    /*
-
-    // TODO activate this
-    
-    # Create the dagger from the prefab
-    dagger = make_dagger()
-
-    # Equip it
-    # player.equipment.toggle_equip(dagger)
-
-    # Required to prevent Exception on pickup
-    game_map.entities.append(dagger)
-
-    # Add dagger to player's inventory
-    player.inventory.pickup(dagger, game_map)
-    */
-
     // Place player in the map
     (*game_map)->place_player(* player);
 
@@ -158,9 +141,10 @@ void init_new_game(
 
     // Add skills
     Skill * skill_stun = new Skill("Stun", "data/graphics/icons/skills/skill_stun.png");
-    Skill * skill_parry = new Skill("Parry", "data/graphics/icons/skills/skill_parry.png");
     Player::singleton().skills.push_back(skill_stun);
-    Player::singleton().skills.push_back(skill_parry);
+
+    //Skill * skill_parry = new Skill("Parry", "data/graphics/icons/skills/skill_parry.png");
+    //Player::singleton().skills.push_back(skill_parry);
 
     Player::singleton().preload_skill_textures(TCOD_sys_get_sdl_renderer());
 

@@ -1,5 +1,5 @@
 #include "Player.hpp"
-#include "Skill.hpp"
+#include "skills/Skill.hpp"
 
 Player::Player()
 {
@@ -15,6 +15,19 @@ Player & Player::singleton()
     static Player instance;
 
     return instance;
+}
+
+int Player::char_to_skill_index(char c)
+{
+    int i = c - '1';
+    if (i >= (int)skills.size() || i < 0)
+    {
+        return -1;
+    }
+    else
+    {
+        return i;
+    }
 }
 
 void Player::preload_skill_textures(SDL_Renderer * renderer)

@@ -6,8 +6,11 @@
 #include "actions/Menus.hpp"
 
 #include "actions/combat.hpp"
+#include "actions/skills.hpp"
 #include "actions/items.hpp"
 #include "actions/inspect.hpp"
+
+#include "Player.hpp"
 
 #include "GameState.hpp"
 #include "GamePhase.hpp"
@@ -43,6 +46,26 @@ char handle_main_menu(TCOD_key_t key)
     }
 }
 
+/**
+ * Select skill if it corresponds to one of the available skills, else return
+ * nullptr.
+ */
+Action * select_skill(char key_char)
+{
+    
+    int skill_index = Player::singleton().char_to_skill_index(key_char);
+
+    if (skill_index >=0)
+    {
+        return new UseSkillAction(Player::singleton().skills[skill_index]);
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+
 Action * handle_player_dead_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 {
     /////////////////////////////////////////
@@ -61,8 +84,11 @@ Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     char key_char = -1;
 
     // Code to prevent double input
-    if (key.vk == TCODK_CHAR)
+    if (key.vk == TCODK_CHAR || // Regular characters a-z
+        (key.vk >= TCODK_0 && key.vk <= TCODK_9)) // digits 0-9
+    {
         key_char = key.c;
+    }
 
     /////////////////////////////////////////
     ////////////// MOVEMENT /////////////////
@@ -116,21 +142,26 @@ Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
         return new AttackAction();
 
     /////////////////////////////////////////
+    //////////////// SKILLS /////////////////
+    /////////////////////////////////////////
+
+    if (key_char >= '1' && key_char <= '7')
+        return select_skill(key_char);
+
+    /////////////////////////////////////////
     /////////// GO TO MAIN MENU /////////////
     /////////////////////////////////////////
 
     if (key.vk == TCODK_ESCAPE)
         return new ShowMenuAction();
 
-    
-    if (key_char == 'z')
-        return new WaitAction();
-    
-
     /////////////////////////////////////////
     ///////////////// MISC //////////////////
     /////////////////////////////////////////
 
+    if (key_char == 'z')
+        return new WaitAction();
+    
     /*
     elif key_char == 'c':
         return ShowCharacterScreenAction()
