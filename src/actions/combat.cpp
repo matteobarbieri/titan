@@ -21,6 +21,8 @@ Outcome * AttackAction::_execute()
     bool position_changed = false;
     bool interacted_with_something = false;
 
+    GamePhase next_phase = PLAYERS_TURN;
+
     Entity * target = nullptr;
     int n_enemies_in_range = game_map->search_target_in_range(
         player->x, player->y, melee_weapon_range, &target);
@@ -33,6 +35,7 @@ Outcome * AttackAction::_execute()
     }
     else if (n_enemies_in_range == 1)
     {
+        next_phase = ENEMY_TURN;
         player->interact_with(target, game_map);
         interacted_with_something = true;
     }
@@ -48,7 +51,7 @@ Outcome * AttackAction::_execute()
 
     // Return outcome
     Outcome * outcome = new Outcome(
-        ENEMY_TURN, // TODO this is the right one
+        next_phase,
         fov_recompute,
         redraw_terrain);
 
