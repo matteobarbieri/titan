@@ -9,9 +9,6 @@ class Outcome;
 class AttackAction : public Action
 {
 
-    private:
-        int search_target_in_range(int range, Entity ** target);
-
     public:
 
         Outcome * _execute();

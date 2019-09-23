@@ -246,6 +246,12 @@ class GameMap
 
         bool is_blocked(int x, int y) const;
 
+        /**
+         * Given a position and a range, return the number of entities in that 
+         * range (normally monsters).
+         */
+        int search_target_in_range(int x, int y, int range, Entity ** target);
+
         void export_txt(const char * txt_file);
 
         void export_shelf(const char * destination);

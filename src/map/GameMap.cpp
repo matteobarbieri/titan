@@ -5,6 +5,7 @@
 #include "Tile.hpp"
 #include "../Entity.hpp"
 
+#include "../utils.hpp"
 #include "map_utils.hpp"
 
 #include <vector>
@@ -446,14 +447,45 @@ def add_walls(level):
 */
 
 
-/*
-void GameMap::add_walls()
+int GameMap::search_target_in_range(int base_x, int base_y, int range, Entity ** target)
 {
-    // TODO implement
-    std::cout << "Implement GameMap::add_walls" << std::endl;
-    float a = 1/0;
+
+    std::vector<Entity *> enemies_in_range;
+
+    // TODO expand for multiple options depending on player equipment
+    // Look for targets in melee range
+    for (int x = base_x - range; x <=base_x + range; x++)
+    {
+        for (int y = base_y - range; y <=base_y + range; y++)
+        {
+            // First check if it is a visible tile, to avoid to target stuff
+            // over walls with greater melee range
+            if (fov_map->isInFov(x, y))
+            {
+                Entity * target = get_blocking_entities_at_location(
+                    entities(), x, y);
+
+                // Check if it is actually a monster
+                if (target != nullptr && target->ai != nullptr && target->fighter != nullptr)
+                {
+                    enemies_in_range.push_back(target);
+                }
+            }
+        }
+    }
+
+    int n_enemies_in_range = enemies_in_range.size();
+
+    // If there is only one enemy in range return it
+    if (n_enemies_in_range == 1)
+    {
+        (*target) = enemies_in_range[0];
+    }
+
+    return n_enemies_in_range;
+
+
 }
-*/
 
 // Compares two entities according to render_order
 bool compare_render_order(Entity * e1, Entity * e2)

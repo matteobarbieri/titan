@@ -11,45 +11,6 @@
 
 #include "Outcome.hpp"
 
-// TODO move somewhere else
-
-int AttackAction::search_target_in_range(int range, Entity ** target)
-{
-
-    std::vector<Entity *> enemies_in_range;
-
-    // TODO expand for multiple options depending on player equipment
-    // Look for targets in melee range
-    for (int x = player->x-range; x <=player->x+range; x++)
-    {
-        for (int y = player->y-range; y <=player->y+range; y++)
-        {
-            // First check if it is a visible tile, to avoid to target stuff
-            // over walls with greater melee range
-            if (game_map->fov_map->isInFov(x, y))
-            {
-                Entity * target = get_blocking_entities_at_location(
-                    game_map->entities(), x, y);
-
-                // Check if it is actually a monster
-                if (target != nullptr && target->ai != nullptr && target->fighter != nullptr)
-                {
-                    enemies_in_range.push_back(target);
-                }
-            }
-        }
-    }
-
-    int n_enemies_in_range = enemies_in_range.size();
-
-    // If there is only one enemy in range return it
-    if (n_enemies_in_range == 1)
-    {
-        (*target) = enemies_in_range[0];
-    }
-
-    return n_enemies_in_range;
-}
 
 Outcome * AttackAction::_execute()
 {
@@ -57,12 +18,12 @@ Outcome * AttackAction::_execute()
     // TODO adapt range based on equipped weapon
     int melee_weapon_range = 1;
 
-
     bool position_changed = false;
     bool interacted_with_something = false;
 
     Entity * target = nullptr;
-    int n_enemies_in_range = search_target_in_range(melee_weapon_range, &target);
+    int n_enemies_in_range = game_map->search_target_in_range(
+        player->x, player->y, melee_weapon_range, &target);
 
     if (n_enemies_in_range == 0)
     {
