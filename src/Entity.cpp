@@ -23,6 +23,9 @@
 #include "components/Inventory.hpp"
 #include "components/Interactive.hpp"
 
+// Misc
+#include "buffs/Buff.hpp"
+
 Entity::Entity(int x, int y, int symbol,
     TCODColor color, std::string name, RenderOrder render_order,
     bool blocks, bool blocks_sight, bool _fixed,
@@ -65,7 +68,27 @@ bool Entity::operator < (const Entity & other) const
 }
 */
 
+void Entity::apply_buff(Buff * buff)
+{
+    buffs.push_back(buff);
+}
+
+bool Entity::is_disabled() const
+{
+
+    for (std::vector<Buff *>::const_iterator b = buffs.begin() ; b != buffs.end(); ++b)
+    {
+        if ((*b)->disables_entity())
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void Entity::interact_with(Entity * other, GameMap * game_map)
+
 {
 
     // TODO must be more complex than this (i.e., take into account factions 

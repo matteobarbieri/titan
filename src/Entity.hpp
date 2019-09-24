@@ -27,6 +27,8 @@ class Interactive;
 
 class GameMap;
 
+class Buff;
+
 /** A container for all consoles that are used in the game, except for the root
  * one, which is accessed directly via TCODConsole::root.
  */
@@ -78,7 +80,12 @@ class Entity
         Inventory * inventory;
         Interactive * interactive;
 
-        // Methods
+        // Buffs currently applied to entity
+        std::vector<Buff *> buffs;
+
+        //////////////////////////////
+        ////////// METHODS ///////////
+        //////////////////////////////
         
         // Constructor
         Entity(int x, int y, int symbol,
@@ -107,13 +114,6 @@ class Entity
         void blocks(bool);
         void blocks_sight(bool);
 
-        /**
-         * Creates a json representation of the entity
-         */
-        json to_json();
-
-        static Entity * from_json(json j);
-
         /*
          * Default interaction with another entity
          *
@@ -122,10 +122,26 @@ class Entity
          */
         void interact_with(Entity * other, GameMap * game_map);
 
+        void apply_buff(Buff *);
+
+        /**
+         * Returns true if for some reason (possibly depending on buffs) the
+         * entity is disabled and cannot take an action.
+         */
+        bool is_disabled() const;
+
         /**
          * Used for entities which represent living things, cleans up components
          */
         void die();
+
+        /**
+         * Creates a json representation of the entity
+         */
+        json to_json();
+
+        static Entity * from_json(json j);
+
 };
 
 #endif

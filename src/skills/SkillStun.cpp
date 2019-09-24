@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 
 #include "SkillStun.hpp"
 
@@ -8,6 +9,8 @@
 #include "../Entity.hpp"
 
 #include "../map/GameMap.hpp"
+
+#include "../buffs/BuffStun.hpp"
 
 SkillStun::SkillStun(const char * name, const char * icon_path) :
     Skill(name, icon_path)
@@ -37,9 +40,19 @@ Outcome * SkillStun::_use()
     else if (n_enemies_in_range == 1)
     {
         next_phase = ENEMY_TURN;
+
+        // Apply debuff to target
+        target->apply_buff(new BuffStun(target, 10));
+
+        // Build message
+        std::ostringstream stringStream;
+
+        stringStream << "The " << target->name << " is stunned!";
+
+        // Add message to message log
         MessageLog::singleton().add_message(
-                {"Stun!",
-                TCODColor::green});
+            {stringStream.str(), TCODColor::green});
+
         //player->interact_with(target, game_map);
         //interacted_with_something = true;
     }

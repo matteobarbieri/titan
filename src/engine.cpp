@@ -15,6 +15,8 @@
 #include "Consoles.hpp"
 #include "actions/Action.hpp"
 
+#include "buffs/Buff.hpp"
+
 #include "components/Ai.hpp"
 #include "components/Fighter.hpp"
 
@@ -25,6 +27,7 @@
 
 using namespace std;
 
+void tick_buffs(GameMap * game_map);
 
 void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 {
@@ -173,7 +176,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
             // Each entity takes a turn
             for (int i=0; i<(int)(game_map->entities().size()); i++)
             {
-                if (game_map->entities()[i]->ai != nullptr)
+                if (game_map->entities()[i]->ai != nullptr && !game_map->entities()[i]->is_disabled())
                 {
 
                     // Pick an action for each entity
@@ -214,6 +217,9 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
                 }
             }
 
+            // Resolves buffs effects
+            tick_buffs(game_map);
+
             if (game_state->game_phase != PLAYER_DEAD)
             {
                 // Go back to player's turn state
@@ -238,6 +244,9 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
 void init_new_game(
     GameMap ** game_map, Entity ** player, GameState ** game_state);
 
+/**
+ * Initializes different components of the engine, mainly related to SDL.
+ */
 void init_engine()
 {
 
@@ -262,6 +271,34 @@ void init_engine()
         //WINDOW_TITLE, false, TCOD_RENDERER_SDL);
         WINDOW_TITLE, false, TCOD_RENDERER_SDL2);
 
+}
+
+void tick_buffs(GameMap * game_map)
+{
+    // Tick buffs for entities
+    for (unsigned int ei=0; ei<game_map->entities().size(); ei++)
+    {
+
+        // Shortcut to entity
+        Entity * e = game_map->entities()[ei];
+
+        // TODO check this for deleting while iterating
+        // https://stackoverflow.com/questions/3901356/deleting-while-iterating
+
+        // Tick each buff.
+        for (unsigned int bi=0; bi<e->buffs.size(); bi++)
+        {
+            // Tick buff
+            e->buffs[bi]->tick();
+
+            // TODO replace iterator
+            // Cleanup if buff has expired
+            if (e->buffs[bi]->has_expired())
+            {
+
+            }
+        }
+    }
 }
 
 int main(int argc, char *argv[])

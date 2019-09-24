@@ -7,6 +7,7 @@ ccsrc = $(wildcard src/*.cpp) \
         $(wildcard src/ui/*.cpp) \
         $(wildcard src/actions/*.cpp) \
         $(wildcard src/skills/*.cpp) \
+        $(wildcard src/buffs/*.cpp) \
         $(wildcard src/prefabs/enemies/*.cpp) \
         $(wildcard src/prefabs/weapons/*.cpp) \
         $(wildcard src/prefabs/misc/*.cpp) \
