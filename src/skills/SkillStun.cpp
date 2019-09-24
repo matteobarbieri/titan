@@ -42,7 +42,7 @@ Outcome * SkillStun::_use()
         next_phase = ENEMY_TURN;
 
         // Apply debuff to target
-        target->apply_buff(new BuffStun(target, 10));
+        target->apply_buff(new BuffStun(target, 3));
 
         // Build message
         std::ostringstream stringStream;
