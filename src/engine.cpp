@@ -282,20 +282,24 @@ void tick_buffs(GameMap * game_map)
         // Shortcut to entity
         Entity * e = game_map->entities()[ei];
 
-        // TODO check this for deleting while iterating
+        // Refer to this for deleting while iterating:
         // https://stackoverflow.com/questions/3901356/deleting-while-iterating
 
         // Tick each buff.
-        for (unsigned int bi=0; bi<e->buffs.size(); bi++)
+        std::vector<Buff *>::iterator b = e->buffs.begin();
+        while (b != e->buffs.end())
         {
-            // Tick buff
-            e->buffs[bi]->tick();
+            // Tick
+            (*b)->tick();
 
-            // TODO replace iterator
-            // Cleanup if buff has expired
-            if (e->buffs[bi]->has_expired())
+            // Remove buff if it has expired
+            if ((*b)->has_expired())
             {
-
+                b = e->buffs.erase(b);
+            }
+            else
+            {
+                ++b;
             }
         }
     }
