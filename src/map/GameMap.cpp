@@ -339,6 +339,17 @@ void GameMap::make_floor(int x, int y)
     tiles[i] = new Floor();
 }
 
+void GameMap::make_window(int x, int y)
+{
+
+    int i = compute_tile_index(x, y, width);
+
+    // Remove old tile
+    delete tiles[i];
+
+    tiles[i] = new Window();
+}
+
 void GameMap::dig(MapPart * map_part, int padding)
 {
 

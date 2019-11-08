@@ -235,6 +235,12 @@ class GameMap
          */
         void make_floor(int x, int y);
 
+        /**
+         * Turn a single tile to a window, that is an impassable cell which
+         * however allows to see through.
+         */
+        void make_window(int x, int y);
+
         void create_dijkstra_map(MapPart * part);
         void initialize_fov_map();
 

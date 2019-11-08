@@ -95,6 +95,24 @@ class Floor : public Tile
 };
 
 /**
+ * A block representing traversable terrain
+ */
+class Window : public Tile
+{
+
+    public:
+
+        Window(TCODColor bg_color = TCODColor(20, 20, 20),
+              TCODColor fg_color = TCODColor(65, 65, 65),
+              int fg_symbol='=');
+
+        json to_json() override;
+
+        static Window * from_json(json);
+
+};
+
+/**
  * A block of wall
  */
 class Wall : public Tile

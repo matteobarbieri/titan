@@ -133,6 +133,44 @@ Tile * Tile::from_json(json j)
 }
 
 /////////////////////////////////
+//////////// WINDOW /////////////
+/////////////////////////////////
+
+Window::Window(TCODColor bg_color, TCODColor fg_color, int fg_symbol) : 
+    Tile(true, false) // blocked, !block_sight
+{
+
+    _bg_color = bg_color;
+    _fg_color = fg_color;
+
+    _fg_symbol = fg_symbol;
+}
+
+json Window::to_json()
+{
+    json j = Tile::to_json();
+
+    j["class"] = "WINDOW";
+
+    return j;
+}
+
+Window * Window::from_json(json j)
+{
+
+    Window * window_tile = new Window(
+        json_to_tcodcolor(j["_bg_color"]), 
+        json_to_tcodcolor(j["_fg_color"]), 
+        j["_fg_symbol"]);
+
+    // Set the "explored" status
+    window_tile->_explored = j["_explored"];
+
+    return window_tile;
+}
+
+
+/////////////////////////////////
 ///////////// FLOOR /////////////
 /////////////////////////////////
 

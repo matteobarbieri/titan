@@ -60,42 +60,11 @@ GameMap * generate_map(int width, int height)
     // Create and add entry stairs '<'
     Stairs * up_stairs_component = new Stairs(level->dungeon_level - 1);
 
-    // Create entity object
-    //Entity * up_stairs = new Entity(
-        //x1+5, y1+3, '<',
-        //TCODColor::white, "Stairs up", STAIRS, false, false, true);
-
-    // Add stairs component to entity
-    //up_stairs->stairs = up_stairs_component;
-    //up_stairs_component->owner = up_stairs;
-
-    //level->add_entity(up_stairs);
-    
     Entity * entry_point = new Entity(
         x1+5, y1+3, ' ',
         TCODColor::white, "ENTRY_POINT", NONE, false, false, true);
 
     level->add_entity(entry_point);
-
-    /*
-    // Create grenade
-    Entity * grenade = new Entity(
-        xc+2, yc, 162,
-        TCODColor::darkerGreen, "Frag grenade", ITEM, false, false, false);
-
-    AOEUsable * usable_component = new AOEUsable();
-    usable_component->radius = 4;
-    usable_component->range = 10;
-
-    grenade->usable = usable_component;
-    usable_component->owner = grenade;
-
-    Item * grenade_item_component = new Item(
-        ItemType::CONSUMABLE, ItemSubtype::NONE);
-    grenade->item = grenade_item_component;
-    grenade_item_component->owner = grenade;
-
-    level->add_entity(grenade);
 
     //////////////////////////////
     /////////// ROOM 2 ///////////
@@ -120,6 +89,10 @@ GameMap * generate_map(int width, int height)
 
     level->add_entity(d2);
     
+    // Add a window
+    level->make_window(x1-1, yc-2);
+
+    /*
     // Add key for room 4
     Entity * door_key = new Entity(
         x1+2, y1+2, 208, 
