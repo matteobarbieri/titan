@@ -215,7 +215,15 @@ class GameMap
          */
         Entity * get_item_at(int x, int y);
 
+        /**
+         * Places the player at the dungeon's entry point
+         */
         void place_player(Entity * player);
+
+        /**
+         * Places player at specified coordinates
+         */
+        void place_player(Entity * player, int, int);
 
         void dig(MapPart * part, int pad=0);
 

@@ -53,6 +53,10 @@ namespace tutorial {
     GameMap * generate_room(int, int);
 }
 
+namespace prologue {
+    GameMap * generate_map(int, int);
+}
+
 namespace test_room {
     GameMap * generate_room(int, int);
 }
@@ -65,9 +69,13 @@ void init_new_game(
     //* game_map = test_room::generate_room(
         //MAP_WIDTH, MAP_HEIGHT);
 
-    // Generate tutorial map
-    * game_map = tutorial::generate_room(
+    // Generate prologue map
+    * game_map = prologue::generate_map(
         MAP_WIDTH, MAP_HEIGHT);
+
+    // Generate tutorial map
+    //* game_map = tutorial::generate_room(
+        //MAP_WIDTH, MAP_HEIGHT);
 
     /*
 

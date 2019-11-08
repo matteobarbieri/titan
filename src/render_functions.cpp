@@ -428,7 +428,7 @@ Entity * get_entity_under_mouse(
     int x = mouse->cx;
     int y = mouse->cy;
 
-    Entity * entity = 0;
+    Entity * entity = nullptr;
 
     for (int i=0; i<(int)entities.size(); i++)
     {
@@ -461,7 +461,8 @@ std::string get_names_under_mouse(
         if (
             entities[i]->x == (top_x + x) && 
             entities[i]->y == (top_y + y) && 
-            fov_map->isInFov(entities[i]->x, entities[i]->y)
+            fov_map->isInFov(entities[i]->x, entities[i]->y) &&
+            entities[i]->render_order() != NONE
             )
         {
             names.append(entities[i]->name);
@@ -695,7 +696,6 @@ void render_all(
 
     }
 
-
     /////////////////////////////////////////
     /////////// Render entities  ////////////
     /////////////////////////////////////////
@@ -707,6 +707,13 @@ void render_all(
         // Entities are kept sorted in GameMap::add_entity
         for (int i=0; i < (int)game_map->entities().size(); i++)
         {
+
+            // Skip entities whose render order is NONE
+            if (game_map->entities()[i]->render_order() == NONE)
+            {
+                continue;
+            }
+
             //std::cout << i << " " << game_map->entities()[i]->name << std::endl;
             draw_entity(
                 Consoles::singleton().terrain_layer, game_map->entities()[i],
@@ -787,7 +794,8 @@ void render_all(
     Entity * entity_under_mouse = get_entity_under_mouse(
             mouse, game_map->entities(), fov_map, top_x, top_y);
 
-    if (entity_under_mouse)
+    // Do not render a label if the entity's render order is NONE
+    if (entity_under_mouse != nullptr && entity_under_mouse->render_order() != NONE)
     {
         render_entity_label(
             Consoles::singleton().main_window, entity_under_mouse,

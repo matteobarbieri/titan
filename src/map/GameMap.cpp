@@ -166,7 +166,7 @@ void GameMap::get_player_starting_coords(int & x, int & y)
     // TODO change this
     for (int i=0; i<(int)entities().size(); i++)
     {
-        if (entities()[i]->symbol == '<')
+        if (entities()[i]->name == "ENTRY_POINT")
         {
             x = entities()[i]->x;
             y = entities()[i]->y;
@@ -179,6 +179,17 @@ void GameMap::get_player_starting_coords(int & x, int & y)
     // Raise exception if no starting point is found
 }
 
+void GameMap::place_player(Entity * player, int x, int y)
+{
+
+    // Set player's coordinates
+    player->x = x;
+    player->y = y;
+
+    // Add player to list of entities
+    add_entity(player);
+}
+
 void GameMap::place_player(Entity * player)
 {
 
@@ -187,13 +198,7 @@ void GameMap::place_player(Entity * player)
     // Get starting coordinates from the map object itself
     get_player_starting_coords(x, y);
 
-    // Set player's coordinates
-    player->x = x;
-    player->y = y;
-
-    // Add player to list of entities
-    add_entity(player);
-
+    place_player(player, x, y);
 }
 
 void GameMap::initialize_fov_map()
