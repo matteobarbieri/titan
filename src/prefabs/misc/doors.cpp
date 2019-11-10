@@ -13,6 +13,8 @@ Entity * make_door(int x, int y, bool is_open, bool locked, unsigned int key_id)
         STAIRS,
         true, true, true);
 
+    door->tag = "door";
+
     door->interactive = new InteractiveDoor(is_open, locked, key_id);
     door->interactive->owner = door;
     return door;

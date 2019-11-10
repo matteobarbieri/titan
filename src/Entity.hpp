@@ -83,6 +83,9 @@ class Entity
         // Buffs currently applied to entity
         std::vector<Buff *> buffs;
 
+        // A tag used to identify entity type
+        std::string tag;
+
         //////////////////////////////
         ////////// METHODS ///////////
         //////////////////////////////

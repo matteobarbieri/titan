@@ -33,7 +33,7 @@ Entity::Entity(int x, int y, int symbol,
     x(x), y(y), _render_order(render_order), name(name),
     symbol(symbol), _color(color),
     _blocks(blocks), _blocks_sight(blocks_sight),
-    _fixed(_fixed)
+    _fixed(_fixed), tag("")
 {
     
         // Initialize pointers to NULL

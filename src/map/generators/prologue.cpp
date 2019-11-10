@@ -1,9 +1,13 @@
 #include <iostream>
+#include <utility>
 
 // TODO check if file stays in place
 #include "../GameMap.hpp"
 
 #include "../../RenderOrder.hpp"
+#include "../../Overseer.hpp"
+#include "../../EventTrigger.hpp"
+#include "../../GameEvent.hpp"
 
 #include "../../libtcod.hpp"
 #include "../../Entity.hpp"
@@ -33,7 +37,7 @@ void add_monsters(GameMap * level);
 void add_items(GameMap * level);
 
 //GameMap generate_dungeon_level(width, height, min_room_length, max_room_length)
-GameMap * generate_map(int width, int height)
+GameMap * generate_map(int width, int height, Overseer ** overseer)
 {
 
     GameMap * level = new GameMap(width, height);
@@ -83,9 +87,10 @@ GameMap * generate_map(int width, int height)
     // Add room to level
     level->add_part(r2);
 
-    // Make a door
+    // Make a locked door
+    unsigned int key_id = 1;
     level->make_floor(x1-1, yc);
-    Entity * d2 = make_door(x1-1, yc);
+    Entity * d2 = make_door(x1-1, yc, false, true, key_id);
 
     level->add_entity(d2);
     
@@ -161,6 +166,22 @@ GameMap * generate_map(int width, int height)
 
     // Add some items in the room
     //add_items(level);
+
+    (*overseer) = new Overseer();
+
+    ////////////////////////////////
+    ///////// GAME EVENTS //////////
+    ////////////////////////////////
+
+    // At turn 3, the door unlocks
+    GameEvent gev1 = GameEvent();
+    gev1.log_message = "A loud noise wakes you up; looks like something hit the ship.";
+    gev1.log_message_color = TCODColor::amber;
+    gev1.unlock_doors_id = 1;
+
+    TriggeredEvent ev1 = TriggeredEvent(EventTrigger(10), gev1);
+
+    (*overseer)->scheduled_events.push_back(ev1);
 
     return level;
 }
