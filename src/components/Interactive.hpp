@@ -43,19 +43,25 @@ class InteractiveDoor : public Interactive
 {
     public:
 
+        // Whether the door is open or closed
+        bool is_open;
+
         // Whether the door is locked or unlocked
         bool locked;
 
         // The ID of the key which will open the door
         unsigned int key_id;
 
-        InteractiveDoor(bool locked=false, unsigned int key_id=0);
+        InteractiveDoor(bool is_open=false, bool locked=false, unsigned int key_id=0);
 
         /**
          * Set the door as unlocked, changing its symbol and updating the FOV
          * map accordingly.
          */
-        void unlock(GameMap * game_map);
+        //void unlock(GameMap * game_map);
+        void unlock();
+
+        void open(GameMap * game_map);
 
         /**
          * Checks if the player has in its inventory an appropriate key to open

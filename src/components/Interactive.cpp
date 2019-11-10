@@ -10,12 +10,18 @@
 
 #include "../GameMessages.hpp"
 
-InteractiveDoor::InteractiveDoor(bool locked, unsigned int key_id) :
-    locked(locked), key_id(key_id)
+InteractiveDoor::InteractiveDoor(bool is_open, bool locked, unsigned int key_id) :
+    is_open(is_open), locked(locked), key_id(key_id)
 {
 }
 
-void InteractiveDoor::unlock(GameMap * game_map)
+//void InteractiveDoor::unlock(GameMap * game_map)
+void InteractiveDoor::unlock()
+{
+    locked = false;
+}
+
+void InteractiveDoor::open(GameMap * game_map)
 {
         owner->blocks_sight(false);
         owner->blocks(false);
@@ -48,7 +54,7 @@ void InteractiveDoor::interact(Entity * player, GameMap * game_map)
 
     if (!locked)
     {
-        unlock(game_map);
+        open(game_map);
     }
     else
     {
@@ -57,7 +63,8 @@ void InteractiveDoor::interact(Entity * player, GameMap * game_map)
         {
             if (player_has_key(player))
             {
-                unlock(game_map);
+                //unlock(game_map);
+                unlock();
                 MessageLog::singleton().add_message(
                     {"You unlock the door",
                     TCODColor::white});
