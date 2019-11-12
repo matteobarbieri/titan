@@ -173,13 +173,13 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     ///////// GAME EVENTS //////////
     ////////////////////////////////
 
-    // At turn 3, the door unlocks
+    // At turn 10, the door unlocks
     GameEvent gev1 = GameEvent();
     gev1.log_message = "A loud noise wakes you up; looks like something hit the ship.";
     gev1.log_message_color = TCODColor::amber;
     gev1.unlock_doors_id = 1;
 
-    TriggeredEvent ev1 = TriggeredEvent(EventTrigger(3), gev1);
+    TriggeredEvent ev1 = TriggeredEvent(EventTrigger(10), gev1);
 
     (*overseer)->scheduled_events.push_back(ev1);
 
