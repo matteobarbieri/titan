@@ -44,19 +44,21 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->dungeon_level = 1;
 
     // Center of the map
-    int xc = width/2;
-    int yc = height/2;
+    int xc = int(width/2);
+    int yc = int(height/2);
 
     //////////////////////////////
     ///////// FIRST ROOM /////////
     //////////////////////////////
     
-    int x1 = xc-5, y1 = yc - 3;
+    // Actually walkable space
     int w = 11, h = 7;
 
-    // Collect coordinates in a variable
-    Rect xy(x1, y1, x1+w-1, y1+h-1);
-    Room * entry_room = new Room(xy, Direction::FourD());
+    // Collect coordinates in variables
+    int x1 = xc, y1 = yc, x2 = x1+w-1, y2 = yc+h-1;
+    
+    Room * entry_room = new Room(
+        Rect(x1, y1, x2, y2), Direction::FourD());
 
     // Add room to level
     level->add_part(entry_room);
@@ -69,33 +71,55 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
         TCODColor::white, "ENTRY_POINT", NONE, false, false, true);
 
     level->add_entity(entry_point);
+    
+    // Make a locked door
+    unsigned int key_id = 1;
+    level->make_floor(x2+1, y1+3);
+    Entity * d2 = make_door(x2+1, y1+3, false, true, key_id);
+
+    level->add_entity(d2);
+    
+    // Add a window
+    level->make_window(x2+1, y1+1);
+
+    //////////////////////////////
+    /////// OTHER CELLS [1] //////
+    //////////////////////////////
+
+    /*
+    Room * cell_1 = new Room(
+        Rect(x1, y1-7-1, x1+w-1, y1-1), Direction::FourD());
+
+    // Add room to level
+    level->add_part(cell_1);
+
+    // Add door to cell 2
+    unsigned int key_id_cell1 = 2;
+    level->make_floor(x1+w, y1-1+3);
+    Entity * dc1 = make_door(x1+w, y1-1+3, false, true, key_id_cell1);
+
+    level->add_entity(dc1);
+
+    */
 
     //////////////////////////////
     /////////// ROOM 2 ///////////
     //////////////////////////////
 
-    x1 += w + 1;
-    y1 -= 2;
-
-    w = 15; h = 11;
+    w = 15;
+    h = 27;
     
-    Rect xy2(x1, y1, x1+w-1, y1+h-1);
+    x1 = xc+11+1;
+    y1 = yc;
+    x2 = x1 + w - 1;
+    y2 = y1 + h - 1;
 
-    //Rect xy2(xc+5+2, yc-5, xc+5+2+10, yc+5);
-    Room * r2 = new Room(xy2, Direction::FourD());
+    Room * r2 = new Room(
+        Rect(x1, y1, x2, y2), Direction::FourD());
 
     // Add room to level
     level->add_part(r2);
 
-    // Make a locked door
-    unsigned int key_id = 1;
-    level->make_floor(x1-1, yc);
-    Entity * d2 = make_door(x1-1, yc, false, true, key_id);
-
-    level->add_entity(d2);
-    
-    // Add a window
-    level->make_window(x1-1, yc-2);
 
     /*
     // Add key for room 4
