@@ -23,19 +23,23 @@ void GameEvent::resolve(GameMap * game_map)
     if (unlock_doors_id != 0)
     {
 
-        DEBUG("Unlocking doors with id " << unlock_doors_id);
-        std::vector<Entity *>::iterator e = game_map->entities().begin();
-        while (e != game_map->entities().end())
-        {
-            
-            // Check only doors based on tag
-            std::size_t found = (*e)->tag.find("door");
-            if (found!=std::string::npos && ((InteractiveDoor *)(*e)->interactive)->key_id == unlock_doors_id)
-            {
-                ((InteractiveDoor *)(*e)->interactive)->unlock();
-            }
+        //DEBUG("Unlocking doors with id " << unlock_doors_id);
+        //std::vector<Entity *>::iterator e = game_map->entities().begin();
 
-            ++e;
+        for (int i=0; i<(int)game_map->entities().size(); i++)
+        {
+            Entity * e = game_map->entities()[i];
+
+            //DEBUG("Entity name: " << e->name);
+            std::size_t found = e->tag.find("door");
+
+            if (
+                    found != std::string::npos &&
+                    e->interactive != nullptr &&
+                    ((InteractiveDoor *)e->interactive)->key_id == unlock_doors_id)
+            {
+                ((InteractiveDoor *)e->interactive)->unlock();
+            }
         }
 
     }

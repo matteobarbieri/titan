@@ -62,7 +62,7 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_part(entry_room);
 
     // Create and add entry stairs '<'
-    Stairs * up_stairs_component = new Stairs(level->dungeon_level - 1);
+    //Stairs * up_stairs_component = new Stairs(level->dungeon_level - 1);
 
     Entity * entry_point = new Entity(
         x1+5, y1+3, ' ',
@@ -179,7 +179,7 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     gev1.log_message_color = TCODColor::amber;
     gev1.unlock_doors_id = 1;
 
-    TriggeredEvent ev1 = TriggeredEvent(EventTrigger(10), gev1);
+    TriggeredEvent ev1 = TriggeredEvent(EventTrigger(3), gev1);
 
     (*overseer)->scheduled_events.push_back(ev1);
 
