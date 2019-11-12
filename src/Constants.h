@@ -40,7 +40,9 @@
 #define MESSAGE_HEIGHT (PANEL_HEIGHT - 1)
 
 // Variables for field of view (FOV)
-#define FOV_ALGORITHM FOV_BASIC
+//#define FOV_ALGORITHM FOV_BASIC
+//#define FOV_ALGORITHM FOV_PERMISSIVE_0
+#define FOV_ALGORITHM FOV_DIAMOND
 #define FOV_LIGHT_WALLS true
 #define FOV_RADIUS 10
 
