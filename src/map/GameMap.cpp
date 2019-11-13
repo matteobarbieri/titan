@@ -824,25 +824,6 @@ class Door(MapPart):
                 game_map.tiles[x][y] = DoorTile()
 
 
-class Room(MapPart):
-
-    def __init__(self, xy, available_directions):
-        super().__init__(xy, available_directions)
-
-    def dig(self, game_map):
-        """
-        Actually dig the map part in the game map.
-        """
-
-        super().dig(game_map, pad=1)
-
-        # # Also dig the door, if there is one
-        # if self.door_xy is not None:
-            # x, y = self.door_xy
-
-            # dig_rect(game_map, [x, y, x, y])
-
-
 class Junction(MapPart):
 
     def __init__(self, xy, available_directions):

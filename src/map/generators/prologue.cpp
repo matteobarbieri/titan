@@ -43,132 +43,96 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     GameMap * level = new GameMap(width, height);
     level->dungeon_level = 1;
 
-    // Center of the map
-    int xc = int(width/2);
-    int yc = int(height/2);
-
     //////////////////////////////
-    ///////// FIRST ROOM /////////
+    /////////// CELLS ////////////
     //////////////////////////////
     
-    // Actually walkable space
-    int w = 11, h = 7;
-
-    // Collect coordinates in variables
-    int x1 = xc, y1 = yc, x2 = x1+w-1, y2 = y1+h-1;
-    
-    Room * entry_room = new Room(
-        Rect(x1, y1, x2, y2), Direction::FourD());
+    // CELL 1
+    Room * cell_1 = new Room(
+        Rect(5, 8, 11, 12), Direction::FourD());
 
     // Add room to level
-    level->add_part(entry_room);
+    level->add_part(cell_1);
+
+    // Make a locked door
+    unsigned int key_id_cell1 = 1;
+    level->make_floor(12, 10);
+    Entity * d2 = make_door(12, 10, false, true, key_id_cell1);
+
+    level->add_entity(d2);
+    
+    // Add a window
+    level->make_window(12, 9);
+
+    // CELL 2
+    Room * cell_2 = new Room(
+        Rect(5, 14, 11, 18), Direction::FourD());
+
+    // Add room to level
+    level->add_part(cell_2);
 
     // Create and add entry stairs '<'
     //Stairs * up_stairs_component = new Stairs(level->dungeon_level - 1);
 
     Entity * entry_point = new Entity(
-        x1+5, y1+3, ' ',
+        6, 16, ' ',
         TCODColor::white, "ENTRY_POINT", NONE, false, false, true);
 
     level->add_entity(entry_point);
     
     // Make a locked door
-    unsigned int key_id = 1;
-    level->make_floor(x2+1, y1+3);
-    Entity * d2 = make_door(x2+1, y1+3, false, true, key_id);
-
-    level->add_entity(d2);
-    
-    // Add a window
-    level->make_window(x2+1, y1+1);
-
-    //////////////////////////////
-    //////// OTHER CELLS /////////
-    //////////////////////////////
-    
-    // CELL 2
-
-    // Actually walkable space
-    w = 11, h = 7;
-
-    // Collect coordinates in variables
-    x1 = xc, y1 = yc+7+1, x2 = x1+w-1, y2 = y1+h-1;
-
-    Room * cell_2 = new Room(
-        Rect(x1, y1, x2, y2), Direction::FourD());
-
-    // Add room to level
-    level->add_part(cell_2);
-
-    // Make a locked door
     unsigned int key_id_cell2 = 2;
-    level->make_floor(x2+1, y1+3);
-    Entity * door_cell2 = make_door(x2+1, y1+3, false, true, key_id_cell2);
+    level->make_floor(12, 16);
+    Entity * door_cell2 = make_door(12, 16, false, true, key_id_cell2);
 
     level->add_entity(door_cell2);
     
     // Add a window
-    level->make_window(x2+1, y1+1);
+    level->make_window(12, 15);
     
     // CELL 3
-    
-    // Collect coordinates in variables
-    x1 = xc, y1 = yc+(7+1)*2, x2 = x1+w-1, y2 = y1+h-1;
-
     Room * cell_3 = new Room(
-        Rect(x1, y1, x2, y2), Direction::FourD());
+        Rect(5, 20, 11, 24), Direction::FourD());
 
     // Add room to level
     level->add_part(cell_3);
 
     // Make a locked door
     unsigned int key_id_cell3 = 2;
-    level->make_floor(x2+1, y1+3);
-    Entity * door_cell3 = make_door(x2+1, y1+3, false, true, key_id_cell3);
+    level->make_floor(12, 22);
+    Entity * door_cell3 = make_door(12, 22, false, true, key_id_cell3);
 
     level->add_entity(door_cell3);
     
     // Add a window
-    level->make_window(x2+1, y1+1);
+    level->make_window(12, 21);
     
     // CELL 4 
-    
-    // Collect coordinates in variables
-    x1 = xc, y1 = yc+(7+1)*3, x2 = x1+w-1, y2 = y1+h-1;
-
     Room * cell_4 = new Room(
-        Rect(x1, y1, x2, y2), Direction::FourD());
+        Rect(5, 26, 11, 30), Direction::FourD());
 
     // Add room to level
     level->add_part(cell_4);
 
     // Make a locked door
     unsigned int key_id_cell_4 = 2;
-    level->make_floor(x2+1, y1+3);
-    Entity * door_cell4 = make_door(x2+1, y1+3, false, true, key_id_cell_4);
+    level->make_floor(12, 28);
+    Entity * door_cell4 = make_door(12, 28, false, true, key_id_cell_4);
 
     level->add_entity(door_cell4);
     
     // Add a window
-    level->make_window(x2+1, y1+1);
+    level->make_window(12, 27);
    
     //////////////////////////////
-    /////////// ROOM 2 ///////////
+    ////////// CORRIDOR //////////
     //////////////////////////////
-
-    w = 15;
-    h = 31;
     
-    x1 = xc+11+1;
-    y1 = yc;
-    x2 = x1 + w - 1;
-    y2 = y1 + h - 1;
-
-    Room * r2 = new Room(
-        Rect(x1, y1, x2, y2), Direction::FourD());
+    Room * corridor = new Room(
+        Rect(13, 8, 18, 30), Direction::FourD());
 
     // Add room to level
-    level->add_part(r2);
+    level->add_part(corridor);
 
     /*
     // Add key for room 4
@@ -250,7 +214,7 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     GameEvent gev1 = GameEvent();
     gev1.log_message = "A loud noise wakes you up; looks like something hit the ship.";
     gev1.log_message_color = TCODColor::amber;
-    gev1.unlock_doors_id = 1;
+    gev1.unlock_doors_id = 2;
 
     TriggeredEvent ev1 = TriggeredEvent(EventTrigger(10), gev1);
 
