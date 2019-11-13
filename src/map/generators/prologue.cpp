@@ -55,7 +55,7 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_part(cell_1);
 
     // Make a locked door
-    unsigned int key_id_cell1 = 1;
+    unsigned int key_id_cell1 = 2;
     level->make_floor(12, 10);
     Entity * d2 = make_door(12, 10, false, true, key_id_cell1);
 
@@ -123,6 +123,74 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     
     // Add a window
     level->make_window(12, 27);
+ 
+    // CELL 5
+    Room * cell_5 = new Room(
+        Rect(20, 8, 26, 12), Direction::FourD());
+
+    // Add room to level
+    level->add_part(cell_5);
+
+    // Make a locked door
+    unsigned int key_id_cell_5 = 5;
+    level->make_floor(19, 10);
+    Entity * door_cell5 = make_door(19, 10, false, true, key_id_cell_5);
+
+    level->add_entity(door_cell5);
+    
+    // Add a window
+    level->make_window(19, 9);
+ 
+    // CELL 6 
+    Room * cell_6 = new Room(
+        Rect(20, 14, 26, 18), Direction::FourD());
+
+    // Add room to level
+    level->add_part(cell_6);
+
+    // Make a locked door
+    unsigned int key_id_cell_6 = 6;
+    level->make_floor(19, 16);
+    Entity * door_cell6 = make_door(19, 16, false, true, key_id_cell_6);
+
+    level->add_entity(door_cell6);
+    
+    // Add a window
+    level->make_window(19, 15);
+ 
+    // CELL 7 
+    Room * cell_7 = new Room(
+        Rect(20, 20, 26, 24), Direction::FourD());
+
+    // Add room to level
+    level->add_part(cell_7);
+
+    // Make a locked door
+    unsigned int key_id_cell_7 = 7;
+    level->make_floor(19, 22);
+    Entity * door_cell7 = make_door(19, 22, false, true, key_id_cell_7);
+
+    level->add_entity(door_cell7);
+    
+    // Add a window
+    level->make_window(19, 21);
+   
+    // CELL 8 
+    Room * cell_8 = new Room(
+        Rect(20, 26, 26, 30), Direction::FourD());
+
+    // Add room to level
+    level->add_part(cell_8);
+
+    // Make a locked door
+    unsigned int key_id_cell_8 = 8;
+    level->make_floor(19, 28);
+    Entity * door_cell8 = make_door(19, 28, false, true, key_id_cell_8);
+
+    level->add_entity(door_cell8);
+    
+    // Add a window
+    level->make_window(19, 27);
    
     //////////////////////////////
     ////////// CORRIDOR //////////
