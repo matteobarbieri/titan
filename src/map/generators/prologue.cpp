@@ -196,13 +196,175 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     ////////// CORRIDOR //////////
     //////////////////////////////
     
-    //Room * corridor = new Room(
-        //Rect(13, 8, 18, 30), Direction::FourD());
     Corridor * c_1 = new Corridor(
         Rect(13, 8, 18, 30), Direction::FourD(), false);
 
-    // Add room to level
+    // Add corridor to level
     level->add_part(c_1);
+
+    // Doors leading to second corridor
+    level->make_floor(15, 31);
+    level->make_floor(16, 31);
+
+    level->add_entity(make_door(15, 31, false, false));
+    level->add_entity(make_door(16, 31, false, false));
+
+    // Add corridors
+    level->add_part(new Corridor(Rect(13, 32, 18, 43), Direction::FourD(), false));
+    level->add_part(new Corridor(Rect(19, 38,  37, 43), Direction::FourD(), true));
+
+    // TODO add guard's corpse and equipment
+    
+    // Doors leading to third room
+    level->make_floor(38, 40);
+    level->make_floor(38, 41);
+
+    level->add_entity(make_door(38, 40, false, false));
+    level->add_entity(make_door(38, 41, false, false));
+
+    // Main room with first security droid
+    level->add_part(new Room(Rect(39, 35, 50, 46), Direction::FourD()));
+
+    // TODO add security droid
+
+    // Small room on the north side (left)
+    level->make_floor(41, 34);
+    level->add_entity(make_door(41, 34, false, false));
+
+    level->add_part(new Room(Rect(39, 29, 43, 33), Direction::FourD()));
+
+    // TODO add equipment?
+
+    // Small room on the north side (right)
+    level->make_floor(48, 34);
+    level->add_entity(make_door(48, 34, false, false));
+
+    level->add_part(new Room(Rect(46, 29, 50, 33), Direction::FourD()));
+
+    // TODO add equipment?
+
+    // Warden's room, on the right
+    level->make_floor(51, 38);
+    level->add_entity(make_door(51, 38, false, false));
+
+    level->add_part(new Room(Rect(52, 35, 59, 41), Direction::FourD()));
+
+    // TODO Add inactive droids
+    // TODO Add terminal
+    // TODO Add cells key card
+    
+    // Utility room with cabinet with medpack
+    level->make_floor(51, 45);
+    level->add_entity(make_door(51, 45, false, false));
+
+    level->add_part(new Room(Rect(52, 43, 56, 47), Direction::FourD()));
+
+    
+    // Large room with two armed grunts
+    level->make_floor(44, 47);
+    level->make_floor(45, 47);
+
+    // TODO must be unlockable from warden's room
+    //level->add_entity(make_door(44, 47, false, true));
+    //level->add_entity(make_door(44, 47, false, true));
+
+    level->add_entity(make_door(44, 47, false, false));
+    level->add_entity(make_door(45, 47, false, false));
+
+    level->add_part(new Room(Rect(39, 48, 50, 68), Direction::FourD()));
+    
+    // TODO Add full cover 
+    // TODO Add partial cover
+
+    // Room with special monster (which will require the use of skills)
+    level->make_floor(44, 69);
+    level->make_floor(45, 69);
+
+    level->add_entity(make_door(44, 69, false, false));
+    level->add_entity(make_door(45, 69, false, false));
+
+    level->add_part(new Room(Rect(41, 70, 48, 77), Direction::FourD()));
+
+    // Corridor to escape pod room
+    level->make_floor(44, 78);
+    level->make_floor(45, 78);
+
+    level->add_entity(make_door(44, 78, false, false));
+    level->add_entity(make_door(45, 78, false, false));
+
+    level->add_part(new Corridor(Rect(43, 79, 46, 87), Direction::FourD(), false));
+
+    // Escape pod room
+    level->make_floor(44, 88);
+    level->make_floor(45, 88);
+
+    level->add_entity(make_door(44, 88, false, false));
+    level->add_entity(make_door(45, 88, false, false));
+
+    level->add_part(new Room(Rect(41, 89, 48, 96), Direction::FourD()));
+
+    // Escape pod 1
+    level->make_floor(49, 90);
+    level->add_entity(make_door(49, 90, false, false));
+
+    level->add_part(new Room(Rect(50, 89, 53, 91), Direction::FourD()));
+
+    // TODO add terminal to launch escape pod
+
+    // Escape pod 2
+    level->make_floor(49, 95);
+    level->add_entity(make_door(49, 95, false, false));
+
+    level->add_part(new Room(Rect(50, 94, 53, 96), Direction::FourD()));
+
+    // TODO add terminal to launch escape pod
+
+    // Corridor to boss room
+    level->make_floor(40, 73);
+    level->make_floor(40, 74);
+
+    level->add_entity(make_door(40, 73, false, false));
+    level->add_entity(make_door(40, 74, false, false));
+    
+    level->add_part(new Room(Rect(50, 94, 53, 96), Direction::FourD()));
+
+    // Huge Boss Room
+    level->make_floor(30, 73);
+    level->make_floor(30, 74);
+
+    level->add_entity(make_door(30, 73, false, false));
+    level->add_entity(make_door(30, 74, false, false));
+    
+    level->add_part(new Room(Rect(9, 64, 29, 83), Direction::FourD()));
+    
+    // TODO add boss and its mechanics
+    
+    // Corridor from boss room to escape pods room
+    level->add_part(new Corridor(Rect(31, 72, 39, 75), Direction::FourD(), false));
+    
+    level->make_floor(19, 84);
+    level->make_floor(20, 84);
+
+    level->add_entity(make_door(19, 84, false, false));
+    level->add_entity(make_door(20, 84, false, false));
+    
+    level->add_part(new Corridor(Rect(18, 85, 21, 94), Direction::FourD(), false));
+    level->add_part(new Corridor(Rect(22, 91, 39, 94), Direction::FourD(), false));
+    
+    // Doors leading to escape pod room
+    level->make_floor(40, 92);
+    level->make_floor(40, 93);
+
+    level->add_entity(make_door(40, 92, false, false));
+    level->add_entity(make_door(40, 93, false, false));
+    
+    // Storage room with special weapon
+    level->make_floor(26, 63);
+
+    // TODO room must be locked until boss is alive
+    level->add_entity(make_door(26, 63, false, false));
+    
+    level->add_part(new Room(Rect(24, 59, 28, 62), Direction::FourD()));
 
     /*
     // Add key for room 4
