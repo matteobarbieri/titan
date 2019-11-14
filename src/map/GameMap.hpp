@@ -126,7 +126,7 @@ class Junction : public MapPart
 {
     public:
 
-        Junction(Rect xy, std::vector<Direction> available_directions);
+        Junction(Rect xy, std::vector<Direction *> available_directions);
 
         // TODO check if needed
         //void dig(GameMap game_map);
@@ -142,7 +142,7 @@ class Corridor : public MapPart
 
         Corridor(
             Rect xy,
-            std::vector<Direction> available_directions, bool horizontal);
+            std::vector<Direction *> available_directions, bool horizontal);
 
         // TODO check if needed
         //void dig(GameMap game_map);
@@ -190,6 +190,8 @@ class GameMap
 
         // Lists of map parts
         std::vector<Room *> rooms;
+        std::vector<Corridor *> corridors;
+        std::vector<Junction *> junctions;
         
         // The tiles
         Tile ** tiles;

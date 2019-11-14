@@ -196,11 +196,13 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     ////////// CORRIDOR //////////
     //////////////////////////////
     
-    Room * corridor = new Room(
-        Rect(13, 8, 18, 30), Direction::FourD());
+    //Room * corridor = new Room(
+        //Rect(13, 8, 18, 30), Direction::FourD());
+    Corridor * c_1 = new Corridor(
+        Rect(13, 8, 18, 30), Direction::FourD(), false);
 
     // Add room to level
-    level->add_part(corridor);
+    level->add_part(c_1);
 
     /*
     // Add key for room 4

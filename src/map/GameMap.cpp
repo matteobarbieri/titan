@@ -79,6 +79,13 @@ Room::Room(Rect xy) : MapPart(xy) {}
 Room::Room(Rect xy, std::vector<Direction *> available_directions) : 
     MapPart(xy, available_directions) {}
 
+/////////////////////////////////
+/////////// CORRIDOR ////////////
+/////////////////////////////////
+
+Corridor::Corridor(Rect xy, std::vector<Direction *> available_directions, bool horizontal) : 
+    MapPart(xy, available_directions), _horizontal(horizontal) {}
+
 /*
     def __init__(self, width, height, dungeon_level=1):
 
@@ -321,6 +328,12 @@ bool GameMap::is_blocked(int x, int y) const
     ]->blocked();
 }
 
+
+void GameMap::add_part(Corridor * corridor)
+{
+    corridors.push_back(corridor);
+    dig(corridor);
+}
 
 void GameMap::add_part(Room * room)
 {
