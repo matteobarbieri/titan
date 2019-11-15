@@ -83,3 +83,32 @@ void InteractiveDoor::interact(Entity * player, GameMap * game_map)
     }
 
 }
+
+InteractivePanel::InteractivePanel(
+        std::string text, TCODColor text_color, Direction * readable_from, bool is_active) :
+    text(text), text_color(text_color), readable_from(readable_from), is_active(is_active)
+{
+}
+
+void InteractivePanel::interact(Entity * player, GameMap * game_map)
+{
+
+    // First check if the player is approaching the panel from the right
+    // direction
+    if ((owner->x + readable_from->dx) == player->x &&
+        (owner->y + readable_from->dy) == player->y)
+    {
+        if (is_active)
+        {
+            MessageLog::singleton().add_message(
+                {text, text_color});
+        }
+        else
+        {
+            MessageLog::singleton().add_message(
+                {"This panel does not seem to be active...",
+                 TCODColor::amber});
+        }
+    }
+
+}

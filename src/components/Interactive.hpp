@@ -3,6 +3,8 @@
 
 #include "../nlohmann/json.hpp"
 
+#include "../libtcod.hpp"
+
 using json = nlohmann::json;
 
 // Forward declarations
@@ -11,6 +13,8 @@ using json = nlohmann::json;
 class Entity;
 
 class GameMap;
+
+class Direction;
 
 
 /**
@@ -68,6 +72,27 @@ class InteractiveDoor : public Interactive
          * the door.
          */
         bool player_has_key(Entity * player);
+
+        virtual void interact(Entity *, GameMap *);
+};
+
+class InteractivePanel : public Interactive
+{
+    public:
+
+        // The text shown in the log
+        std::string text;
+
+        // The color of the text shown in the log
+        TCODColor text_color;
+
+        // The direction from where the panel is readable
+        Direction * readable_from;
+
+        // Whether the panel is active or not
+        bool is_active;
+
+        InteractivePanel(std::string text, TCODColor text_color, Direction * readable_from, bool is_active);
 
         virtual void interact(Entity *, GameMap *);
 };

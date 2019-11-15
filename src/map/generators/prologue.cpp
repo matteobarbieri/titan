@@ -61,6 +61,14 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
 
     level->add_entity(d2);
     
+    // Add panel
+    level->make_floor(12, 11);
+    make_door(12, 11, false, true, key_id_cell1);
+
+    Entity * p1 = make_text_panel(12, 11, Direction::EE, "Cell 01");
+
+    level->add_entity(p1);
+    
     // Add a window
     level->make_window(12, 9);
 
