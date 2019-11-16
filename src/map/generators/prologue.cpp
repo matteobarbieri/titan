@@ -48,36 +48,25 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     //////////////////////////////
     
     // CELL 1
-    Room * cell_1 = new Room(
-        Rect(5, 8, 11, 12), Direction::FourD());
-
     // Add room to level
-    level->add_part(cell_1);
+    level->add_part(new Room(
+        Rect(5, 8, 11, 12), Direction::FourD()));
 
     // Make a locked door
-    unsigned int key_id_cell1 = 2;
     level->make_floor(12, 10);
-    Entity * d2 = make_door(12, 10, false, true, key_id_cell1);
-
-    level->add_entity(d2);
+    level->add_entity(make_door(12, 10, false, true, 2));
     
-    // Add panel
+    // Add panel (Cell 01)
     level->make_floor(12, 11);
-    make_door(12, 11, false, true, key_id_cell1);
-
-    Entity * p1 = make_text_panel(12, 11, Direction::EE, "Cell 01");
-
-    level->add_entity(p1);
+    level->add_entity(make_text_panel(12, 11, Direction::EE, "Cell 01"));
     
     // Add a window
     level->make_window(12, 9);
 
     // CELL 2
-    Room * cell_2 = new Room(
-        Rect(5, 14, 11, 18), Direction::FourD());
-
     // Add room to level
-    level->add_part(cell_2);
+    level->add_part(new Room(
+        Rect(5, 14, 11, 18), Direction::FourD()));
 
     // Create and add entry stairs '<'
     //Stairs * up_stairs_component = new Stairs(level->dungeon_level - 1);
@@ -89,11 +78,12 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_entity(entry_point);
     
     // Make a locked door
-    unsigned int key_id_cell2 = 2;
     level->make_floor(12, 16);
-    Entity * door_cell2 = make_door(12, 16, false, true, key_id_cell2);
-
-    level->add_entity(door_cell2);
+    level->add_entity(make_door(12, 16, false, true, 2));
+    
+    // Add panel (Cell 02)
+    level->make_floor(12, 17);
+    level->add_entity(make_text_panel(12, 17, Direction::EE, "Cell 02"));
     
     // Add a window
     level->make_window(12, 15);
@@ -106,11 +96,12 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_part(cell_3);
 
     // Make a locked door
-    unsigned int key_id_cell3 = 2;
     level->make_floor(12, 22);
-    Entity * door_cell3 = make_door(12, 22, false, true, key_id_cell3);
-
-    level->add_entity(door_cell3);
+    level->add_entity(make_door(12, 22, false, true, 2));
+    
+    // Add panel (Cell 03)
+    level->make_floor(12, 23);
+    level->add_entity(make_text_panel(12, 23, Direction::EE, "Cell 03"));
     
     // Add a window
     level->make_window(12, 21);
@@ -123,11 +114,12 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_part(cell_4);
 
     // Make a locked door
-    unsigned int key_id_cell_4 = 2;
     level->make_floor(12, 28);
-    Entity * door_cell4 = make_door(12, 28, false, true, key_id_cell_4);
-
-    level->add_entity(door_cell4);
+    level->add_entity(make_door(12, 28, false, true, 2));
+    
+    // Add panel (Cell 04)
+    level->make_floor(12, 29);
+    level->add_entity(make_text_panel(12, 29, Direction::EE, "Cell 04"));
     
     // Add a window
     level->make_window(12, 27);
@@ -140,11 +132,12 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_part(cell_5);
 
     // Make a locked door
-    unsigned int key_id_cell_5 = 5;
     level->make_floor(19, 10);
-    Entity * door_cell5 = make_door(19, 10, false, true, key_id_cell_5);
-
-    level->add_entity(door_cell5);
+    level->add_entity(make_door(19, 10, false, true, 3));
+    
+    // Add panel (Cell 05)
+    level->make_floor(19, 11);
+    level->add_entity(make_text_panel(19, 11, Direction::WW, "Cell 05"));
     
     // Add a window
     level->make_window(19, 9);
@@ -157,11 +150,12 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_part(cell_6);
 
     // Make a locked door
-    unsigned int key_id_cell_6 = 6;
     level->make_floor(19, 16);
-    Entity * door_cell6 = make_door(19, 16, false, true, key_id_cell_6);
-
-    level->add_entity(door_cell6);
+    level->add_entity(make_door(19, 16, false, true, 3));
+    
+    // Add panel (Cell 06)
+    level->make_floor(19, 17);
+    level->add_entity(make_text_panel(19, 17, Direction::WW, "Cell 06"));
     
     // Add a window
     level->make_window(19, 15);
@@ -174,11 +168,12 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_part(cell_7);
 
     // Make a locked door
-    unsigned int key_id_cell_7 = 7;
     level->make_floor(19, 22);
-    Entity * door_cell7 = make_door(19, 22, false, true, key_id_cell_7);
-
-    level->add_entity(door_cell7);
+    level->add_entity(make_door(19, 22, false, true, 3));
+    
+    // Add panel (Cell 07)
+    level->make_floor(19, 23);
+    level->add_entity(make_text_panel(19, 23, Direction::WW, "Cell 07"));
     
     // Add a window
     level->make_window(19, 21);
@@ -191,11 +186,12 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_part(cell_8);
 
     // Make a locked door
-    unsigned int key_id_cell_8 = 8;
     level->make_floor(19, 28);
-    Entity * door_cell8 = make_door(19, 28, false, true, key_id_cell_8);
-
-    level->add_entity(door_cell8);
+    level->add_entity(make_door(19, 28, false, true, 3));
+    
+    // Add panel (Cell 08)
+    level->make_floor(19, 29);
+    level->add_entity(make_text_panel(19, 29, Direction::WW, "Cell 08"));
     
     // Add a window
     level->make_window(19, 27);
@@ -239,6 +235,10 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->make_floor(41, 34);
     level->add_entity(make_door(41, 34, false, false));
 
+    // Add panel (Cell 01)
+    level->make_floor(42, 34);
+    level->add_entity(make_text_panel(42, 34, Direction::SS, "Storage room 1"));
+    
     level->add_part(new Room(Rect(39, 29, 43, 33), Direction::FourD()));
 
     // TODO add equipment?
@@ -247,6 +247,10 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->make_floor(48, 34);
     level->add_entity(make_door(48, 34, false, false));
 
+    // Add panel (Cell 01)
+    level->make_floor(49, 34);
+    level->add_entity(make_text_panel(49, 34, Direction::SS, "Storage room 2"));
+    
     level->add_part(new Room(Rect(46, 29, 50, 33), Direction::FourD()));
 
     // TODO add equipment?
