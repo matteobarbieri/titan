@@ -72,7 +72,7 @@ void InteractiveDoor::interact(Entity * player, GameMap * game_map)
             else
             {
                 MessageLog::singleton().add_message(
-                    {"You don't have the right key to unlock this door",
+                    {"This door appears to be locked.",
                     TCODColor::white});
             }
         }
