@@ -14,4 +14,7 @@ Entity * make_text_panel(int x, int y, Direction * readable_from, std::string te
                          TCODColor symbol_color=TCODColor::darkGreen, TCODColor=TCODColor::lightAzure, int symbol=240,
                          bool is_active=true);
 
+Entity * make_terminal(int x, int y, TCODColor symbol_color=TCODColor::darkGreen, std::string terminal_name="Terminal",
+                       int symbol=167);
+
 #endif /* ifndef ROGUE_20177_PREFABS_MISC_DOORS */

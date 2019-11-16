@@ -84,6 +84,10 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     // Add panel (Cell 02)
     level->make_floor(12, 17);
     level->add_entity(make_text_panel(12, 17, Direction::EE, "Cell 02"));
+
+    // TODO move in the right room!
+    // Add terminal
+    level->add_entity(make_terminal(6, 14));
     
     // Add a window
     level->make_window(12, 15);

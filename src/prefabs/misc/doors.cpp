@@ -40,3 +40,22 @@ Entity * make_text_panel(int x, int y, Direction * readable_from, std::string te
     panel->interactive->owner = panel;
     return panel;
 }
+
+Entity * make_terminal(int x, int y, TCODColor symbol_color, std::string terminal_name, int symbol)
+{
+
+    Entity * terminal = new Entity(
+        x, y, symbol,
+        symbol_color, terminal_name,
+        STAIRS,
+        true, false, true);
+
+    terminal->tag = "terminal";
+
+    // Add the interactive component to the panel
+    //terminal->interactive = new InteractivePanel(
+            //text, text_color, readable_from, is_active);
+    //terminal->interactive->owner = terminal;
+    
+    return terminal;
+}
