@@ -43,8 +43,8 @@ Direction::Direction(int dx, int dy) : dx(dx), dy(dy)
 }
 
 // Initialize static members
-Direction * Direction::NN = new Direction(0, 1);
-Direction * Direction::SS = new Direction(0, -1);
+Direction * Direction::NN = new Direction(0, -1);
+Direction * Direction::SS = new Direction(0, 1);
 Direction * Direction::EE = new Direction(1, 0);
 Direction * Direction::WW = new Direction(-1, 0);
 
