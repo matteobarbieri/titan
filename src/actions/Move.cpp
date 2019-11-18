@@ -40,7 +40,7 @@ Outcome * MoveAction::_execute()
 
             if (target != nullptr)
             {
-                player->interact_with(target, game_map);
+                player->interact_with(target, game_map, game_state);
                 interacted_with_something = true;
             }
             else
@@ -48,11 +48,12 @@ Outcome * MoveAction::_execute()
                 // Update player's position
                 player->x = destination_x;
                 player->y = destination_y;
+
+                // Change phase to enemy turn manually!
+                game_state->game_phase = ENEMY_TURN;
             }
         }
-
         else
-
         {
             // Stupid things said when bumping into walls
             // TODO enable message log
@@ -76,7 +77,8 @@ Outcome * MoveAction::_execute()
 
         // Return outcome
         Outcome * outcome = new Outcome(
-            ENEMY_TURN, // TODO this is the right one
+            // ENEMY_TURN, // TODO this is the right one
+            game_state->game_phase, // TODO this is the right one
             fov_recompute,
             redraw_terrain);
 

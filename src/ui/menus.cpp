@@ -16,6 +16,24 @@
 
 #include "menus.hpp"
 
+void terminal_menu(
+    Entity * terminal)
+{
+    // Extract width and height
+    //int w = Consoles::singleton().menu->getWidth();
+    //int h = Consoles::singleton().menu->getHeight();
+
+    // Draw frame
+    // Reset the color to white, just in case
+    Consoles::singleton().terminal->setDefaultForeground(TCODColor::white);
+    Consoles::singleton().terminal->printFrame(
+        0, 0,
+        TERMINAL_FRAME_WIDTH, TERMINAL_FRAME_HEIGHT,
+        true, TCOD_BKGND_NONE, terminal->name.c_str());
+}
+
+
+
 void inventory_menu(
     Entity * player, std::string header)
 {

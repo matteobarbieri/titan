@@ -13,6 +13,7 @@ using json = nlohmann::json;
 class Entity;
 
 class GameMap;
+class GameState;
 
 class Direction;
 
@@ -40,7 +41,7 @@ class Interactive
         //json to_json();
         //static Interactive * from_json(json j);
         
-        virtual void interact(Entity *, GameMap *) = 0;
+        virtual void interact(Entity *, GameMap *, GameState *) = 0;
 };
 
 class InteractiveDoor : public Interactive
@@ -73,8 +74,30 @@ class InteractiveDoor : public Interactive
          */
         bool player_has_key(Entity * player);
 
-        virtual void interact(Entity *, GameMap *);
+        virtual void interact(Entity *, GameMap *, GameState *);
 };
+
+class InteractiveTerminal : public Interactive
+{
+    public:
+
+        // The text shown in the log
+        std::string text;
+
+        // The color of the text shown in the log
+        TCODColor text_color;
+
+        // The direction from where the panel is readable
+        Direction * readable_from;
+
+        // Whether the panel is active or not
+        bool is_active;
+
+        InteractiveTerminal(bool is_active);
+
+        virtual void interact(Entity *, GameMap *, GameState *);
+};
+
 
 class InteractivePanel : public Interactive
 {
@@ -94,7 +117,7 @@ class InteractivePanel : public Interactive
 
         InteractivePanel(std::string text, TCODColor text_color, Direction * readable_from, bool is_active);
 
-        virtual void interact(Entity *, GameMap *);
+        virtual void interact(Entity *, GameMap *, GameState *);
 };
 
 #endif /* ifndef ROGUE_20177_INTERACTIVE */

@@ -36,7 +36,7 @@ Outcome * AttackAction::_execute()
     else if (n_enemies_in_range == 1)
     {
         next_phase = ENEMY_TURN;
-        player->interact_with(target, game_map);
+        player->interact_with(target, game_map, game_state);
         interacted_with_something = true;
     }
     else

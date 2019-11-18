@@ -858,6 +858,21 @@ void render_all(
         TCODConsole::root,
         0, 0);
 
+    // Show terminal menu
+    if (game_state->game_phase == TERMINAL_MENU)
+    {
+        terminal_menu(game_state->entity_interacted);
+        
+        // Blit inventory frame on root console
+        TCODConsole::blit(
+            Consoles::singleton().terminal,
+            0, 0,
+            TERMINAL_FRAME_WIDTH, TERMINAL_FRAME_HEIGHT,
+            TCODConsole::root,
+            (SCREEN_WIDTH - TERMINAL_FRAME_WIDTH)/2, 4,
+            1.0f, 0.8f);
+    }
+
     // Show inventory menu
     if (game_state->game_phase == INVENTORY_MENU ||
         game_state->game_phase == INVENTORY_ITEM_MENU)

@@ -26,6 +26,7 @@ class Inventory;
 class Interactive;
 
 class GameMap;
+class GameState;
 
 class Buff;
 
@@ -123,7 +124,7 @@ class Entity
          * player <-> monster: attack
          * player  -> door: interact
          */
-        void interact_with(Entity * other, GameMap * game_map);
+        void interact_with(Entity * other, GameMap * game_map, GameState * GameState);
 
         void apply_buff(Buff *);
 

@@ -3,6 +3,8 @@
 #include "Interactive.hpp"
 
 #include "../Entity.hpp"
+//#include "../GamePhase.hpp"
+#include "../GameState.hpp"
 #include "../map/GameMap.hpp"
 
 #include "../components/Inventory.hpp"
@@ -49,7 +51,7 @@ bool InteractiveDoor::player_has_key(Entity * player)
     return false;
 }
 
-void InteractiveDoor::interact(Entity * player, GameMap * game_map)
+void InteractiveDoor::interact(Entity * player, GameMap * game_map, GameState * game_state)
 {
 
     if (!locked)
@@ -82,7 +84,9 @@ void InteractiveDoor::interact(Entity * player, GameMap * game_map)
         }
     }
 
+    game_state->game_phase = ENEMY_TURN;
 }
+
 
 InteractivePanel::InteractivePanel(
         std::string text, TCODColor text_color, Direction * readable_from, bool is_active) :
@@ -90,7 +94,7 @@ InteractivePanel::InteractivePanel(
 {
 }
 
-void InteractivePanel::interact(Entity * player, GameMap * game_map)
+void InteractivePanel::interact(Entity * player, GameMap * game_map, GameState * game_state)
 {
 
     // First check if the player is approaching the panel from the right
@@ -109,6 +113,33 @@ void InteractivePanel::interact(Entity * player, GameMap * game_map)
                 {"This panel does not seem to be active...",
                  TCODColor::amber});
         }
+    }
+
+}
+
+InteractiveTerminal::InteractiveTerminal(bool is_active) : is_active(is_active)
+{
+}
+
+void InteractiveTerminal::interact(Entity * player, GameMap * game_map, GameState * game_state)
+{
+
+    // First check if the player is approaching the panel from the right
+    // direction
+    if (is_active)
+    {
+        // Set current terminal as entity with which to interact
+        game_state->entity_interacted = owner;
+        game_state->game_phase = TERMINAL_MENU;
+
+        MessageLog::singleton().add_message(
+            {"[PH] Interacting with terminal", TCODColor::lightGreen});
+    }
+    else
+    {
+        MessageLog::singleton().add_message(
+            {"This terminal does not seem to be active...",
+             TCODColor::amber});
     }
 
 }

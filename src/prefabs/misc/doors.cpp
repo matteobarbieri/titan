@@ -41,7 +41,7 @@ Entity * make_text_panel(int x, int y, Direction * readable_from, std::string te
     return panel;
 }
 
-Entity * make_terminal(int x, int y, TCODColor symbol_color, std::string terminal_name, int symbol)
+Entity * make_terminal(int x, int y, TCODColor symbol_color, std::string terminal_name, int symbol, bool is_active)
 {
 
     Entity * terminal = new Entity(
@@ -52,10 +52,10 @@ Entity * make_terminal(int x, int y, TCODColor symbol_color, std::string termina
 
     terminal->tag = "terminal";
 
-    // Add the interactive component to the panel
-    //terminal->interactive = new InteractivePanel(
-            //text, text_color, readable_from, is_active);
-    //terminal->interactive->owner = terminal;
+     //Add the interactive component to the panel
+    terminal->interactive = new InteractiveTerminal(
+            is_active);
+    terminal->interactive->owner = terminal;
     
     return terminal;
 }

@@ -7,6 +7,7 @@
 #include "RenderOrder.hpp"
 
 #include "GameMessages.hpp"
+#include "GameState.hpp"
 
 #include "SaveGame.hpp"
 #include "Uid.hpp"
@@ -87,7 +88,7 @@ bool Entity::is_disabled() const
     return false;
 }
 
-void Entity::interact_with(Entity * other, GameMap * game_map)
+void Entity::interact_with(Entity * other, GameMap * game_map, GameState * game_state)
 
 {
 
@@ -100,11 +101,13 @@ void Entity::interact_with(Entity * other, GameMap * game_map)
         {
             other->die();
         }
+        game_state->game_phase = ENEMY_TURN;
     }
-
     else if (other->interactive != nullptr)
     {
-        other->interactive->interact(this, game_map);
+        // Assume game phase is determined by the side effect of the specific
+        // implementation of the interact method.
+        other->interactive->interact(this, game_map, game_state);
     }
 
 }
