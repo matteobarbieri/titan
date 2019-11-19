@@ -249,7 +249,7 @@ Action * handle_terminal_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
         // Then check if the letter is one of the valid inventory items
         if (key_char >= 'a' && key_char <= 'z')
         {
-            return new SelectInventoryItemAction(key_char);
+            return new SelectTerminalFunctionAction(key_char);
         }
         //DEBUG("Pressed key " << key_char);
 

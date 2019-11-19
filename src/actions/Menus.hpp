@@ -51,6 +51,21 @@ class SelectInventoryItemAction : public Action
 
 };
 
+class SelectTerminalFunctionAction : public Action
+{
+
+    public:
+
+        char command_shortcut;
+
+        SelectTerminalFunctionAction(char command_shortcut);
+
+        Outcome * _execute();
+
+};
+
+
+
 class BackToInventoryMenuAction : public Action
 {
 
