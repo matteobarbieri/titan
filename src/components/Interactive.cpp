@@ -117,6 +117,16 @@ void InteractivePanel::interact(Entity * player, GameMap * game_map, GameState *
 
 }
 
+TerminalFunction::TerminalFunction(
+        std::string command, 
+        int command_shortcut, 
+        void (*execute)(Entity *, GameMap *, GameState *),
+        bool enabled) :
+    command(command), command_shortcut(command_shortcut), execute(execute),
+    enabled(enabled)
+{
+}
+
 InteractiveTerminal::InteractiveTerminal(bool is_active) : is_active(is_active)
 {
 }

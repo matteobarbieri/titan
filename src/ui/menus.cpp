@@ -10,6 +10,7 @@
 #include "../EquipmentSlots.hpp"
 
 #include "../components/Inventory.hpp"
+#include "../components/Interactive.hpp"
 #include "../components/Item.hpp"
 #include "../components/Equipment.hpp"
 
@@ -30,8 +31,40 @@ void terminal_menu(
         0, 0,
         TERMINAL_FRAME_WIDTH, TERMINAL_FRAME_HEIGHT,
         true, TCOD_BKGND_NONE, terminal->name.c_str());
-}
 
+    // Read terminal options from entity interactive component
+    InteractiveTerminal * interactive_component = (InteractiveTerminal *)terminal->interactive;
+    
+    // TODO possibly move these in constants.h
+    int menu_item_x = 4;
+    int menu_item_y = 4;
+
+    for (int i=0; i<(int)interactive_component->terminal_functions.size(); i++)
+    {
+
+        TerminalFunction tf = interactive_component->terminal_functions[i];
+
+        // Set the color first
+        if (tf.enabled)
+        {
+            Consoles::singleton().terminal->setDefaultForeground(TCODColor::white);
+        }
+        else
+        {
+            Consoles::singleton().terminal->setDefaultForeground(TCODColor::lightGrey);
+        }
+
+        // Then print menu item
+        Consoles::singleton().terminal->printf(
+            menu_item_x, menu_item_y,
+            "(%c) %s",
+            tf.command_shortcut, tf.command.c_str());
+
+        // Increment y coordinate of next menu item by one
+        menu_item_y++;
+    }
+
+}
 
 
 void inventory_menu(

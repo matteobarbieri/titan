@@ -838,7 +838,10 @@ void render_all(
         item_submenu(player, game_state->selected_inventory_item);
     }
 
-    // Inventory item submenu
+    /////////////////////////////////////////
+    ////////// Render death screen //////////
+    /////////////////////////////////////////
+
     if (game_state->game_phase == PLAYER_DEAD)
     {
         render_death_screen(player);
@@ -858,6 +861,10 @@ void render_all(
         TCODConsole::root,
         0, 0);
 
+    /////////////////////////////////////////
+    ///////// Render terminal menu //////////
+    /////////////////////////////////////////
+
     // Show terminal menu
     if (game_state->game_phase == TERMINAL_MENU)
     {
@@ -872,6 +879,10 @@ void render_all(
             (SCREEN_WIDTH - TERMINAL_FRAME_WIDTH)/2, 4,
             1.0f, 0.8f);
     }
+
+    /////////////////////////////////////////
+    ///////// Render inventory menu /////////
+    /////////////////////////////////////////
 
     // Show inventory menu
     if (game_state->game_phase == INVENTORY_MENU ||
@@ -916,6 +927,10 @@ void render_all(
             0, 0,
             1.0f, 0.8f);
     }
+
+    /////////////////////////////////////////
+    ///////////// SDL RENDERING /////////////
+    /////////////////////////////////////////
 
     TCOD_sys_accumulate_console(TCODConsole::root->get_data());
 

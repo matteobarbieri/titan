@@ -77,28 +77,6 @@ class InteractiveDoor : public Interactive
         virtual void interact(Entity *, GameMap *, GameState *);
 };
 
-class InteractiveTerminal : public Interactive
-{
-    public:
-
-        // The text shown in the log
-        std::string text;
-
-        // The color of the text shown in the log
-        TCODColor text_color;
-
-        // TODO check this
-        std::vector<void *> terminal_options;
-
-        // Whether the panel is active or not
-        bool is_active;
-
-        InteractiveTerminal(bool is_active);
-
-        virtual void interact(Entity *, GameMap *, GameState *);
-};
-
-
 class InteractivePanel : public Interactive
 {
     public:
@@ -119,5 +97,50 @@ class InteractivePanel : public Interactive
 
         virtual void interact(Entity *, GameMap *, GameState *);
 };
+
+/**
+ * A single function offered by a terminal
+ */
+class TerminalFunction
+{
+    public:
+
+        // The name of the command, which will show up on the terminal.
+        std::string command;
+
+        // The shortcut used to launch that function. Will be a char most of the
+        // times.
+        int command_shortcut;
+
+        // The pointer to the actual function which will be executed.
+        void (*execute)(Entity *, GameMap *, GameState *);
+
+        // Whether this specific option is currently enabled or not
+        bool enabled;
+
+        TerminalFunction(std::string, int, void (*)(Entity *, GameMap *, GameState *), bool enabled=true);
+};
+
+class InteractiveTerminal : public Interactive
+{
+    public:
+
+        // The text shown in the log
+        std::string text;
+
+        // The color of the text shown in the log
+        TCODColor text_color;
+
+        std::vector<TerminalFunction> terminal_functions;
+
+        // Whether the terminal is active or not
+        bool is_active;
+
+        InteractiveTerminal(bool is_active);
+
+        // What happens when a player interacts with the terminal
+        virtual void interact(Entity *, GameMap *, GameState *);
+};
+
 
 #endif /* ifndef ROGUE_20177_INTERACTIVE */

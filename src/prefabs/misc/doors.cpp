@@ -1,6 +1,7 @@
 #include "../../libtcod.hpp"
 
 #include "../../Entity.hpp"
+#include "../../GameState.hpp"
 
 #include "../../map/GameMap.hpp"
 
@@ -41,9 +42,14 @@ Entity * make_text_panel(int x, int y, Direction * readable_from, std::string te
     return panel;
 }
 
-void test_f()
+void test_f1(Entity * player, GameMap * game_map, GameState * game_state)
 {
-    std::cout << "This is a test function from a terminal" << std::endl;
+    std::cout << "This is test function f1 from a terminal" << std::endl;
+}
+
+void test_f2(Entity * player, GameMap * game_map, GameState * game_state)
+{
+    std::cout << "This is test function f2 from a terminal" << std::endl;
 }
 
 Entity * make_terminal(int x, int y, TCODColor symbol_color, std::string terminal_name, int symbol, bool is_active)
@@ -61,8 +67,12 @@ Entity * make_terminal(int x, int y, TCODColor symbol_color, std::string termina
     InteractiveTerminal * interactive_component = new InteractiveTerminal(
             is_active);
 
-    //interactive_component->terminal_options.push_back(test_f);
-    interactive_component->terminal_options.push_back((void *)test_f);
+    // TODO these are sample functions, which should not be added here
+    TerminalFunction tf1("Test 1", 'a', test_f1);
+    TerminalFunction tf2("Test 2", 'b', test_f2);
+
+    interactive_component->terminal_functions.push_back(tf1);
+    interactive_component->terminal_functions.push_back(tf2);
 
     terminal->interactive = interactive_component;
 
