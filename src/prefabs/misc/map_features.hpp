@@ -1,5 +1,5 @@
-#ifndef ROGUE_20177_PREFABS_MISC_DOORS
-#define ROGUE_20177_PREFABS_MISC_DOORS
+#ifndef ROGUE_20177_PREFABS_MISC_MAP_FEATURES
+#define ROGUE_20177_PREFABS_MISC_MAP_FEATURES
 
 #include <string>
 
@@ -17,4 +17,4 @@ Entity * make_text_panel(int x, int y, Direction * readable_from, std::string te
 Entity * make_terminal(int x, int y, TCODColor symbol_color=TCODColor::darkGreen, std::string terminal_name="Terminal",
                        int symbol=167, bool is_active=true);
 
-#endif /* ifndef ROGUE_20177_PREFABS_MISC_DOORS */
+#endif /* ifndef ROGUE_20177_PREFABS_MISC_MAP_FEATURES */

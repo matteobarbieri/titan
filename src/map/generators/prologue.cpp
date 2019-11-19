@@ -20,7 +20,7 @@
 
 // Prefabs
 #include "../../prefabs/enemies.hpp"
-#include "../../prefabs/misc/doors.hpp"
+#include "../../prefabs/misc/map_features.hpp"
 #include "../../prefabs/weapons/melee.hpp"
 #include "../../prefabs/weapons/ranged.hpp"
 
