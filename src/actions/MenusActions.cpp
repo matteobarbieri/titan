@@ -38,6 +38,24 @@ Outcome * BackToInventoryMenuAction::_execute()
     return outcome;
 }
 
+
+/////////////////////////////
+//////// GO TO PHASE ////////
+/////////////////////////////
+
+GoToPhaseAction::GoToPhaseAction(GamePhase next_phase) : next_phase(next_phase)
+{
+}
+
+Outcome * GoToPhaseAction::_execute()
+{
+    // Return outcome
+    Outcome * outcome = new Outcome(
+        next_phase, true, true);
+
+    return outcome;
+}
+
 Outcome * BackToGameAction::_execute()
 {
     // Return outcome

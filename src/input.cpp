@@ -263,7 +263,7 @@ Action * handle_terminal_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 
     if (key.vk == TCODK_ESCAPE)
     {
-        return new BackToGameAction();
+        return new GoToPhaseAction(ENEMY_TURN);
     }
 
     return nullptr;
