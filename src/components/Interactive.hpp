@@ -87,8 +87,8 @@ class InteractiveTerminal : public Interactive
         // The color of the text shown in the log
         TCODColor text_color;
 
-        // The direction from where the panel is readable
-        Direction * readable_from;
+        // TODO check this
+        std::vector<void *> terminal_options;
 
         // Whether the panel is active or not
         bool is_active;

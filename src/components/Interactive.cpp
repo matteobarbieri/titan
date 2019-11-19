@@ -132,6 +132,9 @@ void InteractiveTerminal::interact(Entity * player, GameMap * game_map, GameStat
         game_state->entity_interacted = owner;
         game_state->game_phase = TERMINAL_MENU;
 
+        //void fff() = terminal_options[0];
+
+
         MessageLog::singleton().add_message(
             {"[PH] Interacting with terminal", TCODColor::lightGreen});
     }
