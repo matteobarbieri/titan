@@ -8,6 +8,7 @@
 #include "../../Overseer.hpp"
 #include "../../EventTrigger.hpp"
 #include "../../GameEvent.hpp"
+#include "../../GameMessages.hpp"
 
 #include "../../libtcod.hpp"
 #include "../../Entity.hpp"
@@ -21,6 +22,7 @@
 // Prefabs
 #include "../../prefabs/enemies.hpp"
 #include "../../prefabs/misc/map_features.hpp"
+#include "../../prefabs/funcs/misc.hpp"
 #include "../../prefabs/weapons/melee.hpp"
 #include "../../prefabs/weapons/ranged.hpp"
 
@@ -87,7 +89,18 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
 
     // TODO move in the right room!
     // Add terminal
-    level->add_entity(make_terminal(6, 14));
+    Entity * terminal = make_terminal(6, 14);
+    InteractiveTerminal * t1_interactive = (InteractiveTerminal *)terminal->interactive;
+    
+    auto test_f3 = [](Entity * player, GameMap * game_map, GameState * game_state)
+    {
+        unlock_doors(player, game_map, game_state, 3);
+        MessageLog::singleton().add_message({"Unlocking doors...", TCODColor::turquoise});
+    };
+
+    TerminalFunction tf3("Test 3 (lambda)", 'd', test_f3);
+    t1_interactive->terminal_functions.push_back(tf3);
+    level->add_entity(terminal);
     
     // Add a window
     level->make_window(12, 15);

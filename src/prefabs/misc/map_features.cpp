@@ -71,8 +71,16 @@ Entity * make_terminal(int x, int y, TCODColor symbol_color, std::string termina
     TerminalFunction tf1("Test 1", 'a', test_f1);
     TerminalFunction tf2("Test 2", 'b', test_f2);
 
+    auto test_f3 = [](Entity * player, GameMap * game_map, GameState * game_state)
+    {
+        std::cout << "This is test function (lambda) f3 from a terminal" << std::endl;
+    };
+
+    TerminalFunction tf3("Test 3 (lambda)", 'c', test_f3);
+
     interactive_component->terminal_functions.push_back(tf1);
     interactive_component->terminal_functions.push_back(tf2);
+    interactive_component->terminal_functions.push_back(tf3);
 
     terminal->interactive = interactive_component;
 

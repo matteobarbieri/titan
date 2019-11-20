@@ -1,6 +1,8 @@
 #ifndef ROGUE_20177_INTERACTIVE
 #define ROGUE_20177_INTERACTIVE
 
+#include <functional>
+
 #include "../nlohmann/json.hpp"
 
 #include "../libtcod.hpp"
