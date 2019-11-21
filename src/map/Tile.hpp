@@ -120,9 +120,9 @@ class Wall : public Tile
 
     public:
 
-        Wall(TCODColor bg_color,
-              TCODColor fg_color=TCODColor::black,
-              int fg_symbol='#');
+        Wall(TCODColor bg_color=TCODColor::white,
+             TCODColor fg_color=TCODColor::black,
+             int fg_symbol='#');
 
         /**
          * Create a wall tile choosing the background color from a
