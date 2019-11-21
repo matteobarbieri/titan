@@ -5,6 +5,7 @@
 #include "../GameState.hpp"
 
 #include "../components/Inventory.hpp"
+#include "../components/Interactive.hpp"
 #include "../components/Item.hpp"
 
 Outcome * ShowMenuAction::_execute()
@@ -33,6 +34,24 @@ Outcome * BackToInventoryMenuAction::_execute()
     // Return outcome
     Outcome * outcome = new Outcome(
         INVENTORY_MENU, true, true);
+
+    return outcome;
+}
+
+
+/////////////////////////////
+//////// GO TO PHASE ////////
+/////////////////////////////
+
+GoToPhaseAction::GoToPhaseAction(GamePhase next_phase) : next_phase(next_phase)
+{
+}
+
+Outcome * GoToPhaseAction::_execute()
+{
+    // Return outcome
+    Outcome * outcome = new Outcome(
+        next_phase, true, true);
 
     return outcome;
 }
@@ -81,6 +100,52 @@ Outcome * SelectInventoryItemAction::_execute()
     {
         Outcome * outcome = new Outcome(
             INVENTORY_ITEM_MENU, false, false);
+
+        return outcome;
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+
+SelectTerminalFunctionAction::SelectTerminalFunctionAction(char command_shortcut) :
+    command_shortcut(command_shortcut)
+{
+}
+
+
+Outcome * SelectTerminalFunctionAction::_execute()
+{
+
+    bool found = false;
+
+    // Read terminal options from entity interactive component
+    InteractiveTerminal * interactive_component = 
+        (InteractiveTerminal *)game_state->entity_interacted->interactive;
+    
+    for (int i=0; i<(int)interactive_component->terminal_functions.size(); i++)
+    {
+        // Shortcut to Terminal function
+        TerminalFunction tf = interactive_component->terminal_functions[i];
+
+        // Check if the letter pressed coincides with the shortcut
+        if (tf.command_shortcut == command_shortcut)
+        {
+            // Execute the actual function here
+            tf.execute(player, game_map, game_state);
+            found = true;
+            break;
+        }
+    }
+    
+    if (found)
+    {
+
+        // TODO check next game phase
+        Outcome * outcome = new Outcome(
+            TERMINAL_MENU, true, true);
 
         return outcome;
     }

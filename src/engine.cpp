@@ -11,6 +11,7 @@
 #include "GameState.hpp"
 #include "GamePhase.hpp"
 #include "SaveGame.hpp"
+#include "Overseer.hpp"
 
 #include "Consoles.hpp"
 #include "actions/Action.hpp"
@@ -29,7 +30,7 @@ using namespace std;
 
 void tick_buffs(GameMap * game_map);
 
-void play_game(Entity * player, GameMap * game_map, GameState * game_state)
+void play_game(Entity * player, GameMap * game_map, GameState * game_state, Overseer * overseer)
 {
     
     // At the beginning of the game, recompute fov
@@ -58,6 +59,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
     // Objects required for Enemies' Actions
     AIAction * entity_action;
 
+    ////////////////////////////////////////////
     /////////////// MAIN LOOP //////////////////
     ////////////////////////////////////////////
 
@@ -220,6 +222,12 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
             // Resolves buffs effects
             tick_buffs(game_map);
 
+            ////////////////////////////////////////////
+            /////////// CHECK GAME EVENTS  /////////////
+            ////////////////////////////////////////////
+            
+            overseer->trigger_events();
+            
             if (game_state->game_phase != PLAYER_DEAD)
             {
                 // Go back to player's turn state
@@ -242,7 +250,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state)
  *
  */
 void init_new_game(
-    GameMap ** game_map, Entity ** player, GameState ** game_state);
+    GameMap ** game_map, Entity ** player, GameState ** game_state, Overseer ** overseer);
 
 /**
  * Initializes different components of the engine, mainly related to SDL.
@@ -326,6 +334,7 @@ int main(int argc, char *argv[])
     Entity * player;
     GameMap * game_map;
     GameState * game_state;
+    Overseer * overseer;
 
     while (!TCODConsole::root->isWindowClosed())
     {
@@ -364,7 +373,7 @@ int main(int argc, char *argv[])
             SaveGame sg;
             sg.load("latest.json", &player, &game_map, &game_state);
 
-            play_game(player, game_map, game_state);
+            play_game(player, game_map, game_state, overseer);
 
             load_game = false;
             //break;
@@ -377,12 +386,12 @@ int main(int argc, char *argv[])
             //game_phase = GamePhase.PLAYERS_TURN
             
             init_new_game(
-                 &game_map,  &player,  &game_state);
+                 &game_map,  &player,  &game_state, &overseer);
 
             //game_map.export_txt('maps_txt/lastmap.txt')
 
             //show_main_menu = False
-            play_game(player, game_map, game_state);
+            play_game(player, game_map, game_state, overseer);
 
             // When returning to main menu, reset play_game variable to false
             play_game_ = false;

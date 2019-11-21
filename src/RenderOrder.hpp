@@ -6,6 +6,7 @@
  * The rendering order of entities on map
  */
 enum RenderOrder {
+    NONE = 0,
     STAIRS = 10,
     CORPSE = 20,
     ITEM = 30,

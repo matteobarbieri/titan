@@ -126,7 +126,7 @@ class Junction : public MapPart
 {
     public:
 
-        Junction(Rect xy, std::vector<Direction> available_directions);
+        Junction(Rect xy, std::vector<Direction *> available_directions);
 
         // TODO check if needed
         //void dig(GameMap game_map);
@@ -142,7 +142,7 @@ class Corridor : public MapPart
 
         Corridor(
             Rect xy,
-            std::vector<Direction> available_directions, bool horizontal);
+            std::vector<Direction *> available_directions, bool horizontal);
 
         // TODO check if needed
         //void dig(GameMap game_map);
@@ -190,6 +190,8 @@ class GameMap
 
         // Lists of map parts
         std::vector<Room *> rooms;
+        std::vector<Corridor *> corridors;
+        std::vector<Junction *> junctions;
         
         // The tiles
         Tile ** tiles;
@@ -215,7 +217,15 @@ class GameMap
          */
         Entity * get_item_at(int x, int y);
 
+        /**
+         * Places the player at the dungeon's entry point
+         */
         void place_player(Entity * player);
+
+        /**
+         * Places player at specified coordinates
+         */
+        void place_player(Entity * player, int, int);
 
         void dig(MapPart * part, int pad=0);
 
@@ -226,6 +236,17 @@ class GameMap
          * Turn a single tile to floor
          */
         void make_floor(int x, int y);
+
+        /**
+         * Turn a single tile to wall
+         */
+        void make_wall(int x, int y);
+
+        /**
+         * Turn a single tile to a window, that is an impassable cell which
+         * however allows to see through.
+         */
+        void make_window(int x, int y);
 
         void create_dijkstra_map(MapPart * part);
         void initialize_fov_map();

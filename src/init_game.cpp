@@ -8,6 +8,7 @@
 #include "skills/SkillStun.hpp"
 
 #include "RenderOrder.hpp"
+#include "Overseer.hpp"
 
 #include "GameState.hpp"
 #include "GamePhase.hpp"
@@ -18,39 +19,12 @@
 #include "components/Level.hpp"
 #include "components/Equipment.hpp"
 
-/*
-import libtcodpy as libtcod
-
-from components.equippable import Equippable
-from components.item import Item
-
-from prefabs.weapons.dagger import make_dagger
-
-from entity import Entity
-
-from equipment_slots import EquipmentSlots
-
-from game_messages import MessageLog
-
-from game_state import GamePhase
-
-# from map_objects.old import GameMap
-
-from render_functions import RenderOrder
-
-from map_objects.generators.dungeon import generate_dungeon_level as \
-    generate_dungeon
-
-from map_objects.generators.test_maps import generate_dungeon_level as \
-    generate_room
-
-
-def get_game_variables(constants):
-
-*/
-
 namespace tutorial {
     GameMap * generate_room(int, int);
+}
+
+namespace prologue {
+    GameMap * generate_map(int, int, Overseer **);
 }
 
 namespace test_room {
@@ -58,16 +32,20 @@ namespace test_room {
 }
 
 void init_new_game(
-    GameMap ** game_map, Entity ** player, GameState ** game_state)
+    GameMap ** game_map, Entity ** player, GameState ** game_state, Overseer ** overseer)
 {
 
     // Generate a small room
     //* game_map = test_room::generate_room(
         //MAP_WIDTH, MAP_HEIGHT);
 
+    // Generate prologue map
+    * game_map = prologue::generate_map(
+        MAP_WIDTH, MAP_HEIGHT, overseer);
+
     // Generate tutorial map
-    * game_map = tutorial::generate_room(
-        MAP_WIDTH, MAP_HEIGHT);
+    //* game_map = tutorial::generate_room(
+        //MAP_WIDTH, MAP_HEIGHT);
 
     /*
 
@@ -151,6 +129,10 @@ void init_new_game(
 
     ////////////////////////////////////////////
     // Begin the game in player's turn
-    * game_state = new GameState();
-    (* game_state)->game_phase = PLAYERS_TURN;
+    (*game_state) = new GameState();
+    (*game_state)->game_phase = PLAYERS_TURN;
+
+    // Set game state reference to Overseer
+    (*overseer)->game_state = *game_state;
+    (*overseer)->game_map = *game_map;
 }

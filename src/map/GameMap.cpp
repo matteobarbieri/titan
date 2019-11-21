@@ -43,8 +43,8 @@ Direction::Direction(int dx, int dy) : dx(dx), dy(dy)
 }
 
 // Initialize static members
-Direction * Direction::NN = new Direction(0, 1);
-Direction * Direction::SS = new Direction(0, -1);
+Direction * Direction::NN = new Direction(0, -1);
+Direction * Direction::SS = new Direction(0, 1);
 Direction * Direction::EE = new Direction(1, 0);
 Direction * Direction::WW = new Direction(-1, 0);
 
@@ -78,6 +78,13 @@ MapPart::MapPart(Rect xy, std::vector<Direction *> available_directions) :
 Room::Room(Rect xy) : MapPart(xy) {}
 Room::Room(Rect xy, std::vector<Direction *> available_directions) : 
     MapPart(xy, available_directions) {}
+
+/////////////////////////////////
+/////////// CORRIDOR ////////////
+/////////////////////////////////
+
+Corridor::Corridor(Rect xy, std::vector<Direction *> available_directions, bool horizontal) : 
+    MapPart(xy, available_directions), _horizontal(horizontal) {}
 
 /*
     def __init__(self, width, height, dungeon_level=1):
@@ -166,7 +173,7 @@ void GameMap::get_player_starting_coords(int & x, int & y)
     // TODO change this
     for (int i=0; i<(int)entities().size(); i++)
     {
-        if (entities()[i]->symbol == '<')
+        if (entities()[i]->name == "ENTRY_POINT")
         {
             x = entities()[i]->x;
             y = entities()[i]->y;
@@ -179,6 +186,17 @@ void GameMap::get_player_starting_coords(int & x, int & y)
     // Raise exception if no starting point is found
 }
 
+void GameMap::place_player(Entity * player, int x, int y)
+{
+
+    // Set player's coordinates
+    player->x = x;
+    player->y = y;
+
+    // Add player to list of entities
+    add_entity(player);
+}
+
 void GameMap::place_player(Entity * player)
 {
 
@@ -187,13 +205,7 @@ void GameMap::place_player(Entity * player)
     // Get starting coordinates from the map object itself
     get_player_starting_coords(x, y);
 
-    // Set player's coordinates
-    player->x = x;
-    player->y = y;
-
-    // Add player to list of entities
-    add_entity(player);
-
+    place_player(player, x, y);
 }
 
 void GameMap::initialize_fov_map()
@@ -317,6 +329,12 @@ bool GameMap::is_blocked(int x, int y) const
 }
 
 
+void GameMap::add_part(Corridor * corridor)
+{
+    corridors.push_back(corridor);
+    dig(corridor);
+}
+
 void GameMap::add_part(Room * room)
 {
     rooms.push_back(room);
@@ -332,6 +350,28 @@ void GameMap::make_floor(int x, int y)
     delete tiles[i];
 
     tiles[i] = new Floor();
+}
+
+void GameMap::make_wall(int x, int y)
+{
+
+    int i = compute_tile_index(x, y, width);
+
+    // Remove old tile
+    delete tiles[i];
+
+    tiles[i] = new Wall();
+}
+
+void GameMap::make_window(int x, int y)
+{
+
+    int i = compute_tile_index(x, y, width);
+
+    // Remove old tile
+    delete tiles[i];
+
+    tiles[i] = new Window();
 }
 
 void GameMap::dig(MapPart * map_part, int padding)
@@ -806,25 +846,6 @@ class Door(MapPart):
         for x in range(x1, x2+1):
             for y in range(y1, y2+1):
                 game_map.tiles[x][y] = DoorTile()
-
-
-class Room(MapPart):
-
-    def __init__(self, xy, available_directions):
-        super().__init__(xy, available_directions)
-
-    def dig(self, game_map):
-        """
-        Actually dig the map part in the game map.
-        """
-
-        super().dig(game_map, pad=1)
-
-        # # Also dig the door, if there is one
-        # if self.door_xy is not None:
-            # x, y = self.door_xy
-
-            # dig_rect(game_map, [x, y, x, y])
 
 
 class Junction(MapPart):

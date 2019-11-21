@@ -34,6 +34,9 @@ class GameState
         // Entity being inspected
         Entity * entity_focused = nullptr;
 
+        // Entity being inspected
+        Entity * entity_interacted = nullptr;
+
         // Entity being targeted
         Entity * entity_targeted = nullptr;
 

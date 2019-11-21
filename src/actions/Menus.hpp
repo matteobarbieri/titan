@@ -2,6 +2,7 @@
 #define ROGUE_20177_ACTIONS_MENU
 
 #include "Action.hpp"
+#include "../GamePhase.hpp"
 
 
 // Forward declarations
@@ -51,12 +52,43 @@ class SelectInventoryItemAction : public Action
 
 };
 
+class SelectTerminalFunctionAction : public Action
+{
+
+    public:
+
+        char command_shortcut;
+
+        SelectTerminalFunctionAction(char command_shortcut);
+
+        Outcome * _execute();
+
+};
+
+
+
 class BackToInventoryMenuAction : public Action
 {
 
     public:
 
         Outcome * _execute();
+
+};
+
+/**
+ * Simply reset the state to player's turn
+ */
+class GoToPhaseAction : public Action
+{
+
+    public:
+
+        GamePhase next_phase;
+
+        Outcome * _execute();
+
+        GoToPhaseAction(GamePhase);
 
 };
 

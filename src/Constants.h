@@ -34,13 +34,19 @@
 #define FRAME_WIDTH 31
 #define FRAME_HEIGHT (SCREEN_HEIGHT - PANEL_HEIGHT)
 
+// Geometry of terminalframe
+#define TERMINAL_FRAME_WIDTH 71
+#define TERMINAL_FRAME_HEIGHT 42
+
 // Parameters for the log panel
 #define MESSAGE_X (BAR_WIDTH + 2)
 #define MESSAGE_WIDTH (SCREEN_WIDTH - BAR_WIDTH - 2)
 #define MESSAGE_HEIGHT (PANEL_HEIGHT - 1)
 
 // Variables for field of view (FOV)
-#define FOV_ALGORITHM FOV_BASIC
+//#define FOV_ALGORITHM FOV_BASIC
+//#define FOV_ALGORITHM FOV_PERMISSIVE_0
+#define FOV_ALGORITHM FOV_DIAMOND
 #define FOV_LIGHT_WALLS true
 #define FOV_RADIUS 10
 
@@ -60,6 +66,7 @@
 
 #define INVENTORY_ITEMS_Y 5
 #define EQUIPPED_ITEMS_Y 32
+
 /*
 
 

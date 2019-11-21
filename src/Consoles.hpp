@@ -15,6 +15,7 @@ class Consoles
         TCODConsole * terrain_layer;
         TCODConsole * main_window;
         TCODConsole * menu;
+        TCODConsole * terminal;
         TCODConsole * submenu;
         TCODConsole * panel;
         TCODConsole * entity_frame;

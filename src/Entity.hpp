@@ -26,6 +26,7 @@ class Inventory;
 class Interactive;
 
 class GameMap;
+class GameState;
 
 class Buff;
 
@@ -83,6 +84,9 @@ class Entity
         // Buffs currently applied to entity
         std::vector<Buff *> buffs;
 
+        // A tag used to identify entity type
+        std::string tag;
+
         //////////////////////////////
         ////////// METHODS ///////////
         //////////////////////////////
@@ -120,7 +124,7 @@ class Entity
          * player <-> monster: attack
          * player  -> door: interact
          */
-        void interact_with(Entity * other, GameMap * game_map);
+        void interact_with(Entity * other, GameMap * game_map, GameState * GameState);
 
         void apply_buff(Buff *);
 

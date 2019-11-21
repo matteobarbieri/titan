@@ -28,6 +28,10 @@ Consoles::Consoles()
     main_window = new TCODConsole(
         TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
 
+    /*! The auxiliary console for the terminal */
+    terminal = new TCODConsole(
+        TERMINAL_FRAME_WIDTH, TERMINAL_FRAME_HEIGHT);
+
     /*! The auxiliary console for the list menu */
     menu = new TCODConsole(
         TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT);
