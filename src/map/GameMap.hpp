@@ -238,6 +238,11 @@ class GameMap
         void make_floor(int x, int y);
 
         /**
+         * Turn a single tile to wall
+         */
+        void make_wall(int x, int y);
+
+        /**
          * Turn a single tile to a window, that is an impassable cell which
          * however allows to see through.
          */

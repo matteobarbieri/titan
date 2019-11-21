@@ -288,7 +288,6 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
 
     level->add_part(new Room(Rect(52, 43, 56, 47), Direction::FourD()));
 
-    
     // Large room with two armed grunts
     level->make_floor(44, 47);
     level->make_floor(45, 47);
@@ -302,7 +301,11 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
 
     level->add_part(new Room(Rect(39, 48, 50, 68), Direction::FourD()));
     
-    // TODO Add full cover 
+    // Full cover
+    level->make_wall(46, 53);
+    level->make_wall(47, 53);
+    
+
     // TODO Add partial cover
 
     // Room with special monster (which will require the use of skills)

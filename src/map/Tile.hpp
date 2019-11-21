@@ -52,13 +52,23 @@ class Tile
         Tile(bool blocked, bool block_sight);
         virtual ~Tile();
 
+        /**
+         * A value representing how much cover that kind of tile offers. This
+         * value will be subtracted from the chance to hit (in percentage), so
+         * it should normally be in the range 0-100. In order to have
+         * impenetrable tiles (e.g., force fields and similar) one can simply
+         * use very high values, such as 1000.
+         * This value should be set in the constructor for every Tile subclass.
+         */
+        int cover_level;
+
 
         // Private member getters
         virtual bool blocked() const;
         virtual bool block_sight() const;
         virtual bool explored() const;
         virtual int fg_symbol() const;
-        
+
         // Set value
         void explored(bool v);
 
@@ -86,7 +96,7 @@ class Floor : public Tile
 
         Floor(TCODColor bg_color = TCODColor(20, 20, 20),
               TCODColor fg_color = TCODColor(65, 65, 65),
-              int fg_symbol=250);
+              int fg_symbol=250, int cover_level=0);
 
         json to_json() override;
 
@@ -104,7 +114,7 @@ class Window : public Tile
 
         Window(TCODColor bg_color = TCODColor(20, 20, 20),
               TCODColor fg_color = TCODColor(65, 65, 65),
-              int fg_symbol='=');
+              int fg_symbol='=', int cover_level=20);
 
         json to_json() override;
 
@@ -122,7 +132,7 @@ class Wall : public Tile
 
         Wall(TCODColor bg_color=TCODColor::white,
              TCODColor fg_color=TCODColor::black,
-             int fg_symbol='#');
+             int fg_symbol='#', int cover_level=50);
 
         /**
          * Create a wall tile choosing the background color from a

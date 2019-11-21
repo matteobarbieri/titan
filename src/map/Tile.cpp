@@ -109,6 +109,7 @@ json Tile::to_json()
     json_data["_block_sight"] = _block_sight;
     json_data["_explored"] = _explored;
     json_data["_fg_symbol"] = _fg_symbol;
+    json_data["cover_level"] = cover_level;
     json_data["_fg_color"] = tcodcolor_to_json(_fg_color);
     json_data["_bg_color"] = tcodcolor_to_json(_bg_color);
 
@@ -136,7 +137,7 @@ Tile * Tile::from_json(json j)
 //////////// WINDOW /////////////
 /////////////////////////////////
 
-Window::Window(TCODColor bg_color, TCODColor fg_color, int fg_symbol) : 
+Window::Window(TCODColor bg_color, TCODColor fg_color, int fg_symbol, int cover_level) : 
     Tile(true, false) // blocked, !block_sight
 {
 
@@ -144,6 +145,7 @@ Window::Window(TCODColor bg_color, TCODColor fg_color, int fg_symbol) :
     _fg_color = fg_color;
 
     _fg_symbol = fg_symbol;
+    this->cover_level = cover_level;
 }
 
 json Window::to_json()
@@ -174,15 +176,15 @@ Window * Window::from_json(json j)
 ///////////// FLOOR /////////////
 /////////////////////////////////
 
-Floor::Floor(TCODColor bg_color, TCODColor fg_color, int fg_symbol) : 
-    Tile(false, false) 
+Floor::Floor(TCODColor bg_color, TCODColor fg_color, int fg_symbol, int cover_level) : 
+    Tile(false, false)
 {
-
     _bg_color = bg_color;
     _fg_color = fg_color;
 
     _fg_symbol = fg_symbol;
 
+    this->cover_level = cover_level;
 }
 
 json Floor::to_json()
@@ -212,13 +214,16 @@ Floor * Floor::from_json(json j)
 ///////////// WALL //////////////
 /////////////////////////////////
 
-Wall::Wall(TCODColor bg_color, TCODColor fg_color, int fg_symbol) : Tile(true, true)
+Wall::Wall(TCODColor bg_color, TCODColor fg_color, int fg_symbol, int cover_level) : Tile(true, true)
 {
 
     _bg_color = bg_color;
     _fg_color = fg_color;
 
     _fg_symbol = fg_symbol;
+
+    // Set cover level
+    this->cover_level = cover_level;
 }
 
 Wall * Wall::create_from_palette(std::vector<TCODColor> palette)
