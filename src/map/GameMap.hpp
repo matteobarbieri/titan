@@ -54,6 +54,10 @@ class Direction
          * East
          */
         static std::vector<Direction *> FourD();
+
+        std::string to_json();
+
+        static Direction * from_json(std::string j);
 };
 
 class MapPart

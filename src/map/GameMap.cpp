@@ -59,6 +59,48 @@ std::vector<Direction *> Direction::FourD()
     return directions;
 }
 
+std::string Direction::to_json()
+{
+    if (dx == 0 && dy == -1)
+    {
+        return "NN";
+    }
+
+    if (dx == 0 && dy == 1)
+    {
+        return "SS";
+    }
+
+    if (dx == 1 && dy == 0)
+    {
+        return "EE";
+    }
+
+    if (dx == -1 && dy == 0)
+    {
+        return "WW";
+    }
+
+    return "";
+}
+
+Direction * from_json(std::string j)
+{
+    if (j == "NN")
+        return Direction::NN;
+
+    if (j == "SS")
+        return Direction::SS;
+
+    if (j == "EE")
+        return Direction::EE;
+
+    if (j == "WW")
+        return Direction::WW;
+
+    return nullptr;
+}
+
 /////////////////////////////////
 /////////// MAP PART ////////////
 /////////////////////////////////
@@ -85,30 +127,6 @@ Room::Room(Rect xy, std::vector<Direction *> available_directions) :
 
 Corridor::Corridor(Rect xy, std::vector<Direction *> available_directions, bool horizontal) : 
     MapPart(xy, available_directions), _horizontal(horizontal) {}
-
-/*
-    def __init__(self, width, height, dungeon_level=1):
-
-        #############################
-        ######### FIN QUI ###########
-        #############################
-
-        self.width = width
-        self.height = height
-        self.tiles = self.initialize_tiles()
-
-        self.dungeon_level = dungeon_level
-
-        # Initialize the empty lists of rooms, corridors and junctions
-        self.rooms = list()
-        self.doors = list()
-        self.corridors = list()
-        self.junctions = list()
-
-        # Initialize an empty list for entities in this level
-        self.entities = list()
-*/
-
 
 /////////////////////////////////
 /////////// GAME MAP ////////////
