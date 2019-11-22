@@ -233,15 +233,15 @@ json Entity::to_json()
     else
         json_data["ai"] = nullptr;
 
-    if (item != nullptr)
-        json_data["item"] = item->to_json();
-    else
-        json_data["item"] = nullptr;
-
     if (stairs != nullptr)
         json_data["stairs"] = stairs->to_json();
     else
         json_data["stairs"] = nullptr;
+
+    if (item != nullptr)
+        json_data["item"] = item->to_json();
+    else
+        json_data["item"] = nullptr;
 
     if (level != nullptr)
         json_data["level"] = level->to_json();
@@ -258,10 +258,20 @@ json Entity::to_json()
     else
         json_data["equippable"] = nullptr;
 
+    if (usable != nullptr)
+        json_data["usable"] = usable->to_json();
+    else
+        json_data["usable"] = nullptr;
+
     if (inventory != nullptr)
         json_data["inventory"] = inventory->to_json();
     else
         json_data["inventory"] = nullptr;
+
+    if (interactive != nullptr)
+        json_data["interactive"] = interactive->to_json();
+    else
+        json_data["interactive"] = nullptr;
 
 
     return json_data;
