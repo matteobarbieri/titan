@@ -42,10 +42,10 @@ void terminal_menu(
     for (int i=0; i<(int)interactive_component->terminal_functions.size(); i++)
     {
 
-        TerminalFunction tf = interactive_component->terminal_functions[i];
+        TerminalFunction * tf = interactive_component->terminal_functions[i];
 
         // Set the color first
-        if (tf.enabled)
+        if (tf->enabled)
         {
             Consoles::singleton().terminal->setDefaultForeground(TCODColor::white);
         }
@@ -58,7 +58,7 @@ void terminal_menu(
         Consoles::singleton().terminal->printf(
             menu_item_x, menu_item_y,
             "(%c) %s",
-            tf.command_shortcut, tf.command.c_str());
+            tf->command_shortcut, tf->command.c_str());
 
         // Increment y coordinate of next menu item by one
         menu_item_y++;

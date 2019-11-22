@@ -18,6 +18,7 @@ class GameMap;
 class GameState;
 
 class Direction;
+class Effect;
 
 
 /**
@@ -142,12 +143,18 @@ class TerminalFunction
         int command_shortcut;
 
         // The pointer to the actual function which will be executed.
-        void (*execute)(Entity *, GameMap *, GameState *);
+        //void (*execute)(Entity *, GameMap *, GameState *);
+        void execute(Entity *, GameMap *, GameState *);
+
+        // The list of effects which will take place once the terminal function
+        // will be executed.
+        std::vector<Effect *> effects;
 
         // Whether this specific option is currently enabled or not
         bool enabled;
 
-        TerminalFunction(std::string, int, void (*)(Entity *, GameMap *, GameState *), bool enabled=true);
+        //TerminalFunction(std::string, int, void (*)(Entity *, GameMap *, GameState *), bool enabled=true);
+        TerminalFunction(std::string, int, bool enabled=true);
 
         json to_json();
 

@@ -92,13 +92,17 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     Entity * terminal = make_terminal(6, 14);
     InteractiveTerminal * t1_interactive = (InteractiveTerminal *)terminal->interactive;
     
-    auto test_f3 = [](Entity * player, GameMap * game_map, GameState * game_state)
-    {
-        unlock_doors(player, game_map, game_state, 3);
-        MessageLog::singleton().add_message({"Unlocking doors...", TCODColor::turquoise});
-    };
+    //auto test_f3 = [](Entity * player, GameMap * game_map, GameState * game_state)
+    //{
+        //unlock_doors(player, game_map, game_state, 3);
+        //MessageLog::singleton().add_message({"Unlocking doors...", TCODColor::turquoise});
+    //};
 
-    TerminalFunction * tf3 = new TerminalFunction("Unlock cell doors", 'a', test_f3);
+    //TerminalFunction * tf3 = new TerminalFunction("Unlock cell doors", 'a', test_f3);
+    
+    TerminalFunction * tf3 = new TerminalFunction("Unlock cell doors", 'a');
+    tf3->effects.push_back(new UnlockDoorsEffect(3));
+    
     t1_interactive->terminal_functions.push_back(tf3);
     level->add_entity(terminal);
     

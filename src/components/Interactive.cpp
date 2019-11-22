@@ -14,6 +14,8 @@
 
 #include "../SaveGame.hpp"
 
+#include "../prefabs/funcs/misc.hpp"
+
 //////////////////////////////////
 ////////// INTERACTIVE ///////////
 //////////////////////////////////
@@ -193,6 +195,7 @@ InteractivePanel * InteractivePanel::from_json(json j)
     InteractivePanel * ip = new InteractivePanel(
         j["text"],
         json_to_tcodcolor(j["text_color"]),
+        //Direction::from_json(j["readable_from"]),
         Direction::from_json(j["readable_from"]),
         j["is_active"]
     );
@@ -207,9 +210,8 @@ InteractivePanel * InteractivePanel::from_json(json j)
 TerminalFunction::TerminalFunction(
         std::string command, 
         int command_shortcut, 
-        void (*execute)(Entity *, GameMap *, GameState *),
         bool enabled) :
-    command(command), command_shortcut(command_shortcut), execute(execute),
+    command(command), command_shortcut(command_shortcut),
     enabled(enabled)
 {
 }
@@ -242,9 +244,6 @@ void InteractiveTerminal::interact(Entity * player, GameMap * game_map, GameStat
         game_state->entity_interacted = owner;
         game_state->game_phase = TERMINAL_MENU;
 
-        //void fff() = terminal_options[0];
-
-
         MessageLog::singleton().add_message(
             {"[PH] Interacting with terminal", TCODColor::lightGreen});
     }
@@ -255,6 +254,14 @@ void InteractiveTerminal::interact(Entity * player, GameMap * game_map, GameStat
              TCODColor::amber});
     }
 
+}
+
+void TerminalFunction::execute(Entity * player, GameMap * game_map, GameState * game_state)
+{
+    for (int i=0; i<(int)effects.size(); i++)
+    {
+        effects[i]->apply(player, game_map, game_state);
+    }
 }
 
 json InteractiveTerminal::to_json()

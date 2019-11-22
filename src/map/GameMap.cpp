@@ -84,7 +84,7 @@ std::string Direction::to_json()
     return "";
 }
 
-Direction * from_json(std::string j)
+Direction * Direction::from_json(std::string j)
 {
     if (j == "NN")
         return Direction::NN;

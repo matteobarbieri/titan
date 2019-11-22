@@ -33,3 +33,36 @@ void unlock_doors(Entity * player, GameMap * game_map, GameState * game_state, u
 
     }
 }
+
+/*********************************
+ * Effects
+ *********************************/
+
+//////////////////////////////////
+/////////// OPEN DOOR ////////////
+//////////////////////////////////
+
+UnlockDoorsEffect::UnlockDoorsEffect(unsigned int key_id) : key_id(key_id)
+{
+}
+
+void UnlockDoorsEffect::apply(Entity * player, GameMap * game_map, GameState * game_state)
+{
+    unlock_doors(player, game_map, game_state, key_id);
+    // TODO remove
+    //DEBUG("Unlocking doors with id " << key_id);
+}
+
+json UnlockDoorsEffect::to_json()
+{
+    // TODO to implement
+    json j;
+
+    return j;
+}
+
+UnlockDoorsEffect * UnlockDoorsEffect::from_json(json j)
+{
+    // TODO to implement
+    return nullptr;
+}
