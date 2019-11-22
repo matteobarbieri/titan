@@ -44,10 +44,6 @@ void SaveGame::load(const char * save_file,
     // Load player data
     * player = Entity::from_json(save_data["player"]);
 
-    //std::cout << "Name: " << (*player)->name << std::endl;
-    //std::cout << "x: " << (*player)->x << std::endl;
-    //std::cout << "y: " << (*player)->y << std::endl;
-
     // Load map data
     * game_map = GameMap::from_json(save_data["game_map"]);
    
@@ -59,6 +55,7 @@ void SaveGame::load(const char * save_file,
 
     
 }
+
 void SaveGame::save(const char * save_file,
      Entity * player, GameMap * game_map, GameState * game_state)
 {

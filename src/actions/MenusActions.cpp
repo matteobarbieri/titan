@@ -128,13 +128,13 @@ Outcome * SelectTerminalFunctionAction::_execute()
     for (int i=0; i<(int)interactive_component->terminal_functions.size(); i++)
     {
         // Shortcut to Terminal function
-        TerminalFunction tf = interactive_component->terminal_functions[i];
+        TerminalFunction * tf = interactive_component->terminal_functions[i];
 
         // Check if the letter pressed coincides with the shortcut
-        if (tf.command_shortcut == command_shortcut)
+        if (tf->command_shortcut == command_shortcut)
         {
             // Execute the actual function here
-            tf.execute(player, game_map, game_state);
+            tf->execute(player, game_map, game_state);
             found = true;
             break;
         }

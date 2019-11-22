@@ -12,6 +12,36 @@
 
 #include "../GameMessages.hpp"
 
+#include "../SaveGame.hpp"
+
+//////////////////////////////////
+////////// INTERACTIVE ///////////
+//////////////////////////////////
+
+Interactive * Interactive::from_json(json j)
+{
+    if (j["subclass"] == "interactive_door")
+    {
+        return InteractiveDoor::from_json(j);
+    }
+
+    if (j["subclass"] == "interactive_panel")
+    {
+        return InteractivePanel::from_json(j);
+    }
+
+    if (j["subclass"] == "interactive_terminal")
+    {
+        return InteractiveTerminal::from_json(j);
+    }
+
+    return nullptr;
+}
+
+//////////////////////////////////
+//////// INTERACTIVE DOOR ////////
+//////////////////////////////////
+
 InteractiveDoor::InteractiveDoor(bool is_open, bool locked, unsigned int key_id) :
     is_open(is_open), locked(locked), key_id(key_id)
 {
@@ -87,6 +117,33 @@ void InteractiveDoor::interact(Entity * player, GameMap * game_map, GameState * 
     game_state->game_phase = ENEMY_TURN;
 }
 
+json InteractiveDoor::to_json()
+{
+    json json_data;
+
+    json_data["subclass"] = "interactive_door";
+    json_data["is_open"] = is_open;
+    json_data["locked"] = locked;
+    json_data["key_id"] = key_id;
+
+    return json_data;
+}
+
+InteractiveDoor * InteractiveDoor::from_json(json j)
+{
+    InteractiveDoor * c = new InteractiveDoor(
+        j["is_open"],
+        j["locked"],
+        j["key_id"]
+    );
+
+    return c;
+}
+
+
+//////////////////////////////////
+/////// INTERACTIVE PANEL ////////
+//////////////////////////////////
 
 InteractivePanel::InteractivePanel(
         std::string text, TCODColor text_color, Direction * readable_from, bool is_active) :
@@ -117,6 +174,36 @@ void InteractivePanel::interact(Entity * player, GameMap * game_map, GameState *
 
 }
 
+json InteractivePanel::to_json()
+{
+    json j;
+
+    j["subclass"] = "interactive_panel";
+    j["text"] = text;
+    j["text_color"] = tcodcolor_to_json(text_color);
+    j["readable_from"] = readable_from->to_json();
+    j["is_active"] = is_active;
+
+    return j;
+}
+
+InteractivePanel * InteractivePanel::from_json(json j)
+{
+
+    InteractivePanel * ip = new InteractivePanel(
+        j["text"],
+        json_to_tcodcolor(j["text_color"]),
+        Direction::from_json(j["readable_from"]),
+        j["is_active"]
+    );
+
+    return ip;
+}
+
+//////////////////////////////////
+////// INTERACTIVE TERMINAL //////
+//////////////////////////////////
+
 TerminalFunction::TerminalFunction(
         std::string command, 
         int command_shortcut, 
@@ -127,15 +214,28 @@ TerminalFunction::TerminalFunction(
 {
 }
 
+json TerminalFunction::to_json()
+{
+    // TODO to implement
+
+    json j;
+
+    return j;
+}
+
+TerminalFunction * TerminalFunction::from_json(json j)
+{
+    // TODO to implement
+
+    return nullptr;
+}
+
 InteractiveTerminal::InteractiveTerminal(bool is_active) : is_active(is_active)
 {
 }
 
 void InteractiveTerminal::interact(Entity * player, GameMap * game_map, GameState * game_state)
 {
-
-    // First check if the player is approaching the panel from the right
-    // direction
     if (is_active)
     {
         // Set current terminal as entity with which to interact
@@ -155,4 +255,38 @@ void InteractiveTerminal::interact(Entity * player, GameMap * game_map, GameStat
              TCODColor::amber});
     }
 
+}
+
+json InteractiveTerminal::to_json()
+{
+    // TODO to complete
+    json j;
+
+    j["is_active"] = is_active;
+
+    json jtf;
+    for (int i=0; i<(int)terminal_functions.size(); i++)
+    {
+        jtf.push_back(terminal_functions[i]->to_json());
+    }
+
+    j["terminal_functions"] = jtf;
+
+    return j;
+}
+
+InteractiveTerminal * InteractiveTerminal::from_json(json j)
+{
+
+    InteractiveTerminal * it = new InteractiveTerminal(
+        j["is_active"]
+    );
+
+    for (int i=0; i<(int)j["terminal_functions"].size(); i++)
+    {
+        it->terminal_functions.push_back(
+            TerminalFunction::from_json(j["terminal_functions"][i]));
+    }
+
+    return it;
 }

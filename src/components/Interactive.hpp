@@ -44,7 +44,18 @@ class Interactive
         //static Interactive * from_json(json j);
         
         virtual void interact(Entity *, GameMap *, GameState *) = 0;
+
+        /**
+         * Creates a json representation of the entity
+         */
+        virtual json to_json() = 0;
+
+        static Interactive * from_json(json);
 };
+
+//////////////////////////////////
+//////// INTERACTIVE DOOR ////////
+//////////////////////////////////
 
 class InteractiveDoor : public Interactive
 {
@@ -77,7 +88,15 @@ class InteractiveDoor : public Interactive
         bool player_has_key(Entity * player);
 
         virtual void interact(Entity *, GameMap *, GameState *);
+
+        json to_json();
+
+        static InteractiveDoor * from_json(json j);
 };
+
+//////////////////////////////////
+/////// INTERACTIVE PANEL ////////
+//////////////////////////////////
 
 class InteractivePanel : public Interactive
 {
@@ -98,7 +117,15 @@ class InteractivePanel : public Interactive
         InteractivePanel(std::string text, TCODColor text_color, Direction * readable_from, bool is_active);
 
         virtual void interact(Entity *, GameMap *, GameState *);
+
+        json to_json();
+
+        static InteractivePanel * from_json(json j);
 };
+
+//////////////////////////////////
+////// INTERACTIVE TERMINAL //////
+//////////////////////////////////
 
 /**
  * A single function offered by a terminal
@@ -121,19 +148,20 @@ class TerminalFunction
         bool enabled;
 
         TerminalFunction(std::string, int, void (*)(Entity *, GameMap *, GameState *), bool enabled=true);
+
+        json to_json();
+
+        static TerminalFunction * from_json(json j);
 };
 
 class InteractiveTerminal : public Interactive
 {
     public:
 
-        // The text shown in the log
-        std::string text;
-
         // The color of the text shown in the log
         TCODColor text_color;
 
-        std::vector<TerminalFunction> terminal_functions;
+        std::vector<TerminalFunction *> terminal_functions;
 
         // Whether the terminal is active or not
         bool is_active;
@@ -142,6 +170,10 @@ class InteractiveTerminal : public Interactive
 
         // What happens when a player interacts with the terminal
         virtual void interact(Entity *, GameMap *, GameState *);
+
+        json to_json();
+
+        static InteractiveTerminal * from_json(json j);
 };
 
 

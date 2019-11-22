@@ -98,7 +98,7 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
         MessageLog::singleton().add_message({"Unlocking doors...", TCODColor::turquoise});
     };
 
-    TerminalFunction tf3("Unlock cell doors", 'a', test_f3);
+    TerminalFunction * tf3 = new TerminalFunction("Unlock cell doors", 'a', test_f3);
     t1_interactive->terminal_functions.push_back(tf3);
     level->add_entity(terminal);
     
