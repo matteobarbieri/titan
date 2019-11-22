@@ -66,3 +66,31 @@ UnlockDoorsEffect * UnlockDoorsEffect::from_json(json j)
     // TODO to implement
     return nullptr;
 }
+
+//////////////////////////////////
+//////// ADD LOG MESSAGE /////////
+//////////////////////////////////
+
+AddLogMessageEffect::AddLogMessageEffect(std::string text, TCODColor text_color) :
+    text(text), text_color(text_color)
+{
+}
+
+void AddLogMessageEffect::apply(Entity * player, GameMap * game_map, GameState * game_state)
+{
+    MessageLog::singleton().add_message({text, text_color});
+}
+
+json AddLogMessageEffect::to_json()
+{
+    // TODO to implement
+    json j;
+
+    return j;
+}
+
+AddLogMessageEffect * AddLogMessageEffect::from_json(json j)
+{
+    // TODO to implement
+    return nullptr;
+}

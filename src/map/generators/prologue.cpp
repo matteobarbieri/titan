@@ -102,6 +102,8 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     
     TerminalFunction * tf3 = new TerminalFunction("Unlock cell doors", 'a');
     tf3->effects.push_back(new UnlockDoorsEffect(3));
+    tf3->effects.push_back(new AddLogMessageEffect(
+        "Unlocking doors...", TCODColor::turquoise));
     
     t1_interactive->terminal_functions.push_back(tf3);
     level->add_entity(terminal);
