@@ -55,7 +55,7 @@ class UnlockDoorsEffect : public Effect
 
 
 /**
- * Open all doors having a key_id equal to the one specified.
+ * Add a message to the message log.
  */
 class AddLogMessageEffect : public Effect
 {

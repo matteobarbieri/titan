@@ -4,6 +4,7 @@
 
 #include "../../map/GameMap.hpp"
 #include "../../Entity.hpp"
+#include "../../SaveGame.hpp"
 #include "../../components/Interactive.hpp"
 #include "../../GameMessages.hpp"
 
@@ -38,6 +39,22 @@ void unlock_doors(Entity * player, GameMap * game_map, GameState * game_state, u
  * Effects
  *********************************/
 
+Effect * Effect::from_json(json j)
+{
+
+    if (j["subclass"] == "UnlockDoorsEffect")
+    {
+        return UnlockDoorsEffect::from_json(j);
+    }
+
+    if (j["subclass"] == "AddLogMessageEffect")
+    {
+        return AddLogMessageEffect::from_json(j);
+    }
+
+    return nullptr;
+}
+
 //////////////////////////////////
 /////////// OPEN DOOR ////////////
 //////////////////////////////////
@@ -49,22 +66,21 @@ UnlockDoorsEffect::UnlockDoorsEffect(unsigned int key_id) : key_id(key_id)
 void UnlockDoorsEffect::apply(Entity * player, GameMap * game_map, GameState * game_state)
 {
     unlock_doors(player, game_map, game_state, key_id);
-    // TODO remove
-    //DEBUG("Unlocking doors with id " << key_id);
 }
 
 json UnlockDoorsEffect::to_json()
 {
-    // TODO to implement
     json j;
-
+    j["key_id"] = key_id;
     return j;
 }
 
 UnlockDoorsEffect * UnlockDoorsEffect::from_json(json j)
 {
-    // TODO to implement
-    return nullptr;
+    UnlockDoorsEffect * ude = new UnlockDoorsEffect(
+        j["key_id"]);
+
+    return ude;
 }
 
 //////////////////////////////////
@@ -83,14 +99,19 @@ void AddLogMessageEffect::apply(Entity * player, GameMap * game_map, GameState *
 
 json AddLogMessageEffect::to_json()
 {
-    // TODO to implement
     json j;
+
+    j["text"] = text;
+    j["text_color"] = tcodcolor_to_json(text_color);
 
     return j;
 }
 
 AddLogMessageEffect * AddLogMessageEffect::from_json(json j)
 {
-    // TODO to implement
-    return nullptr;
+    AddLogMessageEffect * alme = new AddLogMessageEffect(
+        j["text"],
+        json_to_tcodcolor(j["text_color"]));
+
+    return alme;
 }
