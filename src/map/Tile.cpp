@@ -122,11 +122,14 @@ json Tile::to_json()
 
 Tile * Tile::from_json(json j)
 {
-    if (j["class"].get<std::string>() == "WALL")
+    if (j["subclass"].get<std::string>() == "Wall")
         return Wall::from_json(j);
 
-    if (j["class"].get<std::string>() == "FLOOR")
+    if (j["subclass"].get<std::string>() == "Floor")
         return Floor::from_json(j);
+
+    if (j["subclass"].get<std::string>() == "Window")
+        return Window::from_json(j);
 
     std::cout << "This should not happend..." << std::endl;
 
@@ -152,7 +155,7 @@ json Window::to_json()
 {
     json j = Tile::to_json();
 
-    j["class"] = "WINDOW";
+    j["subclass"] = "Window";
 
     return j;
 }
@@ -191,7 +194,7 @@ json Floor::to_json()
 {
     json j = Tile::to_json();
 
-    j["class"] = "FLOOR";
+    j["subclass"] = "Floor";
 
     return j;
 }
@@ -240,7 +243,7 @@ json Wall::to_json()
 {
     json j = Tile::to_json();
 
-    j["class"] = "WALL";
+    j["subclass"] = "Wall";
 
     return j;
 }

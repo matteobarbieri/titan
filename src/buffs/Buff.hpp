@@ -1,6 +1,11 @@
 #ifndef R20177_BUFF
 #define R20177_BUFF
 
+#include "../nlohmann/json.hpp"
+
+using json = nlohmann::json;
+
+// Forward declarations
 class Entity;
 
 /**
@@ -33,6 +38,7 @@ class Buff
          * Base constructor, sets duration
          */
         Buff(Entity * target, int duration);
+        Buff(int duration);
 
         /**
          * Returns true if the buff has expired
@@ -46,6 +52,9 @@ class Buff
 
         virtual void tick();
 
+        json to_json();
+
+        static Buff * from_json(json j);
 };
 
 #endif

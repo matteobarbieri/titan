@@ -22,17 +22,17 @@
 
 Interactive * Interactive::from_json(json j)
 {
-    if (j["subclass"] == "interactive_door")
+    if (j["subclass"] == "InteractiveDoor")
     {
         return InteractiveDoor::from_json(j);
     }
 
-    if (j["subclass"] == "interactive_panel")
+    if (j["subclass"] == "InteractivePanel")
     {
         return InteractivePanel::from_json(j);
     }
 
-    if (j["subclass"] == "interactive_terminal")
+    if (j["subclass"] == "InteractiveTerminal")
     {
         return InteractiveTerminal::from_json(j);
     }
@@ -123,7 +123,7 @@ json InteractiveDoor::to_json()
 {
     json json_data;
 
-    json_data["subclass"] = "interactive_door";
+    json_data["subclass"] = "InteractiveDoor";
     json_data["is_open"] = is_open;
     json_data["locked"] = locked;
     json_data["key_id"] = key_id;
@@ -180,7 +180,7 @@ json InteractivePanel::to_json()
 {
     json j;
 
-    j["subclass"] = "interactive_panel";
+    j["subclass"] = "InteractivePanel";
     j["text"] = text;
     j["text_color"] = tcodcolor_to_json(text_color);
     j["readable_from"] = readable_from->to_json();
@@ -288,6 +288,8 @@ void TerminalFunction::execute(Entity * player, GameMap * game_map, GameState * 
 json InteractiveTerminal::to_json()
 {
     json j;
+
+    j["subclass"] = "InteractiveTerminal";
 
     j["is_active"] = is_active;
 

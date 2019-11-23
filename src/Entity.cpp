@@ -210,17 +210,26 @@ json Entity::to_json()
     // Unique Id
     json_data["_id"] = _id;
 
-    // Base entity features
+    // Base entity features (private)
+    json_data["_color"] = tcodcolor_to_json(_color);
+    json_data["_bg_color"] = tcodcolor_to_json(_bg_color);
+
     json_data["_blocks"] = _blocks;
     json_data["_blocks_sight"] = _blocks_sight;
+
+    json_data["_fixed"] = _fixed;
+
     json_data["_render_order"] = _render_order;
-    json_data["name"] = name;
-    json_data["symbol"] = symbol;
-    json_data["_color"] = tcodcolor_to_json(_color);
+
+    // Base entity features (public)
 
     // Current coordinates in the map
     json_data["x"] = x;
     json_data["y"] = y;
+
+    json_data["name"] = name;
+    json_data["symbol"] = symbol;
+    json_data["tag"] = tag;
 
     // Components
     if (fighter != nullptr)
@@ -273,6 +282,14 @@ json Entity::to_json()
     else
         json_data["interactive"] = nullptr;
 
+    // Buffs currently applied to entity
+    json j_buffs;
+    for (int i=0; i<(int)buffs.size(); i++)
+    {
+        j_buffs.push_back(buffs[i]->to_json());
+    }
+
+    json_data["buffs"] = j_buffs;
 
     return json_data;
 };
@@ -286,33 +303,74 @@ Entity * Entity::from_json(json j)
     Entity * e = new Entity(j["x"], j["y"], j["symbol"],
            json_to_tcodcolor(j["_color"]),  j["name"],
            j["_render_order"],
-           j["_blocks"], j["_blocks_sight"], 
+           j["_blocks"], j["_blocks_sight"],
+           j["_fixed"],
            j["_id"]);
+
+    //DEBUG("Restoring " << j["name"]);
+
+    e->tag = j["tag"];
 
     // Then reconstruct and assign all components
     if (j["fighter"] != nullptr)
+    {
         e->fighter = Fighter::from_json(j["fighter"]);
+        e->fighter->owner = e;
+    }
     
     if (j["ai"] != nullptr)
+    {
         e->ai = MonsterAi::from_json(j["ai"]);
+        e->ai->owner = e;
+    }
     
     if (j["stairs"] != nullptr)
+    {
         e->stairs = Stairs::from_json(j["stairs"]);
+        e->stairs->owner = e;
+    }
     
     if (j["item"] != nullptr)
+    {
         e->item = Item::from_json(j["item"]);
+        e->item->owner = e;
+    }
     
     if (j["level"] != nullptr)
+    {
         e->level = Level::from_json(j["level"]);
+        e->level->owner = e;
+    }
     
     if (j["equipment"] != nullptr)
+    {
         e->equipment = Equipment::from_json(j["equipment"]);
+        e->equipment->owner = e;
+    }
     
     if (j["equippable"] != nullptr)
+    {
         e->equippable = Equippable::from_json(j["equippable"]);
+        e->equippable->owner = e;
+    }
+    
+    if (j["usable"] != nullptr)
+    {
+        e->usable = Usable::from_json(j["usable"]);
+        e->usable->owner = e;
+    }
     
     if (j["inventory"] != nullptr)
+    {
         e->inventory = Inventory::from_json(j["inventory"]);
+        e->inventory->owner = e;
+    }
+    
+    if (j["interactive"] != nullptr)
+    {
+        e->interactive = Interactive::from_json(j["interactive"]);
+        e->interactive->owner = e;
+    }
     
     return e;
 }
@@ -418,26 +476,4 @@ class Entity:
         dy = other.y - self.y
         return math.sqrt(dx ** 2 + dy ** 2)
 
-
-def get_inspectable_entities_at_location(
-    entities, destination_x, destination_y):  # noqa
-
-    for entity in entities:
-        if (entity.x == destination_x and
-            entity.y == destination_y):  # noqa
-            return entity
-
-    return None
-
-
-def get_blocking_entities_at_location(
-    entities, destination_x, destination_y):  # noqa
-
-    for entity in entities:
-        if (entity.blocks and
-            entity.x == destination_x and
-            entity.y == destination_y):  # noqa
-            return entity
-
-    return None
 */

@@ -8,13 +8,21 @@
 
 using json = nlohmann::json;
 
+/**
+ * Auxiliary function to encode a TCODColor instance to a json object
+ */
 json tcodcolor_to_json(TCODColor c);
+
+/**
+ * Restore a TCODColor instance from a json object
+ */
 TCODColor json_to_tcodcolor(json j);
 
 // Forward declarations
 class Entity;
 class GameMap;
 class GameState;
+class Overseer;
 
 class SaveGame
 {

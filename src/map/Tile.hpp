@@ -25,9 +25,6 @@ GRAY_PALETTE = [
 
 using json = nlohmann::json;
 
-// TODO check this one
-json tcodcolor_to_json(TCODColor c);
-
 /**
  * A tile on a map. It may or may not be blocked, and may or may not block
  * sight.

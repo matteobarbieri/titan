@@ -35,9 +35,6 @@ class Interactive
 
         Entity * owner;
 
-        // TODO to enable again
-        //std::vector<MenuOption> item_inventory_options();
-
         /**
          * Creates a json representation of the component
          */

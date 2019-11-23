@@ -20,7 +20,7 @@ void unlock_doors(Entity * player, GameMap * game_map, GameState * game_state, u
         {
             Entity * e = game_map->entities()[i];
 
-            //DEBUG("Entity name: " << e->name);
+            DEBUG("Entity name: " << e->name);
             std::size_t found = e->tag.find("door");
 
             if (
@@ -65,12 +65,16 @@ UnlockDoorsEffect::UnlockDoorsEffect(unsigned int key_id) : key_id(key_id)
 
 void UnlockDoorsEffect::apply(Entity * player, GameMap * game_map, GameState * game_state)
 {
+    //DEBUG("Unlocking doors with key_id " << key_id);
     unlock_doors(player, game_map, game_state, key_id);
 }
 
 json UnlockDoorsEffect::to_json()
 {
     json j;
+
+    j["subclass"] = "UnlockDoorsEffect";
+
     j["key_id"] = key_id;
     return j;
 }
@@ -100,6 +104,8 @@ void AddLogMessageEffect::apply(Entity * player, GameMap * game_map, GameState *
 json AddLogMessageEffect::to_json()
 {
     json j;
+
+    j["subclass"] = "AddLogMessageEffect";
 
     j["text"] = text;
     j["text_color"] = tcodcolor_to_json(text_color);

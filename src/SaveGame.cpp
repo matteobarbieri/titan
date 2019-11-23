@@ -53,7 +53,6 @@ void SaveGame::load(const char * save_file,
     // Load game state
     * game_state = GameState::from_json(save_data["game_state"]);
 
-    
 }
 
 void SaveGame::save(const char * save_file,
