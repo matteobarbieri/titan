@@ -142,19 +142,19 @@ class TerminalFunction
         // times.
         int command_shortcut;
 
-        // The pointer to the actual function which will be executed.
-        //void (*execute)(Entity *, GameMap *, GameState *);
-        void execute(Entity *, GameMap *, GameState *);
+        // Whether this specific option is currently enabled or not
+        bool enabled;
 
         // The list of effects which will take place once the terminal function
         // will be executed.
         std::vector<Effect *> effects;
 
-        // Whether this specific option is currently enabled or not
-        bool enabled;
-
         //TerminalFunction(std::string, int, void (*)(Entity *, GameMap *, GameState *), bool enabled=true);
         TerminalFunction(std::string, int, bool enabled=true);
+
+        // The pointer to the actual function which will be executed.
+        //void (*execute)(Entity *, GameMap *, GameState *);
+        void execute(Entity *, GameMap *, GameState *);
 
         json to_json();
 
@@ -165,13 +165,10 @@ class InteractiveTerminal : public Interactive
 {
     public:
 
-        // The color of the text shown in the log
-        TCODColor text_color;
-
-        std::vector<TerminalFunction *> terminal_functions;
-
         // Whether the terminal is active or not
         bool is_active;
+
+        std::vector<TerminalFunction *> terminal_functions;
 
         InteractiveTerminal(bool is_active);
 
@@ -182,6 +179,5 @@ class InteractiveTerminal : public Interactive
 
         static InteractiveTerminal * from_json(json j);
 };
-
 
 #endif /* ifndef ROGUE_20177_INTERACTIVE */

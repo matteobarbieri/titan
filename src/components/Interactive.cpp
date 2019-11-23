@@ -195,7 +195,6 @@ InteractivePanel * InteractivePanel::from_json(json j)
     InteractivePanel * ip = new InteractivePanel(
         j["text"],
         json_to_tcodcolor(j["text_color"]),
-        //Direction::from_json(j["readable_from"]),
         Direction::from_json(j["readable_from"]),
         j["is_active"]
     );
@@ -218,18 +217,40 @@ TerminalFunction::TerminalFunction(
 
 json TerminalFunction::to_json()
 {
-    // TODO to implement
-
     json j;
+
+    j["command"] = command;
+    j["command_shortcut"] = command_shortcut;
+    j["enabled"] = enabled;
+
+    json j_effects;
+
+    for (int i=0; i<(int)effects.size(); i++)
+    {
+        j_effects.push_back(effects[i]->to_json());
+    }
+
+    j["effects"] = j_effects;
 
     return j;
 }
 
 TerminalFunction * TerminalFunction::from_json(json j)
 {
-    // TODO to implement
+    TerminalFunction * tf = new TerminalFunction(
+        j["command"],
+        j["command_shortcut"],
+        j["enabled"]
+    );
 
-    return nullptr;
+    // Restore effects
+    for (int i=0; i<(int)j["effects"].size(); i++)
+    {
+        tf->effects.push_back(
+            Effect::from_json(j["effects"][i]));
+    }
+
+    return tf;
 }
 
 InteractiveTerminal::InteractiveTerminal(bool is_active) : is_active(is_active)
@@ -266,7 +287,6 @@ void TerminalFunction::execute(Entity * player, GameMap * game_map, GameState * 
 
 json InteractiveTerminal::to_json()
 {
-    // TODO to complete
     json j;
 
     j["is_active"] = is_active;
