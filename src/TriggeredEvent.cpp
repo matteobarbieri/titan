@@ -1,6 +1,4 @@
-#include "GameEvent.hpp"
-
-#include "libtcod.hpp"
+#include "TriggeredEvent.hpp"
 
 #include "GameState.hpp"
 #include "Entity.hpp"

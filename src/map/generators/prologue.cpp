@@ -7,7 +7,7 @@
 #include "../../RenderOrder.hpp"
 #include "../../Overseer.hpp"
 #include "../../EventTrigger.hpp"
-#include "../../GameEvent.hpp"
+#include "../../TriggeredEvent.hpp"
 #include "../../GameMessages.hpp"
 
 #include "../../libtcod.hpp"

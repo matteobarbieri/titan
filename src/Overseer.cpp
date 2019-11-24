@@ -3,7 +3,7 @@
 #include "GameState.hpp"
 
 #include "EventTrigger.hpp"
-#include "GameEvent.hpp"
+#include "TriggeredEvent.hpp"
 
 Overseer::Overseer()
 {
