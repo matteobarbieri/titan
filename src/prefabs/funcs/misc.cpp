@@ -20,7 +20,6 @@ void unlock_doors(Entity * player, GameMap * game_map, GameState * game_state, u
         {
             Entity * e = game_map->entities()[i];
 
-            DEBUG("Entity name: " << e->name);
             std::size_t found = e->tag.find("door");
 
             if (
