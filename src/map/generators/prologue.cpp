@@ -479,14 +479,14 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     ////////////////////////////////
     ///////// GAME EVENTS //////////
     ////////////////////////////////
-
+   
     // At turn 10, the door unlocks
-    GameEvent gev1 = GameEvent();
-    gev1.log_message = "A loud noise wakes you up; looks like something hit the ship.";
-    gev1.log_message_color = TCODColor::amber;
-    gev1.unlock_doors_id = 2;
+    TriggeredEvent * ev1 = new TriggeredEvent(new EventTrigger(10));
 
-    TriggeredEvent ev1 = TriggeredEvent(EventTrigger(10), gev1);
+    ev1->effects.push_back(new UnlockDoorsEffect(2));
+    ev1->effects.push_back(new AddLogMessageEffect(
+        "A loud noise wakes you up; looks like something hit the ship.",
+        TCODColor::amber));
 
     (*overseer)->scheduled_events.push_back(ev1);
 

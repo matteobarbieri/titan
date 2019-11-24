@@ -1,42 +1,36 @@
 #ifndef R20177_GAME_EVENT
 #define R20177_GAME_EVENT
 
-#include <string>
+#include <vector>
+
 #include "libtcod.hpp"
 
 #include "EventTrigger.hpp"
 
 // Forward declarations
-//class EventTrigger;
-class GameState;
+class Entity;
 class GameMap;
+class GameState;
 
-class GameEvent
-{
-    public:
-
-        unsigned int unlock_doors_id;
-        std::string log_message;
-        TCODColor log_message_color;
-
-        // Methods
-
-        GameEvent();
-
-        void resolve(GameMap *);
-};
+class Effect;
 
 class TriggeredEvent
 {
     public:
 
-        EventTrigger trigger;
-        GameEvent event;
+        EventTrigger * trigger;
 
-        TriggeredEvent(EventTrigger, GameEvent);
+        std::vector<Effect *> effects;
 
+        // Constructor
+        TriggeredEvent(EventTrigger *);
+
+        // Checks whether conditions are such that a given event triggers
+        // TODO should be able to check multiple conditions
         bool does_trigger(GameState *);
-        void resolve(GameMap *);
+
+        // Resolve game event
+        void resolve(Entity *, GameMap *, GameState *);
 };
 
 #endif

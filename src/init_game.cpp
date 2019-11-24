@@ -133,6 +133,7 @@ void init_new_game(
     (*game_state)->game_phase = PLAYERS_TURN;
 
     // Set game state reference to Overseer
-    (*overseer)->game_state = *game_state;
+    (*overseer)->player = *player;
     (*overseer)->game_map = *game_map;
+    (*overseer)->game_state = *game_state;
 }

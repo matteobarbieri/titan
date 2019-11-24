@@ -5,6 +5,7 @@
 
 #include "Entity.hpp"
 #include "GameState.hpp"
+#include "Overseer.hpp"
 #include "map/GameMap.hpp"
 
 #include "libtcod.hpp"
@@ -31,7 +32,8 @@ TCODColor json_to_tcodcolor(json j)
 }
 
 void SaveGame::load(const char * save_file,
-     Entity ** player, GameMap ** game_map, GameState ** game_state)
+     Entity ** player, GameMap ** game_map, GameState ** game_state,
+     Overseer ** overseer)
 {
 
     json save_data;
@@ -56,7 +58,8 @@ void SaveGame::load(const char * save_file,
 }
 
 void SaveGame::save(const char * save_file,
-     Entity * player, GameMap * game_map, GameState * game_state)
+     Entity * player, GameMap * game_map, GameState * game_state,
+     Overseer * overseer)
 {
 
     json save_data;

@@ -9,11 +9,14 @@
 #include <vector>
 
 // Forward declarations
-class GameState;
+class Entity;
 class GameMap;
-//class EventTrigger;
-//class GameEvent;
+class GameState;
 class TriggeredEvent;
+
+#include "nlohmann/json.hpp"
+
+using json = nlohmann::json;
 
 /**
  * A class that oversees the game and triggers event and stuff.
@@ -25,22 +28,23 @@ class Overseer
         /**
          * A pointer to current game state
          */
-        GameState * game_state;
+        Entity * player;
 
         /**
          * A pointer to current game state
          */
         GameMap * game_map;
 
-        //pair
-        //std::vector<std::pair<EventTrigger, GameEvent>> scheduled_events;
-        std::vector<TriggeredEvent> scheduled_events;
+        /**
+         * A pointer to current game state
+         */
+        GameState * game_state;
+
+        // The list of scheduled events
+        std::vector<TriggeredEvent *> scheduled_events;
 
         //Overseer(GameState *);
         Overseer();
-
-        // Sets the game state
-        //void set_game_state(GameState *);
 
         /**
          * Check for scheduled events and trigger them if the conditions are

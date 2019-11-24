@@ -150,7 +150,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state, Over
 
                     // Save game
                     SaveGame sg;
-                    sg.save("latest.json", player, game_map, game_state);
+                    sg.save("latest.json", player, game_map, game_state, overseer);
 
                     // Exit to main menu
                     return;
@@ -371,7 +371,7 @@ int main(int argc, char *argv[])
             // TODO implement
             // Load game
             SaveGame sg;
-            sg.load("latest.json", &player, &game_map, &game_state);
+            sg.load("latest.json", &player, &game_map, &game_state, &overseer);
 
             play_game(player, game_map, game_state, overseer);
 

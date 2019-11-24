@@ -32,10 +32,12 @@ class SaveGame
         //SaveGame();
 
         void save(const char * save_file,
-             Entity * player, GameMap * game_map, GameState * game_state);
+             Entity * player, GameMap * game_map, GameState * game_state,
+             Overseer * overseer);
 
         void load(const char * save_file,
-             Entity ** player, GameMap ** game_map, GameState ** game_state);
+             Entity ** player, GameMap ** game_map, GameState ** game_state,
+             Overseer ** overseer);
 
 };
 
