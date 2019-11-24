@@ -55,6 +55,15 @@ void SaveGame::load(const char * save_file,
     // Load game state
     * game_state = GameState::from_json(save_data["game_state"]);
 
+    // Restore the overseer
+    * overseer = Overseer::from_json(save_data["overseer"]);
+
+    // Manually add back references to player, game map and game state to
+    // overseer.
+    (*overseer)->player = *player;
+    (*overseer)->game_map = *game_map;
+    (*overseer)->game_state = *game_state;
+
 }
 
 void SaveGame::save(const char * save_file,
@@ -78,6 +87,9 @@ void SaveGame::save(const char * save_file,
     //DEBUG("Saving player map data");
     // Save player data
     save_data["game_state"] = game_state->to_json();
+
+    // The overseer
+    save_data["overseer"] = overseer->to_json();
 
     // write prettified JSON to another file
     std::ofstream o(save_file);

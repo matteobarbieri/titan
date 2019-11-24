@@ -481,7 +481,7 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     ////////////////////////////////
    
     // At turn 10, the door unlocks
-    TriggeredEvent * ev1 = new TriggeredEvent(new EventTrigger(10));
+    TriggeredEvent * ev1 = new TriggeredEvent(new TurnEventTrigger(10));
 
     ev1->effects.push_back(new UnlockDoorsEffect(2));
     ev1->effects.push_back(new AddLogMessageEffect(

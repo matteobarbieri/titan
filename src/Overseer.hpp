@@ -52,6 +52,13 @@ class Overseer
          */
         void trigger_events();
 
+        json to_json();
+
+        /**
+         * Do not restore pointers to player, game_map and game state (those
+         * are restored externally).
+         */
+        static Overseer * from_json(json);
 };
 
 #endif // ifndef R20177_OVERSEER
