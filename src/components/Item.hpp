@@ -46,24 +46,15 @@ enum class ItemSubtype
 class Item
 {
 
-    private:
-
     public:
 
         Entity * owner;
 
-        //Item(int item_letter);
-        //Item(int item_letter, bool equipped);
-        
         int item_letter;
-        Item(ItemType, ItemSubtype);
 
         // Base item properties
         ItemType item_type;
         ItemSubtype item_subtype;
-
-        // Misc properties (not all make sense for a single item, it depends on
-        // which kind of item it is).
 
         // Self explanatory equipped status
         bool equipped;
@@ -71,6 +62,8 @@ class Item
         // Used for key-like items, they control which doors/mechanisms they
         // unlock.
         unsigned int key_id;
+
+        Item(ItemType, ItemSubtype, bool=false, unsigned int=0);
 
         /**
          * Returns the list of meaninful item inventory options for the item.
