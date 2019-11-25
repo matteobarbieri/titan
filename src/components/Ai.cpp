@@ -8,14 +8,9 @@
 
 #include "../components/Fighter.hpp"
 
-MonsterAi::MonsterAi()
-{
-    state = AIState::IDLE;
-}
-
-MonsterAi::~MonsterAi()
-{
-}
+///////////////////////////////////
+//////////// AI ACTION ////////////
+///////////////////////////////////
 
 AIAction::AIAction(
     Entity * monster, Entity * player, GameMap * game_map) :
@@ -37,45 +32,89 @@ AIAction * MonsterAi::pick_action(Entity * player, GameMap * game_map)
     return nullptr;
 }
 
+///////////////////////////////////
+/////////// MONSTER AI ////////////
+///////////////////////////////////
+
+MonsterAi::MonsterAi()
+{
+    state = AIState::IDLE;
+}
+
+json MonsterAi::to_json()
+{
+    json j;
+
+    j["state"] = state;
+
+    return j;
+}
+
+MonsterAi * MonsterAi::from_json(json j)
+{
+
+    MonsterAi * mai = nullptr;
+
+    if (j["subclass"] == "ImmobileAi")
+    {
+        mai = ImmobileAi::from_json(j);
+    }
+
+    if (j["subclass"] == "SeekerAi")
+    {
+        mai = SeekerAi::from_json(j);
+    }
+
+    // Restore state
+    mai->state = j["state"];
+
+    return mai;
+}
+
+///////////////////////////////////
+////////// IMMOBILE AI ////////////
+///////////////////////////////////
+
+ImmobileAi::ImmobileAi() : MonsterAi()
+{
+}
+
+AIAction * ImmobileAi::pick_action(Entity * player, GameMap * game_map)
+{
+    return nullptr;
+}
+
+json ImmobileAi::to_json()
+{
+    // Set common properties for AI
+    json j = MonsterAi::to_json();
+
+    // Set 
+    j["subclass"] = "ImmobileAi";
+
+    return j;
+}
+
+ImmobileAi * ImmobileAi::from_json(json j)
+{
+    ImmobileAi * c = new ImmobileAi();
+
+    // Restore state
+    c->state = j["state"];
+
+    return c;
+}
+
+///////////////////////////////////
+//////////// SEEKER AI ////////////
+///////////////////////////////////
+
 SeekerAi::SeekerAi() : MonsterAi()
 {
     // Init coordinates of player's last known position to invalid values,
     // meaning that the current monster has no memory of such position.
     player_last_seen_x = -1;
     player_last_seen_y = -1;
-}
-
-void AttackPlayerAIAction::_execute()
-{
-    monster->fighter->attack_melee(player);
-}
-
-AttackPlayerAIAction::AttackPlayerAIAction(
-        Entity * monster, Entity * player, GameMap * game_map) :
-    AIAction(monster, player, game_map)
-{
-}
-
-
-MoveTowardsAIAction::MoveTowardsAIAction(
-        Entity * monster, Entity * player, GameMap * game_map,
-        int target_x, int target_y) :
-    AIAction(monster, player, game_map),
-    target_x(target_x), target_y(target_y)
-{
-}
-
-void MoveTowardsAIAction::_execute()
-{
-    game_map->path_astar->compute(
-    monster->x, monster->y, target_x, target_y);
-
-    int new_x, new_y;
-
-    game_map->path_astar->get(0, &new_x, &new_y);
-    monster->x = new_x;
-    monster->y = new_y;
-
 }
 
 AIAction * SeekerAi::pick_action(Entity * player, GameMap * game_map)
@@ -118,207 +157,70 @@ AIAction * SeekerAi::pick_action(Entity * player, GameMap * game_map)
     return nullptr;
 }
 
-json MonsterAi::to_json()
+json SeekerAi::to_json()
 {
-    json j;
+    // Set common properties for AI
+    json j = MonsterAi::to_json();
 
-    // TODO just so that the json is note empty
-    j["null"] = false;
+    j["subclass"] = "SeekerAi";
+
+    // Save properties specific to SeekerAi
+    j["player_last_seen_x"] = player_last_seen_x;
+    j["player_last_seen_y"] = player_last_seen_y;
 
     return j;
 }
 
-MonsterAi * MonsterAi::from_json(json j)
+SeekerAi * SeekerAi::from_json(json j)
 {
-    MonsterAi * c = new MonsterAi();
+    SeekerAi * c = new SeekerAi();
+
+    // Restore state
+    c->state = j["state"];
+
+    // Restore properties specific to SeekerAi
+    c->player_last_seen_x = j["player_last_seen_x"];
+    c->player_last_seen_y = j["player_last_seen_y"];
 
     return c;
 }
 
+///////////////////////////////////
+///// ATTACK PLAYER AI ACTION /////
+///////////////////////////////////
 
-/*
-import random
+void AttackPlayerAIAction::_execute()
+{
+    monster->fighter->attack_melee(player);
+}
 
-from .mob_states import MobState
-from .actions import AIMoveAction, AIAction
+AttackPlayerAIAction::AttackPlayerAIAction(
+        Entity * monster, Entity * player, GameMap * game_map) :
+    AIAction(monster, player, game_map)
+{
+}
 
-# TODO used in old code
-# from game_messages import Message
-# import libtcodpy as libtcod
+///////////////////////////////////
+///// MOVE TOWARDS AI ACTION //////
+///////////////////////////////////
 
+MoveTowardsAIAction::MoveTowardsAIAction(
+        Entity * monster, Entity * player, GameMap * game_map,
+        int target_x, int target_y) :
+    AIAction(monster, player, game_map),
+    target_x(target_x), target_y(target_y)
+{
+}
 
-class DestinationReachedException(Exception):
-    """
-    Used to signal that the destination has been reached
-    """
-    pass
+void MoveTowardsAIAction::_execute()
+{
+    game_map->path_astar->compute(
+    monster->x, monster->y, target_x, target_y);
 
+    int new_x, new_y;
 
-class MonsterAi:
-    """
-    A monster which stands still
-    """
+    game_map->path_astar->get(0, &new_x, &new_y);
+    monster->x = new_x;
+    monster->y = new_y;
 
-    def __init__(self, location, state=MobState.LOITERING):
-        self.state = state
-
-    def pick_action(self, player, game_map):
-        return AIAction()
-
-
-class BasicMonster(MonsterAi):
-
-    def __init__(self, location, state=MobState.LOITERING):
-
-        # Set starting "boredom" (required to changed state)
-        self.boredom = -1
-
-        # The MapPart where the mob currently is
-        self.location = location
-
-        # The location where the mob desires to go
-        self.target_location = None
-
-        # Set mob's initial state
-        self.state = state
-
-    def loiter(self, game_map):
-
-        # Unpack room coordinates
-        x1, y1, x2, y2 = self.location.xy
-
-        dx = random.randint(-1, 1)
-        dy = random.randint(-1, 1)
-
-        destination_x = self.owner.x + dx
-        destination_y = self.owner.y + dy
-
-        # Remain withing the room
-        if destination_x <= x1 or destination_x >= x2:
-            destination_x = self.owner.x
-            dx = 0
-
-        if destination_y <= y1 or destination_y >= y2:
-            destination_y = self.owner.y
-            dy = 0
-
-        return AIMoveAction(direction=(dx, dy), game_map=game_map,
-                mob=self.owner)
-
-    def transfer(self, game_map):
-        """
-        Move towards a new location
-        """
-
-        destinations_tomin, destinations_tostill = \
-            self.target_location.d_map.downhill_from(
-                self.owner.x, self.owner.y)
-
-        # TODO use `destinations_tostill`
-
-        if destinations_tomin:
-            destination_x, destination_y = random.choice(destinations_tomin)
-
-            # Compute displacement
-            dx = destination_x - self.owner.x
-            dy = destination_y - self.owner.y
-        else:
-            # The mob has arrived to destination
-            raise DestinationReachedException()
-
-
-        return AIMoveAction(direction=(dx, dy), game_map=game_map,
-                mob=self.owner)
-
-
-    def pick_action(self, player, game_map):
-
-        ####################################
-        ############ LOTERING ##############
-        ####################################
-        if self.state == MobState.LOITERING:
-            # While loitering, accumulate a certain amount of boredom
-            # After it reaches a certain level, go do something else
-            if random.random() < self.boredom:
-
-                # Reset boredom
-                self.boredom = -1
-                self.state = MobState.TRANSFERRING
-
-                # Pick random destination
-                while self.target_location is None:
-                    target_room = random.choice(game_map.rooms)
-
-                    # Do not pick current room
-                    if self.location != target_room:
-                        self.target_location = target_room
-                        self.location = None
-
-                return self.pick_action(player, game_map)
-            else:
-                self.boredom += 0.1
-                return self.loiter(game_map)
-
-        ####################################
-        ############ LOTERING ##############
-        ####################################
-        if self.state == MobState.TRANSFERRING:
-            try:
-                return self.transfer(game_map)
-            except DestinationReachedException:
-
-                # Set the current location as previous target location
-                self.location = self.target_location
-
-                # Reset target_location to None
-                self.target_location = None
-
-                # And the current state to LOITERING
-                self.state = MobState.LOITERING
-                return self.pick_action(player, game_map)
-
-        # Fallback Noop action
-        return AIAction()
-
-    """
-    def take_turn(self, target, fov_map, game_map, entities):
-
-        results = []
-
-        monster = self.owner
-        if libtcod.map_is_in_fov(fov_map, monster.x, monster.y):
-
-            if monster.distance_to(target) >= 2:
-                monster.move_astar(target, entities, game_map)
-
-            elif target.fighter.hp > 0:
-                attack_results = monster.fighter.attack(target)
-                results.extend(attack_results)
-
-        return results
-    """
-
-"""
-class ConfusedMonster:
-    def __init__(self, previous_ai, number_of_turns=10):
-        self.previous_ai = previous_ai
-        self.number_of_turns = number_of_turns
-
-    def take_turn(self, target, fov_map, game_map, entities):
-        results = []
-
-        if self.number_of_turns > 0:
-            random_x = self.owner.x + random.randint(0, 2) - 1
-            random_y = self.owner.y + random.randint(0, 2) - 1
-
-            if random_x != self.owner.x and random_y != self.owner.y:
-                self.owner.move_towards(random_x, random_y, game_map, entities)
-
-            self.number_of_turns -= 1
-        else:
-            self.owner.ai = self.previous_ai
-            results.append({'message': ('The {0} is no longer confused!'.format(self.owner.name), libtcod.red)})
-
-        return results
-"""
-*/
+}

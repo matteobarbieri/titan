@@ -38,7 +38,7 @@ Entity * make_orc(Room * room, MonsterAi * ai_component)
     // Create the AI for the monster if it is not passed
     if (ai_component == nullptr)
     {
-        ai_component = new MonsterAi();
+        ai_component = new ImmobileAi();
     }
     orc->ai = ai_component;
     ai_component->owner = orc;
