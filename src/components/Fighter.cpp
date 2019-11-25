@@ -9,26 +9,6 @@
 
 #include "../GameMessages.hpp"
 
-/*
-    def __init__(self, hp, defense, power, xp=0,
-                 STR=0, DEX=0, INT=0):
-
-        # TODO Old stuff, to change/update/remove
-        self.base_defense = defense
-        self.base_power = power
-        self.xp = xp
-
-        ###################################
-        ############ STATS ################
-        ###################################
-
-        self.stats = {
-            'base_str': STR,
-            'base_dex': DEX,
-            'base_int': INT,
-        }
-*/
-
 Fighter::Fighter(int max_hp, int hp) : _max_hp(max_hp), _hp(hp)
 {
 }

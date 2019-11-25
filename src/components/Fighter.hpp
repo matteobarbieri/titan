@@ -11,13 +11,10 @@ class Entity;
 class Fighter
 {
 
-    private:
+    public:
 
         int _max_hp;
         int _hp;
-        
-
-    public:
 
         // Reference to entity
         Entity * owner;
@@ -27,11 +24,6 @@ class Fighter
 
         int max_hp() const;
         int hp() const;
-
-        /**
-         * Creates a json representation of the component
-         */
-        json to_json();
 
         void attack_melee(Entity * other);
 
@@ -47,6 +39,11 @@ class Fighter
         int update_status();
 
         void die();
+
+        /**
+         * Creates a json representation of the component
+         */
+        json to_json();
 
         static Fighter * from_json(json j);
 
