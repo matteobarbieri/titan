@@ -3,7 +3,7 @@
 // Actions
 #include "actions/Action.hpp"
 #include "actions/Move.hpp"
-#include "actions/Menus.hpp"
+#include "actions/menus_actions.hpp"
 
 #include "actions/combat.hpp"
 #include "actions/skills.hpp"
