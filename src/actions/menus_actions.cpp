@@ -6,6 +6,8 @@
 
 #include "../components/Inventory.hpp"
 #include "../components/Interactive.hpp"
+#include "../components/Equipment.hpp"
+#include "../EquipmentSlots.hpp"
 #include "../components/Item.hpp"
 
 Outcome * ShowMenuAction::_execute()
@@ -76,8 +78,7 @@ Outcome * SelectInventoryItemAction::_execute()
     Entity * aux;
     bool found = false;
 
-    //DEBUG((int)player->inventory->items().size());
-
+    // First look in player's inventory
     for (int i=0; i<(int)player->inventory->items.size(); i++)
     {
         // shortcut to entity
@@ -95,7 +96,21 @@ Outcome * SelectInventoryItemAction::_execute()
             break;
         }
     }
-    
+
+    // Then check in equipped items
+
+    // Loop through equipment slots
+    std::map<EquipmentSlot, Entity *>::iterator it;
+    for (it=player->equipment->slots.begin(); it!=player->equipment->slots.end(); ++it)
+    {
+        if (it->second != nullptr && it->second->item->item_letter == item_letter)
+        {
+            game_state->selected_inventory_item = it->second;
+            found = true;
+            break;
+        }
+    }
+
     if (found)
     {
         Outcome * outcome = new Outcome(

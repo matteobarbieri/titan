@@ -5,12 +5,12 @@
 #include "../../components/Item.hpp"
 #include "../../components/Equippable.hpp"
 
-Entity * make_dagger()
+Entity * make_dagger(int x, int y)
 {
 
     // Create entity object
     Entity * dagger = new Entity(
-        -1, -1,
+        x, y,
         '-', TCODColor::sky, "Dagger", ITEM,
         false, false);
 
@@ -32,4 +32,9 @@ Entity * make_dagger()
     equippable_component->owner = dagger;
 
     return dagger;
+}
+
+Entity * make_dagger()
+{
+    return make_dagger(-1, -1);
 }

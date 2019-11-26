@@ -30,17 +30,15 @@ class Equipment
         // The equipment slots
         std::map<EquipmentSlot, Entity *> slots;
 
+        EquipmentSlot equip(Entity * item);
+        void unequip(Entity * item);
+
         /**
          * Creates a json representation of the component
          */
         json to_json();
 
         static Equipment * from_json(json j);
-
-        EquipmentSlot equip(Entity * item);
-        void unequip(Entity * item);
-        //void unequip(Entity * item);
-
 };
 
 

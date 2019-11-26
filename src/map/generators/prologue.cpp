@@ -82,7 +82,7 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     // Make a locked door
     level->make_floor(12, 16);
     level->add_entity(make_door(12, 16, false, true, 2));
-    
+
     // Add panel (Cell 02)
     level->make_floor(12, 17);
     level->add_entity(make_text_panel(12, 17, Direction::EE, "Cell 02"));
@@ -91,6 +91,9 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     // Add terminal
     Entity * terminal = make_terminal(6, 14);
     InteractiveTerminal * t1_interactive = (InteractiveTerminal *)terminal->interactive;
+    
+    // Add a dagger in the initial room
+    level->add_entity(make_dagger(6, 15));
     
     //auto test_f3 = [](Entity * player, GameMap * game_map, GameState * game_state)
     //{

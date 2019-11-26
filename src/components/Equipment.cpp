@@ -1,6 +1,7 @@
 #include "Equipment.hpp"
 #include "Equippable.hpp"
 #include "Item.hpp"
+#include "Inventory.hpp"
 
 #include "../EquipmentSlots.hpp"
 #include "../Entity.hpp"
@@ -50,6 +51,9 @@ void Equipment::unequip(Entity * item)
     {
         slots[slot] = nullptr;
         item->item->equipped = false;
+        
+        // Add it back to the inventory items.
+        owner->inventory->items.push_back(item);
     }
     else
     {
@@ -78,6 +82,10 @@ EquipmentSlot Equipment::equip(Entity * item)
     {
         slots[free_slot] = item;
         item->item->equipped = true;
+
+        // Also remove from list of items in the inventory (required to simplify
+        // serialization).
+        owner->inventory->remove_item(item);
     }
     else
     {

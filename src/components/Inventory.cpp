@@ -102,13 +102,11 @@ void Inventory::drop(Entity * item, GameMap * level, Entity * player)
 
 void Inventory::remove_item(Entity * item)
 {
-
     // Solution taken from
     // https://stackoverflow.com/questions/3385229/c-erase-vector-element-by-value-rather-than-by-position
     items.erase(
         std::remove(items.begin(), items.end(), item),
         items.end());
-
 }
 
 void Inventory::pickup(Entity * item, GameMap * level)
