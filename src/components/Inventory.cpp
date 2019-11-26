@@ -7,42 +7,26 @@
 
 #include "Item.hpp"
 
-
-/*
-
-    def __init__(self, capacity):
-        self.capacity = capacity
-
-        # Keep track separately of items and their associated letters
-        self.items = list()
-        self.item_letters = list()
-
-        # The list of all letters available for an item
-        # TODO limit to the maximum number of items a player can have on him,
-        # between equipped and in inventory
-        self.available_letters = [
-            chr(i) for i in range(ord('a'), ord('z') + 1)]
-
-*/
-
-Inventory::Inventory(int capacity) : _capacity(capacity)
+Inventory::Inventory(int capacity, bool init_available_letters) : _capacity(capacity)
 {
 
         // The list of all letters available for an item
         // TODO limit to the maximum number of items a player can have on him,
         // between equipped and in inventory
         
-        // Skip the 'i'
-        for (int i='a'; i<'h'; i++)
+        if (init_available_letters)
         {
-            available_letters.push_back(i);
+            // Skip the 'i'
+            for (int i='a'; i<'h'; i++)
+            {
+                available_letters.push_back(i);
+            }
+            
+            for (int i='j'; i<='z'; i++)
+            {
+                available_letters.push_back(i);
+            }
         }
-        
-        for (int i='j'; i<='z'; i++)
-        {
-            available_letters.push_back(i);
-        }
-        
 
 }
 
@@ -58,20 +42,10 @@ int Inventory::get_item_position_in_list(Entity * item)
         }
     }
 
+    DEBUG("Inventory::get_item_position_in_list should not arrive here...");
+
     // Should really never arrive here
     throw new std::exception();
-
-    /*
-    def get_item_position_in_list(self, item):
-        """
-        """
-
-        viable_list = [x for x in self.items
-            if x.item.equipped == item.item.equipped]
-
-        # return self.items.index(item)
-        return viable_list.index(item)
-    */
 
 }
 
@@ -140,13 +114,9 @@ void Inventory::pickup(Entity * item, GameMap * level)
     // Add to the vector of items
     items.push_back(item);
 
+    // Remove entity from the level's list of entities
     level->remove_entity(item);
 }
-
-/*
-
-
-*/
 
 json Inventory::to_json()
 {
@@ -154,17 +124,48 @@ json Inventory::to_json()
 
     j["_capacity"] = _capacity;
 
-    // TODO items
+    // Items
+    json j_items;
+
+    for (int i=0; i<(int)items.size(); i++)
+    {
+        j_items.push_back(items[i]->to_json());
+    }
+
+    j["items"] = j_items;
+
+    // Available letters
+    json j_available_letters;
+
+    for (int i=0; i<(int)available_letters.size(); i++)
+    {
+        j_available_letters.push_back(available_letters[i]);
+    }
+
+    j["available_letters"] = j_available_letters;
 
     return j;
 }
 
 Inventory * Inventory::from_json(json j)
 {
-    Inventory * c = new Inventory(j["_capacity"]);
 
-    // TODO items
+    // Initialize inventory component WITHOUT also initializing the list of
+    // available letters (must be restored from json object).
+    Inventory * c = new Inventory(j["_capacity"], false);
+
+    // Items
+    for (int i=0; i<(int)j["items"].size(); i++)
+    {
+        c->items.push_back(Entity::from_json(j["items"][i]));
+    }
     
+    // Items letters
+    for (int i=0; i<(int)j["available_letters"].size(); i++)
+    {
+        c->available_letters.push_back((int)j["available_letters"][i]);
+    }
+
     return c;
 }
 

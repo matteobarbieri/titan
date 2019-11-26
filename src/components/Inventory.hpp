@@ -24,18 +24,14 @@ class Inventory
 
     public:
 
-        Inventory(int capacity);
-        ~Inventory();
-
         Entity * owner;
 
         std::vector<Entity *> items;
         std::vector<char> available_letters;
 
-        // TODO return message?
-        //void equip(Entity * item);
-        
-        // TODO return message?
+        Inventory(int, bool=true);
+        ~Inventory();
+
         void pickup(Entity * item, GameMap * level);
         void drop(Entity * item, GameMap * level, Entity * player);
 
