@@ -109,8 +109,13 @@ void init_new_game(
     fighter_component->owner = (* player);
 
     (* player)->inventory = inventory_component; 
+    inventory_component->owner = (* player); 
+
     (* player)->level = level_component; 
+    level_component->owner = (* player); 
+
     (* player)->equipment = equipment_component; 
+    equipment_component->owner = (* player); 
 
     // Place player in the map
     (*game_map)->place_player(* player);
