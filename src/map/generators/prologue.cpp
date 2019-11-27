@@ -92,6 +92,9 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     Entity * terminal = make_terminal(6, 14);
     InteractiveTerminal * t1_interactive = (InteractiveTerminal *)terminal->interactive;
     
+    // TODO remove
+    level->add_entity(make_security_droid(7, 15));
+
     // Add a dagger in the initial room
     level->add_entity(make_dagger(6, 15));
     
@@ -245,6 +248,9 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
 
     // TODO add guard's corpse and equipment
     
+    Entity * guard_corpse = new Entity(18, 43, '%', TCODColor::red, "Corpse of a guard");
+    level->add_entity(guard_corpse);
+
     // Doors leading to third room
     level->make_floor(38, 40);
     level->make_floor(38, 41);
@@ -471,12 +477,6 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
 
     */
 
-    // Monsters
-    //add_monsters(level);
-
-    // Add some items in the room
-    //add_items(level);
-
     (*overseer) = new Overseer();
 
     ////////////////////////////////
@@ -484,11 +484,15 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     ////////////////////////////////
    
     // At turn 10, the door unlocks
-    TriggeredEvent * ev1 = new TriggeredEvent(new TurnEventTrigger(10));
+    // TODO restore turn 10 (2 is for DEBUG)
+    TriggeredEvent * ev1 = new TriggeredEvent(new TurnEventTrigger(2));
 
     ev1->effects.push_back(new UnlockDoorsEffect(2));
     ev1->effects.push_back(new AddLogMessageEffect(
-        "A loud noise wakes you up; looks like something hit the ship.",
+        "You hear a loud noise, followed by explosions and alarms.",
+        TCODColor::amber));
+    ev1->effects.push_back(new AddLogMessageEffect(
+        "Looks like something hit the ship.",
         TCODColor::amber));
 
     (*overseer)->scheduled_events.push_back(ev1);

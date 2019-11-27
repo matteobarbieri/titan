@@ -9,6 +9,30 @@
 #include "../../components/Fighter.hpp"
 #include "../../components/Ai.hpp"
 
+Entity * make_security_droid(int x, int y, MonsterAi * ai_component)
+{
+    Entity * droid = new Entity(
+        x, y, 'd',  TCODColor::lightYellow,
+        "Security Droid", ACTOR, true);
+
+    // Fighter
+    Fighter * fighter_component = new Fighter(20);
+    droid->fighter = fighter_component;
+    fighter_component->owner = droid;
+
+    // AI
+    // Create the AI for the monster if it is not passed
+    if (ai_component == nullptr)
+    {
+        ai_component = new ImmobileAi();
+    }
+    droid->ai = ai_component;
+    ai_component->owner = droid;
+
+    return droid;
+
+}
+
 Entity * make_security_droid(Room * room, MonsterAi * ai_component)
 {
     // Use proxy variables
@@ -25,24 +49,5 @@ Entity * make_security_droid(Room * room, MonsterAi * ai_component)
     int x = rand() % dx + x1 + 1;
     int y = rand() % dy + y1 + 1;
 
-    Entity * droid = new Entity(
-        x, y, 'd',  TCODColor::lightYellow,
-        "Security Droid", ACTOR, true);
-
-    // Fighter
-    Fighter * fighter_component = new Fighter(20);
-    droid->fighter = fighter_component;
-    fighter_component->owner = droid;
-
-    // AI
-    // Create the AI for the monster if it is not passed
-    if (ai_component == nullptr)
-    {
-        ai_component = new SeekerAi();
-    }
-    droid->ai = ai_component;
-    ai_component->owner = droid;
-
-    return droid;
-
+    return make_security_droid(x, y, ai_component);
 }

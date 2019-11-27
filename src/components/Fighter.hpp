@@ -7,6 +7,7 @@ using json = nlohmann::json;
 
 // Forward declarations
 class Entity;
+class WeaponAttack;
 
 class Fighter
 {
@@ -26,6 +27,7 @@ class Fighter
         int hp() const;
 
         void attack_melee(Entity * other);
+        void attack_melee_with_weapon(Entity * other, WeaponAttack *);
 
         void shoot(Entity * other);
 

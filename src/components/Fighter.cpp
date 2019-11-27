@@ -1,13 +1,21 @@
 #include <string>
 #include <sstream>
 
+#include <stdlib.h>     /* srand, rand */
+
 #include "../libtcod.hpp"
 
-#include "Fighter.hpp"
-#include "Ai.hpp"
 #include "../Entity.hpp"
 
+#include "Fighter.hpp"
+#include "Equipment.hpp"
+#include "WeaponAttack.hpp"
+#include "Ai.hpp"
+
+#include "../EquipmentSlots.hpp"
+
 #include "../GameMessages.hpp"
+
 
 Fighter::Fighter(int max_hp, int hp) : _max_hp(max_hp), _hp(hp)
 {
@@ -46,16 +54,16 @@ Fighter * Fighter::from_json(json j)
     return c;
 }
 
-void Fighter::attack_melee(Entity * target)
+void Fighter::attack_melee_with_weapon(Entity * target, WeaponAttack * weapon_attack)
 {
 
-    /*
-     *for weapon in self.owner.equipment.melee_weapons:
-     *    self.attack_melee_with_weapon(target, weapon);
-     */
+    //int dmg_min = 1, dmg_max = 2;
+    //int dmg_delta = dmg_max - dmg_min;
 
-    // TODO stub
-    int amount = 5;
+    //int amount = 5;
+    //int amount = (rand() % (dmg_delta + 1)) + dmg_min;
+    int amount = (rand() % (weapon_attack->dmg_delta() + 1)) + weapon_attack->dmg_min;
+
     target->fighter->take_damage(amount);
 
     // Build message
@@ -67,6 +75,42 @@ void Fighter::attack_melee(Entity * target)
     // Add message to message log
     MessageLog::singleton().add_message(
         {stringStream.str(), TCODColor::white});
+
+}
+
+void Fighter::attack_melee(Entity * target)
+{
+
+    /*
+     *for weapon in self.owner.equipment.melee_weapons:
+     *    self.attack_melee_with_weapon(target, weapon);
+     */
+
+    // TODO stub
+    
+    bool has_melee_weapon_equipped = false;
+
+    // Loop through equipment slots
+    std::map<EquipmentSlot, Entity *>::iterator it;
+    for (it=owner->equipment->slots.begin(); it!=owner->equipment->slots.end(); ++it)
+    {
+
+        // Store value
+        // TODO should also check if the item equipped is actually a weapon
+        if (it->second != nullptr)
+        {
+            has_melee_weapon_equipped = true;
+            // TODO complete
+        }
+
+    }
+
+    if (!has_melee_weapon_equipped)
+    {
+        WeaponAttack unarmed_attack = WeaponAttack::unarmed_attack();
+        attack_melee_with_weapon(target, &unarmed_attack);
+    }
+
     
 }
 

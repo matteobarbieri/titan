@@ -4,9 +4,12 @@
 // Forward declaration
 class Entity;
 
-// Also specify coordinates
+// A dagger
 Entity * make_dagger(int, int);
-
 Entity * make_dagger();
+
+// A stun baton
+Entity * make_baton(int, int);
+Entity * make_baton();
 
 #endif /* ifndef ROGUE_20177_PREFABS_WEAPONS_RANGED */
