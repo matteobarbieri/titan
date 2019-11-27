@@ -52,8 +52,7 @@ void init_new_game(
     */
 
     // Fighter component for player
-    // fighter_component = Fighter(hp=100, defense=1, power=2)
-    Fighter * fighter_component = new Fighter(30);
+    Fighter * fighter_component = new Fighter(30, 30, 50, 0);
 
     // Iventory component for player
     // inventory_component = Inventory(26)

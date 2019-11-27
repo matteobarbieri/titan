@@ -16,7 +16,7 @@ Entity * make_security_droid(int x, int y, MonsterAi * ai_component)
         "Security Droid", ACTOR, true);
 
     // Fighter
-    Fighter * fighter_component = new Fighter(20);
+    Fighter * fighter_component = new Fighter(20, 20, 50, 0);
     droid->fighter = fighter_component;
     fighter_component->owner = droid;
 

@@ -17,16 +17,49 @@ class Fighter
         int _max_hp;
         int _hp;
 
+        ////////////////////////////
+        ////////// STATS ///////////
+        ////////////////////////////
+
+        // The ability to hit an enemy with melee weapons (or unarmed)
+        int _fighting;
+
+        // The ability to hit an enemy with ranged weapons
+        int _accuracy;
+
         // Reference to entity
         Entity * owner;
 
         Fighter(int max_hp);
         Fighter(int max_hp, int hp);
+        Fighter(int max_hp, int hp, int _fighting, int _accuracy);
 
         int max_hp() const;
         int hp() const;
 
+        /**
+         * Function which determines if the attacker hits the target.
+         *
+         * The chance of hitting the target is given by the following formula:
+         *
+         * c = 100 / (1 + exp(-df/100))
+         *
+         * where df is the difference between the attacker's fighting stat and
+         * the target's.
+         *
+         * TODO also having a shield equipped should help defending, somehow.
+         */
+        bool roll_to_hit_melee(Entity *, WeaponAttack *);
+
+        /**
+         * Perform a melee attack with all equipped melee weapons (or unarmed,
+         * if no melee weapons are equipped).
+         */
         void attack_melee(Entity * other);
+        
+        /**
+         * Perform the attack with a specific weapon
+         */
         void attack_melee_with_weapon(Entity * other, WeaponAttack *);
 
         void shoot(Entity * other);

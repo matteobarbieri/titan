@@ -18,12 +18,16 @@
 
 #include "../GameMessages.hpp"
 
-
-Fighter::Fighter(int max_hp, int hp) : _max_hp(max_hp), _hp(hp)
+Fighter::Fighter(int max_hp, int hp, int _fighting, int _accuracy) :
+    _max_hp(max_hp), _hp(hp), _fighting(_fighting), _accuracy(_accuracy)
 {
 }
 
-Fighter::Fighter(int max_hp) : _max_hp(max_hp), _hp(max_hp)
+Fighter::Fighter(int max_hp, int hp) : Fighter(max_hp, hp, 0, 0)
+{
+}
+
+Fighter::Fighter(int max_hp) : Fighter(max_hp, max_hp)
 {
 }
 
@@ -45,15 +49,39 @@ json Fighter::to_json()
 
     j["_hp"] = _hp;
     j["_max_hp"] = _max_hp;
+    j["_fighting"] = _fighting;
+    j["_accuracy"] = _accuracy;
 
     return j;
 }
 
 Fighter * Fighter::from_json(json j)
 {
-    Fighter * c = new Fighter(j["_max_hp"], j["_hp"]);
+    Fighter * c = new Fighter(
+        j["_max_hp"], j["_hp"],
+        j["_fighting"], j["_accuracy"]);
 
     return c;
+}
+
+bool Fighter::roll_to_hit_melee(Entity * target, WeaponAttack * weapon_attack)
+{
+    // TODO implement defense bonus from shield
+    // TODO implement modifiers from weapon attack
+    // TODO implement modifiers from [de]buffs
+    
+    // TODO should use actual values modified from equipment and such
+    int df = _fighting - target->fighter->_fighting;
+
+    // Determine chance to hit using a sigmoid function
+    int chance_to_hit = floor(100/(1+exp(-df/10)));
+
+    // Roll to hit
+    int roll = rand() % 101;
+
+    DEBUG("Change to hit was " << chance_to_hit << "%, rolled a " << roll);
+
+    return roll < chance_to_hit;
 }
 
 void Fighter::attack_melee_with_weapon(Entity * target, WeaponAttack * weapon_attack)
@@ -61,23 +89,34 @@ void Fighter::attack_melee_with_weapon(Entity * target, WeaponAttack * weapon_at
 
     // TODO complete with roll to hit
     
-    // Determine amount
-    int amount = (rand() % (weapon_attack->dmg_delta() + 1)) + weapon_attack->dmg_min;
-
-    // TODO reduce amount based on target's armour
-
-    target->fighter->take_damage(amount);
-
     // Build message
     std::ostringstream stringStream;
 
-    stringStream << "You punch the " << 
-        target->name << " in the face for " << amount << " damage!";
+    if (roll_to_hit_melee(target, weapon_attack))
+    {
+        // Determine amount
+        int amount = (
+            rand() % (weapon_attack->dmg_delta() + 1)) + weapon_attack->dmg_min;
 
-    // Add message to message log
-    MessageLog::singleton().add_message(
-        {stringStream.str(), TCODColor::white});
+        // TODO reduce amount based on target's armour
 
+        target->fighter->take_damage(amount);
+
+        stringStream << "You punch the " << 
+            target->name << " in the face for " << amount << " damage!";
+
+        // Add message to message log
+        MessageLog::singleton().add_message(
+            {stringStream.str(), TCODColor::white});
+    }
+    else
+    {
+        stringStream << "You miss the " << target->name << "!";
+
+        // Add message to message log
+        MessageLog::singleton().add_message(
+            {stringStream.str(), TCODColor::white});
+    }
 }
 
 void Fighter::attack_melee(Entity * target)
