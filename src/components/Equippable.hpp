@@ -17,11 +17,9 @@ class Equippable
 
         Entity * owner;
 
-        Equippable(EquipmentSlot);
-
-        //~Equippable();
-
         const EquipmentSlot valid_slots;
+
+        Equippable(EquipmentSlot);
 
         /**
          * Creates a json representation of the component
@@ -33,6 +31,7 @@ class Equippable
 
 
 #endif /* ifndef ROGUE_20177_EQUIPPABLE */
+
 /*
 import random
 

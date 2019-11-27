@@ -4,7 +4,6 @@
 ///// EQUIPMENT SLOT OPERATORS ///////
 //////////////////////////////////////
 
-
 Equippable::Equippable(EquipmentSlot valid_slots) :
     valid_slots(valid_slots)
 {
@@ -15,7 +14,6 @@ json Equippable::to_json()
 {
     json j;
 
-    // TODO just so that there is something
     j["valid_slots"] = valid_slots;
 
     return j;
@@ -23,7 +21,6 @@ json Equippable::to_json()
 
 Equippable * Equippable::from_json(json j)
 {
-    // TODO There is nothing in this component so far
     Equippable * c = new Equippable(j["valid_slots"]);
 
     return c;
