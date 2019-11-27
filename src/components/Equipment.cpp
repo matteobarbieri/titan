@@ -13,24 +13,6 @@ Equipment::Equipment()
 }
 
 
-json Equipment::to_json()
-{
-    json j;
-
-    // TODO just so that the json is not empty
-    j["null"] = false;
-
-    return j;
-}
-
-Equipment * Equipment::from_json(json j)
-{
-    Equipment * c = new Equipment();
-
-    return c;
-}
-
-
 void Equipment::unequip(Entity * item)
 {
 
@@ -93,6 +75,59 @@ EquipmentSlot Equipment::equip(Entity * item)
 
     return free_slot;
 }
+
+
+json Equipment::to_json()
+{
+    json j;
+
+    json slots_keys;
+    json slots_values;
+
+    // Loop through equipment slots
+    std::map<EquipmentSlot, Entity *>::iterator it;
+    for (it=slots.begin(); it!=slots.end(); ++it)
+    {
+
+        // Store key
+        slots_keys.push_back(static_cast<int>(it->first));
+
+        // Store value
+        if (it->second == nullptr)
+        {
+            slots_values.push_back(nullptr);
+        }
+        else
+        {
+            slots_values.push_back(it->second->to_json());
+        }
+    }
+
+    j["slots_keys"] = slots_keys;
+    j["slots_values"] = slots_values;
+
+    return j;
+}
+
+Equipment * Equipment::from_json(json j)
+{
+    Equipment * c = new Equipment();
+
+    for (int i=0; i<(int)j["slots_keys"].size(); i++)
+    {
+        if (j["slots_values"][i] != nullptr)
+        {
+            c->slots[j["slots_keys"][i]] = Entity::from_json(j["slots_values"][i]);
+        }
+        else
+        {
+            c->slots[static_cast<EquipmentSlot>(j["slots_keys"][i])] = nullptr;
+        }
+    }
+
+    return c;
+}
+
 
 /*
 from game_messages import Message

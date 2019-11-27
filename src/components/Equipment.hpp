@@ -23,14 +23,15 @@ class Equipment
 
     public:
 
-        Equipment();
-
         Entity * owner;
 
         // The equipment slots
         std::map<EquipmentSlot, Entity *> slots;
 
+        Equipment();
+
         EquipmentSlot equip(Entity * item);
+
         void unequip(Entity * item);
 
         /**
