@@ -3,6 +3,7 @@
 #include "../../Entity.hpp"
 
 #include "../../components/Item.hpp"
+#include "../../components/WeaponAttack.hpp"
 #include "../../components/Equippable.hpp"
 
 Entity * make_dagger(int x, int y)
@@ -26,7 +27,8 @@ Entity * make_dagger(int x, int y)
     Equippable * equippable_component = new Equippable(
         EquipmentSlot::MAIN_HAND | EquipmentSlot::OFF_HAND);
 
-    // TODO Add damage function
+    // Specify weapon attack
+    equippable_component->weapon_attack = new WeaponAttack(4, 6);
 
     dagger->equippable = equippable_component;
     equippable_component->owner = dagger;

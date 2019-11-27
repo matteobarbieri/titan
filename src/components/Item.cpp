@@ -72,6 +72,14 @@ ItemSubtype operator &(ItemSubtype lhs, ItemSubtype rhs)
     );
 }
 
+//ItemSubtype operator &(ItemSubtype lhs, ItemSubtype rhs)
+//{
+    //return static_cast<ItemSubtype> (
+        //static_cast<int>(lhs) &
+        //static_cast<int>(rhs)
+    //);
+//}
+
 ItemSubtype operator ^(ItemSubtype lhs, ItemSubtype rhs)
 {
     return static_cast<ItemSubtype> (
@@ -107,6 +115,11 @@ Item::Item(ItemType item_type, ItemSubtype item_subtype, bool equipped, unsigned
 {
     // Owner must be set manually
     owner = nullptr;
+}
+
+bool Item::is_melee()
+{
+    return (item_subtype & ItemSubtype::MELEE) != ItemSubtype::NONE;
 }
 
 json Item::to_json()

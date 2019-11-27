@@ -7,6 +7,7 @@
 
 // Forward declaration
 class Entity;
+class WeaponAttack;
 
 using json = nlohmann::json;
 
@@ -16,6 +17,8 @@ class Equippable
     public:
 
         Entity * owner;
+
+        WeaponAttack * weapon_attack;
 
         const EquipmentSlot valid_slots;
 

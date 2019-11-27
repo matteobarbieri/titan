@@ -9,6 +9,8 @@
 
 #include "Fighter.hpp"
 #include "Equipment.hpp"
+#include "Equippable.hpp"
+#include "Item.hpp"
 #include "WeaponAttack.hpp"
 #include "Ai.hpp"
 
@@ -57,12 +59,12 @@ Fighter * Fighter::from_json(json j)
 void Fighter::attack_melee_with_weapon(Entity * target, WeaponAttack * weapon_attack)
 {
 
-    //int dmg_min = 1, dmg_max = 2;
-    //int dmg_delta = dmg_max - dmg_min;
-
-    //int amount = 5;
-    //int amount = (rand() % (dmg_delta + 1)) + dmg_min;
+    // TODO complete with roll to hit
+    
+    // Determine amount
     int amount = (rand() % (weapon_attack->dmg_delta() + 1)) + weapon_attack->dmg_min;
+
+    // TODO reduce amount based on target's armour
 
     target->fighter->take_damage(amount);
 
@@ -81,13 +83,8 @@ void Fighter::attack_melee_with_weapon(Entity * target, WeaponAttack * weapon_at
 void Fighter::attack_melee(Entity * target)
 {
 
-    /*
-     *for weapon in self.owner.equipment.melee_weapons:
-     *    self.attack_melee_with_weapon(target, weapon);
-     */
-
-    // TODO stub
-    
+    // Variable used to determine if a melee weapon is equipped. If not, attack
+    // unarmed.
     bool has_melee_weapon_equipped = false;
 
     // Loop through equipment slots
@@ -95,12 +92,13 @@ void Fighter::attack_melee(Entity * target)
     for (it=owner->equipment->slots.begin(); it!=owner->equipment->slots.end(); ++it)
     {
 
-        // Store value
-        // TODO should also check if the item equipped is actually a weapon
-        if (it->second != nullptr)
+        if (
+                it->second != nullptr && // Check that it has something equipped in that slot
+                it->second->item->is_melee() // check that it is a melee weapon
+           )
         {
+            attack_melee_with_weapon(target, it->second->equippable->weapon_attack);
             has_melee_weapon_equipped = true;
-            // TODO complete
         }
 
     }
@@ -110,7 +108,6 @@ void Fighter::attack_melee(Entity * target)
         WeaponAttack unarmed_attack = WeaponAttack::unarmed_attack();
         attack_melee_with_weapon(target, &unarmed_attack);
     }
-
     
 }
 

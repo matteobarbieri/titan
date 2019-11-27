@@ -37,6 +37,8 @@ enum class ItemSubtype
     RANGED = 0x2
 };
 
+ItemSubtype operator & (ItemSubtype lhs, ItemSubtype rhs);
+ItemSubtype operator | (ItemSubtype lhs, ItemSubtype rhs);
 
 /**
  * The item class represents items and their properties "while they are in the
@@ -64,6 +66,9 @@ class Item
         unsigned int key_id;
 
         Item(ItemType, ItemSubtype, bool=false, unsigned int=0);
+
+        // Helper function that returns true if the item is a melee weapon
+        bool is_melee();
 
         /**
          * Returns the list of meaninful item inventory options for the item.

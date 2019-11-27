@@ -1,4 +1,5 @@
 #include "Equippable.hpp"
+#include "WeaponAttack.hpp"
 
 //////////////////////////////////////
 ///// EQUIPMENT SLOT OPERATORS ///////
@@ -7,6 +8,7 @@
 Equippable::Equippable(EquipmentSlot valid_slots) :
     valid_slots(valid_slots)
 {
+    weapon_attack = nullptr;
 }
 
 
@@ -16,12 +18,26 @@ json Equippable::to_json()
 
     j["valid_slots"] = valid_slots;
 
+    if (weapon_attack == nullptr)
+    {
+        j["weapon_attack"] = nullptr;
+    }
+    else
+    {
+        j["weapon_attack"] = weapon_attack->to_json();
+    }
+
     return j;
 }
 
 Equippable * Equippable::from_json(json j)
 {
     Equippable * c = new Equippable(j["valid_slots"]);
+
+    if (j["weapon_attack"] != nullptr)
+    {
+        c->weapon_attack = WeaponAttack::from_json(j["weapon_attack"]);
+    }
 
     return c;
 }
