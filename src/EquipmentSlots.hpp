@@ -33,7 +33,10 @@ enum class EquipmentSlot
     MAIN_HAND = 0x1,
     OFF_HAND = 0x2,
     HEAD = 0x4,
-    CHEST = 0x8
+    CHEST = 0x8,
+    HANDS = 0x16,
+    LEGS = 0x32,
+    FEET = 0x64
 };
 
 class SlotName
