@@ -65,7 +65,7 @@ class Item
         // unlock.
         unsigned int key_id;
 
-        Item(ItemType, ItemSubtype, bool=false, unsigned int=0);
+        Item(ItemType, ItemSubtype=ItemSubtype::NONE, bool=false, unsigned int=0);
 
         // Helper function that returns true if the item is a melee weapon
         bool is_melee();

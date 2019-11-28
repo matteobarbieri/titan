@@ -58,6 +58,11 @@ SlotName::SlotName()
 {
     slot_names[EquipmentSlot::MAIN_HAND] = "Main hand";
     slot_names[EquipmentSlot::OFF_HAND] = "Off hand";
+    slot_names[EquipmentSlot::HEAD] = "Head";
+    slot_names[EquipmentSlot::CHEST] = "Chest";
+    slot_names[EquipmentSlot::HANDS] = "Hands";
+    slot_names[EquipmentSlot::LEGS] = "Legs";
+    slot_names[EquipmentSlot::FEET] = "Feet";
 }
 
 

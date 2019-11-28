@@ -25,6 +25,7 @@
 #include "../../prefabs/funcs/misc.hpp"
 #include "../../prefabs/weapons/melee.hpp"
 #include "../../prefabs/weapons/ranged.hpp"
+#include "../../prefabs/armor.hpp"
 
 namespace prologue {
 
@@ -96,8 +97,8 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_entity(make_security_droid(7, 15));
 
     // Add a dagger in the initial room
-    //level->add_entity(make_dagger(6, 15));
     level->add_entity(make_baton(6, 15));
+    level->add_entity(make_armor(7, 16));
     
     //auto test_f3 = [](Entity * player, GameMap * game_map, GameState * game_state)
     //{

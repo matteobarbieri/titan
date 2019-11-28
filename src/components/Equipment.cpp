@@ -8,8 +8,16 @@
 
 Equipment::Equipment()
 {
+    // Weapon slots
     slots[EquipmentSlot::MAIN_HAND] = nullptr;
     slots[EquipmentSlot::OFF_HAND] = nullptr;
+
+    // Armor slots
+    slots[EquipmentSlot::HEAD] = nullptr;
+    slots[EquipmentSlot::CHEST] = nullptr;
+    slots[EquipmentSlot::HANDS] = nullptr;
+    slots[EquipmentSlot::LEGS] = nullptr;
+    slots[EquipmentSlot::FEET] = nullptr;
 }
 
 
