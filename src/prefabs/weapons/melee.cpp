@@ -49,7 +49,7 @@ Entity * make_baton(int x, int y)
     // Create entity object
     Entity * baton = new Entity(
         x, y,
-        SYMBOL_MACE, TCODColor::lightAzure, "Stun baton", ITEM,
+        SYMBOL_MACE, TCODColor::azure, "Stun baton", ITEM,
         false, false);
 
     // Create item component

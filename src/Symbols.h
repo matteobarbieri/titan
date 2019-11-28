@@ -3,6 +3,7 @@
 
 #define SYMBOL_MACE 256
 #define SYMBOL_PISTOL 272
+#define SYMBOL_CHEST_ARMOR 288
 
 #endif
 
