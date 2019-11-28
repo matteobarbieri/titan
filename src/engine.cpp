@@ -269,7 +269,7 @@ void init_engine()
             //"data/fonts/16x16-sb-ascii.png",
             "data/fonts/16x16-sb-ascii-extended.png",
             TCOD_FONT_LAYOUT_ASCII_INROW,
-            16, 17);
+            16, 21);
 
     // Init root console
     TCODConsole::initRoot(
