@@ -266,8 +266,10 @@ void init_engine()
 
     // Set Custom font to use
     TCODConsole::setCustomFont(
-            "data/fonts/16x16-sb-ascii.png",
-            TCOD_FONT_LAYOUT_ASCII_INROW);
+            //"data/fonts/16x16-sb-ascii.png",
+            "data/fonts/16x16-sb-ascii-extended.png",
+            TCOD_FONT_LAYOUT_ASCII_INROW,
+            16, 17);
 
     // Init root console
     TCODConsole::initRoot(
