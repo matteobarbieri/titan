@@ -134,7 +134,8 @@ void init_new_game(
     ////////////////////////////////////////////
     // Begin the game in player's turn
     (*game_state) = new GameState();
-    (*game_state)->game_phase = PLAYERS_TURN;
+    //(*game_state)->game_phase = PLAYERS_TURN;
+    (*game_state)->game_phase = POPUP_MESSAGE;
 
     // Set game state reference to Overseer
     (*overseer)->player = *player;
