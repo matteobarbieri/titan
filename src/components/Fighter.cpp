@@ -12,6 +12,7 @@
 #include "Equippable.hpp"
 #include "Item.hpp"
 #include "WeaponAttack.hpp"
+#include "ArmorDefense.hpp"
 #include "Ai.hpp"
 
 #include "../EquipmentSlots.hpp"
@@ -99,9 +100,11 @@ void Fighter::attack_melee_with_weapon(Entity * target, WeaponAttack * weapon_at
             rand() % (weapon_attack->dmg_delta() + 1)) + weapon_attack->dmg_min;
 
         // TODO reduce amount based on target's armour
+        amount = target->fighter->apply_damage_reduction(amount);
 
         target->fighter->take_damage(amount);
 
+        // Change message based on who's attacking (Player or NPC)
         stringStream << "You punch the " << 
             target->name << " in the face for " << amount << " damage!";
 
@@ -148,6 +151,34 @@ void Fighter::attack_melee(Entity * target)
         attack_melee_with_weapon(target, &unarmed_attack);
     }
     
+}
+
+int Fighter::apply_damage_reduction(int amount)
+{
+    int total_armor = 0;
+    
+    // Loop through equipment slots, check for armor
+    std::map<EquipmentSlot, Entity *>::iterator it;
+    for (it=owner->equipment->slots.begin(); it!=owner->equipment->slots.end(); ++it)
+    {
+
+        if (
+                it->second != nullptr && // Check that it has something equipped in that slot
+                it->second->item->is_armor() // check that it is a piece of armor
+           )
+        {
+            // Update the total amount of armor
+            total_armor += it->second->equippable->armor_defense->armor_value;
+        }
+
+    }
+
+    // Compute the actual amount of damage
+    // TODO replace with actual constants
+    amount = ceil(amount * 10 / (10 + total_armor));
+
+    return amount;
+
 }
 
 void Fighter::take_damage(int amount)

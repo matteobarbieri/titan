@@ -6,8 +6,13 @@
 #include "../../RenderOrder.hpp"
 #include "../../map/GameMap.hpp"
 
+#include "../../EquipmentSlots.hpp"
+
 #include "../../components/Fighter.hpp"
+#include "../../components/Equipment.hpp"
 #include "../../components/Ai.hpp"
+
+#include "../weapons/melee.hpp"
 
 Entity * make_security_droid(int x, int y, MonsterAi * ai_component)
 {
@@ -16,7 +21,7 @@ Entity * make_security_droid(int x, int y, MonsterAi * ai_component)
         "Security Droid", ACTOR, true);
 
     // Fighter
-    Fighter * fighter_component = new Fighter(20, 20, 50, 0);
+    Fighter * fighter_component = new Fighter(20, 20, 30, 0);
     droid->fighter = fighter_component;
     fighter_component->owner = droid;
 
@@ -29,8 +34,13 @@ Entity * make_security_droid(int x, int y, MonsterAi * ai_component)
     droid->ai = ai_component;
     ai_component->owner = droid;
 
-    return droid;
+    // Equipment component
+    droid->equipment = new Equipment();
+    droid->equipment->owner = droid;
 
+    droid->equipment->slots[EquipmentSlot::MAIN_HAND] = make_baton();
+
+    return droid;
 }
 
 Entity * make_security_droid(Room * room, MonsterAi * ai_component)

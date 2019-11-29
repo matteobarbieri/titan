@@ -56,12 +56,17 @@ class Fighter
          * if no melee weapons are equipped).
          */
         void attack_melee(Entity * other);
-        
+
         /**
          * Perform the attack with a specific weapon
          */
         void attack_melee_with_weapon(Entity * other, WeaponAttack *);
 
+        /**
+         * Applies damage reduction based on armor.
+         */
+        int apply_damage_reduction(int raw_damage);
+        
         void shoot(Entity * other);
 
         void take_damage(int amount);

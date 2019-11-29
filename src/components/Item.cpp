@@ -122,6 +122,11 @@ bool Item::is_melee()
     return (item_subtype & ItemSubtype::MELEE) != ItemSubtype::NONE;
 }
 
+bool Item::is_armor()
+{
+    return (item_type & ItemType::ARMOR) != ItemType::NONE;
+}
+
 json Item::to_json()
 {
     json j;

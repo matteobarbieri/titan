@@ -26,6 +26,8 @@ enum class ItemType
     MISC = 0x32
 };
 
+ItemType operator & (ItemType lhs, ItemType rhs);
+ItemType operator | (ItemType lhs, ItemType rhs);
 
 /*
  * Additional item properties.
@@ -69,6 +71,7 @@ class Item
 
         // Helper function that returns true if the item is a melee weapon
         bool is_melee();
+        bool is_armor();
 
         /**
          * Returns the list of meaninful item inventory options for the item.

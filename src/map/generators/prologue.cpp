@@ -17,6 +17,7 @@
 #include "../../components/Stairs.hpp"
 #include "../../components/Interactive.hpp"
 #include "../../components/Item.hpp"
+#include "../../components/Ai.hpp"
 #include "../../components/Usable.hpp"
 
 // Prefabs
@@ -95,6 +96,13 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     
     // TODO remove
     level->add_entity(make_security_droid(7, 15));
+
+    // TODO remove
+    // Seeking droid in the first corridor
+    
+    Entity * seeking_droid = make_security_droid(14, 20, new SeekerAi());
+
+    level->add_entity(seeking_droid);
 
     // Add a dagger in the initial room
     level->add_entity(make_baton(6, 15));
