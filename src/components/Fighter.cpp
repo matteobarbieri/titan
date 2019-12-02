@@ -80,7 +80,7 @@ bool Fighter::roll_to_hit_melee(Entity * target, WeaponAttack * weapon_attack)
     // Roll to hit
     int roll = rand() % 101;
 
-    DEBUG("Change to hit was " << chance_to_hit << "%, rolled a " << roll);
+    DEBUG("Chance to hit was " << chance_to_hit << "%, rolled a " << roll);
 
     return roll < chance_to_hit;
 }
