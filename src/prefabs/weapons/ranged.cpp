@@ -1,38 +1,48 @@
-/*
-from entity import Entity
+#include "../../libtcod.hpp"
 
-from components.item import Item, ItemType, ItemSubtype  # noqa
-from components.equippable import Equippable
+#include "../../Symbols.h"
 
-from equipment_slots import EquipmentSlots
+#include "../../Entity.hpp"
 
-from render_functions import RenderOrder
+#include "../../components/Item.hpp"
+#include "../../components/WeaponAttack.hpp"
+#include "../../components/Reloadable.hpp"
+#include "../../components/Equippable.hpp"
 
-import tcod as libtcodpy
+Entity * make_pistol(int x, int y)
+{
 
+    // Create entity object
+    Entity * e = new Entity(
+        x, y,
+        SYMBOL_PISTOL, TCODColor::sky, "Pistol", ITEM,
+        false, false);
 
-def make_pistol():
+    // Create item component
+    Item * item_component = new Item(
+        ItemType::WEAPON, ItemSubtype::RANGED);
 
-    # Create the base Item instance
-    item_component = Item(
-        item_types=[ItemType.WEAPON],
-        item_subtypes=[ItemSubtype.RANGED]
-    )
+    // Attach item component to entity
+    e->item = item_component;
+    item_component->owner = e;
 
-    # The equippable component of the entity
-    equippable_component = Equippable(
-        valid_slots=[EquipmentSlots.MAIN_HAND, EquipmentSlots.OFF_HAND],
-        damage_range=[2, 5],
-    )
+    // Create equippable component
+    Equippable * equippable_component = new Equippable(
+        EquipmentSlot::MAIN_HAND | EquipmentSlot::OFF_HAND);
 
-    pistol = Entity(
-        None, None,
-        ')', libtcodpy.green, "Pistol", blocks=False,
-        block_sight=False, render_order=RenderOrder.ITEM,
-        components={
-            'equippable': equippable_component,
-            'item': item_component,
-        })
+    // Specify weapon attack
+    equippable_component->weapon_attack = new WeaponAttack(3, 3);
+    
+    // Specify reloadable subcomponent
+    equippable_component->reloadable = new Reloadable(6);
 
-    return pistol
-*/
+    e->equippable = equippable_component;
+    equippable_component->owner = e;
+
+    return e;
+}
+
+Entity * make_pistol()
+{
+    return make_pistol(-1, -1);
+}

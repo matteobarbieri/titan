@@ -1,6 +1,7 @@
 #include "Equippable.hpp"
 #include "WeaponAttack.hpp"
 #include "ArmorDefense.hpp"
+#include "Reloadable.hpp"
 
 //////////////////////////////////////
 ///// EQUIPMENT SLOT OPERATORS ///////
@@ -11,6 +12,7 @@ Equippable::Equippable(EquipmentSlot valid_slots) :
 {
     weapon_attack = nullptr;
     armor_defense = nullptr;
+    reloadable = nullptr;
 }
 
 
@@ -39,6 +41,15 @@ json Equippable::to_json()
         j["armor_defense"] = armor_defense->to_json();
     }
 
+    if (reloadable == nullptr)
+    {
+        j["reloadable"] = nullptr;
+    }
+    else
+    {
+        j["reloadable"] = reloadable->to_json();
+    }
+
     return j;
 }
 
@@ -54,6 +65,11 @@ Equippable * Equippable::from_json(json j)
     if (j["armor_defense"] != nullptr)
     {
         c->armor_defense = ArmorDefense::from_json(j["armor_defense"]);
+    }
+
+    if (j["reloadable"] != nullptr)
+    {
+        c->reloadable = Reloadable::from_json(j["reloadable"]);
     }
 
     return c;

@@ -80,11 +80,14 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state, Over
         }
 
         // If the player move, check if targeted entity is still in sight
-        if (game_state->entity_targeted != 0 && redraw_terrain)
+        if (game_state->entity_targeted != nullptr && redraw_terrain)
         {
 
-            game_state->entity_targeted = check_if_still_in_sight(
-                game_map->fov_map, game_state->entity_targeted);
+            // If no longer in sight, remove target lock
+            if (!entity_in_sight(game_map->fov_map, game_state->entity_targeted))
+            {
+                game_state->entity_targeted = nullptr;
+            }
 
             // Check if by any chance target is dead
             // TODO more generally, if it is no longer targetable for any

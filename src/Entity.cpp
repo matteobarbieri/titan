@@ -74,6 +74,14 @@ void Entity::apply_buff(Buff * buff)
     buffs.push_back(buff);
 }
 
+
+bool Entity::is_valid_target() const
+{
+    // TODO make more complicated, take factions into account!
+    return fighter != nullptr;
+}
+
+
 bool Entity::is_disabled() const
 {
 

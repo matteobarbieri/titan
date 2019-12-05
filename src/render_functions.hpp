@@ -12,7 +12,7 @@
 #include "GameState.hpp"
 
 
-Entity * check_if_still_in_sight(TCODMap * fov_map, Entity * entity);
+bool entity_in_sight(TCODMap * fov_map, Entity * entity);
 
 // TODO missing message_log parameter
 void render_all(

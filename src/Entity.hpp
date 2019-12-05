@@ -135,6 +135,14 @@ class Entity
         bool is_disabled() const;
 
         /**
+         * Return true if the entity is a valid target, that is has the
+         * following properties:
+         * - Is a fighter (i.e. has the fighter component)
+         * - Is hostile to the player TODO
+         */
+        bool is_valid_target() const;
+
+        /**
          * Used for entities which represent living things, cleans up components
          */
         void die();

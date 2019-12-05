@@ -30,16 +30,6 @@
 
 namespace prologue {
 
-/**
- * Add a single immobile orc in the room
- */
-void add_monsters(GameMap * level);
-
-/**
- * Add a dagger in the room
- */
-void add_items(GameMap * level);
-
 //GameMap generate_dungeon_level(width, height, min_room_length, max_room_length)
 GameMap * generate_map(int width, int height, Overseer ** overseer)
 {
@@ -107,6 +97,7 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     // Add a dagger in the initial room
     level->add_entity(make_baton(6, 15));
     level->add_entity(make_armor(7, 16));
+    level->add_entity(make_pistol(8, 16));
     
     //auto test_f3 = [](Entity * player, GameMap * game_map, GameState * game_state)
     //{
@@ -508,30 +499,6 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     (*overseer)->scheduled_events.push_back(ev1);
 
     return level;
-}
-
-////////////////////////////////
-/////// IMPLEMENTATIONS ////////
-////////////////////////////////
-
-void add_monsters(GameMap * level)
-{
-    Entity * orc = make_orc(level->rooms[0]);
-    level->add_entity(orc);
-}
-
-// TODO implement
-void add_items(GameMap * level)
-{
-
-    int x = level->width/2 - 2;
-    int y = level->height/2 - 2;
-
-    Entity * dagger = make_dagger();
-    dagger->x = x;
-    dagger->y = y;
-
-    level->add_entity(dagger);
 }
 
 } // namespace

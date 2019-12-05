@@ -9,6 +9,7 @@
 class Entity;
 class WeaponAttack;
 class ArmorDefense;
+class Reloadable;
 
 using json = nlohmann::json;
 
@@ -24,6 +25,7 @@ class Equippable
         // Sub-components
         WeaponAttack * weapon_attack;
         ArmorDefense * armor_defense;
+        Reloadable * reloadable;
 
         Equippable(EquipmentSlot);
 

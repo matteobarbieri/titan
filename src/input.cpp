@@ -4,6 +4,7 @@
 #include "actions/Action.hpp"
 #include "actions/Move.hpp"
 #include "actions/menus_actions.hpp"
+#include "actions/ui.hpp"
 
 #include "actions/combat.hpp"
 #include "actions/skills.hpp"
@@ -147,6 +148,25 @@ Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 
     if (key_char >= '1' && key_char <= '7')
         return select_skill(key_char);
+
+    /////////////////////////////////////////
+    //////// CYCLE THROUGH TARGETS //////////
+    /////////////////////////////////////////
+
+    
+    if (key.vk == TCODK_TAB)
+    {
+        if (key.shift)
+        {
+            //DEBUG("Pressed SHIFT TAB!");
+            return new CycleTargetAction(-1);
+        }
+        else
+        {
+            //DEBUG("Pressed TAB!");
+            return new CycleTargetAction(1);
+        }
+    }
 
     /////////////////////////////////////////
     /////////// GO TO MAIN MENU /////////////

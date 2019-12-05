@@ -86,13 +86,9 @@ void sync_time() {
 }
 
 
-Entity * check_if_still_in_sight(TCODMap * fov_map, Entity * entity)
+bool entity_in_sight(TCODMap * fov_map, Entity * entity)
 {
-
-    if (fov_map->isInFov(entity->x, entity->y))
-        return entity;
-    else
-        return nullptr;
+    return fov_map->isInFov(entity->x, entity->y);
 }
 
 /**
