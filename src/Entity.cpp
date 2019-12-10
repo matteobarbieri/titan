@@ -97,7 +97,6 @@ bool Entity::is_disabled() const
 }
 
 void Entity::interact_with(Entity * other, GameMap * game_map, GameState * game_state)
-
 {
 
     // TODO must be more complex than this (i.e., take into account factions 
@@ -105,10 +104,6 @@ void Entity::interact_with(Entity * other, GameMap * game_map, GameState * game_
     if (other->fighter != nullptr)
     {
         fighter->attack_melee(other);
-        if (other->fighter->is_dead())
-        {
-            other->die();
-        }
         game_state->game_phase = ENEMY_TURN;
     }
     else if (other->interactive != nullptr)

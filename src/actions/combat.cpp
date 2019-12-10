@@ -42,7 +42,7 @@ Outcome * AttackAction::_execute()
     else
     {
         MessageLog::singleton().add_message(
-                {"Multiple enemies in melee range, target one manually!",
+                {"Multiple enemies in range, target one manually!",
                 TCODColor::yellow});
     }
 

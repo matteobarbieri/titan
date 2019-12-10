@@ -150,6 +150,12 @@ void Fighter::attack_melee(Entity * target)
         WeaponAttack unarmed_attack = WeaponAttack::unarmed_attack();
         attack_melee_with_weapon(target, &unarmed_attack);
     }
+
+    // Check if target is dead 
+    if (target->fighter->is_dead())
+    {
+        target->die();
+    }
     
 }
 
