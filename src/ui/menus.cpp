@@ -107,8 +107,10 @@ void inventory_menu(
             // Then print menu item
             Consoles::singleton().inventory_frame->printf(
                 3, item_y,
-                "(%c) %s",
+                "(%c)   %s", // Leave enough space for the item's symbol
                 e->item->item_letter, e->name.c_str());
+            // Print the item's symbol separately
+            Consoles::singleton().inventory_frame->putChar(7, item_y, e->symbol);
 
             // Increment y coordinate of next menu item by one
             item_y++;
