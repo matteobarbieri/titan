@@ -1,4 +1,6 @@
+#include <sstream>
 #include "../libtcod.hpp"
+
 #include "combat.hpp"
 
 #include "../utils.hpp"
@@ -11,6 +13,8 @@
 
 #include "../components/Equipment.hpp"
 #include "../components/Fighter.hpp"
+#include "../components/Equippable.hpp"
+#include "../components/Reloadable.hpp"
 
 #include "Outcome.hpp"
 
@@ -81,6 +85,60 @@ Outcome * AttackAction::_execute()
         next_phase,
         fov_recompute,
         redraw_terrain);
+
+    return outcome;
+}
+
+////////////////////////////////
+//////// RELOAD ACTION /////////
+////////////////////////////////
+
+ReloadAction::ReloadAction(EquipmentSlot weapon_to_reload) :
+    weapon_to_reload(weapon_to_reload)
+{
+}
+
+Outcome * ReloadAction::_execute()
+{
+    Entity * w = player->equipment->slots[weapon_to_reload];
+
+    GamePhase next_phase = PLAYERS_TURN;
+
+    // Build message
+    std::ostringstream stringStream;
+
+    if (w != nullptr)
+    {
+        if (w->equippable->reloadable != nullptr && w->equippable->reloadable->reload())
+        {
+            stringStream << "You fully reload your " << w->name;
+            MessageLog::singleton().add_message(
+                {stringStream.str(),
+                TCODColor::white});
+
+            next_phase = ENEMY_TURN;
+        }
+        else
+        {
+            stringStream << "No need to reload your " << w->name;
+            MessageLog::singleton().add_message(
+                {stringStream.str(),
+                TCODColor::white});
+        }
+    }
+    else
+    {
+        stringStream << "Nothing equipped in " << SlotName::singleton().slot_names[weapon_to_reload];
+        MessageLog::singleton().add_message(
+            {stringStream.str(),
+            TCODColor::yellow});
+    }
+
+    // Return outcome
+    Outcome * outcome = new Outcome(
+        next_phase,
+        false,
+        false);
 
     return outcome;
 }

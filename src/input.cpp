@@ -138,9 +138,15 @@ Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     /////////////// COMBAT //////////////////
     /////////////////////////////////////////
 
-    // Cross movement (arrow keys or WASD)
+    // Attack
     if (key_char == 'f')
         return new AttackAction();
+
+    // Reload
+    if (key_char == 'r')
+        return new ReloadAction();
+
+    // TODO ADD RELOAD IN OFF HAND!
 
     /////////////////////////////////////////
     //////////////// SKILLS /////////////////
