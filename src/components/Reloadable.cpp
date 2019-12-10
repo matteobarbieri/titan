@@ -9,6 +9,34 @@ Reloadable::Reloadable(int clip_size) : Reloadable(clip_size, clip_size, 1, fals
 {
 }
 
+bool Reloadable::consume_ammo()
+{
+    if (ammo >= ammo_per_shot)
+    {
+        ammo -= ammo_per_shot;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool Reloadable::reload()
+{
+
+    // TODO Also check the case of weapons requiring special ammo
+    if (ammo < clip_size)
+    {
+        ammo = clip_size;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 json Reloadable::to_json()
 {
     json j;

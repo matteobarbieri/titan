@@ -36,6 +36,21 @@ class Reloadable
         Reloadable (int);
 
         /**
+         * Use a number of ammo (depending on ammo_per_shot property). Return
+         * true if there is enough ammo in the weapon to fire a shot, false
+         * otherwise.
+         */
+        bool consume_ammo();
+
+        /**
+         * Reload the weapon. Returns true if the weapon can be reloaded (i.e.
+         * it is not full already and there are ammo in player's inventory, in
+         * case it is a weapon that requires actual ammo in inventory), false
+         * otherwise.
+         */
+        bool reload();
+
+        /**
          * Creates a json representation of the component
          */
         json to_json();

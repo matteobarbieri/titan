@@ -12,6 +12,7 @@
 #include "Fighter.hpp"
 #include "Equipment.hpp"
 #include "Equippable.hpp"
+#include "Reloadable.hpp"
 #include "Item.hpp"
 #include "WeaponAttack.hpp"
 #include "ArmorDefense.hpp"
@@ -110,10 +111,23 @@ bool Fighter::roll_to_hit_melee(Entity * target, WeaponAttack * weapon_attack)
 bool Fighter::attack_with_melee_weapon(Entity * target, Entity * weapon, WeaponAttack * weapon_attack)
 {
 
-    // Must check for ammo/charges first!
-
     // Build message
     std::ostringstream stringStream;
+
+    // Consume ammo
+    if (weapon->equippable->reloadable != nullptr)
+    {
+        if (!weapon->equippable->reloadable->consume_ammo())
+        {
+
+            stringStream << "No ammo in " << weapon->name << "!";
+            // Add message to message log
+            MessageLog::singleton().add_message(
+                {stringStream.str(), TCODColor::yellow});
+
+            return false;
+        }
+    }
 
     if (roll_to_hit_melee(target, weapon_attack))
     {
@@ -169,6 +183,22 @@ bool Fighter::attack_with_ranged_weapon(Entity * target, Entity * weapon, Weapon
 
         return false;
     }
+
+    // Consume ammo
+    if (weapon->equippable->reloadable != nullptr)
+    {
+        if (!weapon->equippable->reloadable->consume_ammo())
+        {
+
+            stringStream << "No ammo in " << weapon->name << "!";
+            // Add message to message log
+            MessageLog::singleton().add_message(
+                {stringStream.str(), TCODColor::yellow});
+
+            return false;
+        }
+    }
+    
 
     // Must check cover, thus include map
     if (roll_to_hit_ranged(target, weapon_attack))
