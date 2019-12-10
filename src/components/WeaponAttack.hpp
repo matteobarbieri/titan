@@ -21,6 +21,7 @@ class WeaponAttack
 
     public:
 
+        float range;
         int dmg_min;
         int dmg_max;
 
@@ -28,12 +29,12 @@ class WeaponAttack
         std::vector<AttackEffect *> effects;
 
         // Simple constructor which sets damage range.
-        WeaponAttack(int, int);
+        WeaponAttack(float, int, int);
 
         int dmg_delta() const;
 
         // Generate a simple attack simulating unarmed combat
-        static WeaponAttack unarmed_attack(int=1, int=2);
+        //static WeaponAttack unarmed_attack(int=1, int=2);
 
         /**
          * Creates a json representation of the component

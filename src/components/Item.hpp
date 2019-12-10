@@ -70,8 +70,10 @@ class Item
         Item(ItemType, ItemSubtype=ItemSubtype::NONE, bool=false, unsigned int=0);
 
         // Helper function that returns true if the item is a melee weapon
-        bool is_melee();
         bool is_armor();
+        bool is_weapon();
+        bool is_melee();
+        bool is_ranged();
 
         /**
          * Returns the list of meaninful item inventory options for the item.

@@ -21,6 +21,24 @@ Equipment::Equipment()
 }
 
 
+bool Equipment::has_weapon_equipped()
+{
+
+    // Loop through equipment slots
+    std::map<EquipmentSlot, Entity *>::iterator it;
+    for (it=slots.begin(); it!=slots.end(); ++it)
+    {
+        if (it->second != nullptr && it->second->item->is_weapon())
+        {
+            return true;
+            break;
+        }
+    }
+
+    return false;
+
+}
+
 void Equipment::unequip(Entity * item)
 {
 

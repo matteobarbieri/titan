@@ -7,6 +7,8 @@
 
 #include "../Entity.hpp"
 
+#include "../utils.hpp"
+
 #include "Fighter.hpp"
 #include "Equipment.hpp"
 #include "Equippable.hpp"
@@ -65,6 +67,26 @@ Fighter * Fighter::from_json(json j)
     return c;
 }
 
+bool Fighter::roll_to_hit_ranged(Entity * target, WeaponAttack * weapon_attack)
+{
+    // TODO implement defense bonus from shield
+    // TODO implement modifiers from weapon attack
+    // TODO implement modifiers from [de]buffs
+    
+    // TODO should use actual values modified from equipment and such
+    int df = _accuracy;
+
+    // Determine chance to hit using a sigmoid function
+    int chance_to_hit = floor(100/(1+exp(-df/10)));
+
+    // Roll to hit
+    int roll = rand() % 101;
+
+    DEBUG("Chance to hit (RANGED) was " << chance_to_hit << "%, rolled a " << roll);
+
+    return roll < chance_to_hit;
+}
+
 bool Fighter::roll_to_hit_melee(Entity * target, WeaponAttack * weapon_attack)
 {
     // TODO implement defense bonus from shield
@@ -80,16 +102,16 @@ bool Fighter::roll_to_hit_melee(Entity * target, WeaponAttack * weapon_attack)
     // Roll to hit
     int roll = rand() % 101;
 
-    DEBUG("Chance to hit was " << chance_to_hit << "%, rolled a " << roll);
+    DEBUG("Chance to hit (MELEE) was " << chance_to_hit << "%, rolled a " << roll);
 
     return roll < chance_to_hit;
 }
 
-void Fighter::attack_melee_with_weapon(Entity * target, WeaponAttack * weapon_attack)
+bool Fighter::attack_with_melee_weapon(Entity * target, Entity * weapon, WeaponAttack * weapon_attack)
 {
 
-    // TODO complete with roll to hit
-    
+    // Must check for ammo/charges first!
+
     // Build message
     std::ostringstream stringStream;
 
@@ -104,6 +126,7 @@ void Fighter::attack_melee_with_weapon(Entity * target, WeaponAttack * weapon_at
 
         target->fighter->take_damage(amount);
 
+        // TODO
         // Change message based on who's attacking (Player or NPC)
         stringStream << "You punch the " << 
             target->name << " in the face for " << amount << " damage!";
@@ -120,8 +143,147 @@ void Fighter::attack_melee_with_weapon(Entity * target, WeaponAttack * weapon_at
         MessageLog::singleton().add_message(
             {stringStream.str(), TCODColor::white});
     }
+
+    return true;
 }
 
+bool Fighter::attack_with_ranged_weapon(Entity * target, Entity * weapon, WeaponAttack * weapon_attack)
+{
+
+    // TODO change, this is the same one from melee!!!
+    // TODO complete with roll to hit
+    
+    // Build message
+    std::ostringstream stringStream;
+
+    // Check distance from target
+    float target_distance = l2(owner->x, owner->y, target->x, target->y);
+
+    if (target_distance > weapon_attack->range)
+    {
+        stringStream << "Target out of range";
+
+        // Add message to message log
+        MessageLog::singleton().add_message(
+            {stringStream.str(), TCODColor::yellow});
+
+        return false;
+    }
+
+    // Must check cover, thus include map
+    if (roll_to_hit_ranged(target, weapon_attack))
+    {
+        // Determine amount
+        int amount = (
+            rand() % (weapon_attack->dmg_delta() + 1)) + weapon_attack->dmg_min;
+
+        // Reduce amount based on target's armour
+        amount = target->fighter->apply_damage_reduction(amount);
+
+        // Apply damage to target
+        target->fighter->take_damage(amount);
+
+        stringStream << target->name << " was hit for " << amount << " damage [" << weapon->name << "]";
+
+        // Add message to message log
+        MessageLog::singleton().add_message(
+            {stringStream.str(), TCODColor::white});
+
+        return true;
+    }
+    else
+    {
+        //stringStream << "You miss the " << target->name << "!";
+        stringStream << target->name << " missed [" << weapon->name << "]";
+
+        // Add message to message log
+        MessageLog::singleton().add_message(
+            {stringStream.str(), TCODColor::white});
+
+        return true;
+    }
+}
+
+/*
+void Fighter::attack_ranged(Entity * target)
+{
+
+    // Variable used to determine if a melee weapon is equipped. If not, attack
+    // unarmed.
+    bool has_ranged_weapon_equipped = false;
+
+    // Loop through equipment slots
+    std::map<EquipmentSlot, Entity *>::iterator it;
+    for (it=owner->equipment->slots.begin(); it!=owner->equipment->slots.end(); ++it)
+    {
+
+        if (
+                it->second != nullptr && // Check that it has something equipped in that slot
+                it->second->item->is_ranged() // check that it is a melee weapon
+           )
+        {
+            // TODO
+            // Check for ammo
+            attack_ranged_with_weapon(target, it->second->equippable->weapon_attack);
+            has_ranged_weapon_equipped = true;
+        }
+
+    }
+
+    if (!has_ranged_weapon_equipped)
+    {
+        WeaponAttack unarmed_attack = WeaponAttack::unarmed_attack();
+        attack_melee_with_weapon(target, &unarmed_attack);
+    }
+
+    // Check if target is dead 
+    if (target->fighter->is_dead())
+    {
+        target->die();
+    }
+    
+}
+*/
+
+bool Fighter::attack(Entity * target)
+{
+
+    bool attack_succeeded = false;
+
+    // Loop through equipment slots
+    std::map<EquipmentSlot, Entity *>::iterator it;
+    for (it=owner->equipment->slots.begin(); it!=owner->equipment->slots.end(); ++it)
+    {
+
+        // Check that it has a weapon equipped in that slot
+        if (it->second != nullptr && it->second->item->is_weapon())
+        {
+            if (it->second->item->is_melee()) // check that it is a melee weapon
+            {
+                attack_succeeded = attack_succeeded ||
+                    attack_with_melee_weapon(target, it->second, it->second->equippable->weapon_attack);
+            }
+
+            if (it->second->item->is_ranged()) // check that it is a ranged weapon
+            {
+                attack_succeeded = attack_succeeded ||
+                    attack_with_ranged_weapon(target, it->second, it->second->equippable->weapon_attack);
+            }
+        }
+
+    }
+
+    // Check if target is dead 
+    if (target->fighter->is_dead())
+    {
+        target->die();
+    }
+
+    return attack_succeeded;
+    
+}
+
+/*
 void Fighter::attack_melee(Entity * target)
 {
 
@@ -158,6 +320,7 @@ void Fighter::attack_melee(Entity * target)
     }
     
 }
+*/
 
 int Fighter::apply_damage_reduction(int amount)
 {
@@ -195,10 +358,6 @@ void Fighter::take_damage(int amount)
 bool Fighter::is_dead() const
 {
     return _hp <= 0;
-}
-
-void Fighter::shoot(Entity * target)
-{
 }
 
 /*
@@ -320,62 +479,4 @@ class Fighter:
                         self.owner.name.capitalize(), target.name), libtcod.white))
 
         return messages
-
-    def roll_to_hit_ranged(self, target, weapon):
-        # TODO placeholder, must be implemented. For the time being, always
-        # hit!
-        return True
-
-    def roll_to_hit_melee(self, target, weapon):
-        # TODO placeholder, must be implemented. For the time being, always
-        # hit!
-        return True
-
-    def calculate_damage(self, target, weapon):
-
-        return weapon.equippable.roll_damage()
-
-        # damage = self.power - target.fighter.defense
-        # return 3
-
-
-    def attack_melee_with_weapon(self, target, weapon):
-        """
-        Perform a melee attack with a specific weapon
-        """
-
-        # TODO DEBUG remove
-        # print("Attacking with melee weapon")
-        messages = list()
-
-        if not self.roll_to_hit_melee(target, weapon):
-            # TODO better implement this
-            messages.append(Message("Missed!", libtcod.yellow))
-
-        damage = self.calculate_damage(target, weapon)
-
-        if damage > 0:
-
-            messages.append(
-                Message('{0} attacks {1} for {2} hit points.'.format(
-                    self.owner.name.capitalize(), target.name,
-                    str(damage)), libtcod.white))
-
-            # In case there are other effects, add extra messages
-            messages.extend(target.fighter.take_damage(damage))
-        else:
-
-            # Append the no damage dealt messages
-            messages.append(
-                Message('{0} attacks {1} but does no damage.'.format(
-                    self.owner.name.capitalize(), target.name), libtcod.white))
-
-        return messages
-
-
-    def attack_melee(self, target):
-        """
-        Perform an attack with all equipped melee weapons
-        """
-
 */

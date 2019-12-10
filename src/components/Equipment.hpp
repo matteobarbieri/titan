@@ -30,6 +30,8 @@ class Equipment
 
         Equipment();
 
+        bool has_weapon_equipped();
+
         EquipmentSlot equip(Entity * item);
 
         void unequip(Entity * item);

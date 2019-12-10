@@ -9,21 +9,49 @@
 
 #include "../map/GameMap.hpp"
 
+#include "../components/Equipment.hpp"
+#include "../components/Fighter.hpp"
+
 #include "Outcome.hpp"
 
 
 Outcome * AttackAction::_execute()
 {
 
-    // TODO adapt range based on equipped weapon
-    int melee_weapon_range = 1;
-
-    bool position_changed = false;
-    bool interacted_with_something = false;
-
+    Entity * target = game_state->entity_targeted;
+    
     GamePhase next_phase = PLAYERS_TURN;
+    
+    //bool position_changed = false;
+    // Attack succeeded means only that the player was able to carry out the
+    // attack, not that he necessarily hit
+    bool attack_succeeded = false;
 
-    Entity * target = nullptr;
+    // If no entity has been targeted, warn the player
+    if (target == nullptr)
+    {
+        MessageLog::singleton().add_message(
+            {"Select target before attacking!",
+            TCODColor::yellow});
+    }
+    else if (!player->equipment->has_weapon_equipped())
+    {
+        MessageLog::singleton().add_message(
+            {"You have no equipped weapons!",
+            TCODColor::yellow});
+    }
+    else
+    {
+
+        //player->interact_with(target, game_map, game_state);
+
+        // TODO might also be able to modify map?
+        attack_succeeded = player->fighter->attack(target);
+        next_phase = ENEMY_TURN;
+    }
+
+
+    /*
     int n_enemies_in_range = game_map->search_target_in_range(
         player->x, player->y, melee_weapon_range, &target);
 
@@ -35,9 +63,6 @@ Outcome * AttackAction::_execute()
     }
     else if (n_enemies_in_range == 1)
     {
-        next_phase = ENEMY_TURN;
-        player->interact_with(target, game_map, game_state);
-        interacted_with_something = true;
     }
     else
     {
@@ -45,8 +70,10 @@ Outcome * AttackAction::_execute()
                 {"Multiple enemies in range, target one manually!",
                 TCODColor::yellow});
     }
+    */
 
-    bool redraw_terrain = position_changed || interacted_with_something;
+    //bool redraw_terrain = position_changed || interacted_with_something;
+    bool redraw_terrain = attack_succeeded;
     bool fov_recompute = redraw_terrain;
 
     // Return outcome

@@ -30,7 +30,7 @@ Entity * make_dagger(int x, int y)
         EquipmentSlot::MAIN_HAND | EquipmentSlot::OFF_HAND);
 
     // Specify weapon attack
-    equippable_component->weapon_attack = new WeaponAttack(4, 6);
+    equippable_component->weapon_attack = new WeaponAttack(1.5, 4, 6);
 
     dagger->equippable = equippable_component;
     equippable_component->owner = dagger;
@@ -65,7 +65,7 @@ Entity * make_baton(int x, int y)
         EquipmentSlot::MAIN_HAND | EquipmentSlot::OFF_HAND);
 
     // Specify weapon attack
-    equippable_component->weapon_attack = new WeaponAttack(4, 6);
+    equippable_component->weapon_attack = new WeaponAttack(1.5, 4, 6);
 
     baton->equippable = equippable_component;
     equippable_component->owner = baton;
