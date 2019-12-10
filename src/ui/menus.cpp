@@ -13,6 +13,8 @@
 #include "../components/Interactive.hpp"
 #include "../components/Item.hpp"
 #include "../components/Equipment.hpp"
+#include "../components/Equippable.hpp"
+#include "../components/Reloadable.hpp"
 
 
 #include "menus.hpp"
@@ -86,10 +88,12 @@ void inventory_menu(
     // Starting menu item height
     int item_y = INVENTORY_ITEMS_Y;
 
+    Entity * e;
+
     for (int i=0; i<(int)player->inventory->items.size(); i++)
     {
-        Entity * e = player->inventory->items[i];
 
+        e = player->inventory->items[i];
         // If it isn't equipped
         if (!e->item->equipped)
         {
@@ -105,10 +109,22 @@ void inventory_menu(
             Consoles::singleton().inventory_frame->setDefaultForeground(e->color());
 
             // Then print menu item
-            Consoles::singleton().inventory_frame->printf(
-                3, item_y,
-                "(%c)   %s", // Leave enough space for the item's symbol
-                e->item->item_letter, e->name.c_str());
+            if (e->equippable != nullptr && e->equippable->reloadable != nullptr)
+            {
+                Consoles::singleton().inventory_frame->printf(
+                    3, item_y,
+                    "(%c)   %s [%d/%d]", // Leave enough space for the item's symbol
+                    e->item->item_letter, e->name.c_str(),
+                    e->equippable->reloadable->ammo, e->equippable->reloadable->clip_size);
+            }
+            else
+            {
+                Consoles::singleton().inventory_frame->printf(
+                    3, item_y,
+                    "(%c)   %s", // Leave enough space for the item's symbol
+                    e->item->item_letter, e->name.c_str());
+            }
+
             // Print the item's symbol separately
             Consoles::singleton().inventory_frame->putChar(7, item_y, e->symbol);
 
@@ -134,13 +150,34 @@ void inventory_menu(
         {
             // Set the color first
             Consoles::singleton().inventory_frame->setDefaultForeground(it->second->color());
+            e = it->second;
+            if (e->equippable != nullptr && e->equippable->reloadable != nullptr)
+            {
+                Consoles::singleton().inventory_frame->printf(
+                    3, item_y,
+                    "(%c)   %s [%d/%d] [%s]", // Leave enough space for the item's symbol
+                    e->item->item_letter, e->name.c_str(),
+                    e->equippable->reloadable->ammo, e->equippable->reloadable->clip_size,
+                    SlotName::singleton().slot_names_short[it->first].c_str());
+            }
+            else
+            {
+                Consoles::singleton().inventory_frame->printf(
+                    3, item_y,
+                    "(%c)   %s [%s]", // Leave enough space for the item's symbol
+                    e->item->item_letter, e->name.c_str(),
+                    SlotName::singleton().slot_names_short[it->first].c_str());
+            }
+
+            // Print the item's symbol separately
+            Consoles::singleton().inventory_frame->putChar(7, item_y, e->symbol);
 
             // Then print menu item
-            Consoles::singleton().inventory_frame->printf(
-                3, item_y,
-                "(%c) %s [%s]",
-                it->second->item->item_letter, it->second->name.c_str(),
-                SlotName::singleton().slot_names[it->first].c_str());
+            //Consoles::singleton().inventory_frame->printf(
+                //3, item_y,
+                //"(%c) %s [%s]",
+                //it->second->item->item_letter, it->second->name.c_str(),
+                //SlotName::singleton().slot_names_short[it->first].c_str());
         }
         else
         {

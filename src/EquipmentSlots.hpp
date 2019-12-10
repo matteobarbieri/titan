@@ -49,6 +49,7 @@ class SlotName
     public:
 
         std::map<EquipmentSlot, std::string> slot_names;
+        std::map<EquipmentSlot, std::string> slot_names_short;
 
         /*! The static method to access the singleton */
         static SlotName & singleton();

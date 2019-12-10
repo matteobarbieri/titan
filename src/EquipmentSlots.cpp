@@ -63,6 +63,15 @@ SlotName::SlotName()
     slot_names[EquipmentSlot::HANDS] = "Hands";
     slot_names[EquipmentSlot::LEGS] = "Legs";
     slot_names[EquipmentSlot::FEET] = "Feet";
+
+    slot_names_short[EquipmentSlot::MAIN_HAND] = "MH";
+    slot_names_short[EquipmentSlot::OFF_HAND] = "OH";
+    slot_names_short[EquipmentSlot::HEAD] = "HD";
+    slot_names_short[EquipmentSlot::CHEST] = "CH";
+    slot_names_short[EquipmentSlot::HANDS] = "HN";
+    slot_names_short[EquipmentSlot::LEGS] = "LG";
+    slot_names_short[EquipmentSlot::FEET] = "FT";
+
 }
 
 
