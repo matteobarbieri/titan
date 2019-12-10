@@ -191,7 +191,7 @@ void GameMap::get_player_starting_coords(int & x, int & y)
     // TODO change this
     for (int i=0; i<(int)entities().size(); i++)
     {
-        if (entities()[i]->name == "ENTRY_POINT")
+        if (entities()[i]->tag.find("entrypoint") != std::string::npos)
         {
             x = entities()[i]->x;
             y = entities()[i]->y;

@@ -62,12 +62,11 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_part(new Room(
         Rect(5, 14, 11, 18), Direction::FourD()));
 
-    // Create and add entry stairs '<'
-    //Stairs * up_stairs_component = new Stairs(level->dungeon_level - 1);
-
+    // Player starting point
     Entity * entry_point = new Entity(
         6, 16, ' ',
-        TCODColor::white, "ENTRY_POINT", NONE, false, false, true);
+        TCODColor::white, "", NONE, false, false, true);
+    entry_point->tag = "entrypoint"; 
 
     level->add_entity(entry_point);
     
