@@ -137,16 +137,11 @@ bool weapon_in_range(Entity * attacker, Entity * target, Entity * weapon, Weapon
 }
 
 
-bool Fighter::attack_with_melee_weapon(Entity * target, Entity * weapon, WeaponAttack * weapon_attack)
+bool ammo_check(Entity * weapon)
 {
 
     // Build message
     std::ostringstream stringStream;
-
-    if (!weapon_in_range(owner, target, weapon, weapon_attack))
-    {
-        return false;
-    }
 
     // Consume ammo
     if (weapon->equippable->reloadable != nullptr)
@@ -161,6 +156,27 @@ bool Fighter::attack_with_melee_weapon(Entity * target, Entity * weapon, WeaponA
 
             return false;
         }
+    }
+    return true;
+}
+
+
+bool Fighter::attack_with_melee_weapon(Entity * target, Entity * weapon, WeaponAttack * weapon_attack)
+{
+
+    // Use stram to build messages
+    std::ostringstream stringStream;
+
+    // Check if weapon in range
+    if (!weapon_in_range(owner, target, weapon, weapon_attack))
+    {
+        return false;
+    }
+
+    // Check for ammo (if the weapon uses them)
+    if (!ammo_check(weapon))
+    {
+        return false;
     }
 
     if (roll_to_hit_melee(target, weapon_attack))
@@ -198,34 +214,22 @@ bool Fighter::attack_with_melee_weapon(Entity * target, Entity * weapon, WeaponA
 bool Fighter::attack_with_ranged_weapon(Entity * target, Entity * weapon, WeaponAttack * weapon_attack)
 {
 
-    // TODO change, this is the same one from melee!!!
-    // TODO complete with roll to hit
-    
     // Build message
     std::ostringstream stringStream;
 
+    // Check if weapon in range
     if (!weapon_in_range(owner, target, weapon, weapon_attack))
     {
         return false;
     }
 
-    // Consume ammo
-    if (weapon->equippable->reloadable != nullptr)
+    // Check for ammo (if the weapon uses them)
+    if (!ammo_check(weapon))
     {
-        if (!weapon->equippable->reloadable->consume_ammo())
-        {
-
-            stringStream << "No ammo in " << weapon->name << "!";
-            // Add message to message log
-            MessageLog::singleton().add_message(
-                {stringStream.str(), TCODColor::yellow});
-
-            return false;
-        }
+        return false;
     }
-    
 
-    // Must check cover, thus include map
+    // TODO Must check cover, thus include map
     if (roll_to_hit_ranged(target, weapon_attack))
     {
         // Determine amount
