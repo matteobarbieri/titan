@@ -89,10 +89,13 @@ bool Fighter::roll_to_hit_ranged(Entity * target, WeaponAttack * weapon_attack, 
     int dx = owner->x - target->x;
     int dy = owner->y - target->y;
 
+    // Compute l2 distance from target
+    float target_distance = sqrt(dx*dx + dy*dy);
+
     // Compute the coordinates of the tiles to take into consideration for cover
     
     // The tile to the left/right of the target
-    int modifier_tile_h = 0;
+    float modifier_tile_h = 0;
     if (abs(dx) > 1)
     {
         int tileh_x = target->x + dx/(abs(dx));
@@ -104,7 +107,7 @@ bool Fighter::roll_to_hit_ranged(Entity * target, WeaponAttack * weapon_attack, 
     }
 
     // The tile just above/below the target
-    int modifier_tile_v = 0;
+    float modifier_tile_v = 0;
     if (abs(dy) > 1)
     {
         int tilev_x = target->x;
@@ -115,15 +118,26 @@ bool Fighter::roll_to_hit_ranged(Entity * target, WeaponAttack * weapon_attack, 
         modifier_tile_v = level->get_tile_at(tilev_x, tilev_y)->cover_level;
     }
 
-    acc -= modifier_tile_h; 
-    acc -= modifier_tile_v; 
+    //acc -= modifier_tile_h; 
+    //acc -= modifier_tile_v; 
 
     DEBUG("Final accuracy: " << acc);
     DEBUG("Modifer from horizontal tile: " << modifier_tile_h);
     DEBUG("Modifer from vertical tile: " << modifier_tile_v);
 
+    float cover_multiplier = 1.0 -
+        (abs(dx)/target_distance) * (modifier_tile_h/100.0) -
+        (abs(dy)/target_distance) * (modifier_tile_v/100.0);
+
+    DEBUG("Cover multiplier: " << cover_multiplier);
+
     // Determine chance to hit using a sigmoid function
     int chance_to_hit = floor(100/(1+exp(-acc/10)));
+
+    DEBUG("Unmodified chance to hit: " << chance_to_hit);
+
+    // Apply cover multiplier to chance to hit
+    chance_to_hit *= cover_multiplier;
 
     // Roll to hit
     int roll = rand() % 101;
