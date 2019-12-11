@@ -22,6 +22,8 @@
 
 #include "../GameMessages.hpp"
 
+bool weapon_in_range(Entity * attacker, Entity * target, Entity * weapon, WeaponAttack * weapon_attack);
+
 Fighter::Fighter(int max_hp, int hp, int _fighting, int _accuracy) :
     _max_hp(max_hp), _hp(hp), _fighting(_fighting), _accuracy(_accuracy)
 {
@@ -108,11 +110,43 @@ bool Fighter::roll_to_hit_melee(Entity * target, WeaponAttack * weapon_attack)
     return roll < chance_to_hit;
 }
 
+
+bool weapon_in_range(Entity * attacker, Entity * target, Entity * weapon, WeaponAttack * weapon_attack)
+{
+
+    // Build message
+    std::ostringstream stringStream;
+
+    // Check distance from target
+    float target_distance = l2(attacker->x, attacker->y, target->x, target->y);
+
+    if (target_distance > weapon_attack->range)
+    {
+        stringStream << "Target out of range [" << weapon->name << "]";
+
+        // Add message to message log
+        MessageLog::singleton().add_message(
+            {stringStream.str(), TCODColor::yellow});
+
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+
 bool Fighter::attack_with_melee_weapon(Entity * target, Entity * weapon, WeaponAttack * weapon_attack)
 {
 
     // Build message
     std::ostringstream stringStream;
+
+    if (!weapon_in_range(owner, target, weapon, weapon_attack))
+    {
+        return false;
+    }
 
     // Consume ammo
     if (weapon->equippable->reloadable != nullptr)
@@ -170,17 +204,8 @@ bool Fighter::attack_with_ranged_weapon(Entity * target, Entity * weapon, Weapon
     // Build message
     std::ostringstream stringStream;
 
-    // Check distance from target
-    float target_distance = l2(owner->x, owner->y, target->x, target->y);
-
-    if (target_distance > weapon_attack->range)
+    if (!weapon_in_range(owner, target, weapon, weapon_attack))
     {
-        stringStream << "Target out of range";
-
-        // Add message to message log
-        MessageLog::singleton().add_message(
-            {stringStream.str(), TCODColor::yellow});
-
         return false;
     }
 
