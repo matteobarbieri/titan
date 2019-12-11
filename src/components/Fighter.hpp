@@ -8,6 +8,7 @@ using json = nlohmann::json;
 // Forward declarations
 class Entity;
 class WeaponAttack;
+class GameMap;
 
 class Fighter
 {
@@ -50,29 +51,20 @@ class Fighter
          * TODO also having a shield equipped should help defending, somehow.
          */
         bool roll_to_hit_melee(Entity *, WeaponAttack *);
-        bool roll_to_hit_ranged(Entity *, WeaponAttack *);
-
-        /**
-         * Perform a melee attack with all equipped melee weapons (or unarmed,
-         * if no melee weapons are equipped).
-         */
-        //void attack_ranged(Entity * other);
+        bool roll_to_hit_ranged(Entity *, WeaponAttack *, GameMap *);
 
         /**
          * Perform the attack with a specific weapon
          */
-        bool attack_with_ranged_weapon(Entity * target, Entity * weapon, WeaponAttack *);
+        bool attack_with_ranged_weapon(Entity * target, Entity * weapon, WeaponAttack *, GameMap *);
 
         /**
-         * Perform a melee attack with all equipped melee weapons (or unarmed,
-         * if no melee weapons are equipped).
+         * Attack a target with all equipped and primed weapons 
          */
-        //void attack_melee(Entity * other);
-
-        bool attack(Entity * other);
+        bool attack(Entity *, GameMap *);
 
         /**
-         * Perform the attack with a specific weapon
+         * Perform the attack with a specific melee weapon
          */
         bool attack_with_melee_weapon(Entity * target, Entity * weapon, WeaponAttack *);
 

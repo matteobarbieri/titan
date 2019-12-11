@@ -103,7 +103,7 @@ void Entity::interact_with(Entity * other, GameMap * game_map, GameState * game_
     // etc)!
     if (other->fighter != nullptr)
     {
-        fighter->attack(other);
+        fighter->attack(other, game_map);
         game_state->game_phase = ENEMY_TURN;
     }
     else if (other->interactive != nullptr)

@@ -46,12 +46,15 @@ Outcome * AttackAction::_execute()
     }
     else
     {
-
-        //player->interact_with(target, game_map, game_state);
-
         // TODO might also be able to modify map?
-        attack_succeeded = player->fighter->attack(target);
-        next_phase = ENEMY_TURN;
+        attack_succeeded = player->fighter->attack(target, game_map);
+
+        // Only pass the turn if the attack could actually be carried out (no
+        // problems with missing ammo/target out of range).
+        if (attack_succeeded)
+        {
+            next_phase = ENEMY_TURN;
+        }
     }
 
 

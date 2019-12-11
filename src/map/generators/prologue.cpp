@@ -86,6 +86,9 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     // TODO remove
     level->add_entity(make_security_droid(7, 15));
 
+    // Add full cover
+    level->make_wall(8, 15);
+
     // TODO remove
     // Seeking droid in the first corridor
     

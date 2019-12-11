@@ -18,6 +18,9 @@
 #include "ArmorDefense.hpp"
 #include "Ai.hpp"
 
+#include "../map/GameMap.hpp"
+#include "../map/Tile.hpp"
+
 #include "../EquipmentSlots.hpp"
 
 #include "../GameMessages.hpp"
@@ -72,17 +75,55 @@ Fighter * Fighter::from_json(json j)
     return c;
 }
 
-bool Fighter::roll_to_hit_ranged(Entity * target, WeaponAttack * weapon_attack)
+bool Fighter::roll_to_hit_ranged(Entity * target, WeaponAttack * weapon_attack, GameMap * level)
 {
     // TODO implement defense bonus from shield
     // TODO implement modifiers from weapon attack
     // TODO implement modifiers from [de]buffs
     
     // TODO should use actual values modified from equipment and such
-    int df = _accuracy;
+    // Base accuracy
+    int acc = _accuracy;
+
+    // Determine from where the shot is coming from
+    int dx = owner->x - target->x;
+    int dy = owner->y - target->y;
+
+    // Compute the coordinates of the tiles to take into consideration for cover
+    
+    // The tile to the left/right of the target
+    int modifier_tile_h = 0;
+    if (abs(dx) > 1)
+    {
+        int tileh_x = target->x + dx/(abs(dx));
+        int tileh_y = target->y;
+
+        // TODO
+        // Modify using trigonometric function
+        modifier_tile_h = level->get_tile_at(tileh_x, tileh_y)->cover_level;
+    }
+
+    // The tile just above/below the target
+    int modifier_tile_v = 0;
+    if (abs(dy) > 1)
+    {
+        int tilev_x = target->x;
+        int tilev_y = target->y + dy/(abs(dy));
+
+        // TODO
+        // Modify using trigonometric function
+        modifier_tile_v = level->get_tile_at(tilev_x, tilev_y)->cover_level;
+    }
+
+    acc -= modifier_tile_h; 
+    acc -= modifier_tile_v; 
+
+    DEBUG("Final accuracy: " << acc);
+    DEBUG("Modifer from horizontal tile: " << modifier_tile_h);
+    DEBUG("Modifer from vertical tile: " << modifier_tile_v);
 
     // Determine chance to hit using a sigmoid function
-    int chance_to_hit = floor(100/(1+exp(-df/10)));
+    int chance_to_hit = floor(100/(1+exp(-acc/10)));
 
     // Roll to hit
     int roll = rand() % 101;
@@ -199,7 +240,7 @@ bool Fighter::attack_with_melee_weapon(Entity * target, Entity * weapon, WeaponA
     }
     else
     {
-        stringStream << "You miss the " << target->name << "!";
+        stringStream << target->name << " missed [" << weapon->name << "]";
 
         // Add message to message log
         MessageLog::singleton().add_message(
@@ -209,7 +250,7 @@ bool Fighter::attack_with_melee_weapon(Entity * target, Entity * weapon, WeaponA
     return true;
 }
 
-bool Fighter::attack_with_ranged_weapon(Entity * target, Entity * weapon, WeaponAttack * weapon_attack)
+bool Fighter::attack_with_ranged_weapon(Entity * target, Entity * weapon, WeaponAttack * weapon_attack, GameMap * level)
 {
 
     // Build message
@@ -228,7 +269,7 @@ bool Fighter::attack_with_ranged_weapon(Entity * target, Entity * weapon, Weapon
     }
 
     // TODO Must check cover, thus include map
-    if (roll_to_hit_ranged(target, weapon_attack))
+    if (roll_to_hit_ranged(target, weapon_attack, level))
     {
         // Determine amount
         int amount = (
@@ -302,7 +343,7 @@ void Fighter::attack_ranged(Entity * target)
 }
 */
 
-bool Fighter::attack(Entity * target)
+bool Fighter::attack(Entity * target, GameMap * level)
 {
 
     bool attack_succeeded = false;
@@ -324,7 +365,9 @@ bool Fighter::attack(Entity * target)
             if (it->second->item->is_ranged()) // check that it is a ranged weapon
             {
                 attack_succeeded = attack_succeeded ||
-                    attack_with_ranged_weapon(target, it->second, it->second->equippable->weapon_attack);
+                    attack_with_ranged_weapon(
+                        target, it->second, it->second->equippable->weapon_attack,
+                        level);
             }
         }
 

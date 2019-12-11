@@ -31,7 +31,7 @@ Entity * make_pistol(int x, int y)
         EquipmentSlot::MAIN_HAND | EquipmentSlot::OFF_HAND);
 
     // Specify weapon attack
-    equippable_component->weapon_attack = new WeaponAttack(2.0, 3, 3);
+    equippable_component->weapon_attack = new WeaponAttack(3.0, 3, 3);
     
     // Specify reloadable subcomponent
     equippable_component->reloadable = new Reloadable(6);

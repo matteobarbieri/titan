@@ -157,6 +157,15 @@ Entity * GameMap::get_inspectable_entity_at(int x, int y)
     return nullptr;
 }
 
+Tile * GameMap::get_tile_at(int x, int y)
+{
+
+    int i = compute_tile_index(x, y, width);
+
+    return tiles[i];
+}
+
+
 Entity * GameMap::get_item_at(int x, int y)
 {
     for (int i=0; i<(int)_entities.size(); i++)

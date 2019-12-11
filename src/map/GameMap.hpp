@@ -222,6 +222,11 @@ class GameMap
         Entity * get_item_at(int x, int y);
 
         /**
+         * Return a tile at a given position in the map
+         */
+        Tile * get_tile_at(int, int);
+
+        /**
          * Places the player at the dungeon's entry point
          */
         void place_player(Entity * player);

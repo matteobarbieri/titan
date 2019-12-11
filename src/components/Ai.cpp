@@ -191,7 +191,7 @@ SeekerAi * SeekerAi::from_json(json j)
 
 void AttackPlayerAIAction::_execute()
 {
-    monster->fighter->attack(player);
+    monster->fighter->attack(player, game_map);
 }
 
 AttackPlayerAIAction::AttackPlayerAIAction(
