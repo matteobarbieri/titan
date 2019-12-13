@@ -20,8 +20,15 @@ void menu(TCODConsole * con, std::vector<MenuOption> options, const char * heade
           int width,
           int x, int y, TCODColor header_fg);
 
-void terminal_menu(
-    Entity * terminal);
+/**
+ * Draws stuff on a console to represent the interface to a Terminal in the game
+ */
+void terminal_menu(Entity *);
+
+/**
+ * Draws stuff on the console to display a container interface
+ */
+void container_menu(Entity *);
 
 void inventory_menu(
     Entity * player, std::string header="Inventory");

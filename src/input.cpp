@@ -295,6 +295,40 @@ Action * handle_terminal_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     return nullptr;
 }
 
+Action * handle_container_keys(TCOD_key_t key, TCOD_mouse_t mouse)
+{
+
+    char key_char = -1;
+
+    // Code to prevent double input
+    if (key.vk == TCODK_CHAR)
+    {
+
+        key_char = key.c;
+
+        // Then check if the letter is one of the valid inventory items
+        if (key_char >= 'a' && key_char <= 'z')
+        {
+            return new SelectContainerItemAction(key_char);
+        }
+        //DEBUG("Pressed key " << key_char);
+
+    }
+
+    /*
+    if key.vk == libtcod.KEY_ENTER and key.lalt:
+        # Alt+Enter: toggle full screen
+        return ToggleFullscreenAction()
+    */
+
+    if (key.vk == TCODK_ESCAPE)
+    {
+        return new GoToPhaseAction(ENEMY_TURN);
+    }
+
+    return nullptr;
+}
+
 Action * handle_targeting_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 {
     char key_char = -1;

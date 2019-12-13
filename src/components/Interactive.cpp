@@ -37,6 +37,11 @@ Interactive * Interactive::from_json(json j)
         return InteractiveTerminal::from_json(j);
     }
 
+    if (j["subclass"] == "InteractiveContainer")
+    {
+        return InteractiveContainer::from_json(j);
+    }
+
     return nullptr;
 }
 
@@ -318,4 +323,60 @@ InteractiveTerminal * InteractiveTerminal::from_json(json j)
     }
 
     return it;
+}
+
+
+//////////////////////////////////
+////// INTERACTIVE CONTAINER /////
+//////////////////////////////////
+
+InteractiveContainer::InteractiveContainer(bool locked, unsigned int key_id) :
+    locked(locked), key_id(key_id)
+{
+}
+
+void InteractiveContainer::interact(Entity * player, GameMap * game_map, GameState * game_state)
+{
+
+    if (!locked)
+    {
+        // Set current terminal as entity with which to interact
+        game_state->entity_interacted = owner;
+        game_state->game_phase = CONTAINER_MENU;
+
+        MessageLog::singleton().add_message(
+            {"[PH] Interacting with container", TCODColor::lightGreen});
+    }
+    else
+    // TODO actually handle lock and key mechanism
+    {
+        // TODO improve message with actual container's name
+        MessageLog::singleton().add_message(
+            {"This terminal does not seem to be active...",
+             TCODColor::amber});
+    }
+
+}
+
+json InteractiveContainer::to_json()
+{
+    json j;
+
+    j["subclass"] = "InteractiveContainer";
+
+    j["locked"] = locked;
+    j["key_id"] = key_id;
+
+    return j;
+}
+
+InteractiveContainer * InteractiveContainer::from_json(json j)
+{
+
+    InteractiveContainer * ic = new InteractiveContainer(
+        j["locked"],
+        j["key_id"]
+    );
+
+    return ic;
 }

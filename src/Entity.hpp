@@ -24,6 +24,7 @@ class Equippable;
 class Usable;
 class Inventory;
 class Interactive;
+class Container;
 
 class GameMap;
 class GameState;
@@ -83,6 +84,7 @@ class Entity
         Usable * usable;
         Inventory * inventory;
         Interactive * interactive;
+        Container * container;
 
         // Buffs currently applied to entity
         std::vector<Buff *> buffs;

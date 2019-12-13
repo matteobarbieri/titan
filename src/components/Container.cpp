@@ -1,20 +1,16 @@
-#include <algorithm>
+//#include <algorithm>
 
-#include "Inventory.hpp"
+#include "Container.hpp"
 
 #include "../Entity.hpp"
 #include "../map/GameMap.hpp"
 
 #include "Item.hpp"
-#include "Container.hpp"
 
-Inventory::Inventory(int capacity, bool init_available_letters) : _capacity(capacity)
+Container::Container(bool init_available_letters)
 {
 
         // The list of all letters available for an item
-        // TODO limit to the maximum number of items a player can have on him,
-        // between equipped and in inventory
-        
         if (init_available_letters)
         {
             // Skip the 'i'
@@ -31,31 +27,31 @@ Inventory::Inventory(int capacity, bool init_available_letters) : _capacity(capa
 
 }
 
-int Inventory::get_item_position_in_list(Entity * item)
+/*
+ *
+ *int Container::get_item_position_in_list(Entity * item)
+ *{
+ *
+ *    // TODO must change, doesn't work well because of equipped status
+ *    for (int i=0; i<(int)items.size(); i++)
+ *    {
+ *        if (items[i] == item)
+ *        {
+ *            return i;
+ *        }
+ *    }
+ *
+ *    DEBUG("Container::get_item_position_in_list should not arrive here...");
+ *
+ *    // Should really never arrive here
+ *    throw new std::exception();
+ *
+ *}
+ *
+ */
+
+void Container::get(Entity * item)
 {
-
-    // TODO must change, doesn't work well because of equipped status
-    for (int i=0; i<(int)items.size(); i++)
-    {
-        if (items[i] == item)
-        {
-            return i;
-        }
-    }
-
-    DEBUG("Inventory::get_item_position_in_list should not arrive here...");
-
-    // Should really never arrive here
-    throw new std::exception();
-
-}
-
-void Inventory::drop(Entity * item, GameMap * level, Entity * player)
-{
-
-    // TODO obtain coordinates by map (get closest free tile
-    item->x = player->x;
-    item->y = player->y;
 
     // Add item letter back to the pool of available letters
     available_letters.push_back(item->item->item_letter);
@@ -69,13 +65,11 @@ void Inventory::drop(Entity * item, GameMap * level, Entity * player)
     // Mark item as unequipped
     item->item->equipped = false;
 
-    // Add to the vector of items
+    // Actually remove item from vector of pointers
     remove_item(item);
-
-    level->add_entity(item);
 }
 
-void Inventory::remove_item(Entity * item)
+void Container::remove_item(Entity * item)
 {
     // Solution taken from
     // https://stackoverflow.com/questions/3385229/c-erase-vector-element-by-value-rather-than-by-position
@@ -84,46 +78,8 @@ void Inventory::remove_item(Entity * item)
         items.end());
 }
 
-void Inventory::retrieve_from_container(Entity * item, Entity * container)
+void Container::put(Entity * item)
 {
-    // If at full capacity, throw exception
-    if ((int)items.size() == _capacity)
-    {
-        throw InventoryFullException();
-    }
-
-    // Remove entity from the level's list of entities
-    container->container->get(item);
-
-    // Set item's coordinates to invalid values, since they do not make any
-    // sense while the item is in player's inventory
-    item->x = -1;
-    item->y = -1;
-
-    // Actually add the item to the inventory, Associating it with the
-    // first available letter
-
-    // "Manual" pop(0)
-    char item_letter = available_letters[0];
-    available_letters.erase(available_letters.begin());
-
-    // Mark item as unequipped
-    item->item->equipped = false;
-
-    // Assign item letter to item component
-    item->item->item_letter = item_letter;
-
-    // Add to the vector of items
-    items.push_back(item);
-}
-
-void Inventory::pickup(Entity * item, GameMap * level)
-{
-    // If at full capacity, throw exception
-    if ((int)items.size() == _capacity)
-    {
-        throw InventoryFullException();
-    }
 
     // Set item's coordinates to invalid values, since they do not make any
     // sense while the item is in player's inventory
@@ -147,16 +103,11 @@ void Inventory::pickup(Entity * item, GameMap * level)
 
     // Add to the vector of items
     items.push_back(item);
-
-    // Remove entity from the level's list of entities
-    level->remove_entity(item);
 }
 
-json Inventory::to_json()
+json Container::to_json()
 {
     json j;
-
-    j["_capacity"] = _capacity;
 
     // Items
     json j_items;
@@ -181,12 +132,12 @@ json Inventory::to_json()
     return j;
 }
 
-Inventory * Inventory::from_json(json j)
+Container * Container::from_json(json j)
 {
 
     // Initialize inventory component WITHOUT also initializing the list of
     // available letters (must be restored from json object).
-    Inventory * c = new Inventory(j["_capacity"], false);
+    Container * c = new Container(false);
 
     // Items
     for (int i=0; i<(int)j["items"].size(); i++)

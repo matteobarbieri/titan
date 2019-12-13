@@ -257,3 +257,19 @@ Outcome * PickupAction::_execute()
     return outcome;
 
 }
+
+/////////////////////////////////
+///// SELECT CONTAINER ITEM /////
+/////////////////////////////////
+
+SelectContainerItemAction::SelectContainerItemAction(char item_letter) :
+    item_letter(item_letter)
+{
+}
+
+Outcome * SelectContainerItemAction::_execute()
+{
+    // TODO implement!
+    return nullptr;
+}
+

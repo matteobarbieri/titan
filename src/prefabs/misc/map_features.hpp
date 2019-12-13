@@ -38,4 +38,15 @@ Entity * make_terminal(int x, int y,
                        int symbol=167,
                        bool is_active=true);
 
+/**
+ * Creates a container.
+ */
+Entity * make_container(int x, int y,
+                        TCODColor symbol_color=TCODColor::brass,
+                        std::string name="Chest",
+                        int symbol='C',
+                        bool locked=false,
+                        unsigned int key_id=0);
+
+
 #endif /* ifndef ROGUE_20177_PREFABS_MISC_MAP_FEATURES */

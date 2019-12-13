@@ -49,34 +49,17 @@ class ItemEquipToggleAction : public Action
 
 };
 
-
-/*
-class DropItemAction : public Action
+class SelectContainerItemAction : public Action
 {
 
     public:
 
-        // Constructors
-        DropItemAction();
-        ~DropItemAction();
+        char item_letter;
+
+        SelectContainerItemAction(char item_letter);
 
         Outcome * _execute();
 
 };
-
-class UnequipItemAction : public Action
-{
-
-    public:
-
-        // Constructors
-        UnequipItemAction();
-        ~UnequipItemAction();
-
-        Outcome * _execute();
-
-};
-
-*/
 
 #endif /* ifndef ROGUE_20177_ACTION_ITEMS */

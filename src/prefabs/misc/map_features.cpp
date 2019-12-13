@@ -6,6 +6,7 @@
 #include "../../map/GameMap.hpp"
 
 #include "../../components/Interactive.hpp"
+#include "../../components/Container.hpp"
 
 Entity * make_door(int x, int y, bool is_open, bool locked, unsigned int key_id)
 {
@@ -73,3 +74,29 @@ Entity * make_terminal(int x, int y, TCODColor symbol_color, std::string termina
     
     return terminal;
 }
+
+
+Entity * make_container(int x, int y,
+                        TCODColor symbol_color,
+                        std::string name,
+                        int symbol,
+                        bool locked,
+                        unsigned int key_id)
+{
+
+    Entity * c = new Entity(
+        x, y, symbol,
+        symbol_color, name,
+        ITEM,
+        true, true, true);
+
+    c->tag = "container";
+
+    c->container = new Container();
+
+    // Add the interactive component to the c
+    c->interactive = new InteractiveContainer(locked, key_id);
+    c->interactive->owner = c;
+    return c;
+}
+

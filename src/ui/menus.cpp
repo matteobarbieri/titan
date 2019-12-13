@@ -15,12 +15,12 @@
 #include "../components/Equipment.hpp"
 #include "../components/Equippable.hpp"
 #include "../components/Reloadable.hpp"
+#include "../components/Container.hpp"
 
 
 #include "menus.hpp"
 
-void terminal_menu(
-    Entity * terminal)
+void terminal_menu(Entity * terminal)
 {
     // Extract width and height
     //int w = Consoles::singleton().menu->getWidth();
@@ -317,79 +317,49 @@ void item_submenu(Entity * player, Entity * item)
     
 }
 
-/*
+void container_menu(Entity * container)
+{
+    // Extract width and height
+    //int w = Consoles::singleton().menu->getWidth();
+    //int h = Consoles::singleton().menu->getHeight();
 
-###############################
-########### FIN QUI ###########
-###############################
+    // Draw frame
+    // Reset the color to white, just in case
+    Consoles::singleton().terminal->setDefaultForeground(TCODColor::white);
+    Consoles::singleton().terminal->printFrame(
+        0, 0,
+        TERMINAL_FRAME_WIDTH, TERMINAL_FRAME_HEIGHT,
+        true, TCOD_BKGND_NONE, container->name.c_str());
 
+    // TODO possibly move these in constants.h
+    int item_entry_x = 4;
+    int item_entry_y = 4;
 
+    //DEBUG("[CONTAINER MENU]");
 
+    for (int i=0; i<(int)container->container->items.size(); i++)
+    {
 
-def character_screen(player,
-                     character_screen_width, character_screen_height,
-                     screen_width, screen_height):
+        Entity * e = container->container->items[i];
 
-    # Create new console for showing character info
-    window = libtcod.console_new(
-        character_screen_width, character_screen_height)
+        //DEBUG("[CONTAINER MENU] Printing item entry" << e->name);
 
-    # Foreground color: white
-    libtcod.console_set_default_foreground(
-        window, libtcod.white)
+        // Set color
+        Consoles::singleton().terminal->setDefaultForeground(e->color());
 
-    # Header of the character info section
-    libtcod.console_print_rect_ex(
-        window, 0, 1, character_screen_width, character_screen_height,
-        libtcod.BKGND_NONE, libtcod.LEFT, 'Character Information')
+        // Then print item entry
+        Consoles::singleton().terminal->printf(
+                item_entry_x, item_entry_y,
+                "(%c)   %s", // Leave enough space for the item's symbol
+                e->item->item_letter, e->name.c_str());
 
-    # Character level
-    libtcod.console_print_rect_ex(
-        window, 0, 2, character_screen_width, character_screen_height,
-        libtcod.BKGND_NONE, libtcod.LEFT,
-        'Level: {0}'.format(player.level.current_level))
+        // Print the item's symbol separately
+        Consoles::singleton().terminal->putChar(item_entry_x+4, item_entry_y, e->symbol);
 
-    # Character experience
-    libtcod.console_print_rect_ex(
-        window, 0, 3, character_screen_width, character_screen_height,
-        libtcod.BKGND_NONE, libtcod.LEFT,
-        'Experience: {0}'.format(player.level.current_xp))
+        // Increment y coordinate of next item entry by one
+        item_entry_y++;
+    }
 
-    # Experience to next level
-    libtcod.console_print_rect_ex(
-        window, 0, 4, character_screen_width, character_screen_height,
-        libtcod.BKGND_NONE, libtcod.LEFT,
-        'Experience to Level: {0}'.format(
-            player.level.experience_to_next_level))
-
-    # Maximum HP
-    libtcod.console_print_rect_ex(
-        window, 0, 6, character_screen_width, character_screen_height,
-        libtcod.BKGND_NONE, libtcod.LEFT,
-        'Maximum HP: {0}'.format(player.fighter.max_hp))
-
-    # Attack value
-    libtcod.console_print_rect_ex(
-        window, 0, 7, character_screen_width, character_screen_height,
-        libtcod.BKGND_NONE, libtcod.LEFT,
-        'Attack: {0}'.format(player.fighter.power))
-
-    # Defense value
-    libtcod.console_print_rect_ex(
-        window, 0, 8, character_screen_width, character_screen_height,
-        libtcod.BKGND_NONE, libtcod.LEFT,
-        'Defense: {0}'.format(player.fighter.defense))
-
-    # Calculate character screen position w.r.t. the main screen
-    x = screen_width // 2 - character_screen_width // 2
-    y = screen_height // 2 - character_screen_height // 2
-
-    # Blit character console on root console
-    libtcod.console_blit(
-        window, 0, 0, character_screen_width, character_screen_height,
-        0, x, y, 1.0, 0.7)
+}
 
 
-def message_box(con, header, width, screen_width, screen_height):
-    menu(con, header, [], width, screen_width, screen_height)
-*/

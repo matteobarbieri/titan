@@ -177,4 +177,22 @@ class InteractiveTerminal : public Interactive
         static InteractiveTerminal * from_json(json j);
 };
 
+class InteractiveContainer : public Interactive
+{
+    public:
+
+        // Whether the terminal is active or not
+        bool locked;
+        unsigned int key_id;
+
+        InteractiveContainer(bool locked=false, unsigned int key_id=0);
+
+        // What happens when a player interacts with the container
+        virtual void interact(Entity *, GameMap *, GameState *);
+
+        json to_json();
+
+        static InteractiveContainer * from_json(json j);
+};
+
 #endif /* ifndef ROGUE_20177_INTERACTIVE */

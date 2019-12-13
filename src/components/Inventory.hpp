@@ -29,12 +29,31 @@ class Inventory
         std::vector<Entity *> items;
         std::vector<char> available_letters;
 
+        ///////////////////////////////
+        ////////// METHODS ////////////
+        ///////////////////////////////
+
         Inventory(int, bool=true);
         ~Inventory();
 
+        /**
+         * Pick up an item from the ground an put it in the inventory
+         */
         void pickup(Entity * item, GameMap * level);
+
+        /**
+         * Drop an item to the ground, removing it from the inventory
+         */
         void drop(Entity * item, GameMap * level, Entity * player);
 
+        /**
+         * Retrieven an item from a container
+         */
+        void retrieve_from_container(Entity * item, Entity *);
+
+        /**
+         * Proper cleanup function
+         */
         void remove_item(Entity * item);
 
         /**

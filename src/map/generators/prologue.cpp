@@ -19,6 +19,7 @@
 #include "../../components/Item.hpp"
 #include "../../components/Ai.hpp"
 #include "../../components/Usable.hpp"
+#include "../../components/Container.hpp"
 
 // Prefabs
 #include "../../prefabs/enemies.hpp"
@@ -98,8 +99,13 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
 
     // Add a dagger in the initial room
     level->add_entity(make_baton(6, 15));
-    level->add_entity(make_armor(7, 16));
     level->add_entity(make_pistol(8, 16));
+    //level->add_entity(make_armor(7, 16));
+    
+    Entity * c1 = make_container(7, 16);
+    c1->container->put(make_armor(-1, -1));
+
+    level->add_entity(c1);
     
     //auto test_f3 = [](Entity * player, GameMap * game_map, GameState * game_state)
     //{
