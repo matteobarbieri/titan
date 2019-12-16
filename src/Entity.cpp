@@ -49,6 +49,7 @@ Entity::Entity(int x, int y, int symbol,
         usable = nullptr;
         inventory = nullptr;
         interactive = nullptr;
+        container = nullptr;
 
         // If parameter id is default, initialize it with a progressive one
         if (id == 0)
