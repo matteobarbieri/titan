@@ -88,7 +88,7 @@ Entity * make_container(int x, int y,
         x, y, symbol,
         symbol_color, name,
         ITEM,
-        true, true, true);
+        true, false, true);
 
     c->tag = "container";
 
