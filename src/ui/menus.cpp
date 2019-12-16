@@ -278,7 +278,7 @@ void main_menu(TCODImage * background_image)
 
 }
 
-void item_submenu(Entity * player, Entity * item)
+void inventory_item_submenu(Entity * player, Entity * item)
 {
 
     int menu_y;
@@ -298,12 +298,47 @@ void item_submenu(Entity * player, Entity * item)
     //item_position = min(item_position, 20000)
     
     // TODO compute dinamically?
-    int submenu_width = 15;
     int submenu_height = 5;
 
     Consoles::singleton().submenu->clear();
 
     menu(Consoles::singleton().submenu, item->item->item_inventory_options(), " ",
+         ITEM_SUBMENU_WIDTH, 0, 0);
+
+    // Blit here
+    TCODConsole::blit(
+        Consoles::singleton().submenu, 0, 0,
+        ITEM_SUBMENU_WIDTH, submenu_height,
+        Consoles::singleton().main_window,
+        //TCODConsole::root,
+        //FRAME_WIDTH, menu_y);
+        FRAME_WIDTH, menu_y,
+        1.0, 0.4);
+    
+}
+
+void container_item_submenu(Entity * item)
+{
+
+    int menu_y;
+
+    menu_y = CONTAINER_ITEMS_Y;
+    
+    // TODO limit the height of the submenu
+    //item_position = min(item_position, 20000)
+    
+    // TODO compute dinamically?
+    int submenu_width = 15;
+    int submenu_height = 5;
+
+    Consoles::singleton().submenu->clear();
+
+    // TODO improve this?
+    std::vector<MenuOption> container_item_submenu_options;
+
+    container_item_submenu_options.push_back({'g', "Pickup"});
+
+    menu(Consoles::singleton().submenu, container_item_submenu_options, " ",
          submenu_width, 0, 0);
 
     // Blit here
@@ -311,8 +346,9 @@ void item_submenu(Entity * player, Entity * item)
         Consoles::singleton().submenu, 0, 0,
         submenu_width, submenu_height,
         Consoles::singleton().main_window,
+        //TCODConsole::root,
         //FRAME_WIDTH, menu_y);
-        FRAME_WIDTH, menu_y,
+        INVENTORY_FRAME_WIDTH, menu_y,
         1.0, 0.4);
     
 }
@@ -320,15 +356,15 @@ void item_submenu(Entity * player, Entity * item)
 void container_menu(Entity * container)
 {
     // Extract width and height
-    //int w = Consoles::singleton().menu->getWidth();
-    //int h = Consoles::singleton().menu->getHeight();
+    int w = Consoles::singleton().container_frame->getWidth();
+    int h = Consoles::singleton().container_frame->getHeight();
 
     // Draw frame
     // Reset the color to white, just in case
-    Consoles::singleton().terminal->setDefaultForeground(TCODColor::white);
-    Consoles::singleton().terminal->printFrame(
-        0, 0,
-        TERMINAL_FRAME_WIDTH, TERMINAL_FRAME_HEIGHT,
+    Consoles::singleton().container_frame->setDefaultForeground(TCODColor::white);
+    Consoles::singleton().container_frame->printFrame(
+        1, 1,
+        w-2, h-2,
         true, TCOD_BKGND_NONE, container->name.c_str());
 
     // TODO possibly move these in constants.h
@@ -345,16 +381,16 @@ void container_menu(Entity * container)
         //DEBUG("[CONTAINER MENU] Printing item entry" << e->name);
 
         // Set color
-        Consoles::singleton().terminal->setDefaultForeground(e->color());
+        Consoles::singleton().container_frame->setDefaultForeground(e->color());
 
         // Then print item entry
-        Consoles::singleton().terminal->printf(
+        Consoles::singleton().container_frame->printf(
                 item_entry_x, item_entry_y,
                 "(%c)   %s", // Leave enough space for the item's symbol
                 e->item->item_letter, e->name.c_str());
 
         // Print the item's symbol separately
-        Consoles::singleton().terminal->putChar(item_entry_x+4, item_entry_y, e->symbol);
+        Consoles::singleton().container_frame->putChar(item_entry_x+4, item_entry_y, e->symbol);
 
         // Increment y coordinate of next item entry by one
         item_entry_y++;

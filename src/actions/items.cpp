@@ -9,6 +9,7 @@
 #include "../components/Inventory.hpp"
 #include "../components/Equipment.hpp"
 #include "../components/Item.hpp"
+#include "../components/Container.hpp"
 
 //#include "../GameMessages.hpp"
 #include "../GameState.hpp"
@@ -269,7 +270,36 @@ SelectContainerItemAction::SelectContainerItemAction(char item_letter) :
 
 Outcome * SelectContainerItemAction::_execute()
 {
-    // TODO implement!
-    return nullptr;
+    Entity * aux;
+    bool found = false;
+
+    // First look in player's inventory
+    for (int i=0; i<(int)game_state->entity_interacted->container->items.size(); i++)
+    {
+        // shortcut to entity
+        aux = game_state->entity_interacted->container->items[i];
+
+        if (aux->item->item_letter == item_letter)
+        {
+            game_state->selected_inventory_item = aux;
+            found = true;
+            break;
+        }
+    }
+
+    // Then check in equipped items
+
+    if (found)
+    {
+        Outcome * outcome = new Outcome(
+            CONTAINER_ITEM_MENU, false, false);
+
+        return outcome;
+    }
+    else
+    {
+        return nullptr;
+    }
+
 }
 

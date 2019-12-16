@@ -315,6 +315,18 @@ Action * handle_container_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     return nullptr;
 }
 
+
+Action * handle_container_item_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
+{
+
+    if (key.vk == TCODK_ESCAPE)
+    {
+        return new GoToPhaseAction(CONTAINER_MENU);
+    }
+
+    return nullptr;
+}
+
 Action * handle_targeting_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 {
     char key_char = -1;
@@ -511,6 +523,13 @@ Action * handle_input(
         /////////////////////////////////////////
         case CONTAINER_MENU:
             return handle_container_menu_keys(key, mouse);
+            break;
+
+        /////////////////////////////////////////
+        ///////// CONTAINER ITEM MENU ///////////
+        /////////////////////////////////////////
+        case CONTAINER_ITEM_MENU:
+            return handle_container_item_menu_keys(key, mouse);
             break;
 
         /////////////////////////////////////////

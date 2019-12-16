@@ -33,6 +33,8 @@ void container_menu(Entity *);
 void inventory_menu(
     Entity * player, std::string header="Inventory");
 
-void item_submenu(Entity * player, Entity * item);
+void inventory_item_submenu(Entity * player, Entity * item);
+
+void container_item_submenu(Entity * item);
 
 #endif /* ifndef R20177_MENUS */

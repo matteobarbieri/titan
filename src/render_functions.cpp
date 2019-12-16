@@ -6,7 +6,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_image.h>
 
 #include "libtcod.hpp"
 
@@ -831,7 +830,13 @@ void render_all(
     // Inventory item submenu
     if (game_state->game_phase == INVENTORY_ITEM_MENU)
     {
-        item_submenu(player, game_state->selected_inventory_item);
+        inventory_item_submenu(player, game_state->selected_inventory_item);
+    }
+
+    // Container item submenu
+    if (game_state->game_phase == CONTAINER_ITEM_MENU)
+    {
+        container_item_submenu(game_state->selected_inventory_item);
     }
 
     /////////////////////////////////////////
@@ -880,18 +885,18 @@ void render_all(
     ///////// Render container menu /////////
     /////////////////////////////////////////
 
-    // Show terminal menu
-    if (game_state->game_phase == CONTAINER_MENU)
+    // Show menu for container
+    if (game_state->game_phase == CONTAINER_MENU || game_state->game_phase == CONTAINER_ITEM_MENU)
     {
         container_menu(game_state->entity_interacted);
         
         // Blit inventory frame on root console
         TCODConsole::blit(
-            Consoles::singleton().terminal,
+            Consoles::singleton().container_frame,
             0, 0,
-            TERMINAL_FRAME_WIDTH, TERMINAL_FRAME_HEIGHT,
+            CONTAINER_FRAME_WIDTH, CONTAINER_FRAME_HEIGHT,
             TCODConsole::root,
-            (SCREEN_WIDTH - TERMINAL_FRAME_WIDTH)/2, 4,
+            INVENTORY_FRAME_WIDTH + ITEM_SUBMENU_WIDTH, 0,
             1.0f, 1.0f);
     }
 
@@ -901,7 +906,9 @@ void render_all(
 
     // Show inventory menu
     if (game_state->game_phase == INVENTORY_MENU ||
-        game_state->game_phase == INVENTORY_ITEM_MENU)
+        game_state->game_phase == INVENTORY_ITEM_MENU ||
+        game_state->game_phase == CONTAINER_ITEM_MENU ||
+        game_state->game_phase == CONTAINER_MENU)
     {
         inventory_menu(player);
         

@@ -64,8 +64,21 @@
 
 #define MESSAGE_LOG_N_ROWS 5
 
+//////////////////////////////////////////
+///////////// INVENTORY /////////////////
+//////////////////////////////////////////
+#define INVENTORY_FRAME_WIDTH 31
+#define INVENTORY_FRAME_HEIGHT (SCREEN_HEIGHT - PANEL_HEIGHT)
 #define INVENTORY_ITEMS_Y 5
 #define EQUIPPED_ITEMS_Y 32
+#define ITEM_SUBMENU_WIDTH 15
+
+//////////////////////////////////////////
+///////////// CONTAINERS /////////////////
+//////////////////////////////////////////
+#define CONTAINER_FRAME_WIDTH 31
+#define CONTAINER_FRAME_HEIGHT (SCREEN_HEIGHT - PANEL_HEIGHT)
+#define CONTAINER_ITEMS_Y 8
 
 /*
 
