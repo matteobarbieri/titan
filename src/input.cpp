@@ -507,7 +507,7 @@ Action * handle_input(
             break;
 
         /////////////////////////////////////////
-        //////////// INVENTORY MENU /////////////
+        ///////////// TERMINAL MENU /////////////
         /////////////////////////////////////////
         case TERMINAL_MENU:
             return handle_terminal_menu_keys(key, mouse);
