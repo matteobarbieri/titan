@@ -18,20 +18,6 @@
 
 #include "input.hpp"
 
-/*
-def handle_main_menu(key):
-    key_char = chr(key.c)
-
-    if key_char == 'a':
-        return {'new_game': True}
-    elif key_char == 'b':
-        return {'load_game': True}
-    elif key_char == 'c' or  key.vk == libtcod.KEY_ESCAPE:
-        return {'exit': True}
-
-    return {}
-*/
-
 char handle_main_menu(TCOD_key_t key)
 {
     switch(key.c)
@@ -295,7 +281,7 @@ Action * handle_terminal_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     return nullptr;
 }
 
-Action * handle_container_keys(TCOD_key_t key, TCOD_mouse_t mouse)
+Action * handle_container_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 {
 
     char key_char = -1;
@@ -518,6 +504,13 @@ Action * handle_input(
         /////////////////////////////////////////
         case INVENTORY_MENU:
             return handle_inventory_menu_keys(key, mouse);
+            break;
+
+        /////////////////////////////////////////
+        //////////// CONTAINER MENU /////////////
+        /////////////////////////////////////////
+        case CONTAINER_MENU:
+            return handle_container_menu_keys(key, mouse);
             break;
 
         /////////////////////////////////////////
