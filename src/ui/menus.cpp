@@ -365,6 +365,14 @@ void container_menu(Entity * container)
     int item_entry_x = 4;
     int item_entry_y = 4;
 
+    if (container->container->items.size() == 0)
+    {
+        // Then print item entry
+        Consoles::singleton().container_frame->printf(
+            item_entry_x, item_entry_y,
+            "    ==== EMPTY ====");
+    }
+
     for (int i=0; i<(int)container->container->items.size(); i++)
     {
 
