@@ -24,6 +24,15 @@ class DropItemAction : public Action
 
 };
 
+class RetrieveAction : public Action
+{
+
+    public:
+
+        Outcome * _execute();
+
+};
+
 class PickupAction : public Action
 {
 

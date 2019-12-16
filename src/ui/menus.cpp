@@ -69,8 +69,7 @@ void terminal_menu(Entity * terminal)
 }
 
 
-void inventory_menu(
-    Entity * player, std::string header)
+void inventory_menu(Entity * player, std::string header)
 {
     // Extract width and height
     int w = Consoles::singleton().inventory_frame->getWidth();
@@ -98,11 +97,6 @@ void inventory_menu(
         if (!e->item->equipped)
         {
 
-            // Old python code
-            //inventory_frame.print(
-                //3, item_y, '({}) {}'.format(e.item_letter, e.name),
-                //fg=e.color)
-            
             // TODO Highlight item line if item is selected
             //Consoles::singleton().inventory_frame->setDefaultBackground(TCODColor::lightGrey);
             // Set the color first
@@ -371,10 +365,9 @@ void container_menu(Entity * container)
     int item_entry_x = 4;
     int item_entry_y = 4;
 
-    //DEBUG("[CONTAINER MENU]");
-
     for (int i=0; i<(int)container->container->items.size(); i++)
     {
+
 
         Entity * e = container->container->items[i];
 

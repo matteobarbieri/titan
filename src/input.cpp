@@ -319,6 +319,22 @@ Action * handle_container_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 Action * handle_container_item_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 {
 
+    char key_char = -1;
+
+    // Code to prevent double input
+    if (key.vk == TCODK_CHAR)
+    {
+        key_char = key.c;
+
+        if (key_char == 'g')
+        {
+            return new RetrieveAction();
+        }
+
+    }
+
+
+
     if (key.vk == TCODK_ESCAPE)
     {
         return new GoToPhaseAction(CONTAINER_MENU);

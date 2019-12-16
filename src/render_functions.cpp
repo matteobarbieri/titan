@@ -919,7 +919,6 @@ void render_all(
             FRAME_WIDTH, FRAME_HEIGHT,
             TCODConsole::root,
             0, 0);
-
     }
 
 /*

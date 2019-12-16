@@ -10,6 +10,7 @@ using json = nlohmann::json;
 // Forward declarations
 class Entity;
 class GameMap;
+class Container;
 
 class InventoryFullException : public std::exception
 {
@@ -40,6 +41,11 @@ class Inventory
          * Pick up an item from the ground an put it in the inventory
          */
         void pickup(Entity * item, GameMap * level);
+
+        /**
+         * Retrieve an item from a container
+         */
+        void retrieve(Entity * item, Container *);
 
         /**
          * Drop an item to the ground, removing it from the inventory

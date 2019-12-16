@@ -87,8 +87,6 @@ Outcome * SelectInventoryItemAction::_execute()
         // Check if the letter coincides and the item is not currently equipped
         //if (aux->item->item_letter == item_letter && !aux->item->equipped)
         
-        //DEBUG(aux->item->item_letter);
-
         if (aux->item->item_letter == item_letter)
         {
             game_state->selected_inventory_item = aux;

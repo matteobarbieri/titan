@@ -152,6 +152,40 @@ void Inventory::pickup(Entity * item, GameMap * level)
     level->remove_entity(item);
 }
 
+void Inventory::retrieve(Entity * item, Container * container)
+{
+    // If at full capacity, throw exception
+    if ((int)items.size() == _capacity)
+    {
+        throw InventoryFullException();
+    }
+
+    // Set item's coordinates to invalid values, since they do not make any
+    // sense while the item is in player's inventory
+    item->x = -1;
+    item->y = -1;
+
+    // Remove entity from the container's list of entities
+    container->get(item);
+
+    // Actually add the item to the inventory, Associating it with the
+    // first available letter
+
+    // "Manual" pop(0)
+    char item_letter = available_letters[0];
+
+    available_letters.erase(available_letters.begin());
+
+    // Mark item as unequipped
+    item->item->equipped = false;
+
+    // Assign item letter to item component
+    item->item->item_letter = item_letter;
+
+    // Add to the vector of items
+    items.push_back(item);
+}
+
 json Inventory::to_json()
 {
     json j;

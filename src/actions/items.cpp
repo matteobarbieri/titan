@@ -259,6 +259,49 @@ Outcome * PickupAction::_execute()
 
 }
 
+Outcome * RetrieveAction::_execute()
+{
+
+    // Retrieve item from a container
+    Entity * item = game_state->selected_inventory_item;
+
+    GamePhase next_phase = CONTAINER_MENU;
+
+    try
+    {
+        player->inventory->retrieve(item, game_state->entity_interacted->container);
+        
+        // Build message
+        std::ostringstream stringStream;
+        stringStream << "You retrieve a " << item->name << ".";
+
+        // Add message to message log
+        MessageLog::singleton().add_message(
+            {stringStream.str(), TCODColor::white});
+
+    }
+    catch (const InventoryFullException& e) 
+    {
+        // Build message
+        std::ostringstream stringStream;
+        stringStream << "Unable to retrieve up " << item->name << ": inventory full.";
+
+        // Add message to message log
+        MessageLog::singleton().add_message(
+            {stringStream.str(), TCODColor::yellow});
+
+        next_phase = PLAYERS_TURN;
+    }
+     
+    // Return outcome
+    Outcome * outcome = new Outcome(
+        next_phase,
+        true,
+        true);
+
+    return outcome;
+}
+
 /////////////////////////////////
 ///// SELECT CONTAINER ITEM /////
 /////////////////////////////////
