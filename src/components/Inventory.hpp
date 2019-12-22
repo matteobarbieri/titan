@@ -50,7 +50,7 @@ class Inventory
         /**
          * Drop an item to the ground, removing it from the inventory
          */
-        void drop(Entity * item, GameMap * level, Entity * player);
+        void drop(Entity * item, GameMap * level);
 
         /**
          * Store an item inside a container

@@ -83,7 +83,7 @@ Outcome * DropItemAction::_execute()
     }
 
     player->inventory->drop(
-        game_state->selected_inventory_item, game_map, player);
+        game_state->selected_inventory_item, game_map);
 
     //next_phase = ENEMY_TURN;
     next_phase = INVENTORY_MENU;

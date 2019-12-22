@@ -50,12 +50,12 @@ int Inventory::get_item_position_in_list(Entity * item)
 
 }
 
-void Inventory::drop(Entity * item, GameMap * level, Entity * player)
+void Inventory::drop(Entity * item, GameMap * level)
 {
 
     // TODO obtain coordinates by map (get closest free tile
-    item->x = player->x;
-    item->y = player->y;
+    item->x = owner->x;
+    item->y = owner->y;
 
     // Add item letter back to the pool of available letters
     available_letters.push_back(item->item->item_letter);
