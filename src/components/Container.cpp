@@ -7,24 +7,8 @@
 
 #include "Item.hpp"
 
-Container::Container(bool init_available_letters)
+Container::Container()
 {
-
-        // The list of all letters available for an item
-        if (init_available_letters)
-        {
-            // Skip the 'i'
-            for (int i='a'; i<'h'; i++)
-            {
-                available_letters.push_back(i);
-            }
-            
-            for (int i='j'; i<='z'; i++)
-            {
-                available_letters.push_back(i);
-            }
-        }
-
 }
 
 /*
@@ -53,15 +37,9 @@ Container::Container(bool init_available_letters)
 void Container::get(Entity * item)
 {
 
-    // Add item letter back to the pool of available letters
-    available_letters.push_back(item->item->item_letter);
-
     // Reset item letter assigned to item
     item->item->item_letter = -1;
 
-    // Sort available item letters
-    std::sort(available_letters.begin(), available_letters.end());
-    
     // Mark item as unequipped
     item->item->equipped = false;
 
@@ -86,20 +64,10 @@ void Container::put(Entity * item)
     item->x = -1;
     item->y = -1;
 
-    // Actually add the item to the inventory, Associating it with the
-    // first available letter
-
-    // "Manual" pop(0)
-    char item_letter = available_letters[0];
-    available_letters.erase(available_letters.begin());
+    // Actually add the item to the inventory
 
     // Mark item as unequipped
     item->item->equipped = false;
-
-    // Assign item letter to item component
-    item->item->item_letter = item_letter;
-
-    //DEBUG("Assigned letter " << item_letter);
 
     // Add to the vector of items
     items.push_back(item);
@@ -119,16 +87,6 @@ json Container::to_json()
 
     j["items"] = j_items;
 
-    // Available letters
-    json j_available_letters;
-
-    for (int i=0; i<(int)available_letters.size(); i++)
-    {
-        j_available_letters.push_back(available_letters[i]);
-    }
-
-    j["available_letters"] = j_available_letters;
-
     return j;
 }
 
@@ -137,7 +95,7 @@ Container * Container::from_json(json j)
 
     // Initialize inventory component WITHOUT also initializing the list of
     // available letters (must be restored from json object).
-    Container * c = new Container(false);
+    Container * c = new Container();
 
     // Items
     for (int i=0; i<(int)j["items"].size(); i++)
@@ -145,11 +103,5 @@ Container * Container::from_json(json j)
         c->items.push_back(Entity::from_json(j["items"][i]));
     }
     
-    // Items letters
-    for (int i=0; i<(int)j["available_letters"].size(); i++)
-    {
-        c->available_letters.push_back((int)j["available_letters"][i]);
-    }
-
     return c;
 }

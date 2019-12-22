@@ -9,6 +9,7 @@
 
 #include "../components/Inventory.hpp"
 #include "../components/Item.hpp"
+#include "../components/Container.hpp"
 
 #include "../GameMessages.hpp"
 
@@ -340,9 +341,17 @@ void InteractiveContainer::interact(Entity * player, GameMap * game_map, GameSta
 
     if (!locked)
     {
-        // Set current terminal as entity with which to interact
+        // Set the container as entity with which to interact
         game_state->entity_interacted = owner;
         game_state->game_phase = CONTAINER_MENU;
+
+        // Assign letters to items inside the container based on player's
+        // current inventory.
+        for (int i=0; i<(int)owner->container->items.size(); i++)
+        {
+            owner->container->items[i]->item->item_letter =
+                player->inventory->available_letters[i];
+        }
 
         MessageLog::singleton().add_message(
             {"[PH] Interacting with container", TCODColor::lightGreen});

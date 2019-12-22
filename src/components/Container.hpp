@@ -26,13 +26,12 @@ class Container
         Entity * owner;
 
         std::vector<Entity *> items;
-        std::vector<char> available_letters;
 
         /////////////////////////////
         ////////// METHODS //////////
         /////////////////////////////
         
-        Container(bool=true);
+        Container();
 
         /**
          * Retrieve an item from the container
