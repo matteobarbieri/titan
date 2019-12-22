@@ -75,6 +75,20 @@ void Inventory::drop(Entity * item, GameMap * level, Entity * player)
     level->add_entity(item);
 }
 
+bool Inventory::is_in_inventory(Entity * item)
+{
+
+    for (int i=0; i<(int)items.size(); i++)
+    {
+        if (items[i] == item)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void Inventory::remove_item(Entity * item)
 {
     // Solution taken from

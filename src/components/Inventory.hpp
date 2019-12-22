@@ -58,6 +58,11 @@ class Inventory
         void retrieve_from_container(Entity * item, Entity *);
 
         /**
+         * Is in inventory
+         */
+        bool is_in_inventory(Entity * item);
+
+        /**
          * Proper cleanup function
          */
         void remove_item(Entity * item);

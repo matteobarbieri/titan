@@ -16,6 +16,7 @@
 #include "skills/Skill.hpp"
 
 #include "components/Fighter.hpp"
+#include "components/Inventory.hpp"
 #include "components/Usable.hpp"
 
 #include "map/GameMap.hpp"
@@ -836,7 +837,9 @@ void render_all(
     // Container item submenu
     if (game_state->game_phase == CONTAINER_ITEM_MENU)
     {
-        container_item_submenu(game_state->selected_inventory_item);
+        container_item_submenu(
+            game_state->selected_inventory_item,
+            !player->inventory->is_in_inventory(game_state->selected_inventory_item));
     }
 
     /////////////////////////////////////////

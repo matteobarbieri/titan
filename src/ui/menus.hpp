@@ -35,6 +35,6 @@ void inventory_menu(
 
 void inventory_item_submenu(Entity * player, Entity * item);
 
-void container_item_submenu(Entity * item);
+void container_item_submenu(Entity * item, bool=true);
 
 #endif /* ifndef R20177_MENUS */

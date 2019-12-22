@@ -336,6 +336,15 @@ InteractiveContainer::InteractiveContainer(bool locked, unsigned int key_id) :
 {
 }
 
+void InteractiveContainer::refresh_items_letters(Inventory * inventory)
+{
+    for (int i=0; i<(int)owner->container->items.size(); i++)
+    {
+        owner->container->items[i]->item->item_letter =
+            inventory->available_letters[i];
+    }
+}
+
 void InteractiveContainer::interact(Entity * player, GameMap * game_map, GameState * game_state)
 {
 
@@ -347,11 +356,7 @@ void InteractiveContainer::interact(Entity * player, GameMap * game_map, GameSta
 
         // Assign letters to items inside the container based on player's
         // current inventory.
-        for (int i=0; i<(int)owner->container->items.size(); i++)
-        {
-            owner->container->items[i]->item->item_letter =
-                player->inventory->available_letters[i];
-        }
+        refresh_items_letters(player->inventory);
 
         MessageLog::singleton().add_message(
             {"[PH] Interacting with container", TCODColor::lightGreen});

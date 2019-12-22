@@ -13,6 +13,7 @@ using json = nlohmann::json;
 //struct MenuOption;
 
 class Entity;
+class Inventory;
 
 class GameMap;
 class GameState;
@@ -179,6 +180,7 @@ class InteractiveTerminal : public Interactive
 
 class InteractiveContainer : public Interactive
 {
+
     public:
 
         // Whether the terminal is active or not
@@ -189,6 +191,10 @@ class InteractiveContainer : public Interactive
 
         // What happens when a player interacts with the container
         virtual void interact(Entity *, GameMap *, GameState *);
+
+        // Updates current available letters based on the inventory of the
+        // player currently interacting with the container.
+        void refresh_items_letters(Inventory *);
 
         json to_json();
 

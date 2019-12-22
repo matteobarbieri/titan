@@ -311,7 +311,7 @@ void inventory_item_submenu(Entity * player, Entity * item)
     
 }
 
-void container_item_submenu(Entity * item)
+void container_item_submenu(Entity * item, bool in_container)
 {
 
     int menu_y;
@@ -330,7 +330,14 @@ void container_item_submenu(Entity * item)
     // TODO improve this?
     std::vector<MenuOption> container_item_submenu_options;
 
-    container_item_submenu_options.push_back({'g', "Pickup"});
+    if (in_container)
+    {
+        container_item_submenu_options.push_back({'g', "Retrieve"});
+    }
+    else
+    {
+        container_item_submenu_options.push_back({'g', "Store"});
+    }
 
     menu(Consoles::singleton().submenu, container_item_submenu_options, " ",
          submenu_width, 0, 0);

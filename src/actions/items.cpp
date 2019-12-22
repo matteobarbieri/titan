@@ -316,7 +316,7 @@ Outcome * SelectContainerItemAction::_execute()
     Entity * aux;
     bool found = false;
 
-    // First look in player's inventory
+    // First look in the container's list of stored items
     for (int i=0; i<(int)game_state->entity_interacted->container->items.size(); i++)
     {
         // shortcut to entity
@@ -330,7 +330,22 @@ Outcome * SelectContainerItemAction::_execute()
         }
     }
 
-    // Then check in equipped items
+    // Then check in player's inventory
+    for (int i=0; i<(int)player->inventory->items.size(); i++)
+    {
+        // shortcut to entity
+        aux = player->inventory->items[i];
+
+        if (aux->item->item_letter == item_letter)
+        {
+            game_state->selected_inventory_item = aux;
+            found = true;
+            break;
+        }
+    }
+
+    // TODO maybe also check in equipped items?
+
 
     if (found)
     {
