@@ -9,6 +9,7 @@ using json = nlohmann::json;
 
 // Forward declarations
 class Entity;
+class Inventory;
 //class GameMap;
 
 class Container
@@ -47,6 +48,9 @@ class Container
          * Return the position of the item in the inventory's items list
          */
         //int get_item_position_in_list(Entity * item);
+        //
+        
+        void refresh_items_letters(Inventory *);
 
         /**
          * Creates a json representation of the component

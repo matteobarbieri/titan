@@ -6,6 +6,7 @@
 #include "../map/GameMap.hpp"
 
 #include "Item.hpp"
+#include "Inventory.hpp"
 
 Container::Container()
 {
@@ -36,10 +37,6 @@ Container::Container()
 
 void Container::get(Entity * item)
 {
-
-    // Reset item letter assigned to item
-    item->item->item_letter = -1;
-
     // Mark item as unequipped
     item->item->equipped = false;
 
@@ -71,6 +68,15 @@ void Container::put(Entity * item)
 
     // Add to the vector of items
     items.push_back(item);
+}
+
+void Container::refresh_items_letters(Inventory * inventory)
+{
+    for (int i=0; i<(int)items.size(); i++)
+    {
+        items[i]->item->item_letter =
+            inventory->available_letters[i];
+    }
 }
 
 json Container::to_json()

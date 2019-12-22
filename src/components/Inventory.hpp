@@ -53,9 +53,9 @@ class Inventory
         void drop(Entity * item, GameMap * level, Entity * player);
 
         /**
-         * Retrieven an item from a container
+         * Store an item inside a container
          */
-        void retrieve_from_container(Entity * item, Entity *);
+        void store(Entity * item, Container * container);
 
         /**
          * Is in inventory

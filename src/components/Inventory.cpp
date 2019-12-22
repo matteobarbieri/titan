@@ -75,6 +75,30 @@ void Inventory::drop(Entity * item, GameMap * level, Entity * player)
     level->add_entity(item);
 }
 
+void Inventory::store(Entity * item, Container * container)
+{
+
+    // Add item letter back to the pool of available letters
+    available_letters.push_back(item->item->item_letter);
+
+    // Sort available item letters
+    std::sort(available_letters.begin(), available_letters.end());
+    
+    // Reset item letter assigned to item
+    item->item->item_letter = -1;
+
+    // Mark item as unequipped
+    item->item->equipped = false;
+
+    // Add to the vector of items
+    remove_item(item);
+
+    // Add item to the list of item inside the container
+    container->put(item);
+
+    container->refresh_items_letters(this);
+}
+
 bool Inventory::is_in_inventory(Entity * item)
 {
 
@@ -96,39 +120,6 @@ void Inventory::remove_item(Entity * item)
     items.erase(
         std::remove(items.begin(), items.end(), item),
         items.end());
-}
-
-void Inventory::retrieve_from_container(Entity * item, Entity * container)
-{
-    // If at full capacity, throw exception
-    if ((int)items.size() == _capacity)
-    {
-        throw InventoryFullException();
-    }
-
-    // Remove entity from the level's list of entities
-    container->container->get(item);
-
-    // Set item's coordinates to invalid values, since they do not make any
-    // sense while the item is in player's inventory
-    item->x = -1;
-    item->y = -1;
-
-    // Actually add the item to the inventory, Associating it with the
-    // first available letter
-
-    // "Manual" pop(0)
-    char item_letter = available_letters[0];
-    available_letters.erase(available_letters.begin());
-
-    // Mark item as unequipped
-    item->item->equipped = false;
-
-    // Assign item letter to item component
-    item->item->item_letter = item_letter;
-
-    // Add to the vector of items
-    items.push_back(item);
 }
 
 void Inventory::pickup(Entity * item, GameMap * level)
@@ -182,19 +173,18 @@ void Inventory::retrieve(Entity * item, Container * container)
     // Remove entity from the container's list of entities
     container->get(item);
 
-    // Actually add the item to the inventory, Associating it with the
-    // first available letter
+    // Actually add the item to the inventory, keeping the same item letter
+    // which it had while in the container (which was guaranteed to be an
+    // available one).
 
-    // "Manual" pop(0)
-    char item_letter = available_letters[0];
+    char item_letter = item->item->item_letter;
 
-    available_letters.erase(available_letters.begin());
+    available_letters.erase(
+        std::remove(available_letters.begin(), available_letters.end(), item_letter),
+        available_letters.end());
 
     // Mark item as unequipped
     item->item->equipped = false;
-
-    // Assign item letter to item component
-    item->item->item_letter = item_letter;
 
     // Add to the vector of items
     items.push_back(item);

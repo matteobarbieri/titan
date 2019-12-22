@@ -328,7 +328,7 @@ Action * handle_container_item_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 
         if (key_char == 'g')
         {
-            return new RetrieveAction();
+            return new TransferItemAction();
         }
 
     }

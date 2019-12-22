@@ -93,6 +93,7 @@ Entity * make_container(int x, int y,
     c->tag = "container";
 
     c->container = new Container();
+    c->container->owner = c;
 
     // Add the interactive component to the c
     c->interactive = new InteractiveContainer(locked, key_id);

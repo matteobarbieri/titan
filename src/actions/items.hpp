@@ -24,12 +24,18 @@ class DropItemAction : public Action
 
 };
 
-class RetrieveAction : public Action
+// Retrieve an item from a container
+class TransferItemAction : public Action
 {
 
     public:
 
+        // The general method called, which will turn up either being a "store"
+        // or "retrieve" based on where the item currently is.
         Outcome * _execute();
+
+        Outcome * _execute_retrieve();
+        Outcome * _execute_store();
 
 };
 

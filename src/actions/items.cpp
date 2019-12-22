@@ -259,7 +259,23 @@ Outcome * PickupAction::_execute()
 
 }
 
-Outcome * RetrieveAction::_execute()
+Outcome * TransferItemAction::_execute()
+{
+
+    // Retrieve item from a container
+    Entity * item = game_state->selected_inventory_item;
+
+    if (player->inventory->is_in_inventory(item))
+    {
+        return _execute_store();
+    }
+    else
+    {
+        return _execute_retrieve();
+    }
+}
+
+Outcome * TransferItemAction::_execute_retrieve()
 {
 
     // Retrieve item from a container
@@ -284,7 +300,51 @@ Outcome * RetrieveAction::_execute()
     {
         // Build message
         std::ostringstream stringStream;
-        stringStream << "Unable to retrieve up " << item->name << ": inventory full.";
+        stringStream << "Unable to retrieve " << item->name << ": inventory full.";
+
+        // Add message to message log
+        MessageLog::singleton().add_message(
+            {stringStream.str(), TCODColor::yellow});
+
+        next_phase = CONTAINER_MENU;
+    }
+     
+    // Return outcome
+    Outcome * outcome = new Outcome(
+        next_phase,
+        true,
+        true);
+
+    return outcome;
+}
+
+Outcome * TransferItemAction::_execute_store()
+{
+
+    // Retrieve item from a container
+    Entity * item = game_state->selected_inventory_item;
+
+    GamePhase next_phase = CONTAINER_MENU;
+
+    try
+    {
+        player->inventory->store(item, game_state->entity_interacted->container);
+        
+        // Build message
+        std::ostringstream stringStream;
+        stringStream << "You store a " << item->name << ".";
+
+        // Add message to message log
+        MessageLog::singleton().add_message(
+            {stringStream.str(), TCODColor::white});
+
+    }
+    // TODO change this in case containers have a limited capacity
+    catch (const InventoryFullException& e) 
+    {
+        // Build message
+        std::ostringstream stringStream;
+        stringStream << "Unable to store " << item->name << ": inventory full.";
 
         // Add message to message log
         MessageLog::singleton().add_message(

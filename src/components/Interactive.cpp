@@ -338,11 +338,7 @@ InteractiveContainer::InteractiveContainer(bool locked, unsigned int key_id) :
 
 void InteractiveContainer::refresh_items_letters(Inventory * inventory)
 {
-    for (int i=0; i<(int)owner->container->items.size(); i++)
-    {
-        owner->container->items[i]->item->item_letter =
-            inventory->available_letters[i];
-    }
+    owner->container->refresh_items_letters(inventory);
 }
 
 void InteractiveContainer::interact(Entity * player, GameMap * game_map, GameState * game_state)
