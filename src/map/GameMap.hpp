@@ -252,6 +252,11 @@ class GameMap
         void make_wall(int x, int y);
 
         /**
+         * Turn a single tile to partial cover
+         */
+        void make_cover(int x, int y);
+
+        /**
          * Turn a single tile to a window, that is an impassable cell which
          * however allows to see through.
          */

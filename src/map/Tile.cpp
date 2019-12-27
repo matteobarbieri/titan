@@ -131,6 +131,9 @@ Tile * Tile::from_json(json j)
     if (j["subclass"].get<std::string>() == "Window")
         return Window::from_json(j);
 
+    if (j["subclass"].get<std::string>() == "Cover")
+        return Cover::from_json(j);
+
     std::cout << "This should not happend..." << std::endl;
 
     return nullptr;
@@ -164,6 +167,44 @@ Window * Window::from_json(json j)
 {
 
     Window * window_tile = new Window(
+        json_to_tcodcolor(j["_bg_color"]), 
+        json_to_tcodcolor(j["_fg_color"]), 
+        j["_fg_symbol"]);
+
+    // Set the "explored" status
+    window_tile->_explored = j["_explored"];
+
+    return window_tile;
+}
+
+/////////////////////////////////
+//////////// WINDOW /////////////
+/////////////////////////////////
+
+Cover::Cover(TCODColor bg_color, TCODColor fg_color, int fg_symbol, int cover_level) : 
+    Tile(true, false) // blocked, !block_sight
+{
+
+    _bg_color = bg_color;
+    _fg_color = fg_color;
+
+    _fg_symbol = fg_symbol;
+    this->cover_level = cover_level;
+}
+
+json Cover::to_json()
+{
+    json j = Tile::to_json();
+
+    j["subclass"] = "Cover";
+
+    return j;
+}
+
+Cover * Cover::from_json(json j)
+{
+
+    Cover * window_tile = new Cover(
         json_to_tcodcolor(j["_bg_color"]), 
         json_to_tcodcolor(j["_fg_color"]), 
         j["_fg_symbol"]);

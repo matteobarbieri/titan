@@ -120,6 +120,25 @@ class Window : public Tile
 };
 
 /**
+ * A block representing traversable terrain
+ */
+class Cover : public Tile
+{
+
+    public:
+
+        // Symbol is double tilde
+        Cover(TCODColor bg_color = TCODColor(20, 20, 20),
+              TCODColor fg_color = TCODColor(65, 65, 65),
+              int fg_symbol=247, int cover_level=20);
+
+        json to_json() override;
+
+        static Cover * from_json(json);
+
+};
+
+/**
  * A block of wall
  */
 class Wall : public Tile

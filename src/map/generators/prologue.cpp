@@ -329,9 +329,10 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->make_wall(46, 53);
     level->make_wall(47, 53);
     
-
     // TODO Add partial cover
-
+    level->make_cover(42, 50);
+    level->make_cover(43, 50);
+    
     // Room with special monster (which will require the use of skills)
     level->make_floor(44, 69);
     level->make_floor(45, 69);
