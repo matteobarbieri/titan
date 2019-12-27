@@ -265,14 +265,14 @@ void GameMap::initialize_fov_map()
     for (int i=0; i<(int)_entities.size(); i++)
     {
 
-        // Set cell as blocking sight
-        if (_entities[i]->blocks_sight())
-        {
-            int x =_entities[i]->x;
-            int y =_entities[i]->y;
+        int x =_entities[i]->x;
+        int y =_entities[i]->y;
 
-            fov_map->setProperties(x, y, false, fov_map->isWalkable(x, y));
-        }
+        bool blocks = !fov_map->isWalkable(x, y) || _entities[i]->blocks();
+        bool blocks_sight = !fov_map->isTransparent(x, y) || _entities[i]->blocks_sight();
+
+        fov_map->setProperties(x, y, !blocks_sight, !blocks);
+
     }
 
     // Copy properties for auxiliary fov map
