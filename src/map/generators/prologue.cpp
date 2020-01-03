@@ -20,6 +20,10 @@
 #include "../../components/Ai.hpp"
 #include "../../components/Usable.hpp"
 #include "../../components/Container.hpp"
+#include "../../components/Fighter.hpp"
+#include "../../components/Equipment.hpp"
+
+#include "../../EquipmentSlots.hpp"
 
 // Prefabs
 #include "../../prefabs/enemies.hpp"
@@ -30,6 +34,8 @@
 #include "../../prefabs/armor.hpp"
 
 namespace prologue {
+
+Entity * make_butcher(int x, int y, MonsterAi * ai_component);
 
 //GameMap generate_dungeon_level(width, height, min_room_length, max_room_length)
 GameMap * generate_map(int width, int height, Overseer ** overseer)
@@ -395,6 +401,7 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_part(new Room(Rect(9, 64, 29, 83), Direction::FourD()));
     
     // TODO add boss and its mechanics
+    level->add_entity(make_butcher(19, 74, new SeekerAi()));
     
     // Corridor from boss room to escape pods room
     level->add_part(new Corridor(Rect(31, 72, 39, 75), Direction::FourD(), false));
@@ -509,5 +516,35 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
 
     return level;
 }
+
+Entity * make_butcher(int x, int y, MonsterAi * ai_component)
+{
+    Entity * butcher = new Entity(
+        x, y, 'B',  TCODColor::lightYellow,
+        "The Butcher", ACTOR, true);
+
+    // Fighter
+    Fighter * fighter_component = new Fighter(70, 70, 60, 0);
+    butcher->fighter = fighter_component;
+    fighter_component->owner = butcher;
+
+    // AI
+    // Create the AI for the monster if it is not passed
+    if (ai_component == nullptr)
+    {
+        ai_component = new ImmobileAi();
+    }
+    butcher->ai = ai_component;
+    ai_component->owner = butcher;
+
+    // Equipment component
+    butcher->equipment = new Equipment();
+    butcher->equipment->owner = butcher;
+
+    butcher->equipment->slots[EquipmentSlot::MAIN_HAND] = make_baton();
+
+    return butcher;
+}
+
 
 } // namespace
