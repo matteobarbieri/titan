@@ -75,6 +75,27 @@ Entity * make_terminal(int x, int y, TCODColor symbol_color, std::string termina
     return terminal;
 }
 
+Entity * make_switch(int x, int y, TCODColor symbol_color, std::string switch_name, int symbol, bool enabled)
+{
+
+    Entity * the_switch = new Entity(
+        x, y, symbol,
+        symbol_color, switch_name,
+        STAIRS,
+        true, false, true);
+
+    the_switch->tag = "switch";
+
+    // Add the interactive component to the switch
+    InteractiveSwitch * interactive_component = new InteractiveSwitch(enabled);
+
+    the_switch->interactive = interactive_component;
+
+    the_switch->interactive->owner = the_switch;
+    
+    return the_switch;
+}
+
 
 Entity * make_container(int x, int y,
                         TCODColor symbol_color,

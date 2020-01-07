@@ -150,7 +150,8 @@ Entity * GameMap::get_inspectable_entity_at(int x, int y)
 {
     for (int i=0; i<(int)_entities.size(); i++)
     {
-        if (_entities[i]->x == x && _entities[i]->y == y) // check position
+        if (_entities[i]->x == x && _entities[i]->y == y // check position
+            && _entities[i]->render_order() != NONE) // check that it is a physical entity
             return _entities[i];
     }
 

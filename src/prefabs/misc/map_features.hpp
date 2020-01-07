@@ -48,5 +48,14 @@ Entity * make_container(int x, int y,
                         bool locked=false,
                         unsigned int key_id=0);
 
+/**
+ * Creates a container.
+ */
+Entity * make_switch(int x, int y,
+                     TCODColor symbol_color=TCODColor::brass,
+                     std::string name="Switch",
+                     int symbol='S',
+                     bool enabled=true);
+
 
 #endif /* ifndef ROGUE_20177_PREFABS_MISC_MAP_FEATURES */

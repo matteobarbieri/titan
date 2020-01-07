@@ -73,6 +73,9 @@ class Entity
         // A tag used to identify entity type
         std::string tag;
 
+        // Unique id
+        unsigned long int group_id;
+
         // Components
         Fighter * fighter;
         MonsterAi * ai;
@@ -99,7 +102,8 @@ class Entity
                RenderOrder render_order=CORPSE,
                bool blocks=false, bool blocks_sight=false,
                bool _fixed=false,
-               unsigned long int id=0);
+               unsigned long int id=0,
+               unsigned long int group_id=0);
 
         ~Entity();
 

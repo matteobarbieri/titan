@@ -8,6 +8,8 @@
 #include "../../components/Interactive.hpp"
 #include "../../GameMessages.hpp"
 
+#include "../../buffs/BuffStun.hpp"
+
 void unlock_doors(Entity * player, GameMap * game_map, GameState * game_state, unsigned int unlock_doors_id)
 {
     if (unlock_doors_id != 0)
@@ -51,7 +53,63 @@ Effect * Effect::from_json(json j)
         return AddLogMessageEffect::from_json(j);
     }
 
+    if (j["subclass"] == "StunEnemyOnTrapEffect")
+    {
+        return StunEnemyOnTrapEffect::from_json(j);
+    }
+
     return nullptr;
+}
+
+//////////////////////////////////
+////// STUN ENEMY ON TRAP  ///////
+//////////////////////////////////
+
+StunEnemyOnTrapEffect::StunEnemyOnTrapEffect(unsigned int group_id, int stun_duration) :
+    group_id(group_id), stun_duration(stun_duration)
+{
+}
+
+void StunEnemyOnTrapEffect::apply(Entity * player, GameMap * game_map, GameState * game_state)
+{
+
+    for (int i=0; i<(int)game_map->entities().size(); i++)
+    {
+        Entity * aa = game_map->entities()[i];
+        if (aa->group_id == group_id)
+        {
+            Entity * target = game_map->get_inspectable_entity_at(aa->x, aa->y);
+            
+            if (target != nullptr)
+            {
+                DEBUG("Applying stun to " << target->name);
+                // Apply debuff to target
+                target->apply_buff(new BuffStun(target, stun_duration));
+            }
+        }
+    }
+
+}
+
+json StunEnemyOnTrapEffect::to_json()
+{
+    json j;
+
+    j["subclass"] = "StunEnemyOnTrapEffect";
+
+    j["group_id"] = group_id;
+    j["stun_duration"] = stun_duration;
+
+    return j;
+}
+
+StunEnemyOnTrapEffect * StunEnemyOnTrapEffect::from_json(json j)
+{
+    StunEnemyOnTrapEffect * seote = new StunEnemyOnTrapEffect(
+        j["stun_duration"],
+        j["group_id"]);
+
+    return seote;
 }
 
 //////////////////////////////////

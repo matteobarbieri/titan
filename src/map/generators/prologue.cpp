@@ -81,6 +81,25 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->make_floor(12, 16);
     level->add_entity(make_door(12, 16, false, true, 2));
 
+    // Add paralyzing trap
+    //level->make_floor(11, 16);
+
+    Entity * test_trap = new Entity(11, 16, 247,
+           TCODColor::brass, "",
+           NONE,
+           false, false,
+           true,
+           0, 1);
+
+    level->change_tile_symbol(11, 16, 'X');
+
+    level->add_entity(test_trap);
+
+    Entity * trap_switch = make_switch(10, 15);
+    ((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(new StunEnemyOnTrapEffect(1, 3));
+
+    level->add_entity(trap_switch);
+
     // Add panel (Cell 02)
     level->make_floor(12, 17);
     level->add_entity(make_text_panel(12, 17, Direction::EE, "Cell 02"));
@@ -89,6 +108,14 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     // Add terminal
     Entity * terminal = make_terminal(6, 14);
     InteractiveTerminal * t1_interactive = (InteractiveTerminal *)terminal->interactive;
+    
+    TerminalFunction * tf3 = new TerminalFunction("Unlock cell doors", 'a');
+    tf3->effects.push_back(new UnlockDoorsEffect(3));
+    tf3->effects.push_back(new AddLogMessageEffect(
+        "Unlocking doors...", TCODColor::turquoise));
+    
+    t1_interactive->terminal_functions.push_back(tf3);
+    level->add_entity(terminal);
     
     // TODO remove
     level->add_entity(make_security_droid(7, 15));
@@ -103,7 +130,6 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
 
     level->add_entity(seeking_droid);
 
-    // Add a dagger in the initial room
     level->add_entity(make_baton(6, 15));
     level->add_entity(make_pistol(8, 16));
     //level->add_entity(make_armor(7, 16));
@@ -112,22 +138,6 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     c1->container->put(make_armor(-1, -1));
 
     level->add_entity(c1);
-    
-    //auto test_f3 = [](Entity * player, GameMap * game_map, GameState * game_state)
-    //{
-        //unlock_doors(player, game_map, game_state, 3);
-        //MessageLog::singleton().add_message({"Unlocking doors...", TCODColor::turquoise});
-    //};
-
-    //TerminalFunction * tf3 = new TerminalFunction("Unlock cell doors", 'a', test_f3);
-    
-    TerminalFunction * tf3 = new TerminalFunction("Unlock cell doors", 'a');
-    tf3->effects.push_back(new UnlockDoorsEffect(3));
-    tf3->effects.push_back(new AddLogMessageEffect(
-        "Unlocking doors...", TCODColor::turquoise));
-    
-    t1_interactive->terminal_functions.push_back(tf3);
-    level->add_entity(terminal);
     
     // Add a window
     level->make_window(12, 15);

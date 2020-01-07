@@ -53,6 +53,29 @@ class UnlockDoorsEffect : public Effect
         static UnlockDoorsEffect * from_json(json);
 };
 
+/**
+ * Open all doors having a key_id equal to the one specified.
+ */
+class StunEnemyOnTrapEffect : public Effect
+{
+
+    public:
+
+        // The group of tiles affected by this effect
+        unsigned int group_id;
+
+        // The duration of the stun effect
+        int stun_duration;
+        
+        StunEnemyOnTrapEffect(unsigned int, int);
+
+        void apply(Entity *, GameMap *, GameState *);
+
+        json to_json();
+
+        static StunEnemyOnTrapEffect * from_json(json);
+};
+
 
 /**
  * Add a message to the message log.

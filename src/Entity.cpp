@@ -31,11 +31,12 @@
 Entity::Entity(int x, int y, int symbol,
     TCODColor color, std::string name, RenderOrder render_order,
     bool blocks, bool blocks_sight, bool _fixed,
-    unsigned long int id) :
+    unsigned long int id, unsigned long int group_id) :
     x(x), y(y), _render_order(render_order), name(name),
     symbol(symbol), _color(color),
     _blocks(blocks), _blocks_sight(blocks_sight),
-    _fixed(_fixed), tag("")
+    _fixed(_fixed), tag(""),
+    group_id(group_id)
 {
     
         // Initialize pointers to NULL
@@ -57,6 +58,7 @@ Entity::Entity(int x, int y, int symbol,
         else
             _id = id;
 
+        // No need to assign a unique group ID if not needed
 }
 
 /*

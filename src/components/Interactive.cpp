@@ -43,7 +43,69 @@ Interactive * Interactive::from_json(json j)
         return InteractiveContainer::from_json(j);
     }
 
+    if (j["subclass"] == "InteractiveSwitch")
+    {
+        return InteractiveSwitch::from_json(j);
+    }
+
     return nullptr;
+}
+
+//////////////////////////////////
+/////// INTERACTIVE SWITCH ///////
+//////////////////////////////////
+
+InteractiveSwitch::InteractiveSwitch(bool enabled) : enabled(enabled)
+{
+}
+
+void InteractiveSwitch::interact(Entity * player, GameMap * game_map, GameState * game_state)
+{
+
+    if (enabled)
+    {
+        
+        DEBUG("There are this many effects: " << effects.size());
+        for (int i=0; i<(int)effects.size(); i++)
+        {
+            DEBUG("Trying to apply effect");
+            effects[i]->apply(player, game_map, game_state);
+        }
+
+        // Pass turn to enemy
+        game_state->game_phase = ENEMY_TURN;
+    }
+    else
+    {
+        // TODO
+        // Add log message
+    }
+}
+
+
+json InteractiveSwitch::to_json()
+{
+    json j;
+
+    j["subclass"] = "InteractiveSwitch";
+
+    j["enabled"] = enabled;
+
+    json je;
+    for (int i=0; i<(int)effects.size(); i++)
+    {
+        je.push_back(effects[i]->to_json());
+    }
+
+    j["effects"] = je;
+    return j;
+}
+
+InteractiveSwitch * InteractiveSwitch::from_json(json j)
+{
+    InteractiveSwitch * is = new InteractiveSwitch(j["enabled"]);
+
+    return is;
 }
 
 //////////////////////////////////

@@ -52,6 +52,35 @@ class Interactive
         static Interactive * from_json(json);
 };
 
+
+//////////////////////////////////
+/////// INTERACTIVE SWITCH ///////
+//////////////////////////////////
+
+class InteractiveSwitch : public Interactive
+{
+    public:
+
+        // Whether the door is locked or unlocked
+        bool enabled;
+
+        // The ID of the key which will open the door
+        //unsigned int key_id;
+
+        // The list of effects which will take place once the terminal function
+        // will be executed.
+        std::vector<Effect *> effects;
+
+        InteractiveSwitch(bool enabled=false);
+
+        virtual void interact(Entity *, GameMap *, GameState *);
+
+        json to_json();
+
+        static InteractiveSwitch * from_json(json j);
+};
+
+
 //////////////////////////////////
 //////// INTERACTIVE DOOR ////////
 //////////////////////////////////
