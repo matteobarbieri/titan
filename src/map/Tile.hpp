@@ -42,9 +42,9 @@ class Tile
         TCODColor _fg_color;
 
         // TODO check attribute name
-        int _fg_symbol;
-
     public:
+
+        int _fg_symbol;
 
         Tile(bool blocked, bool block_sight);
         virtual ~Tile();

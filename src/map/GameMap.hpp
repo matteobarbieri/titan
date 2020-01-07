@@ -244,6 +244,11 @@ class GameMap
         /**
          * Turn a single tile to floor
          */
+        void change_tile_symbol(int x, int y, int symbol);
+
+        /**
+         * Turn a single tile to floor
+         */
         void make_floor(int x, int y);
 
         /**

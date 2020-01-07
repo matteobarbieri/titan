@@ -401,8 +401,13 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_part(new Room(Rect(9, 64, 29, 83), Direction::FourD()));
     
     // TODO add boss and its mechanics
-    level->add_entity(make_butcher(19, 74, new SeekerAi()));
+    //level->add_entity(make_butcher(19, 74, new SeekerAi()));
     
+    level->change_tile_symbol(27, 66, 'X');
+    level->change_tile_symbol(26, 66, 'X');
+    level->change_tile_symbol(27, 67, 'X');
+    level->change_tile_symbol(26, 67, 'X');
+
     // Corridor from boss room to escape pods room
     level->add_part(new Corridor(Rect(31, 72, 39, 75), Direction::FourD(), false));
     

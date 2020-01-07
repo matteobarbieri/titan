@@ -368,6 +368,14 @@ void GameMap::add_part(Room * room)
     dig(room);
 }
 
+void GameMap::change_tile_symbol(int x, int y, int symbol)
+{
+    int i = compute_tile_index(x, y, width);
+
+    // Set new symbol
+    tiles[i]->_fg_symbol = symbol;
+}
+
 void GameMap::make_floor(int x, int y)
 {
 
