@@ -86,6 +86,46 @@ void sync_time() {
 }
 
 
+/**
+ * Returns the actual size of the characters, correctly computed based on the
+ * current status fullscreen/no fullscreen.
+ *
+ * @param x The x coordinate (in the console reference system, that is
+ * tile-based).
+ * @param y The y coordinate (in the console reference system, that is
+ * tile-based).
+ * @param real_x The x coordinate in the pixel reference system.
+ * @param real_y The y coordinate in the pixel reference system.
+ */
+void getRealCoordinates(int x, int y, int * real_x, int * real_y)
+{
+
+    if (TCODConsole::isFullscreen())
+    {
+        int res_x, res_y;
+        TCODSystem::getCurrentResolution(&res_x, &res_y);
+
+        float charw, charh;
+
+        charw = (float)res_x/SCREEN_WIDTH;
+        charh = (float)res_y/SCREEN_HEIGHT;
+
+        *real_x = x * charw;
+        *real_y = y * charh;
+    }
+    else
+    {
+        int charw, charh;
+
+        // Retrieve size of font used for tiles
+        TCODSystem::getCharSize(&charw, &charh);
+
+        *real_x = x * charw;
+        *real_y = y * charh;
+    }
+}
+
+
 bool entity_in_sight(TCODMap * fov_map, Entity * entity)
 {
     return fov_map->isInFov(entity->x, entity->y);
@@ -150,13 +190,29 @@ void split2(const std::string& str, Container& cont, char delim = ' ')
     }
 }
 
+/**
+ * Render a popup message
+ *
+ * @param renderer Pointer to SDL renderer
+ * @param text The text that needs to be rendered
+ * @param x horizontal coordinate where text will start to be rendered
+ * @param y vertical coordinate where text will start to be rendered
+ * @param frame_w frame width, used to calculate text wrapping
+ * @param
+ * @param
+ * @param
+ */
 void render_popup_message_text_sdl(SDL_Renderer * renderer, std::string text,
     int x, int y, int frame_w, int font_size=20, SDL_Color text_color={255, 255, 255, 255})
 {
 
     int charw, charh;
 
-    TCODSystem::getCharSize(&charw,&charh);
+    // Retrieve size of font used for tiles
+    TCODSystem::getCharSize(&charw, &charh);
+
+    int real_x, real_y;
+    getRealCoordinates(x, y, &real_x, &real_y);
 
     TTF_Font * font = TTF_OpenFont("data/fonts/ttf/SairaExtraCondensed/SairaExtraCondensed-Regular.ttf", font_size);
 
@@ -168,7 +224,8 @@ void render_popup_message_text_sdl(SDL_Renderer * renderer, std::string text,
     std::vector<std::string> text_lines;
     split2(text, text_lines, '\n');
 
-    int line_y = y * charh;
+    //int line_y = y * charh;
+    int line_y = real_y;
 
     for (int i=0; i<(int)text_lines.size(); i++)
     {
@@ -184,7 +241,8 @@ void render_popup_message_text_sdl(SDL_Renderer * renderer, std::string text,
         // Must retrieve size of rectangle from surface
         SDL_QueryTexture(text_texture, NULL, NULL, &w, &h);
 
-        Message_rect.x = x * charw;  //controls the rect's x coordinate
+        //Message_rect.x = x * charw;  //controls the rect's x coordinate
+        Message_rect.x = real_x;  //controls the rect's x coordinate
         Message_rect.y = line_y; // controls the rect's y coordinte
         Message_rect.w = w; // controls the width of the rect
         Message_rect.h = h; // controls the height of the rect
@@ -277,6 +335,7 @@ void render_message_log_sdl(SDL_Renderer * renderer)
     TCODSystem::getCharSize(&charw,&charh);
 
     TTF_Font* font = TTF_OpenFont("data/fonts/ttf/SairaExtraCondensed/SairaExtraCondensed-Regular.ttf", 20);
+    //TTF_Font* font = TTF_OpenFont("data/fonts/ttf/unifont.ttf", 20);
 
     // Auxiliary variables to store size values
     int w, h;
