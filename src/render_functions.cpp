@@ -142,6 +142,7 @@ void render_popup_message_frame(int w, int h)
     Consoles::singleton().popup_message->printFrame(x, y, w, h, true, TCOD_BKGND_SET);
 }
 
+/*
 void render_message_log()
 {
     std::vector<Message> visible_messages =
@@ -167,6 +168,7 @@ void render_message_log()
     }
 
 }
+*/
 
 /*
 // As TTF_RenderText_Solid could only be used on SDL_Surface then you have to
@@ -341,13 +343,12 @@ void render_message_log_sdl(SDL_Renderer * renderer)
     int w, h;
     SDL_Rect Message_rect; //create a rect
 
-    // Initialize message height
-    int y = 0;
-
     std::vector<Message> visible_messages =
         MessageLog::singleton().visible_messages();
 
-    // TODO consider including timestamp for message (turn no)
+    int x, y;
+
+    // TODO consider including timestamp for message (turn number)
     for (int i=0; i<(int)visible_messages.size(); i++)
     {
 
@@ -357,7 +358,8 @@ void render_message_log_sdl(SDL_Renderer * renderer)
 
         // As TTF_RenderText_Solid could only be used on SDL_Surface then you have to
         //  create the surface first.
-        SDL_Surface* text_surface = TTF_RenderText_Blended(font, visible_messages[i].text.c_str() , text_color); 
+        SDL_Surface* text_surface = TTF_RenderText_Blended(
+                font, visible_messages[i].text.c_str() , text_color); 
 
         // Create texture
         SDL_Texture* text_texture = SDL_CreateTextureFromSurface(renderer, text_surface);
@@ -365,8 +367,13 @@ void render_message_log_sdl(SDL_Renderer * renderer)
 
         TTF_SizeText(font, visible_messages[i].text.c_str(), &w, &h);
 
-        Message_rect.x = MESSAGE_LOG_X * charw ;  //controls the rect's x coordinate
-        Message_rect.y = MESSAGE_LOG_Y * charh + (20 * y); // controls the rect's y coordinte
+        // Compute coordinates in the pixel reference system
+        getRealCoordinates(
+            MESSAGE_LOG_X, MESSAGE_LOG_Y + i,
+            &x, &y);
+
+        Message_rect.x = x;  //controls the rect's x coordinate
+        Message_rect.y = y; // controls the rect's y coordinte
         Message_rect.w = w; // controls the width of the rect
         Message_rect.h = h; // controls the height of the rect
 
@@ -375,9 +382,6 @@ void render_message_log_sdl(SDL_Renderer * renderer)
         // Once copied, they can be destroyed
         SDL_FreeSurface(text_surface);
         SDL_DestroyTexture(text_texture);
-
-        // Increment height of next message
-        y++;
     }
 
     TTF_CloseFont(font);
