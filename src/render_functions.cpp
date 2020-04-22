@@ -310,6 +310,8 @@ void render_skill_icons_sdl(SDL_Renderer * renderer)
     int center_offset = 37;
     int SKILL_BOX_W = 128;
 
+    int x, y;
+
     for (unsigned int i=0; i<Player::singleton().skills.size(); i++)
     {
         Skill * skill = Player::singleton().skills[i];
@@ -317,8 +319,13 @@ void render_skill_icons_sdl(SDL_Renderer * renderer)
         // TODO change alpha based on existing popups/menus
         SDL_SetTextureAlphaMod(skill->get_icon_texture(), 255);
 
-        skill_icon_rect.x = (SKILLS_AREA_X + 1) * charw + (SKILL_BOX_W * i) + center_offset;  //controls the rect's x coordinate
-        skill_icon_rect.y = (SKILLS_AREA_Y + 1) * charh; // controls the rect's y coordinte
+        // Compute coordinates in the pixel reference system
+        getRealCoordinates(
+            (SKILLS_AREA_X + 1), (SKILLS_AREA_Y + 1),
+            &x, &y);
+
+        skill_icon_rect.x = x + (SKILL_BOX_W * i) + center_offset;  //controls the rect's x coordinate
+        skill_icon_rect.y = y; // controls the rect's y coordinte
         skill_icon_rect.w = 64; // controls the width of the rect
         skill_icon_rect.h = 64; // controls the height of the rect
 
