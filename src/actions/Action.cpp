@@ -56,6 +56,15 @@ Outcome * Action::execute()
     return _execute();
 }
 
+Outcome * ToggleFullscreenAction::_execute()
+{
+
+    TCODConsole::setFullscreen(!TCODConsole::isFullscreen());
+
+    return nullptr;
+}
+
+
 /*
 from game_state import GamePhase
 

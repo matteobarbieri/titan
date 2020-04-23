@@ -55,6 +55,16 @@ class ShowMenuException : public std::exception
 {
 };
 
+class ToggleFullscreenAction : public Action
+{
+
+    public:
+
+        Outcome * _execute();
+
+};
+
+
 #endif
 
 /*

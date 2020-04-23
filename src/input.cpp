@@ -232,12 +232,6 @@ Action * handle_inventory_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 
     }
 
-    /*
-    if key.vk == libtcod.KEY_ENTER and key.lalt:
-        # Alt+Enter: toggle full screen
-        return ToggleFullscreenAction()
-    */
-
     if (key.vk == TCODK_ESCAPE)
     {
         return new BackToGameAction();
@@ -267,12 +261,6 @@ Action * handle_terminal_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 
     }
 
-    /*
-    if key.vk == libtcod.KEY_ENTER and key.lalt:
-        # Alt+Enter: toggle full screen
-        return ToggleFullscreenAction()
-    */
-
     if (key.vk == TCODK_ESCAPE)
     {
         return new GoToPhaseAction(ENEMY_TURN);
@@ -301,12 +289,6 @@ Action * handle_container_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 
     }
 
-    /*
-    if key.vk == libtcod.KEY_ENTER and key.lalt:
-        # Alt+Enter: toggle full screen
-        return ToggleFullscreenAction()
-    */
-
     if (key.vk == TCODK_ESCAPE)
     {
         return new GoToPhaseAction(ENEMY_TURN);
@@ -332,8 +314,6 @@ Action * handle_container_item_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
         }
 
     }
-
-
 
     if (key.vk == TCODK_ESCAPE)
     {
@@ -374,10 +354,6 @@ Action * handle_targeting_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     /*
     # Code to prevent double input
     key_char = chr(key.c) if key.vk == libtcod.KEY_CHAR else ""
-
-    if key.vk == libtcod.KEY_ENTER and key.lalt:
-        # Alt+Enter: toggle full screen
-        return ToggleFullscreenAction()
 
     if key_char == "d":
         return DropItemAction()
@@ -430,10 +406,6 @@ Action * handle_inventory_item_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     # Code to prevent double input
     key_char = chr(key.c) if key.vk == libtcod.KEY_CHAR else ""
 
-    if key.vk == libtcod.KEY_ENTER and key.lalt:
-        # Alt+Enter: toggle full screen
-        return ToggleFullscreenAction()
-
     if key_char == "d":
         return DropItemAction()
     elif key_char == "e":
@@ -445,10 +417,6 @@ Action * handle_inventory_item_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 
 Action * handle_entity_info_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 {
-
-    //if key.vk == libtcod.KEY_ENTER and key.lalt:
-        //# Alt+Enter: toggle full screen
-        //return ToggleFullscreenAction()
 
     // Return to normal game
     if (key.vk == TCODK_ESCAPE)
@@ -483,15 +451,6 @@ def handle_player_turn_keys(key, mouse):
         return ShootAction()
 
     #########################################
-    ########## TOGGLE FULLSCREEN ############
-    #########################################
-
-    elif key.vk == libtcod.KEY_ENTER and key.lalt:
-        # Alt+Enter: toggle full screen
-        return ToggleFullscreenAction()
-
-
-    #########################################
     ############ SELECT ENTITY ##############
     #########################################
 
@@ -508,6 +467,14 @@ def handle_player_turn_keys(key, mouse):
 Action * handle_input(
     TCOD_key_t key, TCOD_mouse_t mouse, GameState * game_state)
 {
+
+    /////////////////////////////////////////
+    ////////// TOGGLE FULLSCREEN ////////////
+    /////////////////////////////////////////
+    if (key.vk == TCODK_ENTER && key.lalt)
+    {
+        return new ToggleFullscreenAction();
+    }
 
     switch (game_state->game_phase)
     {
