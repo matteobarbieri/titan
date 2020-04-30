@@ -43,7 +43,7 @@ void init_new_game(
     //* game_map = test_room::generate_room(
         //MAP_WIDTH, MAP_HEIGHT);
 
-    // Generate prologue map
+    // Generate shooting range map
     //* game_map = shooting_range::generate_map(
         //MAP_WIDTH, MAP_HEIGHT, overseer);
 
