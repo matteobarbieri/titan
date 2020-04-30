@@ -58,6 +58,11 @@ Effect * Effect::from_json(json j)
         return StunEnemyOnTrapEffect::from_json(j);
     }
 
+    if (j["subclass"] == "CompositeEffect")
+    {
+        return CompositeEffect::from_json(j);
+    }
+
     return nullptr;
 }
 
@@ -178,3 +183,56 @@ AddLogMessageEffect * AddLogMessageEffect::from_json(json j)
 
     return alme;
 }
+
+//////////////////////////////////
+/////////// Composite ////////////
+//////////////////////////////////
+
+CompositeEffect::CompositeEffect()
+{
+}
+
+void CompositeEffect::apply(Entity * player, GameMap * game_map, GameState * game_state)
+{
+
+    // Apply all effects
+    for (int i=0; i<(int)effects.size(); i++)
+    {
+        effects[i]->apply(player, game_map, game_state);
+    }
+}
+
+json CompositeEffect::to_json()
+{
+    json j;
+
+    j["subclass"] = "CompositeEffect";
+
+    // Effects
+    json j_effects;
+
+    for (int i=0; i<(int)effects.size(); i++)
+    {
+        j_effects.push_back(effects[i]->to_json());
+    }
+
+    j["effects"] = j_effects;
+
+
+    return j;
+}
+
+CompositeEffect * CompositeEffect::from_json(json j)
+{
+    CompositeEffect * ce = new CompositeEffect();
+
+    // Items
+    for (int i=0; i<(int)j["effects"].size(); i++)
+    {
+        ce->effects.push_back(Effect::from_json(j["effects"][i]));
+    }
+    
+    return ce;
+}
+
+

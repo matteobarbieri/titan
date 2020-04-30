@@ -100,4 +100,25 @@ class AddLogMessageEffect : public Effect
         static AddLogMessageEffect * from_json(json);
 };
 
+/**
+ * Apply several effects
+ */
+class CompositeEffect : public Effect
+{
+
+    public:
+
+        std::vector<Effect *> effects;
+
+        CompositeEffect();
+
+        void apply(Entity *, GameMap *, GameState *);
+
+        json to_json();
+
+        static CompositeEffect * from_json(json);
+
+
+};
+
 #endif /* ifndef ROGUE_20177_PREFABS_FUNCS_MISC */
