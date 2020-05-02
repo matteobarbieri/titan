@@ -33,6 +33,8 @@
 #include "../../prefabs/weapons/ranged.hpp"
 #include "../../prefabs/armor.hpp"
 
+#include "../../buffs/BuffStun.hpp"
+
 namespace prologue {
 
 Entity * make_butcher(int x, int y, MonsterAi * ai_component);
@@ -72,6 +74,7 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     // Player starting point
     Entity * entry_point = new Entity(
         6, 16, ' ',
+        //33, 73, ' ',
         TCODColor::white, "", NONE, false, false, true);
     entry_point->tag = "entrypoint"; 
 
@@ -96,7 +99,17 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_entity(test_trap);
 
     Entity * trap_switch = make_switch(10, 15);
-    ((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(new StunEnemyOnTrapEffect(1, 3));
+    //((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(new StunEnemyOnTrapEffect(1, 3));
+
+    ApplyDebuffsEffect * ade1 = new ApplyDebuffsEffect(1);
+    ade1->buffs.push_back(new BuffStun(7));
+
+    ade1->buffs.push_back(new DelayedMessageBuff(
+        5, "This guy is about to break free!", TCODColor::lightYellow));
+
+    //DEBUG("Applying stun to " << target->name);
+
+    ((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(ade1);
 
     level->add_entity(trap_switch);
 
@@ -401,7 +414,18 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     
     level->add_part(new Room(Rect(50, 94, 53, 96), Direction::FourD()));
 
-    // Huge Boss Room
+    // TODO Extra pistol, to remove
+    level->add_entity(make_pistol(32, 73));
+
+    /*
+     *  ____
+     * | __ )  ___  ___ ___   _ __ ___   ___  _ __ ___
+     * |  _ \ / _ \/ __/ __| | '__/ _ \ / _ \| '_ ` _ \
+     * | |_) | (_) \__ \__ \ | | | (_) | (_) | | | | | |
+     * |____/ \___/|___/___/ |_|  \___/ \___/|_| |_| |_|
+     *
+     */ 
+
     level->make_floor(30, 73);
     level->make_floor(30, 74);
 
@@ -412,11 +436,35 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     
     // TODO add boss and its mechanics
     //level->add_entity(make_butcher(19, 74, new SeekerAi()));
-    
+
+    /*
+    Entity * test_trap = new Entity(11, 16, 247,
+           TCODColor::brass, "",
+           NONE,
+           false, false,
+           true,
+           0, 1);
+
+    level->change_tile_symbol(11, 16, 'X');
+
+    level->add_entity(test_trap);
+
+    Entity * trap_switch = make_switch(10, 15);
+    ((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(new StunEnemyOnTrapEffect(1, 3));
+
+    level->add_entity(trap_switch);
+
+    level->make_floor(12, 17);
+    level->add_entity(make_text_panel(12, 17, Direction::EE, "Cell 02"));
+    */
+
+    // NE plates
     level->change_tile_symbol(27, 66, 'X');
     level->change_tile_symbol(26, 66, 'X');
     level->change_tile_symbol(27, 67, 'X');
     level->change_tile_symbol(26, 67, 'X');
+
+    //////////////////////////
 
     // Corridor from boss room to escape pods room
     level->add_part(new Corridor(Rect(31, 72, 39, 75), Direction::FourD(), false));

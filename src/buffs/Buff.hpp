@@ -3,6 +3,8 @@
 
 #include "../nlohmann/json.hpp"
 
+#include "../libtcod.hpp"
+
 using json = nlohmann::json;
 
 // Forward declarations
@@ -37,7 +39,7 @@ class Buff
         /**
          * Base constructor, sets duration
          */
-        Buff(Entity * target, int duration);
+        //Buff(Entity * target, int duration);
         Buff(int duration);
 
         /**
@@ -50,11 +52,32 @@ class Buff
          */
         virtual bool disables_entity() = 0;
 
+        virtual Buff * clone() = 0;
+
         virtual void tick();
+
+        virtual void expire();
 
         json to_json();
 
         static Buff * from_json(json j);
+};
+
+class DelayedMessageBuff : public Buff
+{
+
+    public:
+
+        std::string text;
+        TCODColor color;
+
+        DelayedMessageBuff(int duration, std::string text, TCODColor color);
+
+        DelayedMessageBuff * clone();
+
+        void expire();
+        bool disables_entity();
+
 };
 
 #endif

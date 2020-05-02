@@ -35,3 +35,23 @@
   should he survive, will get a powerful item.
 
 - End 2: the player heads for the escape pod and survives.
+
+### Boss fight
+
+The boss itself will charge towards the player and inflict heavy melee damage.
+It is impossible to defeat unless the room's mechanics are exploited.
+
+Once the player enters the boss room a message will warn them that the monster
+(which will be called experiment-67 or something like that) has broken free, and
+that the doors of the room have been sealed.
+
+There are two areas on the east side of the boss room (near the door from which
+the player can enter) that stun the boss for a bunch of turns and apply a heavy
+debuff that makes it possible to harm the creature. These traps are triggered by
+one lever each, located near to the traps. They have a pretty long cooldown, so
+if the player wants to defeat the monster needs to dance between the two pads.
+
+When the debuff is about to end, a message is displayed notifying the player
+that the creature seems to be regaining consciousness. The creature will become
+active again after a given number of turns so the player needs to move in time
+to avoid being hit.

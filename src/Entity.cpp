@@ -76,6 +76,7 @@ bool Entity::operator < (const Entity & other) const
 void Entity::apply_buff(Buff * buff)
 {
     buffs.push_back(buff);
+    buff->target = this;
 }
 
 
@@ -389,6 +390,18 @@ Entity * Entity::from_json(json j)
         e->container = Container::from_json(j["container"]);
         e->container->owner = e;
     }
-    
+
+    // Buffs
+    if (j["buffs"] != nullptr)
+    {
+        // Reapply buffs "manually"
+        for (int i=0; i<(int)j["buffs"].size(); i++)
+        {
+            Buff * b = Buff::from_json(j["buffs"][i]);
+            e->buffs.push_back(b);
+            b->target = e;
+        }
+    }
+
     return e;
 }

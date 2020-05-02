@@ -53,15 +53,15 @@ Effect * Effect::from_json(json j)
         return AddLogMessageEffect::from_json(j);
     }
 
-    if (j["subclass"] == "StunEnemyOnTrapEffect")
+    if (j["subclass"] == "ApplyDebuffsEffect")
     {
-        return StunEnemyOnTrapEffect::from_json(j);
+        return ApplyDebuffsEffect::from_json(j);
     }
 
-    if (j["subclass"] == "CompositeEffect")
-    {
-        return CompositeEffect::from_json(j);
-    }
+    //if (j["subclass"] == "CompositeEffect")
+    //{
+        //return CompositeEffect::from_json(j);
+    //}
 
     return nullptr;
 }
@@ -70,51 +70,76 @@ Effect * Effect::from_json(json j)
 ////// STUN ENEMY ON TRAP  ///////
 //////////////////////////////////
 
-StunEnemyOnTrapEffect::StunEnemyOnTrapEffect(unsigned int group_id, int stun_duration) :
-    group_id(group_id), stun_duration(stun_duration)
+ApplyDebuffsEffect::ApplyDebuffsEffect(unsigned int group_id) :
+    group_id(group_id)
 {
 }
 
-void StunEnemyOnTrapEffect::apply(Entity * player, GameMap * game_map, GameState * game_state)
+void ApplyDebuffsEffect::apply(Entity * player, GameMap * game_map, GameState * game_state)
 {
 
     for (int i=0; i<(int)game_map->entities().size(); i++)
     {
         Entity * aa = game_map->entities()[i];
+        // Entities affected by the trigger are those whose group id matches
+        // with the one specified in the effect.
         if (aa->group_id == group_id)
         {
+            // Apply to entities in the same position as the "trap", if
+            // applicable.
             Entity * target = game_map->get_inspectable_entity_at(aa->x, aa->y);
             
             if (target != nullptr)
             {
-                DEBUG("Applying stun to " << target->name);
-                // Apply debuff to target
-                target->apply_buff(new BuffStun(target, stun_duration));
+                //DEBUG("Applying debuffs to " << target->name);
+
+                for (int bi=0; bi<(int)buffs.size(); bi++)
+                {
+                    // Apply [de]buff to target
+                    // Must clone the object, otherwise it's always the same
+                    // instance being used
+                    target->apply_buff(buffs[bi]->clone());
+                }
+
             }
         }
     }
 
 }
 
-json StunEnemyOnTrapEffect::to_json()
+json ApplyDebuffsEffect::to_json()
 {
     json j;
 
-    j["subclass"] = "StunEnemyOnTrapEffect";
+    j["subclass"] = "ApplyDebuffsEffect";
 
     j["group_id"] = group_id;
-    j["stun_duration"] = stun_duration;
+
+    // Buffs
+    json j_buffs;
+
+    for (int i=0; i<(int)buffs.size(); i++)
+    {
+        j_buffs.push_back(buffs[i]->to_json());
+    }
+
+    j["buffs"] = j_buffs;
 
     return j;
 }
 
-StunEnemyOnTrapEffect * StunEnemyOnTrapEffect::from_json(json j)
+ApplyDebuffsEffect * ApplyDebuffsEffect::from_json(json j)
 {
-    StunEnemyOnTrapEffect * seote = new StunEnemyOnTrapEffect(
-        j["stun_duration"],
+    ApplyDebuffsEffect * ade = new ApplyDebuffsEffect(
         j["group_id"]);
 
-    return seote;
+    // Buffs
+    for (int i=0; i<(int)j["buffs"].size(); i++)
+    {
+        ade->buffs.push_back(Buff::from_json(j["buffs"][i]));
+    }
+    
+    return ade;
 }
 
 //////////////////////////////////
@@ -188,6 +213,7 @@ AddLogMessageEffect * AddLogMessageEffect::from_json(json j)
 /////////// Composite ////////////
 //////////////////////////////////
 
+/*
 CompositeEffect::CompositeEffect()
 {
 }
@@ -226,7 +252,7 @@ CompositeEffect * CompositeEffect::from_json(json j)
 {
     CompositeEffect * ce = new CompositeEffect();
 
-    // Items
+    // Effects
     for (int i=0; i<(int)j["effects"].size(); i++)
     {
         ce->effects.push_back(Effect::from_json(j["effects"][i]));
@@ -234,5 +260,5 @@ CompositeEffect * CompositeEffect::from_json(json j)
     
     return ce;
 }
-
+*/
 

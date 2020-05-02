@@ -167,6 +167,7 @@ json SeekerAi::to_json()
     // Save properties specific to SeekerAi
     j["player_last_seen_x"] = player_last_seen_x;
     j["player_last_seen_y"] = player_last_seen_y;
+    j["state"] = state;
 
     return j;
 }
@@ -214,13 +215,46 @@ MoveTowardsAIAction::MoveTowardsAIAction(
 
 void MoveTowardsAIAction::_execute()
 {
-    game_map->path_astar->compute(
+    // Save previous state of cell
+    bool is_transparent = game_map->fov_map->isTransparent(target_x, target_y);
+    bool is_walkable = game_map->fov_map->isWalkable(target_x, target_y);
+
+    // Temporarily set the destination tile as walkable, to allow the
+    // computation of the path
+    game_map->update_fov_map_properties(target_x, target_y, is_transparent, true);
+
+    // Compute path
+    bool res = game_map->path_astar->compute(
     monster->x, monster->y, target_x, target_y);
+
+    // Restore original map properties
+    game_map->update_fov_map_properties(target_x, target_y, is_transparent, is_walkable);
+
+    if (!res)
+    {
+        DEBUG("No path found :(");
+        return;
+    }
 
     int new_x, new_y;
 
     game_map->path_astar->get(0, &new_x, &new_y);
+
+    // Previous tile is now walkable again
+    game_map->fov_map->setProperties(
+        monster->x, monster->y,
+        game_map->fov_map->isTransparent(
+            monster->x, monster->y),
+        true);
+
     monster->x = new_x;
     monster->y = new_y;
+
+    // Previous tile is now walkable again
+    game_map->fov_map->setProperties(
+        monster->x, monster->y,
+        game_map->fov_map->isTransparent(
+            monster->x, monster->y),
+        false);
 
 }

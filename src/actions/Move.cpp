@@ -30,6 +30,20 @@ Outcome * MoveAction::_execute()
 
         bool position_changed = false;
         bool interacted_with_something = false;
+        
+        //bool res;
+        //res = game_map->path_astar->compute(6, 18, 6, 16);
+        //DEBUG("Path found: " << res);
+        //res = game_map->path_astar->compute(6, 19, 6, 16);
+        //DEBUG("Path found: " << res);
+        //res = game_map->path_astar->compute(6, 16, 6, 19);
+        //DEBUG("Path found: " << res);
+        //res = game_map->path_astar->compute(6, 16, 6, 18);
+        //DEBUG("Path found: " << res);
+        //res = game_map->path_astar->compute(6, 17, 6, 19);
+        //DEBUG("Path found: " << res);
+        //res = game_map->path_astar->compute(6, 17, 6, 18);
+        //DEBUG("Path found: " << res);
 
         // If it is not blocked, do something, either move to a new location,
         // attack an enemy or interact with an entity
@@ -45,12 +59,28 @@ Outcome * MoveAction::_execute()
             }
             else
             {
+
+                // Previous tile is now walkable again
+                game_map->fov_map->setProperties(
+                    player->x, player->y,
+                    game_map->fov_map->isTransparent(
+                        player->x, player->y),
+                    true);
+
                 // Update player's position
                 player->x = destination_x;
                 player->y = destination_y;
 
+                // New tile is now not walkable
+                game_map->fov_map->setProperties(
+                    player->x, player->y,
+                    game_map->fov_map->isTransparent(
+                        player->x, player->y),
+                    false);
+
                 // Change phase to enemy turn manually!
                 game_state->game_phase = ENEMY_TURN;
+
             }
         }
         else
@@ -91,7 +121,6 @@ Outcome * MoveAction::_execute()
 
 Outcome * WaitAction::_execute()
 {
-
 
         // Return outcome
         Outcome * outcome = new Outcome(

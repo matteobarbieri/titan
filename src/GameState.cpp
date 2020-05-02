@@ -34,6 +34,7 @@ void GameState::update(Outcome * outcome, bool & fov_recompute,
         bool & redraw_terrain)
 {
 
+    //DEBUG();
     // Update game phase
     game_phase = outcome->next_phase;
 
@@ -45,34 +46,11 @@ void GameState::update(Outcome * outcome, bool & fov_recompute,
     if (outcome->entity_targeted != nullptr)
         entity_targeted = outcome->entity_targeted;
 
-    /*
-    TODO this was the original python code
-    # Determine whether to recompute fov...
-    if outcome.get('fov_recompute') is not None:
-        fov_recompute = outcome.get('fov_recompute')
-    else:
-        fov_recompute = fov_recompute
-
-    # Or redraw terrain
-    if outcome.get('redraw_terrain') is not None:
-        redraw_terrain = outcome.get('redraw_terrain')
-    else:
-        redraw_terrain = redraw_terrain
-    */
-
     // Determine whether to recompute fov...
     fov_recompute = outcome->fov_recompute;
+
     // or redraw terrain
     redraw_terrain = outcome->redraw_terrain;
-
-    // TODO enable message log
-    /*
-    # Add messages to the log
-    if outcome.get('messages') is not None:
-        for m in outcome.get('messages'):
-            message_log.add_message(m)
-    */
-
 }
 
 

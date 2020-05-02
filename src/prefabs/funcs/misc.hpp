@@ -9,6 +9,7 @@ class GameMap;
 class GameState;
 
 #include "../../nlohmann/json.hpp"
+#include "../../buffs/Buff.hpp"
 
 #include "../../libtcod.hpp"
 
@@ -54,9 +55,9 @@ class UnlockDoorsEffect : public Effect
 };
 
 /**
- * Open all doors having a key_id equal to the one specified.
+ * Apply debuff[s] to entities caught by trap's effect
  */
-class StunEnemyOnTrapEffect : public Effect
+class ApplyDebuffsEffect : public Effect
 {
 
     public:
@@ -64,16 +65,15 @@ class StunEnemyOnTrapEffect : public Effect
         // The group of tiles affected by this effect
         unsigned int group_id;
 
-        // The duration of the stun effect
-        int stun_duration;
+        std::vector<Buff *> buffs;
         
-        StunEnemyOnTrapEffect(unsigned int, int);
+        ApplyDebuffsEffect(unsigned int);
 
         void apply(Entity *, GameMap *, GameState *);
 
         json to_json();
 
-        static StunEnemyOnTrapEffect * from_json(json);
+        static ApplyDebuffsEffect * from_json(json);
 };
 
 
@@ -103,6 +103,7 @@ class AddLogMessageEffect : public Effect
 /**
  * Apply several effects
  */
+/*
 class CompositeEffect : public Effect
 {
 
@@ -119,6 +120,7 @@ class CompositeEffect : public Effect
         static CompositeEffect * from_json(json);
 
 
-};
+;
+*/
 
 #endif /* ifndef ROGUE_20177_PREFABS_FUNCS_MISC */

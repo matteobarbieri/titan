@@ -19,7 +19,10 @@ class BuffStun : public Buff
         ////////// METHODS ///////////
         //////////////////////////////
 
-        BuffStun(Entity * target, int duration);
+        //BuffStun(Entity * target, int duration);
+        BuffStun(int duration);
+
+        BuffStun * clone();
 
         virtual bool disables_entity();
 

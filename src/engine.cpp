@@ -39,7 +39,7 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state, Over
     bool redraw_entities = true;
 
     // Initialize fov map
-    //TCODMap * fov_map = initialize_fov(game_map);
+    //DEBUG("Initializing fov map");
     game_map->initialize_fov_map();
 
     // TODO needs initialization?
@@ -160,9 +160,14 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state, Over
                 ///////////// RESOLVE OUTCOME //////////////
                 ////////////////////////////////////////////
                 
-                if (outcome != 0)
+                if (outcome != nullptr)
                 {
                     game_state->update(outcome, fov_recompute, redraw_terrain);
+                }
+
+                if (fov_recompute)
+                {
+                    game_map->recompute_fov(player);
                 }
 
             }
@@ -305,6 +310,7 @@ void tick_buffs(GameMap * game_map)
             // Remove buff if it has expired
             if ((*b)->has_expired())
             {
+                (*b)->expire();
                 b = e->buffs.erase(b);
             }
             else
