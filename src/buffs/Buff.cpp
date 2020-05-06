@@ -1,10 +1,13 @@
 #include "Buff.hpp"
+#include "BuffStun.hpp"
 
 #include "../GameMessages.hpp"
+#include "../SaveGame.hpp"
 
 //Buff::Buff(Entity * target, int duration) : duration(duration), target(target)
 //{
 //}
+
 
 Buff::Buff(int duration) : duration(duration)
 {
@@ -29,23 +32,19 @@ void Buff::expire()
     // Does nothing by default
 }
 
-json Buff::to_json()
-{
-    // TODO to remove, will be virtual
-    json j;
-
-    j["duration"] = duration;
-
-    return j;
-}
-
 Buff * Buff::from_json(json j)
 {
     // TODO to change with the right version
     
-    //Buff * b = new Buff(j["duration"]);
+    if (j["subclass"] == "BuffStun")
+    {
+        return BuffStun::from_json(j);
+    }
 
-    //return b;
+    if (j["subclass"] == "DelayedMessageBuff")
+    {
+        return DelayedMessageBuff::from_json(j);
+    }
 
     return nullptr;
 }
@@ -84,4 +83,25 @@ void DelayedMessageBuff::expire()
 bool DelayedMessageBuff::disables_entity()
 {
     return false;
+}
+
+json DelayedMessageBuff::to_json()
+{
+    json j;
+
+    j["subclass"] = "DelayedMessageBuff";
+
+    j["duration"] = duration;
+    j["text"] = text;
+    j["color"] = tcodcolor_to_json(color);
+
+    return j;
+}
+
+DelayedMessageBuff * DelayedMessageBuff::from_json(json j)
+{
+    DelayedMessageBuff * dmb = new DelayedMessageBuff(
+        j["duration"], j["text"], json_to_tcodcolor(j["color"]));
+
+    return dmb;
 }

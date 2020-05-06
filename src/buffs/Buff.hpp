@@ -58,7 +58,7 @@ class Buff
 
         virtual void expire();
 
-        json to_json();
+        virtual json to_json() = 0;
 
         static Buff * from_json(json j);
 };
@@ -78,6 +78,8 @@ class DelayedMessageBuff : public Buff
         void expire();
         bool disables_entity();
 
+        json to_json();
+        static DelayedMessageBuff * from_json(json j);
 };
 
 #endif

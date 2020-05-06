@@ -78,6 +78,8 @@ ApplyDebuffsEffect::ApplyDebuffsEffect(unsigned int group_id) :
 void ApplyDebuffsEffect::apply(Entity * player, GameMap * game_map, GameState * game_state)
 {
 
+    //DEBUG("Trying to apply debuff effect");
+
     for (int i=0; i<(int)game_map->entities().size(); i++)
     {
         Entity * aa = game_map->entities()[i];
@@ -85,6 +87,7 @@ void ApplyDebuffsEffect::apply(Entity * player, GameMap * game_map, GameState * 
         // with the one specified in the effect.
         if (aa->group_id == group_id)
         {
+            //DEBUG("Found tile on which to apply effect");
             // Apply to entities in the same position as the "trap", if
             // applicable.
             Entity * target = game_map->get_inspectable_entity_at(aa->x, aa->y);
@@ -93,6 +96,7 @@ void ApplyDebuffsEffect::apply(Entity * player, GameMap * game_map, GameState * 
             {
                 //DEBUG("Applying debuffs to " << target->name);
 
+                //DEBUG("Found entity on which to apply effect: " << target->name);
                 for (int bi=0; bi<(int)buffs.size(); bi++)
                 {
                     // Apply [de]buff to target
@@ -120,6 +124,7 @@ json ApplyDebuffsEffect::to_json()
 
     for (int i=0; i<(int)buffs.size(); i++)
     {
+        //DEBUG("json: " << buffs[i]->to_json());
         j_buffs.push_back(buffs[i]->to_json());
     }
 
@@ -133,9 +138,13 @@ ApplyDebuffsEffect * ApplyDebuffsEffect::from_json(json j)
     ApplyDebuffsEffect * ade = new ApplyDebuffsEffect(
         j["group_id"]);
 
+    //DEBUG("Restoring " << (int)j["buffs"].size() << " effects");
+
     // Buffs
     for (int i=0; i<(int)j["buffs"].size(); i++)
     {
+        //Buff * jj = Buff::from_json(j["buffs"][i]);
+        //DEBUG("is nullptr? (shouldnt be) " << (jj == nullptr));
         ade->buffs.push_back(Buff::from_json(j["buffs"][i]));
     }
     

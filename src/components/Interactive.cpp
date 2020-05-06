@@ -62,13 +62,15 @@ InteractiveSwitch::InteractiveSwitch(bool enabled) : enabled(enabled)
 void InteractiveSwitch::interact(Entity * player, GameMap * game_map, GameState * game_state)
 {
 
+    //DEBUG("Enabling here!");
+
     if (enabled)
     {
         
-        DEBUG("There are this many effects: " << effects.size());
+        //DEBUG("There are this many effects: " << effects.size());
         for (int i=0; i<(int)effects.size(); i++)
         {
-            DEBUG("Trying to apply effect");
+            //DEBUG("Trying to apply effect");
             effects[i]->apply(player, game_map, game_state);
         }
 
@@ -104,6 +106,12 @@ json InteractiveSwitch::to_json()
 InteractiveSwitch * InteractiveSwitch::from_json(json j)
 {
     InteractiveSwitch * is = new InteractiveSwitch(j["enabled"]);
+
+    // Effects
+    for (int i=0; i<(int)j["effects"].size(); i++)
+    {
+        is->effects.push_back(Effect::from_json(j["effects"][i]));
+    }
 
     return is;
 }

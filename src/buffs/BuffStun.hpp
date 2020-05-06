@@ -26,6 +26,8 @@ class BuffStun : public Buff
 
         virtual bool disables_entity();
 
+        json to_json();
+        static BuffStun * from_json(json j);
 };
 
 

@@ -17,3 +17,22 @@ bool BuffStun::disables_entity()
 {
     return true;
 }
+
+json BuffStun::to_json()
+{
+
+    json j;
+
+    j["subclass"] = "BuffStun";
+    j["duration"] = duration;
+
+    return j;
+
+}
+
+BuffStun * BuffStun::from_json(json j)
+{
+    BuffStun * bs = new BuffStun(j["duration"]);
+
+    return bs;
+}
