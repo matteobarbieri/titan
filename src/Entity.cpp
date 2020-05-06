@@ -218,6 +218,9 @@ json Entity::to_json()
     // Unique Id
     json_data["_id"] = _id;
 
+    // Group id
+    json_data["group_id"] = group_id;
+
     // Base entity features (private)
     json_data["_color"] = tcodcolor_to_json(_color);
     json_data["_bg_color"] = tcodcolor_to_json(_bg_color);
@@ -318,7 +321,8 @@ Entity * Entity::from_json(json j)
            j["_render_order"],
            j["_blocks"], j["_blocks_sight"],
            j["_fixed"],
-           j["_id"]);
+           j["_id"],
+           j["group_id"]);
 
     //DEBUG("Restoring " << j["name"]);
 
