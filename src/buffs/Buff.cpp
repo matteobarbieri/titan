@@ -1,5 +1,6 @@
 #include "Buff.hpp"
 #include "BuffStun.hpp"
+#include "../Entity.hpp"
 
 #include "../GameMessages.hpp"
 #include "../SaveGame.hpp"
@@ -16,6 +17,22 @@ Buff::Buff(int duration) : duration(duration)
 bool Buff::has_expired()
 {
     return duration <= 0;
+}
+
+void Buff::apply(Entity * e)
+{
+    e->apply_buff(this);
+
+    // Do buff-specific stuff
+    _apply(e);
+
+    // Link entity to buff
+    target = e;
+}
+
+// By deefault, do nothing else on apply
+void Buff::_apply(Entity * e)
+{
 }
 
 void Buff::tick()

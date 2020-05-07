@@ -102,7 +102,9 @@ void ApplyDebuffsEffect::apply(Entity * player, GameMap * game_map, GameState * 
                     // Apply [de]buff to target
                     // Must clone the object, otherwise it's always the same
                     // instance being used
-                    target->apply_buff(buffs[bi]->clone());
+                    
+                    //target->apply_buff(buffs[bi]->clone());
+                    buffs[bi]->clone()->apply(target);
                 }
 
             }

@@ -76,7 +76,7 @@ bool Entity::operator < (const Entity & other) const
 void Entity::apply_buff(Buff * buff)
 {
     buffs.push_back(buff);
-    buff->target = this;
+    //buff->target = this;
 }
 
 
