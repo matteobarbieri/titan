@@ -15,11 +15,15 @@ class BuffStun : public Buff
         ///////// PROPERTIES /////////
         //////////////////////////////
 
+        // Whether it adds a message in the log to notify that the entity is
+        // stunned.
+        bool add_log_message;
+
         //////////////////////////////
         ////////// METHODS ///////////
         //////////////////////////////
 
-        //BuffStun(Entity * target, int duration);
+        BuffStun(int duration, bool);
         BuffStun(int duration);
 
         BuffStun * clone();

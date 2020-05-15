@@ -85,8 +85,6 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_entity(make_door(12, 16, false, true, 2));
 
     // Add paralyzing trap
-    //level->make_floor(11, 16);
-
     Entity * test_trap = new Entity(11, 16, 247,
            TCODColor::brass, "",
            NONE,
@@ -99,9 +97,16 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_entity(test_trap);
 
     Entity * trap_switch = make_switch(10, 15);
+    trap_switch->group_id = 3;
     //((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(new StunEnemyOnTrapEffect(1, 3));
 
-    ApplyDebuffsEffect * ade1 = new ApplyDebuffsEffect(1);
+    // Disable switch for 7 turns after using it
+    ApplyDebuffsEffect * disable_switch = new ApplyDebuffsEffect(-1, 3);
+    disable_switch->buffs.push_back(new BuffStun(7, false));
+    ((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(disable_switch);
+
+    //ApplyDebuffsEffect * ade1 = new ApplyDebuffsEffect(1);
+    ApplyDebuffsOnTrapEffect * ade1 = new ApplyDebuffsOnTrapEffect(1);
     ade1->buffs.push_back(new BuffStun(7));
 
     ade1->buffs.push_back(new DelayedMessageBuff(

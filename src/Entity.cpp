@@ -111,11 +111,28 @@ void Entity::interact_with(Entity * other, GameMap * game_map, GameState * game_
         fighter->attack(other, game_map);
         game_state->game_phase = ENEMY_TURN;
     }
+    // Is an entity with wich it seems possible to interact
     else if (other->interactive != nullptr)
     {
-        // Assume game phase is determined by the side effect of the specific
-        // implementation of the interact method.
-        other->interactive->interact(this, game_map, game_state);
+        if (other->is_disabled())
+        {
+            // Build message
+            std::ostringstream stringStream;
+
+            stringStream << "The " << 
+                other->name << " does not seem to be operational.";
+
+            // Add message to message log
+            MessageLog::singleton().add_message(
+                {stringStream.str(), TCODColor::yellow});
+
+        }
+        else
+        {
+            // Assume game phase is determined by the side effect of the specific
+            // implementation of the interact method.
+            other->interactive->interact(this, game_map, game_state);
+        }
     }
 
 }

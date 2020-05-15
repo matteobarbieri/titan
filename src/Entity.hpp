@@ -39,9 +39,6 @@ class Entity
 
     private:
 
-        // Unique id
-        unsigned long int _id;
-
         // The color of the entity's symbol
         TCODColor _color;
         TCODColor _bg_color;
@@ -59,6 +56,9 @@ class Entity
         RenderOrder _render_order;
 
     public:
+
+        // Unique id
+        unsigned long int _id;
 
         // Entity coordinates in the game map
         int x;

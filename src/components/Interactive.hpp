@@ -64,9 +64,6 @@ class InteractiveSwitch : public Interactive
         // Whether the door is locked or unlocked
         bool enabled;
 
-        // The ID of the key which will open the door
-        //unsigned int key_id;
-
         // The list of effects which will take place once the terminal function
         // will be executed.
         std::vector<Effect *> effects;

@@ -55,9 +55,37 @@ class UnlockDoorsEffect : public Effect
 };
 
 /**
- * Apply debuff[s] to entities caught by trap's effect
+ * Apply debuff[s] to entities directly
  */
 class ApplyDebuffsEffect : public Effect
+{
+
+    public:
+
+        // Only one of these two must be specified
+        // The id of the entity affected by this effect
+        int entity_id;
+
+        // The group_id of entities affected by this effect
+        int group_id;
+
+        std::vector<Buff *> buffs;
+        
+        ApplyDebuffsEffect(int);
+        ApplyDebuffsEffect(int, int);
+
+        void apply(Entity *, GameMap *, GameState *);
+
+        json to_json();
+
+        static ApplyDebuffsEffect * from_json(json);
+};
+
+
+/**
+ * Apply debuff[s] to entities caught by trap's effect
+ */
+class ApplyDebuffsOnTrapEffect : public Effect
 {
 
     public:
@@ -67,13 +95,13 @@ class ApplyDebuffsEffect : public Effect
 
         std::vector<Buff *> buffs;
         
-        ApplyDebuffsEffect(unsigned int);
+        ApplyDebuffsOnTrapEffect(unsigned int);
 
         void apply(Entity *, GameMap *, GameState *);
 
         json to_json();
 
-        static ApplyDebuffsEffect * from_json(json);
+        static ApplyDebuffsOnTrapEffect * from_json(json);
 };
 
 

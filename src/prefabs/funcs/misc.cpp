@@ -53,6 +53,11 @@ Effect * Effect::from_json(json j)
         return AddLogMessageEffect::from_json(j);
     }
 
+    if (j["subclass"] == "ApplyDebuffsOnTrapEffect")
+    {
+        return ApplyDebuffsOnTrapEffect::from_json(j);
+    }
+
     if (j["subclass"] == "ApplyDebuffsEffect")
     {
         return ApplyDebuffsEffect::from_json(j);
@@ -66,16 +71,100 @@ Effect * Effect::from_json(json j)
     return nullptr;
 }
 
-//////////////////////////////////
-////// STUN ENEMY ON TRAP  ///////
-//////////////////////////////////
+/////////////////////////////////////
+////// APPLY DEBUFFS TO ENTITY //////
+/////////////////////////////////////
 
-ApplyDebuffsEffect::ApplyDebuffsEffect(unsigned int group_id) :
-    group_id(group_id)
+ApplyDebuffsEffect::ApplyDebuffsEffect(int entity_id,int group_id) :
+    entity_id(entity_id), group_id(group_id)
+{
+}
+
+ApplyDebuffsEffect::ApplyDebuffsEffect(int entity_id) :
+    ApplyDebuffsEffect(entity_id, -1)
 {
 }
 
 void ApplyDebuffsEffect::apply(Entity * player, GameMap * game_map, GameState * game_state)
+{
+
+    //DEBUG("Trying to apply debuff effect");
+
+    for (int i=0; i<(int)game_map->entities().size(); i++)
+    {
+        Entity * aa = game_map->entities()[i];
+        // Entities affected by the trigger are those whose group id matches
+        // with the one specified in the effect.
+
+        if (
+                (entity_id > -1 && aa->_id == (unsigned int)entity_id) || // Select by entity_id
+                (group_id > -1 && aa->group_id == (unsigned int)group_id)    // Select by group
+           )
+        {
+            
+            for (int bi=0; bi<(int)buffs.size(); bi++)
+            {
+                // Must clone the object, otherwise it's always the same
+                // instance being used
+                buffs[bi]->clone()->apply(aa);
+            }
+        }
+
+    }
+
+}
+
+json ApplyDebuffsEffect::to_json()
+{
+    json j;
+
+    j["subclass"] = "ApplyDebuffsEffect";
+
+    j["entity_id"] = entity_id;
+    j["group_id"] = group_id;
+
+    // Buffs
+    json j_buffs;
+
+    for (int i=0; i<(int)buffs.size(); i++)
+    {
+        //DEBUG("json: " << buffs[i]->to_json());
+        j_buffs.push_back(buffs[i]->to_json());
+    }
+
+    j["buffs"] = j_buffs;
+
+    return j;
+}
+
+ApplyDebuffsEffect * ApplyDebuffsEffect::from_json(json j)
+{
+    ApplyDebuffsEffect * ade = new ApplyDebuffsEffect(
+        j["entity_id"], j["group_id"]);
+
+    // Buffs
+    for (int i=0; i<(int)j["buffs"].size(); i++)
+    {
+        //Buff * jj = Buff::from_json(j["buffs"][i]);
+        //DEBUG("is nullptr? (shouldnt be) " << (jj == nullptr));
+        ade->buffs.push_back(Buff::from_json(j["buffs"][i]));
+    }
+    
+    return ade;
+}
+
+
+///////////////////////////////////////
+////// APPLY DEBUFFS TO ENTITIES //////
+////// CAUGHT ON TRAP /////////////////
+///////////////////////////////////////
+
+ApplyDebuffsOnTrapEffect::ApplyDebuffsOnTrapEffect(unsigned int group_id) :
+    group_id(group_id)
+{
+}
+
+void ApplyDebuffsOnTrapEffect::apply(Entity * player, GameMap * game_map, GameState * game_state)
 {
 
     //DEBUG("Trying to apply debuff effect");
@@ -113,11 +202,11 @@ void ApplyDebuffsEffect::apply(Entity * player, GameMap * game_map, GameState * 
 
 }
 
-json ApplyDebuffsEffect::to_json()
+json ApplyDebuffsOnTrapEffect::to_json()
 {
     json j;
 
-    j["subclass"] = "ApplyDebuffsEffect";
+    j["subclass"] = "ApplyDebuffsOnTrapEffect";
 
     j["group_id"] = group_id;
 
@@ -135,9 +224,9 @@ json ApplyDebuffsEffect::to_json()
     return j;
 }
 
-ApplyDebuffsEffect * ApplyDebuffsEffect::from_json(json j)
+ApplyDebuffsOnTrapEffect * ApplyDebuffsOnTrapEffect::from_json(json j)
 {
-    ApplyDebuffsEffect * ade = new ApplyDebuffsEffect(
+    ApplyDebuffsOnTrapEffect * ade = new ApplyDebuffsOnTrapEffect(
         j["group_id"]);
 
     //DEBUG("Restoring " << (int)j["buffs"].size() << " effects");

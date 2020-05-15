@@ -183,7 +183,9 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state, Over
             // Each entity takes a turn
             for (int i=0; i<(int)(game_map->entities().size()); i++)
             {
-                if (game_map->entities()[i]->ai != nullptr && !game_map->entities()[i]->is_disabled())
+                if (
+                        game_map->entities()[i]->ai != nullptr && // Is a monster
+                        !game_map->entities()[i]->is_disabled()) // Is not disabled
                 {
 
                     // Pick an action for each entity
