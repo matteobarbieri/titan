@@ -4,6 +4,7 @@
 
 #include "../GameMessages.hpp"
 #include "../SaveGame.hpp"
+#include "../map/GameMap.hpp"
 
 //Buff::Buff(Entity * target, int duration) : duration(duration), target(target)
 //{
@@ -17,6 +18,11 @@ Buff::Buff(int duration) : duration(duration)
 bool Buff::has_expired()
 {
     return duration <= 0;
+}
+
+bool Buff::disables_entity()
+{
+    return false;
 }
 
 void Buff::apply(Entity * e)
@@ -44,7 +50,7 @@ void Buff::tick()
 /**
  * Function which is called once when the buff expires.
  */
-void Buff::expire()
+void Buff::expire(GameMap * game_map)
 {
     // Does nothing by default
 }
@@ -61,6 +67,11 @@ Buff * Buff::from_json(json j)
     if (j["subclass"] == "DelayedMessageBuff")
     {
         return DelayedMessageBuff::from_json(j);
+    }
+
+    if (j["subclass"] == "DelayedRemoveBuff")
+    {
+        return DelayedRemoveBuff::from_json(j);
     }
 
     return nullptr;
@@ -92,14 +103,9 @@ DelayedMessageBuff * DelayedMessageBuff::clone()
     return new DelayedMessageBuff(duration, text, color);
 }
 
-void DelayedMessageBuff::expire()
+void DelayedMessageBuff::expire(GameMap * game_map)
 {
     MessageLog::singleton().add_message({text, color});
-}
-
-bool DelayedMessageBuff::disables_entity()
-{
-    return false;
 }
 
 json DelayedMessageBuff::to_json()
@@ -119,6 +125,54 @@ DelayedMessageBuff * DelayedMessageBuff::from_json(json j)
 {
     DelayedMessageBuff * dmb = new DelayedMessageBuff(
         j["duration"], j["text"], json_to_tcodcolor(j["color"]));
+
+    return dmb;
+}
+
+/*
+ ____       _                      _                                     
+|  _ \  ___| | __ _ _   _  ___  __| |  _ __ ___ _ __ ___   _____   _____ 
+| | | |/ _ \ |/ _` | | | |/ _ \/ _` | | '__/ _ \ '_ ` _ \ / _ \ \ / / _ \
+| |_| |  __/ | (_| | |_| |  __/ (_| | | | |  __/ | | | | | (_) \ V /  __/
+|____/ \___|_|\__,_|\__, |\___|\__,_| |_|  \___|_| |_| |_|\___/ \_/ \___|
+                              |___/                            
+*/
+
+DelayedRemoveBuff::DelayedRemoveBuff(
+        int duration) :
+        Buff(duration)
+{
+}
+
+DelayedRemoveBuff * DelayedRemoveBuff::clone()
+{
+    return new DelayedRemoveBuff(duration);
+}
+
+void DelayedRemoveBuff::expire(GameMap * game_map)
+{
+    //DEBUG("DRM Expired ");
+    game_map->remove_entity(target);
+
+    //delete target;
+    //MessageLog::singleton().add_message({text, color});
+}
+
+json DelayedRemoveBuff::to_json()
+{
+    json j;
+
+    j["subclass"] = "DelayedRemoveBuff";
+
+    j["duration"] = duration;
+
+    return j;
+}
+
+DelayedRemoveBuff * DelayedRemoveBuff::from_json(json j)
+{
+    DelayedRemoveBuff * dmb = new DelayedRemoveBuff(
+        j["duration"]);
 
     return dmb;
 }

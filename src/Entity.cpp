@@ -61,6 +61,11 @@ Entity::Entity(int x, int y, int symbol,
         // No need to assign a unique group ID if not needed
 }
 
+Entity::~Entity()
+{
+    DEBUG("Destroying entity " << name);
+}
+
 /*
 bool Entity::operator < (const Entity & other) const
 {

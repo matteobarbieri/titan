@@ -55,6 +55,29 @@ class UnlockDoorsEffect : public Effect
 };
 
 /**
+ * Display a symbol for a given amount of time
+ */
+class DisplaySFXEffect : public Effect
+{
+
+    public:
+
+        int symbol;
+        TCODColor color; 
+        int duration;
+        int x, y;
+        
+        DisplaySFXEffect(int symbol, TCODColor, int x, int y, int duration = 2);
+        DisplaySFXEffect(int symbol, TCODColor, Entity *, int duration = 2);
+
+        void apply(Entity *, GameMap *, GameState *);
+
+        json to_json();
+
+        static DisplaySFXEffect * from_json(json);
+};
+
+/**
  * Apply debuff[s] to entities directly
  */
 class ApplyDebuffsEffect : public Effect
@@ -62,7 +85,6 @@ class ApplyDebuffsEffect : public Effect
 
     public:
 
-        // Only one of these two must be specified
         // The id of the entity affected by this effect
         int entity_id;
 

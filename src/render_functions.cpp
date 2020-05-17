@@ -528,7 +528,8 @@ std::string get_names_under_mouse(
             entities[i]->x == (top_x + x) && 
             entities[i]->y == (top_y + y) && 
             fov_map->isInFov(entities[i]->x, entities[i]->y) &&
-            entities[i]->render_order() != NONE
+            entities[i]->render_order() != NONE &&
+            entities[i]->render_order() != SFX
             )
         {
             names.append(entities[i]->name);
@@ -861,7 +862,10 @@ void render_all(
             mouse, game_map->entities(), fov_map, top_x, top_y);
 
     // Do not render a label if the entity's render order is NONE
-    if (entity_under_mouse != nullptr && entity_under_mouse->render_order() != NONE)
+    if (
+            entity_under_mouse != nullptr &&
+            entity_under_mouse->render_order() != NONE &&
+            entity_under_mouse->render_order() != SFX)
     {
         render_entity_label(
             Consoles::singleton().main_window, entity_under_mouse,

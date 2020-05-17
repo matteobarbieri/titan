@@ -8,6 +8,7 @@
 enum RenderOrder {
     NONE = 0,
     STAIRS = 10,
+    SFX = 11,
     CORPSE = 20,
     ITEM = 30,
     ACTOR = 40

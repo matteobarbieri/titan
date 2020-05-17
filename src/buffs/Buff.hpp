@@ -9,6 +9,7 @@ using json = nlohmann::json;
 
 // Forward declarations
 class Entity;
+class GameMap;
 
 /**
  * A class that represents a [de]buff which is applied to an entity/region of
@@ -50,13 +51,13 @@ class Buff
         /**
          *
          */
-        virtual bool disables_entity() = 0;
+        virtual bool disables_entity();
 
         virtual Buff * clone() = 0;
 
         virtual void tick();
 
-        virtual void expire();
+        virtual void expire(GameMap *);
 
         void apply(Entity *);
 
@@ -79,14 +80,34 @@ class DelayedMessageBuff : public Buff
 
         DelayedMessageBuff * clone();
 
-        void expire();
+        void expire(GameMap *);
 
         //void _apply(Entity *);
 
-        bool disables_entity();
-
         json to_json();
         static DelayedMessageBuff * from_json(json j);
+};
+
+/**
+ * Removes completely an entity when buff expires
+ */
+class DelayedRemoveBuff : public Buff
+{
+
+    public:
+
+        GameMap * game_map;
+
+        DelayedRemoveBuff(int duration);
+
+        DelayedRemoveBuff * clone();
+
+        void expire(GameMap *);
+
+        //void _apply(Entity *);
+
+        json to_json();
+        static DelayedRemoveBuff * from_json(json j);
 };
 
 #endif

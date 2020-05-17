@@ -47,10 +47,9 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->dungeon_level = 1;
 
     //////////////////////////////
-    /////////// CELLS ////////////
+    /////////// CELL 1 ///////////
     //////////////////////////////
     
-    // CELL 1
     // Add room to level
     level->add_part(new Room(
         Rect(5, 8, 11, 12), Direction::FourD()));
@@ -66,7 +65,10 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     // Add a window
     level->make_window(12, 9);
 
-    // CELL 2
+    //////////////////////////////
+    /////////// CELL 2 ///////////
+    //////////////////////////////
+    
     // Add room to level
     level->add_part(new Room(
         Rect(5, 14, 11, 18), Direction::FourD()));
@@ -109,10 +111,12 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     ApplyDebuffsOnTrapEffect * ade1 = new ApplyDebuffsOnTrapEffect(1);
     ade1->buffs.push_back(new BuffStun(7));
 
+    //DisplaySFXEffect * sfx = new DisplaySFXEffect(22, 11, 17);
+    DisplaySFXEffect * sfx = new DisplaySFXEffect(247, TCODColor::azure, test_trap);
+    ((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(sfx);
+
     ade1->buffs.push_back(new DelayedMessageBuff(
         5, "This guy is about to break free!", TCODColor::lightYellow));
-
-    //DEBUG("Applying stun to " << target->name);
 
     ((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(ade1);
 
@@ -148,7 +152,12 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
 
     level->add_entity(seeking_droid);
 
-    level->add_entity(make_baton(6, 15));
+    Entity * baton = make_baton(6, 15);
+    level->add_entity(baton);
+
+    //DelayedRemoveBuff * drmb = new DelayedRemoveBuff(3);
+    //drmb->apply(baton);
+
     level->add_entity(make_pistol(8, 16));
     //level->add_entity(make_armor(7, 16));
     
@@ -160,7 +169,10 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     // Add a window
     level->make_window(12, 15);
     
-    // CELL 3
+    //////////////////////////////
+    /////////// CELL 3 ///////////
+    //////////////////////////////
+    
     Room * cell_3 = new Room(
         Rect(5, 20, 11, 24), Direction::FourD());
 

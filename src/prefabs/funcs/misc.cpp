@@ -63,6 +63,11 @@ Effect * Effect::from_json(json j)
         return ApplyDebuffsEffect::from_json(j);
     }
 
+    if (j["subclass"] == "DisplaySFXEffect")
+    {
+        return DisplaySFXEffect::from_json(j);
+    }
+
     //if (j["subclass"] == "CompositeEffect")
     //{
         //return CompositeEffect::from_json(j);
@@ -270,6 +275,62 @@ UnlockDoorsEffect * UnlockDoorsEffect::from_json(json j)
 {
     UnlockDoorsEffect * ude = new UnlockDoorsEffect(
         j["key_id"]);
+
+    return ude;
+}
+
+//////////////////////////////////
+/////////// OPEN DOOR ////////////
+//////////////////////////////////
+
+DisplaySFXEffect::DisplaySFXEffect(int symbol, TCODColor color, int x, int y, int duration) :
+    symbol(symbol), color(color), duration(duration), x(x), y(y)
+{
+}
+
+// Extrapolate position from entity
+DisplaySFXEffect::DisplaySFXEffect(int symbol, TCODColor color, Entity * e, int duration) : 
+    //symbol(symbol), x(e->x), y(e->y)
+    DisplaySFXEffect(symbol, color, e->x, e->y, duration)
+{
+}
+
+void DisplaySFXEffect::apply(Entity * player, GameMap * game_map, GameState * game_state)
+{
+    //DEBUG("Unlocking doors with key_id " << key_id);
+    //unlock_doors(player, game_map, game_state, key_id);
+    
+    Entity * sfx = new Entity(x, y, symbol, color, "", SFX);
+    DelayedRemoveBuff * drm = new DelayedRemoveBuff(duration);
+    drm->apply(sfx);
+
+    // TODO delayed remove buffss
+    game_map->add_entity(sfx);
+}
+
+json DisplaySFXEffect::to_json()
+{
+    json j;
+
+    j["subclass"] = "DisplaySFXEffect";
+
+    j["symbol"] = symbol;
+    j["color"] = tcodcolor_to_json(color);
+    j["x"] = x;
+    j["y"] = y;
+    j["duration"] = duration;
+    return j;
+}
+
+DisplaySFXEffect * DisplaySFXEffect::from_json(json j)
+{
+    DisplaySFXEffect * ude = new DisplaySFXEffect(
+        j["symbol"],
+        json_to_tcodcolor(j["color"]),
+        j["x"],
+        j["y"],
+        j["duration"]
+    );
 
     return ude;
 }
