@@ -218,7 +218,7 @@ bool ammo_check(Entity * weapon)
 }
 
 
-bool Fighter::attack_with_melee_weapon(Entity * target, Entity * weapon, WeaponAttack * weapon_attack)
+bool Fighter::attack_with_melee_weapon(Entity * target, Entity * weapon, WeaponAttack * weapon_attack, GameMap * level)
 {
 
     // Use stram to build messages
@@ -242,9 +242,17 @@ bool Fighter::attack_with_melee_weapon(Entity * target, Entity * weapon, WeaponA
         int amount = (
             rand() % (weapon_attack->dmg_delta() + 1)) + weapon_attack->dmg_min;
 
+        // Apply reduction to damage due to armor etc.
         amount = target->fighter->apply_damage_reduction(amount);
 
+        // Finally, apply damage to target
         target->fighter->take_damage(amount);
+
+        // Trigger special weapon effects on the target
+        for (int i=0; i<(int)weapon_attack->on_hit_effects.size(); i++)
+        {
+            weapon_attack->on_hit_effects[i]->apply(owner, target, level);
+        }
 
         // Add message to message log
         stringStream << target->name << " was hit for " << amount << " damage [" << weapon->name << "]";
@@ -259,6 +267,12 @@ bool Fighter::attack_with_melee_weapon(Entity * target, Entity * weapon, WeaponA
         // Add message to message log
         MessageLog::singleton().add_message(
             {stringStream.str(), TCODColor::white});
+    }
+
+    // Trigger special weapon effects on the target
+    for (int i=0; i<(int)weapon_attack->after_attack_effects.size(); i++)
+    {
+        weapon_attack->after_attack_effects[i]->apply(owner, target, level);
     }
 
     return true;
@@ -357,6 +371,12 @@ void Fighter::attack_ranged(Entity * target)
 }
 */
 
+/**
+ * Attack a hostile entity
+ *
+ * Returns false if it was not possible to perform the attack for some reason
+ * (e.g. no weapon was equipped).
+ */
 bool Fighter::attack(Entity * target, GameMap * level)
 {
 
@@ -373,7 +393,8 @@ bool Fighter::attack(Entity * target, GameMap * level)
             if (it->second->item->is_melee()) // check that it is a melee weapon
             {
                 attack_succeeded = attack_succeeded ||
-                    attack_with_melee_weapon(target, it->second, it->second->equippable->weapon_attack);
+                    attack_with_melee_weapon(target, it->second, it->second->equippable->weapon_attack,
+                                             level);
             }
 
             if (it->second->item->is_ranged()) // check that it is a ranged weapon

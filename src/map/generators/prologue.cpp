@@ -22,6 +22,8 @@
 #include "../../components/Container.hpp"
 #include "../../components/Fighter.hpp"
 #include "../../components/Equipment.hpp"
+#include "../../components/Equippable.hpp"
+#include "../../components/WeaponAttack.hpp"
 
 #include "../../EquipmentSlots.hpp"
 
@@ -37,7 +39,7 @@
 
 namespace prologue {
 
-Entity * make_butcher(int x, int y, MonsterAi * ai_component);
+Entity * make_butcher(int x, int y, MonsterAi * ai_component = nullptr);
 
 //GameMap generate_dungeon_level(width, height, min_room_length, max_room_length)
 GameMap * generate_map(int width, int height, Overseer ** overseer)
@@ -75,8 +77,8 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
 
     // Player starting point
     Entity * entry_point = new Entity(
-        6, 16, ' ',
-        //33, 73, ' ',
+        //6, 16, ' ',
+        33, 73, ' ',
         TCODColor::white, "", NONE, false, false, true);
     entry_point->tag = "entrypoint"; 
 
@@ -451,9 +453,6 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     
     level->add_part(new Room(Rect(9, 64, 29, 83), Direction::FourD()));
     
-    // TODO add boss and its mechanics
-    //level->add_entity(make_butcher(19, 74, new SeekerAi()));
-
     /*
     Entity * test_trap = new Entity(11, 16, 247,
            TCODColor::brass, "",
@@ -482,6 +481,10 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->change_tile_symbol(26, 67, 'X');
 
     //////////////////////////
+
+    // TODO add boss and its mechanics
+    Entity * butcher = make_butcher(14, 73);
+    level->add_entity(butcher);
 
     // Corridor from boss room to escape pods room
     level->add_part(new Corridor(Rect(31, 72, 39, 75), Direction::FourD(), false));
@@ -600,11 +603,12 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
 Entity * make_butcher(int x, int y, MonsterAi * ai_component)
 {
     Entity * butcher = new Entity(
-        x, y, 'B',  TCODColor::lightYellow,
+        x, y, 'B',  TCODColor::darkYellow,
         "The Butcher", ACTOR, true);
 
     // Fighter
     Fighter * fighter_component = new Fighter(70, 70, 60, 0);
+    //Fighter * fighter_component = new Fighter(20, 20, 30, 0);
     butcher->fighter = fighter_component;
     fighter_component->owner = butcher;
 
@@ -612,7 +616,7 @@ Entity * make_butcher(int x, int y, MonsterAi * ai_component)
     // Create the AI for the monster if it is not passed
     if (ai_component == nullptr)
     {
-        ai_component = new ImmobileAi();
+        ai_component = new SeekerAi();
     }
     butcher->ai = ai_component;
     ai_component->owner = butcher;
@@ -621,7 +625,12 @@ Entity * make_butcher(int x, int y, MonsterAi * ai_component)
     butcher->equipment = new Equipment();
     butcher->equipment->owner = butcher;
 
-    butcher->equipment->slots[EquipmentSlot::MAIN_HAND] = make_baton();
+    // The butcher's cleaver
+    Entity * bc = make_baton(-1, -1, 8, 12);
+    bc->equippable->weapon_attack->after_attack_effects.push_back(
+        new StunSelfAttackEffect(4));
+
+    butcher->equipment->slots[EquipmentSlot::MAIN_HAND] = bc;
 
     return butcher;
 }

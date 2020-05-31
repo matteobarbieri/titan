@@ -54,19 +54,19 @@ class Fighter
         bool roll_to_hit_ranged(Entity *, WeaponAttack *, GameMap *);
 
         /**
-         * Perform the attack with a specific weapon
-         */
-        bool attack_with_ranged_weapon(Entity * target, Entity * weapon, WeaponAttack *, GameMap *);
-
-        /**
          * Attack a target with all equipped and primed weapons 
          */
         bool attack(Entity *, GameMap *);
 
         /**
+         * Perform the attack with a specific weapon
+         */
+        bool attack_with_ranged_weapon(Entity * target, Entity * weapon, WeaponAttack *, GameMap *);
+
+        /**
          * Perform the attack with a specific melee weapon
          */
-        bool attack_with_melee_weapon(Entity * target, Entity * weapon, WeaponAttack *);
+        bool attack_with_melee_weapon(Entity * target, Entity * weapon, WeaponAttack *, GameMap *);
 
         /**
          * Applies damage reduction based on armor.

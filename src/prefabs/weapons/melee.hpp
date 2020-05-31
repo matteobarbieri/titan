@@ -9,6 +9,7 @@ Entity * make_dagger(int, int);
 Entity * make_dagger();
 
 // A stun baton
+Entity * make_baton(int, int, int, int);
 Entity * make_baton(int, int);
 Entity * make_baton();
 

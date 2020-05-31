@@ -43,9 +43,8 @@ Entity * make_dagger()
     return make_dagger(-1, -1);
 }
 
-Entity * make_baton(int x, int y)
+Entity * make_baton(int x, int y, int damage_min, int damage_max)
 {
-
     // Create entity object
     Entity * baton = new Entity(
         x, y,
@@ -65,12 +64,19 @@ Entity * make_baton(int x, int y)
         EquipmentSlot::MAIN_HAND | EquipmentSlot::OFF_HAND);
 
     // Specify weapon attack
-    equippable_component->weapon_attack = new WeaponAttack(1.5, 4, 6);
+    equippable_component->weapon_attack = new WeaponAttack(
+        1.5, damage_min, damage_max);
 
     baton->equippable = equippable_component;
     equippable_component->owner = baton;
 
     return baton;
+
+}
+
+Entity * make_baton(int x, int y)
+{
+    return make_baton(x, y, 4, 6);
 }
 
 Entity * make_baton()
