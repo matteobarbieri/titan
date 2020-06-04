@@ -480,6 +480,63 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->change_tile_symbol(27, 67, 'X');
     level->change_tile_symbol(26, 67, 'X');
 
+    unsigned int ne_traps_gid = 20;
+
+    // Add paralyzing traps
+    Entity * t_ne1 = new Entity(
+        27, 66, 0, TCODColor::brass, "", NONE, false, false,
+        true, 0, ne_traps_gid);
+    level->add_entity(t_ne1);
+
+    Entity * t_ne2 = new Entity(
+        26, 66, 0, TCODColor::brass, "", NONE, false, false,
+        true, 0, ne_traps_gid);
+    level->add_entity(t_ne2);
+
+    Entity * t_ne3 = new Entity(
+        27, 67, 0, TCODColor::brass, "", NONE, false, false,
+        true, 0, ne_traps_gid);
+    level->add_entity(t_ne3);
+
+    Entity * t_ne4 = new Entity(
+        26, 67, 0, TCODColor::brass, "", NONE, false, false,
+        true, 0, ne_traps_gid);
+    level->add_entity(t_ne4);
+
+
+    Entity * s_t_ne = make_switch(29, 64);
+    s_t_ne->group_id = 21;
+
+    // Disable switch for 6 turns after using it
+    ApplyDebuffsEffect * d_s_ne = new ApplyDebuffsEffect(-1, 21);
+    d_s_ne->buffs.push_back(new BuffStun(7, false));
+    ((InteractiveSwitch* )s_t_ne->interactive)->effects.push_back(d_s_ne);
+
+    // Stun creature for 6 turns (7-1) on trigger
+    ApplyDebuffsOnTrapEffect * t_ne_effect = new ApplyDebuffsOnTrapEffect(ne_traps_gid);
+    t_ne_effect->buffs.push_back(new BuffStun(7));
+
+    // Display SFX
+    DisplaySFXEffect * sfx_t_ne1 = new DisplaySFXEffect(247, TCODColor::azure, t_ne1);
+    DisplaySFXEffect * sfx_t_ne2 = new DisplaySFXEffect(247, TCODColor::azure, t_ne2);
+    DisplaySFXEffect * sfx_t_ne3 = new DisplaySFXEffect(247, TCODColor::azure, t_ne3);
+    DisplaySFXEffect * sfx_t_ne4 = new DisplaySFXEffect(247, TCODColor::azure, t_ne4);
+
+    ((InteractiveSwitch* )s_t_ne->interactive)->effects.push_back(sfx_t_ne1);
+    ((InteractiveSwitch* )s_t_ne->interactive)->effects.push_back(sfx_t_ne2);
+    ((InteractiveSwitch* )s_t_ne->interactive)->effects.push_back(sfx_t_ne3);
+    ((InteractiveSwitch* )s_t_ne->interactive)->effects.push_back(sfx_t_ne4);
+
+    t_ne_effect->buffs.push_back(new DelayedMessageBuff(
+        5, "This guy is about to break free!", TCODColor::lightYellow));
+
+    ((InteractiveSwitch* )s_t_ne->interactive)->effects.push_back(t_ne_effect);
+
+    level->add_entity(s_t_ne);
+
+
+
+
     //////////////////////////
 
     // TODO add boss and its mechanics
@@ -627,6 +684,8 @@ Entity * make_butcher(int x, int y, MonsterAi * ai_component)
 
     // The butcher's cleaver
     Entity * bc = make_baton(-1, -1, 8, 12);
+    // Add effect such that Butcher is stunned for 3 turns (4-1) after every
+    // attack (whether it's successful or not).
     bc->equippable->weapon_attack->after_attack_effects.push_back(
         new StunSelfAttackEffect(4));
 

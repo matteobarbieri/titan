@@ -297,9 +297,6 @@ DisplaySFXEffect::DisplaySFXEffect(int symbol, TCODColor color, Entity * e, int 
 
 void DisplaySFXEffect::apply(Entity * player, GameMap * game_map, GameState * game_state)
 {
-    //DEBUG("Unlocking doors with key_id " << key_id);
-    //unlock_doors(player, game_map, game_state, key_id);
-    
     Entity * sfx = new Entity(x, y, symbol, color, "", SFX);
     DelayedRemoveBuff * drm = new DelayedRemoveBuff(duration);
     drm->apply(sfx);

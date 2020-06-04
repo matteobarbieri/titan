@@ -1,5 +1,6 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
+#include <vector>
 
 #include "libtcod.hpp"
 
@@ -293,11 +294,24 @@ void init_engine()
 void tick_buffs(GameMap * game_map)
 {
     // Tick buffs for entities
+    unsigned int n_entities = game_map->entities().size();
+
+    // Must copy list of entities because some of them might be deleted during
+    // the loop.
+    std::vector<Entity *> entities_list;
+
     for (unsigned int ei=0; ei<game_map->entities().size(); ei++)
+    {
+        entities_list.push_back(game_map->entities()[ei]);
+    }
+
+    //for (unsigned int ei=0; ei<game_map->entities().size(); ei++)
+    for (unsigned int ei=0; ei<n_entities; ei++)
     {
 
         // Shortcut to entity
-        Entity * e = game_map->entities()[ei];
+        //Entity * e = game_map->entities()[ei];
+        Entity * e = entities_list[ei];
 
         // Refer to this for deleting while iterating:
         // https://stackoverflow.com/questions/3901356/deleting-while-iterating
