@@ -52,9 +52,9 @@ Entity * make_container(int x, int y,
  * Creates a container.
  */
 Entity * make_switch(int x, int y,
-                     TCODColor symbol_color=TCODColor::brass,
+                     TCODColor symbol_color=TCODColor::lime,
                      std::string name="Switch",
-                     int symbol='S',
+                     int symbol=245,
                      bool enabled=true);
 
 
