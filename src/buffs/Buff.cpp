@@ -11,7 +11,11 @@
 //}
 
 
-Buff::Buff(int duration) : duration(duration)
+Buff::Buff(int duration) : duration(duration), stays_on_death(false)
+{
+}
+
+Buff::~Buff()
 {
 }
 
@@ -117,6 +121,7 @@ json DelayedMessageBuff::to_json()
     j["duration"] = duration;
     j["text"] = text;
     j["color"] = tcodcolor_to_json(color);
+    j["stays_on_death"] = stays_on_death;
 
     return j;
 }
@@ -125,6 +130,8 @@ DelayedMessageBuff * DelayedMessageBuff::from_json(json j)
 {
     DelayedMessageBuff * dmb = new DelayedMessageBuff(
         j["duration"], j["text"], json_to_tcodcolor(j["color"]));
+
+    dmb->stays_on_death = j["stays_on_death"];
 
     return dmb;
 }
@@ -165,14 +172,16 @@ json DelayedRemoveBuff::to_json()
     j["subclass"] = "DelayedRemoveBuff";
 
     j["duration"] = duration;
+    j["stays_on_death"] = stays_on_death;
 
     return j;
 }
 
 DelayedRemoveBuff * DelayedRemoveBuff::from_json(json j)
 {
-    DelayedRemoveBuff * dmb = new DelayedRemoveBuff(
+    DelayedRemoveBuff * drm = new DelayedRemoveBuff(
         j["duration"]);
 
-    return dmb;
+    drm->stays_on_death = j["stays_on_death"];
+    return drm;
 }

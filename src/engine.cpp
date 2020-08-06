@@ -327,9 +327,8 @@ void tick_buffs(GameMap * game_map)
             if ((*b)->has_expired())
             {
                 (*b)->expire(game_map);
+                delete (*b);
                 b = e->buffs.erase(b);
-                // TODO delete buff?
-                //delete (*b);
             }
             else
             {

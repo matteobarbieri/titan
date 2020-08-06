@@ -229,6 +229,23 @@ void Entity::die()
         fighter = nullptr;
     }
 
+    // Remove buffs which do not persist after monster's death
+    std::vector<Buff *>::iterator b = buffs.begin();
+    while (b != buffs.end())
+    {
+        // Remove only if not flagged as one which persists after death
+        if (not (*b)->stays_on_death)
+        {
+            // TODO delete buff?
+            delete (*b);
+            b = buffs.erase(b);
+        }
+        else
+        {
+            ++b;
+        }
+    }
+
 }
 
 

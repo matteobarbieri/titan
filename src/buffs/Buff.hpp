@@ -33,6 +33,13 @@ class Buff
          */
         Entity * target;
 
+        /**
+         * Determines whether the buff must be removed once the entity to which
+         * it is attached dies/is destroyed. In some cases (explosives attached
+         * to a monster) it might make sense to keep the buff there.
+         */
+        bool stays_on_death;
+
         //////////////////////////////
         ////////// METHODS ///////////
         //////////////////////////////
@@ -42,6 +49,8 @@ class Buff
          */
         //Buff(Entity * target, int duration);
         Buff(int duration);
+
+        virtual ~Buff();
 
         /**
          * Returns true if the buff has expired
