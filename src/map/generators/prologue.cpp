@@ -41,6 +41,18 @@ namespace prologue {
 
 Entity * make_butcher(int x, int y, MonsterAi * ai_component = nullptr);
 
+/**
+ * n is the number of traps
+ * coordinates is an array containing 2*n integers, to be interpreted as x,y
+ * pairs.
+ */
+void make_trap(int n, const int coordinates[],
+               int switch_coordinates[2],
+               unsigned int trap_id,
+               unsigned int switch_id,
+               GameMap * level,
+               int trap_symbol='X', int switch_symbol=666);
+
 //GameMap generate_dungeon_level(width, height, min_room_length, max_room_length)
 GameMap * generate_map(int width, int height, Overseer ** overseer)
 {
@@ -516,6 +528,9 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     ApplyDebuffsOnTrapEffect * t_ne_effect = new ApplyDebuffsOnTrapEffect(ne_traps_gid);
     t_ne_effect->buffs.push_back(new BuffStun(10));
 
+    t_ne_effect->buffs.push_back(new DelayedMessageBuff(
+        8, "This guy is about to break free!", TCODColor::lightYellow));
+
     // Display SFX
     DisplaySFXEffect * sfx_t_ne1 = new DisplaySFXEffect(247, TCODColor::azure, t_ne1);
     DisplaySFXEffect * sfx_t_ne2 = new DisplaySFXEffect(247, TCODColor::azure, t_ne2);
@@ -527,14 +542,27 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     ((InteractiveSwitch* )s_t_ne->interactive)->effects.push_back(sfx_t_ne3);
     ((InteractiveSwitch* )s_t_ne->interactive)->effects.push_back(sfx_t_ne4);
 
-    t_ne_effect->buffs.push_back(new DelayedMessageBuff(
-        8, "This guy is about to break free!", TCODColor::lightYellow));
-
     ((InteractiveSwitch* )s_t_ne->interactive)->effects.push_back(t_ne_effect);
 
     level->add_entity(s_t_ne);
 
     // SE plates
+    int se_traps_coordinates[] = {
+        27, 80,
+        26, 80,
+        27, 81,
+        26, 81
+    };
+
+    int se_switch_coordinates[] = {
+        29, 83,
+    };
+
+    make_trap(
+        4, // # of trap plates
+        se_traps_coordinates, se_switch_coordinates, 31, 32, level);
+
+    /*
     level->change_tile_symbol(27, 80, 'X');
     level->change_tile_symbol(26, 80, 'X');
     level->change_tile_symbol(27, 81, 'X');
@@ -592,6 +620,7 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     ((InteractiveSwitch* )s_t_se->interactive)->effects.push_back(t_se_effect);
 
     level->add_entity(s_t_se);
+    */
 
     //////////////////////////
 
@@ -711,6 +740,51 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     (*overseer)->scheduled_events.push_back(ev1);
 
     return level;
+}
+
+void make_trap(int n, const int traps_coordinates[],
+               int switch_coordinates[2],
+               unsigned int trap_id, unsigned int switch_id,
+               GameMap * level, int trap_symbol, int switch_symbol)
+{
+
+    // Create switch
+    Entity * trap_switch = make_switch(switch_coordinates[0], switch_coordinates[1]);
+    trap_switch->group_id = switch_id;
+
+    // Disable switch for 6 turns after using it
+    ApplyDebuffsEffect * disable_switch_debuff = new ApplyDebuffsEffect(-1, switch_id);
+    disable_switch_debuff->buffs.push_back(new BuffStun(20, false));
+    ((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(disable_switch_debuff);
+
+    // Stun creature for 6 turns (7-1) on trigger
+    ApplyDebuffsOnTrapEffect * trap_effect = new ApplyDebuffsOnTrapEffect(trap_id);
+    trap_effect->buffs.push_back(new BuffStun(10));
+    trap_effect->buffs.push_back(new DelayedMessageBuff(
+        8, "This guy is about to break free!", TCODColor::lightYellow));
+    ((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(trap_effect);
+
+    for (int i=0; i<n; i++)
+    {
+        // Unpack traps_coordinates
+        int x = traps_coordinates[2*i];
+        int y = traps_coordinates[2*i+1];
+
+        level->change_tile_symbol(x, y, trap_symbol);
+
+        // Add entity for the trap
+        // TODO set the color to white (it is not shown anyway)
+        Entity * trap_entity = new Entity(
+            x, y, 0, TCODColor::brass, "", NONE, false, false,
+            true, 0, trap_id);
+        level->add_entity(trap_entity);
+         
+        // Display SFX on trap tile
+        DisplaySFXEffect * trap_sfx = new DisplaySFXEffect(247, TCODColor::azure, trap_entity);
+        ((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(trap_sfx);
+    }
+
+    level->add_entity(trap_switch);
 }
 
 Entity * make_butcher(int x, int y, MonsterAi * ai_component)

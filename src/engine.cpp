@@ -316,6 +316,11 @@ void tick_buffs(GameMap * game_map)
         // Refer to this for deleting while iterating:
         // https://stackoverflow.com/questions/3901356/deleting-while-iterating
 
+        //if (e->buffs.size() > 0) 
+        //{
+            //DEBUG(e->name << " has " << e->buffs.size() << " buffs active" );
+        //}
+
         // Tick each buff.
         std::vector<Buff *>::iterator b = e->buffs.begin();
         while (b != e->buffs.end())
