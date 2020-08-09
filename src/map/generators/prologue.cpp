@@ -100,42 +100,6 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->make_floor(12, 16);
     level->add_entity(make_door(12, 16, false, true, 2));
 
-    // Add paralyzing trap
-    Entity * test_trap = new Entity(11, 16, 247,
-           TCODColor::brass, "",
-           NONE,
-           false, false,
-           true,
-           0, 1);
-
-    level->change_tile_symbol(11, 16, 'X');
-
-    level->add_entity(test_trap);
-
-    Entity * trap_switch = make_switch(10, 15);
-    trap_switch->group_id = 3;
-    //((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(new StunEnemyOnTrapEffect(1, 3));
-
-    // Disable switch for 7 turns after using it
-    ApplyDebuffsEffect * disable_switch = new ApplyDebuffsEffect(-1, 3);
-    disable_switch->buffs.push_back(new BuffStun(7, false));
-    ((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(disable_switch);
-
-    //ApplyDebuffsEffect * ade1 = new ApplyDebuffsEffect(1);
-    ApplyDebuffsOnTrapEffect * ade1 = new ApplyDebuffsOnTrapEffect(1);
-    ade1->buffs.push_back(new BuffStun(7));
-
-    //DisplaySFXEffect * sfx = new DisplaySFXEffect(22, 11, 17);
-    DisplaySFXEffect * sfx = new DisplaySFXEffect(247, TCODColor::azure, test_trap);
-    ((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(sfx);
-
-    ade1->buffs.push_back(new DelayedMessageBuff(
-        5, "This guy is about to break free!", TCODColor::lightYellow));
-
-    ((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(ade1);
-
-    level->add_entity(trap_switch);
-
     // Add panel (Cell 02)
     level->make_floor(12, 17);
     level->add_entity(make_text_panel(12, 17, Direction::EE, "Cell 02"));
@@ -731,7 +695,7 @@ void make_trap(int n, const int traps_coordinates[],
     ApplyDebuffsOnTrapEffect * trap_effect = new ApplyDebuffsOnTrapEffect(trap_id);
     trap_effect->buffs.push_back(new BuffStun(10));
     trap_effect->buffs.push_back(new DelayedMessageBuff(
-        8, "This guy is about to break free!", TCODColor::lightYellow));
+        8, "The Butcher is about to break free!", TCODColor::lightYellow));
     ((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(trap_effect);
 
     for (int i=0; i<n; i++)

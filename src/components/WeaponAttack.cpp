@@ -2,6 +2,9 @@
 #include "../buffs/BuffStun.hpp"
 #include "../Entity.hpp"
 
+#include <sstream>
+#include "../GameMessages.hpp"
+
 //////////////////////////////////////
 /////////// WEAPON ATTACK ////////////
 //////////////////////////////////////
@@ -121,11 +124,20 @@ StunSelfAttackEffect::StunSelfAttackEffect(int duration) : duration(duration)
 void StunSelfAttackEffect::_apply(Entity * attacker, Entity * target, GameMap * level)
 {
 
-    BuffStun * bs = new BuffStun(duration, true);
+    BuffStun * bs = new BuffStun(duration, false);
     bs->apply(attacker);
 
+    // Build message
+    std::ostringstream stringStream;
+
+    stringStream << attacker->name << " is fatigued.";
+
+    // Add message to message log
+    MessageLog::singleton().add_message(
+        {stringStream.str(), TCODColor::yellow});
+
     // TODO remove?
-    DEBUG(attacker->name << " is tired!");
+    //DEBUG(attacker->name << " is tired!");
 }
 
 json StunSelfAttackEffect::to_json()
