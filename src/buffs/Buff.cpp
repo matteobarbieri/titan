@@ -33,15 +33,15 @@ void Buff::apply(Entity * e)
 {
     e->apply_buff(this);
 
-    // Do buff-specific stuff
-    _apply(e);
-
     // Link entity to buff
     target = e;
+
+    // Do buff-specific stuff
+    _apply();
 }
 
 // By deefault, do nothing else on apply
-void Buff::_apply(Entity * e)
+void Buff::_apply()
 {
 }
 
@@ -76,6 +76,11 @@ Buff * Buff::from_json(json j)
     if (j["subclass"] == "DelayedRemoveBuff")
     {
         return DelayedRemoveBuff::from_json(j);
+    }
+
+    if (j["subclass"] == "TempChangeEntityBuff")
+    {
+        return TempChangeEntityBuff::from_json(j);
     }
 
     return nullptr;
@@ -184,4 +189,85 @@ DelayedRemoveBuff * DelayedRemoveBuff::from_json(json j)
 
     drm->stays_on_death = j["stays_on_death"];
     return drm;
+}
+
+/*
+ _____                       ____ _                            
+|_   _|__ _ __ ___  _ __    / ___| |__   __ _ _ __   __ _  ___ 
+  | |/ _ \ '_ ` _ \| '_ \  | |   | '_ \ / _` | '_ \ / _` |/ _ \
+  | |  __/ | | | | | |_) | | |___| | | | (_| | | | | (_| |  __/
+  |_|\___|_| |_| |_| .__/   \____|_| |_|\__,_|_| |_|\__, |\___|
+                   |_|                              |___/      
+ _____       _   _ _         
+| ____|_ __ | |_(_) |_ _   _ 
+|  _| | '_ \| __| | __| | | |
+| |___| | | | |_| | |_| |_| |
+|_____|_| |_|\__|_|\__|\__, |
+*/
+
+TempChangeEntityBuff::TempChangeEntityBuff(int duration, std::string new_name, TCODColor new_color):
+    Buff(duration), new_name(new_name), new_color(new_color)
+{
+}
+
+TempChangeEntityBuff::TempChangeEntityBuff(
+        int duration,
+        std::string new_name, TCODColor new_color,
+        std::string old_name, TCODColor old_color):
+    Buff(duration), new_name(new_name), new_color(new_color),
+    old_name(old_name), old_color(old_color)
+{
+}
+
+TempChangeEntityBuff * TempChangeEntityBuff::clone()
+{
+    return new TempChangeEntityBuff(duration, new_name, new_color, old_name, old_color);
+}
+
+void TempChangeEntityBuff::_apply()
+{
+    DEBUG("Applied to " << target->name);
+    // Save old values of the attributes, so that they can be restored
+    old_color = target->color();
+    old_name = target->name;
+
+    // Change target entity's attributes
+    target->color(new_color);
+    target->name = new_name;
+}
+
+void TempChangeEntityBuff::expire(GameMap * game_map)
+{
+    // Restore previous attributes
+    target->color(old_color);
+    target->name = old_name;
+}
+
+json TempChangeEntityBuff::to_json()
+{
+    json j;
+
+    j["subclass"] = "TempChangeEntityBuff";
+
+    j["duration"] = duration;
+    j["stays_on_death"] = stays_on_death;
+
+    j["new_color"] = tcodcolor_to_json(new_color);
+    j["new_name"] = new_name;
+
+    j["old_color"] = tcodcolor_to_json(old_color);
+    j["old_name"] = old_name;
+
+    return j;
+}
+
+TempChangeEntityBuff * TempChangeEntityBuff::from_json(json j)
+{
+    TempChangeEntityBuff * tce = new TempChangeEntityBuff(
+        j["duration"],
+        j["new_name"], json_to_tcodcolor(j["new_color"]),
+        j["old_name"], json_to_tcodcolor(j["old_color"]));
+
+    tce->stays_on_death = j["stays_on_death"];
+    return tce;
 }

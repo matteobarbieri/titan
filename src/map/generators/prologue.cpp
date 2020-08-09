@@ -722,6 +722,9 @@ void make_trap(int n, const int traps_coordinates[],
     // Disable switch for 6 turns after using it
     ApplyDebuffsEffect * disable_switch_debuff = new ApplyDebuffsEffect(-1, switch_id);
     disable_switch_debuff->buffs.push_back(new BuffStun(20, false));
+
+    // Change color so that it appears different
+    disable_switch_debuff->buffs.push_back(new TempChangeEntityBuff(20, trap_switch->name, TCODColor::darkCrimson));
     ((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(disable_switch_debuff);
 
     // Stun creature for 6 turns (7-1) on trigger

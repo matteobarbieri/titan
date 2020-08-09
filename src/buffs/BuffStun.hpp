@@ -28,7 +28,7 @@ class BuffStun : public Buff
 
         BuffStun * clone();
 
-        void _apply(Entity *);
+        void _apply();
         virtual bool disables_entity();
 
         json to_json();

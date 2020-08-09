@@ -70,13 +70,16 @@ class Buff
 
         void apply(Entity *);
 
-        virtual void _apply(Entity *);
+        virtual void _apply();
 
         virtual json to_json() = 0;
 
         static Buff * from_json(json j);
 };
 
+/**
+ * Adds a message to the message log after a given number of turns
+ */
 class DelayedMessageBuff : public Buff
 {
 
@@ -96,6 +99,37 @@ class DelayedMessageBuff : public Buff
         json to_json();
         static DelayedMessageBuff * from_json(json j);
 };
+
+/**
+ * Temporarily change attributes of an entity (color, name, etc.)
+ */
+class TempChangeEntityBuff : public Buff
+{
+
+    public:
+
+        std::string new_name;
+        TCODColor new_color;
+
+        std::string old_name;
+        TCODColor old_color;
+
+        TempChangeEntityBuff(int duration, std::string new_name, TCODColor new_color);
+        TempChangeEntityBuff(
+                int duration,
+                std::string new_name, TCODColor new_color,
+                std::string old_name, TCODColor old_color);
+
+        TempChangeEntityBuff * clone();
+
+        void expire(GameMap *);
+
+        void _apply();
+
+        json to_json();
+        static TempChangeEntityBuff * from_json(json j);
+};
+
 
 /**
  * Removes completely an entity when buff expires

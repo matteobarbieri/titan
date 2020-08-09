@@ -22,7 +22,7 @@ BuffStun * BuffStun::clone()
     return new BuffStun(duration, add_log_message);
 }
 
-void BuffStun::_apply(Entity * e)
+void BuffStun::_apply()
 {
     //DEBUG("ALM: " << add_log_message);
     if (add_log_message)
@@ -30,7 +30,7 @@ void BuffStun::_apply(Entity * e)
         // Build message
         std::ostringstream stringStream;
 
-        stringStream << e->name << " is stunned!";
+        stringStream << target->name << " is stunned!";
 
         // Add message to message log
         MessageLog::singleton().add_message(
