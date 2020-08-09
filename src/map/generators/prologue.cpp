@@ -465,86 +465,21 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     
     level->add_part(new Room(Rect(9, 64, 29, 83), Direction::FourD()));
     
-    /*
-    Entity * test_trap = new Entity(11, 16, 247,
-           TCODColor::brass, "",
-           NONE,
-           false, false,
-           true,
-           0, 1);
-
-    level->change_tile_symbol(11, 16, 'X');
-
-    level->add_entity(test_trap);
-
-    Entity * trap_switch = make_switch(10, 15);
-    ((InteractiveSwitch* )trap_switch->interactive)->effects.push_back(new StunEnemyOnTrapEffect(1, 3));
-
-    level->add_entity(trap_switch);
-
-    level->make_floor(12, 17);
-    level->add_entity(make_text_panel(12, 17, Direction::EE, "Cell 02"));
-    */
-    
     // NE plates
-    level->change_tile_symbol(27, 66, 'X');
-    level->change_tile_symbol(26, 66, 'X');
-    level->change_tile_symbol(27, 67, 'X');
-    level->change_tile_symbol(26, 67, 'X');
+    int ne_traps_coordinates[] = {
+        26, 66,
+        27, 66,
+        26, 67,
+        27, 67
+    };
 
-    unsigned int ne_traps_gid = 20;
+    int ne_switch_coordinates[] = {
+        29, 64,
+    };
 
-    // Add paralyzing traps
-    Entity * t_ne1 = new Entity(
-        27, 66, 0, TCODColor::brass, "", NONE, false, false,
-        true, 0, ne_traps_gid);
-    level->add_entity(t_ne1);
-
-    Entity * t_ne2 = new Entity(
-        26, 66, 0, TCODColor::brass, "", NONE, false, false,
-        true, 0, ne_traps_gid);
-    level->add_entity(t_ne2);
-
-    Entity * t_ne3 = new Entity(
-        27, 67, 0, TCODColor::brass, "", NONE, false, false,
-        true, 0, ne_traps_gid);
-    level->add_entity(t_ne3);
-
-    Entity * t_ne4 = new Entity(
-        26, 67, 0, TCODColor::brass, "", NONE, false, false,
-        true, 0, ne_traps_gid);
-    level->add_entity(t_ne4);
-
-
-    Entity * s_t_ne = make_switch(29, 64);
-    s_t_ne->group_id = 21;
-
-    // Disable switch for 6 turns after using it
-    ApplyDebuffsEffect * d_s_ne = new ApplyDebuffsEffect(-1, 21);
-    d_s_ne->buffs.push_back(new BuffStun(20, false));
-    ((InteractiveSwitch* )s_t_ne->interactive)->effects.push_back(d_s_ne);
-
-    // Stun creature for 6 turns (7-1) on trigger
-    ApplyDebuffsOnTrapEffect * t_ne_effect = new ApplyDebuffsOnTrapEffect(ne_traps_gid);
-    t_ne_effect->buffs.push_back(new BuffStun(10));
-
-    t_ne_effect->buffs.push_back(new DelayedMessageBuff(
-        8, "This guy is about to break free!", TCODColor::lightYellow));
-
-    // Display SFX
-    DisplaySFXEffect * sfx_t_ne1 = new DisplaySFXEffect(247, TCODColor::azure, t_ne1);
-    DisplaySFXEffect * sfx_t_ne2 = new DisplaySFXEffect(247, TCODColor::azure, t_ne2);
-    DisplaySFXEffect * sfx_t_ne3 = new DisplaySFXEffect(247, TCODColor::azure, t_ne3);
-    DisplaySFXEffect * sfx_t_ne4 = new DisplaySFXEffect(247, TCODColor::azure, t_ne4);
-
-    ((InteractiveSwitch* )s_t_ne->interactive)->effects.push_back(sfx_t_ne1);
-    ((InteractiveSwitch* )s_t_ne->interactive)->effects.push_back(sfx_t_ne2);
-    ((InteractiveSwitch* )s_t_ne->interactive)->effects.push_back(sfx_t_ne3);
-    ((InteractiveSwitch* )s_t_ne->interactive)->effects.push_back(sfx_t_ne4);
-
-    ((InteractiveSwitch* )s_t_ne->interactive)->effects.push_back(t_ne_effect);
-
-    level->add_entity(s_t_ne);
+    make_trap(
+        4, // # of trap plates
+        ne_traps_coordinates, ne_switch_coordinates, 29, 30, level);
 
     // SE plates
     int se_traps_coordinates[] = {
@@ -561,6 +496,38 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     make_trap(
         4, // # of trap plates
         se_traps_coordinates, se_switch_coordinates, 31, 32, level);
+
+    // NW plates
+    int nw_traps_coordinates[] = {
+        11, 66,
+        12, 66,
+        11, 67,
+        12, 67
+    };
+
+    int nw_switch_coordinates[] = {
+        9, 64
+    };
+
+    make_trap(
+        4, // # of trap plates
+        nw_traps_coordinates, nw_switch_coordinates, 33, 34, level);
+
+    // SW plates
+    int sw_traps_coordinates[] = {
+        11, 80,
+        12, 80,
+        11, 81,
+        12, 81
+    };
+
+    int sw_switch_coordinates[] = {
+        9, 83
+    };
+
+    make_trap(
+        4, // # of trap plates
+        sw_traps_coordinates, sw_switch_coordinates, 35, 36, level);
 
     /*
     level->change_tile_symbol(27, 80, 'X');
