@@ -53,6 +53,12 @@ void make_trap(int n, const int coordinates[],
                GameMap * level,
                int trap_symbol='X', int switch_symbol=666);
 
+/**
+ * Entity IDs recap:
+ *
+ * 100: locked door in boss's room
+ */
+
 //GameMap generate_dungeon_level(width, height, min_room_length, max_room_length)
 GameMap * generate_map(int width, int height, Overseer ** overseer)
 {
@@ -493,66 +499,6 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
         4, // # of trap plates
         sw_traps_coordinates, sw_switch_coordinates, 35, 36, level);
 
-    /*
-    level->change_tile_symbol(27, 80, 'X');
-    level->change_tile_symbol(26, 80, 'X');
-    level->change_tile_symbol(27, 81, 'X');
-    level->change_tile_symbol(26, 81, 'X');
-
-    unsigned int se_traps_id = 30;
-
-    // Add paralyzing traps
-    Entity * t_se1 = new Entity(
-        27, 80, 0, TCODColor::brass, "", NONE, false, false,
-        true, 0, se_traps_id);
-    level->add_entity(t_se1);
-
-    Entity * t_se2 = new Entity(
-        26, 80, 0, TCODColor::brass, "", NONE, false, false,
-        true, 0, se_traps_id);
-    level->add_entity(t_se2);
-
-    Entity * t_se3 = new Entity(
-        27, 81, 0, TCODColor::brass, "", NONE, false, false,
-        true, 0, se_traps_id);
-    level->add_entity(t_se3);
-
-    Entity * t_se4 = new Entity(
-        26, 81, 0, TCODColor::brass, "", NONE, false, false,
-        true, 0, se_traps_id);
-    level->add_entity(t_se4);
-
-    Entity * s_t_se = make_switch(29, 83);
-    s_t_se->group_id = 31;
-
-    // Disable switch for 6 turns after using it
-    ApplyDebuffsEffect * d_s_se = new ApplyDebuffsEffect(-1, 31);
-    d_s_se->buffs.push_back(new BuffStun(20, false));
-    ((InteractiveSwitch* )s_t_se->interactive)->effects.push_back(d_s_se);
-
-    // Stun creature for 6 turns (7-1) on trigger
-    ApplyDebuffsOnTrapEffect * t_se_effect = new ApplyDebuffsOnTrapEffect(se_traps_id);
-    t_se_effect->buffs.push_back(new BuffStun(10));
-
-    // Display SFX
-    DisplaySFXEffect * sfx_t_se1 = new DisplaySFXEffect(247, TCODColor::azure, t_se1);
-    DisplaySFXEffect * sfx_t_se2 = new DisplaySFXEffect(247, TCODColor::azure, t_se2);
-    DisplaySFXEffect * sfx_t_se3 = new DisplaySFXEffect(247, TCODColor::azure, t_se3);
-    DisplaySFXEffect * sfx_t_se4 = new DisplaySFXEffect(247, TCODColor::azure, t_se4);
-
-    ((InteractiveSwitch* )s_t_se->interactive)->effects.push_back(sfx_t_se1);
-    ((InteractiveSwitch* )s_t_se->interactive)->effects.push_back(sfx_t_se2);
-    ((InteractiveSwitch* )s_t_se->interactive)->effects.push_back(sfx_t_se3);
-    ((InteractiveSwitch* )s_t_se->interactive)->effects.push_back(sfx_t_se4);
-
-    t_se_effect->buffs.push_back(new DelayedMessageBuff(
-        8, "This guy is about to break free!", TCODColor::lightYellow));
-
-    ((InteractiveSwitch* )s_t_se->interactive)->effects.push_back(t_se_effect);
-
-    level->add_entity(s_t_se);
-    */
-
     //////////////////////////
 
     // TODO add boss and its mechanics
@@ -582,7 +528,7 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->make_floor(26, 63);
 
     // TODO room must be locked until boss is alive
-    level->add_entity(make_door(26, 63, false, false));
+    level->add_entity(make_door(26, 63, false, true, 100));
     
     level->add_part(new Room(Rect(24, 59, 28, 62), Direction::FourD()));
 
@@ -728,8 +674,8 @@ Entity * make_butcher(int x, int y, MonsterAi * ai_component)
         "The Butcher", ACTOR, true);
 
     // Fighter
-    Fighter * fighter_component = new Fighter(40, 40, 60, 0);
-    //Fighter * fighter_component = new Fighter(20, 20, 30, 0);
+    //Fighter * fighter_component = new Fighter(40, 40, 60, 0);
+    Fighter * fighter_component = new Fighter(10, 10, 60, 0);
     butcher->fighter = fighter_component;
     fighter_component->owner = butcher;
 
@@ -754,6 +700,15 @@ Entity * make_butcher(int x, int y, MonsterAi * ai_component)
         new StunSelfAttackEffect(4));
 
     butcher->equipment->slots[EquipmentSlot::MAIN_HAND] = bc;
+
+    // On death, unlock doors
+    UnlockDoorsEffect * ude = new UnlockDoorsEffect(100);
+    butcher->on_death_effects.push_back(ude);
+
+    AddLogMessageEffect * alme = new AddLogMessageEffect(
+            "Threat level under control. Unlocking door.",
+            TCODColor::lightViolet);
+    butcher->on_death_effects.push_back(alme);
 
     return butcher;
 }

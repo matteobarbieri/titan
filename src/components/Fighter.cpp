@@ -411,7 +411,8 @@ bool Fighter::attack(Entity * target, GameMap * level)
     // Check if target is dead 
     if (target->fighter->is_dead())
     {
-        target->die();
+        // TODO must check other arguments
+        target->die(nullptr, level, nullptr);
     }
 
     return attack_succeeded;

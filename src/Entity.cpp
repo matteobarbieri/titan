@@ -27,6 +27,7 @@
 
 // Misc
 #include "buffs/Buff.hpp"
+#include "prefabs/funcs/misc.hpp"
 
 Entity::Entity(int x, int y, int symbol,
     TCODColor color, std::string name, RenderOrder render_order,
@@ -194,7 +195,7 @@ void Entity::blocks_sight(bool b)
     _blocks_sight = b;
 }
 
-void Entity::die()
+void Entity::die(Entity * player, GameMap * game_map, GameState * game_state)
 {
 
     // Build message
@@ -244,6 +245,15 @@ void Entity::die()
         {
             ++b;
         }
+    }
+
+    // Remove buffs which do not persist after monster's death
+    std::vector<Effect *>::iterator eff = on_death_effects.begin();
+    while (eff != on_death_effects.end())
+    {
+        (*eff)->apply(player, game_map, game_state);
+        delete (*eff);
+        eff = on_death_effects.erase(eff);
     }
 
 }
@@ -346,6 +356,15 @@ json Entity::to_json()
 
     json_data["buffs"] = j_buffs;
 
+    // Buffs currently applied to entity
+    json j_on_death_effects;
+    for (int i=0; i<(int)on_death_effects.size(); i++)
+    {
+        j_on_death_effects.push_back(on_death_effects[i]->to_json());
+    }
+
+    json_data["on_death_effects"] = j_on_death_effects;
+
     return json_data;
 };
 
@@ -443,6 +462,17 @@ Entity * Entity::from_json(json j)
             Buff * b = Buff::from_json(j["buffs"][i]);
             e->buffs.push_back(b);
             b->target = e;
+        }
+    }
+
+    // On death effects
+    if (j["on_death_effects"] != nullptr)
+    {
+        // Reapply on_death_effects "manually"
+        for (int i=0; i<(int)j["on_death_effects"].size(); i++)
+        {
+            Effect * ef = Effect::from_json(j["on_death_effects"][i]);
+            e->on_death_effects.push_back(ef);
         }
     }
 

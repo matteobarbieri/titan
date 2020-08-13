@@ -30,6 +30,7 @@ class GameMap;
 class GameState;
 
 class Buff;
+class Effect;
 
 /** A container for all consoles that are used in the game, except for the root
  * one, which is accessed directly via TCODConsole::root.
@@ -92,6 +93,9 @@ class Entity
         // Buffs currently applied to entity
         std::vector<Buff *> buffs;
 
+        // Effects that take place on entity's death
+        std::vector<Effect *> on_death_effects;
+
         //////////////////////////////
         ////////// METHODS ///////////
         //////////////////////////////
@@ -151,7 +155,7 @@ class Entity
         /**
          * Used for entities which represent living things, cleans up components
          */
-        void die();
+        void die(Entity *, GameMap *, GameState *);
 
         /**
          * Creates a json representation of the entity
