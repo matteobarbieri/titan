@@ -41,8 +41,7 @@ class Fighter
         Entity * owner;
 
         Fighter(int max_hp);
-        Fighter(int max_hp, int hp);
-        Fighter(int max_hp, int hp, int _fighting, int _accuracy);
+        Fighter(int max_hp, int _fighting, int _accuracy);
 
         int max_hp() const;
         int hp() const;

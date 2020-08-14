@@ -29,16 +29,12 @@
 bool weapon_in_range(Entity * attacker, Entity * target, Entity * weapon, WeaponAttack * weapon_attack);
 bool ammo_check(Entity * weapon);
 
-Fighter::Fighter(int max_hp, int hp, int _fighting, int _accuracy) :
-    _max_hp(max_hp), _hp(hp), _fighting(_fighting), _accuracy(_accuracy)
+Fighter::Fighter(int max_hp, int _fighting, int _accuracy) :
+    _max_hp(max_hp), _hp(max_hp), _fighting(_fighting), _accuracy(_accuracy)
 {
 }
 
-Fighter::Fighter(int max_hp, int hp) : Fighter(max_hp, hp, 0, 0)
-{
-}
-
-Fighter::Fighter(int max_hp) : Fighter(max_hp, max_hp)
+Fighter::Fighter(int max_hp) : Fighter(max_hp, 0, 0)
 {
 }
 
@@ -88,9 +84,17 @@ json Fighter::to_json()
 
 Fighter * Fighter::from_json(json j)
 {
+    //Fighter * c = new Fighter(
+        //j["_max_hp"], j["_hp"],
+        //j["_fighting"], j["_accuracy"]);
+
     Fighter * c = new Fighter(
-        j["_max_hp"], j["_hp"],
+        j["_max_hp"],
         j["_fighting"], j["_accuracy"]);
+
+    // Current HP must be set manually since it is no longer done in the
+    // constructor.
+    c->_hp = j["_hp"];
 
     return c;
 }
