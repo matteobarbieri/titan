@@ -511,8 +511,8 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->make_floor(19, 84);
     level->make_floor(20, 84);
 
-    level->add_entity(make_door(19, 84, false, false));
-    level->add_entity(make_door(20, 84, false, false));
+    level->add_entity(make_door(19, 84, false, true, 100));
+    level->add_entity(make_door(20, 84, false, true, 100));
     
     level->add_part(new Corridor(Rect(18, 85, 21, 94), Direction::FourD(), false));
     level->add_part(new Corridor(Rect(22, 91, 39, 94), Direction::FourD(), false));
