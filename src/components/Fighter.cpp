@@ -42,6 +42,26 @@ Fighter::Fighter(int max_hp) : Fighter(max_hp, max_hp)
 {
 }
 
+FighterStatus Fighter::damage_track() const
+{
+    // Compute the ratio of current HP
+    float hp_ratio = (float)hp()/(float)max_hp();
+    
+    if (hp_ratio >= 1)
+        return HALE;
+    
+    if (hp_ratio >= 0.75)
+        return SCRATCHED;
+    
+    if (hp_ratio >= 0.3)
+        return INJURED;
+    
+    if (hp_ratio > 0)
+        return RAVAGED;
+    
+    return DEAD;
+}
+
 int Fighter::hp() const
 {
     // TODO possibly change this

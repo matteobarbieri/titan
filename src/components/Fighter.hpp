@@ -10,6 +10,15 @@ class Entity;
 class WeaponAttack;
 class GameMap;
 
+typedef enum 
+{
+    HALE = 0,
+    SCRATCHED = 1,
+    INJURED = 2,
+    RAVAGED = 3,
+    DEAD = 4,
+} FighterStatus;
+
 class Fighter
 {
 
@@ -37,6 +46,11 @@ class Fighter
 
         int max_hp() const;
         int hp() const;
+
+        /**
+         * Returns an indication of how injured/damaged an entity is.
+         */
+        FighterStatus damage_track() const;
 
         /**
          * Function which determines if the attacker hits the target.

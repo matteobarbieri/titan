@@ -674,8 +674,8 @@ Entity * make_butcher(int x, int y, MonsterAi * ai_component)
         "The Butcher", ACTOR, true);
 
     // Fighter
-    //Fighter * fighter_component = new Fighter(40, 40, 60, 0);
-    Fighter * fighter_component = new Fighter(10, 10, 60, 0);
+    Fighter * fighter_component = new Fighter(40, 40, 60, 0);
+    //Fighter * fighter_component = new Fighter(10, 10, 60, 0);
     butcher->fighter = fighter_component;
     fighter_component->owner = butcher;
 
