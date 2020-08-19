@@ -332,36 +332,20 @@ Action * handle_targeting_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     {
         key_char = key.c;
 
-
-        //if (key_char == 'd')
-            //return new DropItemAction();
-
-        //if (key_char == 'e')
-            //return new ItemEquipToggleAction();
-
-        //if (key_char == 'u')
-            //return new ItemUseAction();
-
     }
 
+    // TODO should probably return to game instead
     if (key.vk == TCODK_ESCAPE)
     {
         return new BackToInventoryMenuAction();
     }
 
+    if (mouse.lbutton_pressed)
+    {
+        return new ItemResolveTargetingAction(mouse.cx, mouse.cy);
+    }
+
     return nullptr;
-
-    /*
-    # Code to prevent double input
-    key_char = chr(key.c) if key.vk == libtcod.KEY_CHAR else ""
-
-    if key_char == "d":
-        return DropItemAction()
-    elif key_char == "e":
-        return EquipItemAction()
-    elif key_char == "t":
-        return UnequipItemAction()
-    */
 }
 
 

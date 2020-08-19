@@ -11,6 +11,7 @@ ccsrc = $(wildcard src/*.cpp) \
         $(wildcard src/prefabs/*.cpp) \
         $(wildcard src/prefabs/enemies/*.cpp) \
         $(wildcard src/prefabs/weapons/*.cpp) \
+        $(wildcard src/prefabs/items/*.cpp) \
         $(wildcard src/prefabs/misc/*.cpp) \
         $(wildcard src/prefabs/funcs/*.cpp) \
         $(wildcard src/map/*.cpp) \

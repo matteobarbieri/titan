@@ -25,6 +25,8 @@ class Effect
 {
     public:
 
+        int x, y;
+
         /**
          * Apply the effect specified
          */
@@ -148,6 +150,27 @@ class AddLogMessageEffect : public Effect
         json to_json();
 
         static AddLogMessageEffect * from_json(json);
+};
+
+class DamageEnemiesInAreaEffect : public Effect
+{
+    public:
+
+        // Coordinates of the target
+        //int x, y;
+
+        // Radius
+        int radius;
+
+        int damage;
+
+        DamageEnemiesInAreaEffect(int, int);
+
+        void apply(Entity *, GameMap *, GameState *);
+
+        json to_json();
+
+        static DamageEnemiesInAreaEffect * from_json(json);
 };
 
 /**
