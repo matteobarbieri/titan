@@ -3,6 +3,8 @@
 
 #include "../nlohmann/json.hpp"
 
+#include "../prefabs/funcs/misc.hpp"
+
 using json = nlohmann::json;
 
 // Forward declarations
@@ -55,6 +57,11 @@ class Item
         Entity * owner;
 
         int item_letter;
+
+        /**
+         * The effects applied by the item once it's used
+         */
+        std::vector<Effect *> effects;
 
         // Base item properties
         ItemType item_type;

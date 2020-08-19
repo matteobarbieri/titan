@@ -38,6 +38,9 @@ Outcome * ItemEquipToggleAction::_execute()
 }
 
 
+/**
+ * Use an item from the inventory
+ */
 Outcome * ItemUseAction::_execute()
 {
 
@@ -68,6 +71,44 @@ Outcome * ItemUseAction::_execute()
         next_phase,
         false,
         false);
+
+    return outcome;
+}
+
+
+ItemResolveTargetingAction::ItemResolveTargetingAction(int x, int y) : x(x), y(y)
+{
+}
+
+    
+/**
+ * Use an item from the inventory
+ */
+Outcome * ItemResolveTargetingAction::_execute()
+{
+
+    GamePhase next_phase;
+
+    // Build message
+    //std::ostringstream stringStream;
+
+    for (int i=0; i<(int)game_state->selected_inventory_item->item->effects.size(); i++)
+    {
+        Effect * eff = game_state->selected_inventory_item->item->effects[i];
+        eff->x = x; 
+        eff->y = y; 
+
+        eff->apply(player, game_map, game_state);
+    }
+
+    next_phase = ENEMY_TURN;
+
+    // Return outcome
+    // TODO check if everything needs to be redrawn
+    Outcome * outcome = new Outcome(
+        next_phase,
+        true,
+        true);
 
     return outcome;
 }

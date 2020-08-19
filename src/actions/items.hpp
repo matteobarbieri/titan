@@ -15,6 +15,20 @@ class ItemUseAction : public Action
 
 };
 
+class ItemResolveTargetingAction : public Action
+{
+
+    public:
+
+        int x, y;
+
+        // Since it's a targeted action, require target coordinates
+        ItemResolveTargetingAction(int, int);
+
+        Outcome * _execute();
+
+};
+
 class DropItemAction : public Action
 {
 

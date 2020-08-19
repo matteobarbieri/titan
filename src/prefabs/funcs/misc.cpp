@@ -5,10 +5,14 @@
 #include "../../map/GameMap.hpp"
 #include "../../Entity.hpp"
 #include "../../SaveGame.hpp"
-#include "../../components/Interactive.hpp"
 #include "../../GameMessages.hpp"
 
+#include "../../components/Interactive.hpp"
+#include "../../components/Fighter.hpp"
+
 #include "../../buffs/BuffStun.hpp"
+
+#include "../../utils.hpp"
 
 void unlock_doors(Entity * player, GameMap * game_map, GameState * game_state, unsigned int unlock_doors_id)
 {
@@ -56,6 +60,11 @@ Effect * Effect::from_json(json j)
     if (j["subclass"] == "ApplyDebuffsOnTrapEffect")
     {
         return ApplyDebuffsOnTrapEffect::from_json(j);
+    }
+
+    if (j["subclass"] == "DamageEnemiesInAreaEffect")
+    {
+        return DamageEnemiesInAreaEffect::from_json(j);
     }
 
     if (j["subclass"] == "ApplyDebuffsEffect")
@@ -158,7 +167,6 @@ ApplyDebuffsEffect * ApplyDebuffsEffect::from_json(json j)
     return ade;
 }
 
-
 ///////////////////////////////////////
 ////// APPLY DEBUFFS TO ENTITIES //////
 ////// CAUGHT ON TRAP /////////////////
@@ -245,6 +253,78 @@ ApplyDebuffsOnTrapEffect * ApplyDebuffsOnTrapEffect::from_json(json j)
     }
     
     return ade;
+}
+
+
+////////////////////////////////
+//// DAMAGE ENTITIES IN AOE ////
+////////////////////////////////
+
+DamageEnemiesInAreaEffect::DamageEnemiesInAreaEffect(int radius, int damage) :
+    radius(radius), damage(damage)
+{
+}
+
+void DamageEnemiesInAreaEffect::apply(Entity * player, GameMap * game_map, GameState * game_state)
+{
+
+    // Correct coordinates
+    x = game_map->top_x + x;
+    y = game_map->top_y + y;
+
+    // Cycle through a square which contains the area
+    // TODO check
+    for (int xx=x-radius; xx<=x+radius; xx++)
+    {
+        for (int yy=y-radius; yy<=y+radius; yy++)
+        {
+            
+            // Check if is in range
+            if (l2(x, y, xx, yy ) > radius)
+            {
+                continue;
+            }
+
+            //DEBUG("Applying effect to " << xx << " " << yy);
+
+            // Else apply damage
+            Entity * target = game_map->get_inspectable_entity_at(xx, yy);
+
+            if (target != nullptr && target->fighter != nullptr)
+            {
+                //DEBUG("Found entity: " << target->name);
+                target->fighter->take_damage(damage);
+                
+                // Check if target is dead 
+                if (target->fighter->is_dead())
+                {
+                    // TODO must check other arguments
+                    target->die(nullptr, game_map, nullptr);
+                }
+            }
+        }
+    }
+
+}
+
+json DamageEnemiesInAreaEffect::to_json()
+{
+    json j;
+
+    j["subclass"] = "DamageEnemiesInAreaEffect";
+
+    j["radius"] = radius;
+    j["damage"] = damage;
+
+    return j;
+}
+
+DamageEnemiesInAreaEffect * DamageEnemiesInAreaEffect::from_json(json j)
+{
+    DamageEnemiesInAreaEffect * deiae = new DamageEnemiesInAreaEffect(
+        j["radius"], j["damage"]);
+
+    return deiae;
 }
 
 //////////////////////////////////

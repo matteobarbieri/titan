@@ -33,6 +33,7 @@
 #include "../../prefabs/funcs/misc.hpp"
 #include "../../prefabs/weapons/melee.hpp"
 #include "../../prefabs/weapons/ranged.hpp"
+#include "../../prefabs/items/items.hpp"
 #include "../../prefabs/armor.hpp"
 
 #include "../../buffs/BuffStun.hpp"
@@ -417,6 +418,7 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
 
     // TODO Extra pistol, to remove
     level->add_entity(make_pistol(32, 73));
+    level->add_entity(make_frag_grenade(32, 74));
 
     /*
      *  ____
