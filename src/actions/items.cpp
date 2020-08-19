@@ -21,6 +21,12 @@
 
 Outcome * ItemEquipToggleAction::_execute()
 {
+    // First check if it can be equipped at all
+    if (game_state->selected_inventory_item->equippable == nullptr)
+    {
+        return nullptr;
+    }
+
     if (game_state->selected_inventory_item->item->equipped)
     {
         return unequip();
