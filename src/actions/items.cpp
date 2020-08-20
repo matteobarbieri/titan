@@ -49,11 +49,6 @@ Outcome * ItemUseAction::_execute()
    
     o = game_state->selected_inventory_item->usable->use();
 
-    //if (game_state->selected_inventory_item->usable->is_consumable)
-    //{
-        //player->inventory->remove_item(game_state->selected_inventory_item);
-    //}
-    
     return o;
 
     /*
@@ -116,8 +111,12 @@ Outcome * ItemResolveTargetingAction::_execute()
     }
 
     // Remove object from player's inventory
-    // TODO redue quantity
-
+    // TODO reduce quantity instead
+    if (game_state->selected_inventory_item->usable->is_consumable)
+    {
+        player->inventory->remove_item(game_state->selected_inventory_item);
+    }
+    
     next_phase = ENEMY_TURN;
 
     // Return outcome
