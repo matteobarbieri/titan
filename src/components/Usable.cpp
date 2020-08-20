@@ -51,8 +51,9 @@ Outcome * Usable::use()
 /_/   \_\___/|_____|\___/|___/\__,_|_.__/|_|\___|
 */
 
-AOEUsable::AOEUsable(int radius, int range) : Targetable(radius, range)
+AOEUsable::AOEUsable(bool is_consumable, int radius, int range) : Targetable(radius, range)
 {
+    this->is_consumable = is_consumable;
 }
 
 Outcome * AOEUsable::_use()
@@ -85,6 +86,8 @@ json AOEUsable::to_json()
     json j;
     j["subclass"] = "AOEUsable";
 
+    j["is_consumable"] = is_consumable;
+
     json j_effects;
 
     // Buffs currently applied to entity
@@ -105,7 +108,7 @@ json AOEUsable::to_json()
 AOEUsable * AOEUsable::from_json(json j)
 {
     
-    AOEUsable * aoeu = new AOEUsable(j["radius"], j["range"]);
+    AOEUsable * aoeu = new AOEUsable(j["is_consumable"], j["radius"], j["range"]);
 
     // Restore effects
     // TODO probably could move in parent class

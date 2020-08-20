@@ -45,7 +45,16 @@ Outcome * ItemEquipToggleAction::_execute()
 Outcome * ItemUseAction::_execute()
 {
 
-    return game_state->selected_inventory_item->usable->use();
+    Outcome * o;
+   
+    o = game_state->selected_inventory_item->usable->use();
+
+    //if (game_state->selected_inventory_item->usable->is_consumable)
+    //{
+        //player->inventory->remove_item(game_state->selected_inventory_item);
+    //}
+    
+    return o;
 
     /*
     GamePhase next_phase;
@@ -105,6 +114,9 @@ Outcome * ItemResolveTargetingAction::_execute()
 
         eff->apply(player, game_map, game_state);
     }
+
+    // Remove object from player's inventory
+    // TODO redue quantity
 
     next_phase = ENEMY_TURN;
 

@@ -63,3 +63,10 @@ Outcome * ToggleFullscreenAction::_execute()
 
     return nullptr;
 }
+
+Outcome * CancelAction::_execute()
+{
+    // Throw exception to go to main menu;
+    throw CancelActionException();
+    //return nullptr;
+}

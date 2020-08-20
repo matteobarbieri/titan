@@ -16,6 +16,7 @@
 
 #include "Consoles.hpp"
 #include "actions/Action.hpp"
+#include "actions/Outcome.hpp"
 
 #include "buffs/Buff.hpp"
 
@@ -156,6 +157,11 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state, Over
                     // Exit to main menu
                     return;
                 }
+                catch(CancelActionException e) {
+                    // TODO check fov_recompute and redraw_terrain
+                    outcome = new Outcome(PLAYERS_TURN, true, true);
+                }
+
 
                 ////////////////////////////////////////////
                 ///////////// RESOLVE OUTCOME //////////////
