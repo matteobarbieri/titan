@@ -45,6 +45,9 @@ Outcome * ItemEquipToggleAction::_execute()
 Outcome * ItemUseAction::_execute()
 {
 
+    return game_state->selected_inventory_item->usable->use();
+
+    /*
     GamePhase next_phase;
 
     // Build message
@@ -74,6 +77,7 @@ Outcome * ItemUseAction::_execute()
         false);
 
     return outcome;
+    */
 }
 
 

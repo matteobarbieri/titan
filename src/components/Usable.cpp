@@ -4,6 +4,12 @@
 
 #include "../prefabs/funcs/misc.hpp"
 
+#include "../GameState.hpp"
+
+#include "../actions/Outcome.hpp"
+
+//#include <string>
+#include <sstream>
 /**
  _   _           _     _      
 | | | |___  __ _| |__ | | ___ 
@@ -32,7 +38,7 @@ Usable * Usable::from_json(json j)
     return nullptr;
 }
 
-void Usable::use()
+Outcome * Usable::use()
 {
     return _use();
 }
@@ -49,9 +55,29 @@ AOEUsable::AOEUsable(int radius, int range) : Targetable(radius, range)
 {
 }
 
-void AOEUsable::_use()
+Outcome * AOEUsable::_use()
 {
-    // TODO fix this!
+    GamePhase next_phase;
+
+    // Build message
+    std::ostringstream stringStream;
+
+    next_phase = TARGETING;
+
+    stringStream << "Select target ";
+
+    // Add message to message log
+    MessageLog::singleton().add_message(
+        {stringStream.str(), TCODColor::yellow});
+
+    // Return outcome
+    Outcome * outcome = new Outcome(
+        next_phase,
+        false,
+        false);
+
+    return outcome;
+
 }
 
 json AOEUsable::to_json()
