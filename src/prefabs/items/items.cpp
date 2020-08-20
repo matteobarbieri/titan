@@ -21,19 +21,17 @@ Entity * make_frag_grenade(int x, int y)
         '*', TCODColor::sky, "Frag grenade", ITEM,
         false, false);
 
-    AOEUsable * usable_component = new AOEUsable();
-    usable_component->radius = 4;
-    usable_component->range = 10;
+    AOEUsable * usable_component = new AOEUsable(4, 10);
+
+    // Add damage effect
+    DamageEnemiesInAreaEffect * damage_effect = new DamageEnemiesInAreaEffect(4, 100);
+    usable_component->effects.push_back(damage_effect);
 
     grenade->usable = usable_component;
     usable_component->owner = grenade;
 
     Item * grenade_item_component = new Item(
         ItemType::CONSUMABLE, ItemSubtype::NONE);
-
-    // Add damage effect
-    DamageEnemiesInAreaEffect * damage_effect = new DamageEnemiesInAreaEffect(2, 100);
-    grenade_item_component->effects.push_back(damage_effect);
 
     grenade->item = grenade_item_component;
     grenade_item_component->owner = grenade;

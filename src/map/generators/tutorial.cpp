@@ -75,9 +75,7 @@ GameMap * generate_room(int width, int height)
         xc+2, yc, 162,
         TCODColor::darkerGreen, "Frag grenade", ITEM, false, false, false);
 
-    AOEUsable * usable_component = new AOEUsable();
-    usable_component->radius = 4;
-    usable_component->range = 10;
+    AOEUsable * usable_component = new AOEUsable(4, 10);
 
     grenade->usable = usable_component;
     usable_component->owner = grenade;
