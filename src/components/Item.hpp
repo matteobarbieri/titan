@@ -58,11 +58,6 @@ class Item
 
         int item_letter;
 
-        /**
-         * The effects applied by the item once it's used
-         */
-        std::vector<Effect *> effects;
-
         // Base item properties
         ItemType item_type;
         ItemSubtype item_subtype;

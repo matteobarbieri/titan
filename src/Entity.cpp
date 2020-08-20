@@ -382,8 +382,6 @@ Entity * Entity::from_json(json j)
            j["_id"],
            j["group_id"]);
 
-    //DEBUG("Restoring " << j["name"]);
-
     e->tag = j["tag"];
 
     // Then reconstruct and assign all components

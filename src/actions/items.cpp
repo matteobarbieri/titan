@@ -9,6 +9,7 @@
 #include "../components/Inventory.hpp"
 #include "../components/Equipment.hpp"
 #include "../components/Item.hpp"
+#include "../components/Usable.hpp"
 #include "../components/Container.hpp"
 
 //#include "../GameMessages.hpp"
@@ -92,9 +93,9 @@ Outcome * ItemResolveTargetingAction::_execute()
     // Build message
     //std::ostringstream stringStream;
 
-    for (int i=0; i<(int)game_state->selected_inventory_item->item->effects.size(); i++)
+    for (int i=0; i<(int)game_state->selected_inventory_item->usable->effects.size(); i++)
     {
-        Effect * eff = game_state->selected_inventory_item->item->effects[i];
+        Effect * eff = game_state->selected_inventory_item->usable->effects[i];
         eff->x = x; 
         eff->y = y; 
 
