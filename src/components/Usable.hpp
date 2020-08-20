@@ -7,6 +7,7 @@ using json = nlohmann::json;
 
 class Entity;
 class Effect;
+class Outcome;
 
 class Usable
 {
@@ -28,9 +29,9 @@ class Usable
          */
         virtual json to_json() = 0;
 
-        virtual void _use() = 0;
+        virtual Outcome * _use() = 0;
 
-        void use();
+        Outcome * use();
 
         static Usable * from_json(json j);
 };
@@ -56,7 +57,7 @@ class AOEUsable : public Usable, public Targetable
 
         AOEUsable(int, int);
 
-        void _use() override;
+        Outcome * _use() override;
 
         static AOEUsable * from_json(json j);
         json to_json() override;
