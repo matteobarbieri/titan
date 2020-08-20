@@ -337,7 +337,8 @@ Action * handle_targeting_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     // TODO should probably return to game instead
     if (key.vk == TCODK_ESCAPE)
     {
-        return new BackToInventoryMenuAction();
+        //throw CancelActionException();
+        return new CancelAction();
     }
 
     if (mouse.lbutton_pressed)

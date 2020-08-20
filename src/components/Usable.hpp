@@ -21,6 +21,9 @@ class Usable
          */
         std::vector<Effect *> effects;
 
+        // Whether the item is consumed on use
+        bool is_consumable;
+
         Usable();
         ~Usable();
 
@@ -55,7 +58,7 @@ class AOEUsable : public Usable, public Targetable
 
     public:
 
-        AOEUsable(int, int);
+        AOEUsable(bool, int, int);
 
         Outcome * _use() override;
 
