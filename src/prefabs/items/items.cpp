@@ -18,13 +18,13 @@ Entity * make_frag_grenade(int x, int y)
     Entity * grenade = new Entity(
         //-1, -1, // x, y
         x, y,
-        '*', TCODColor::sky, "Frag grenade", ITEM,
+        149, TCODColor::brass, "Frag grenade", ITEM,
         false, false);
 
-    AOEUsable * usable_component = new AOEUsable(true, 4, 10);
+    AOEUsable * usable_component = new AOEUsable(true, 3, 10);
 
     // Add damage effect
-    DamageEnemiesInAreaEffect * damage_effect = new DamageEnemiesInAreaEffect(4, 100);
+    DamageEnemiesInAreaEffect * damage_effect = new DamageEnemiesInAreaEffect(3, 100);
     usable_component->effects.push_back(damage_effect);
 
     grenade->usable = usable_component;
