@@ -197,10 +197,12 @@ Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
         return new InspectAction(mouse.cx, mouse.cy);
     }
 
-    /*
-     *elif mouse.rbutton_pressed:
-     *    return {'right_click': (x, y)}
-     */
+    ;
+
+    if (key.vk == TCODK_F1)
+    {
+        return new ShowHelpAction();
+    }
 
     // No key was pressed
     return nullptr;
@@ -233,6 +235,32 @@ Action * handle_inventory_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     }
 
     if (key.vk == TCODK_ESCAPE)
+    {
+        return new BackToGameAction();
+    }
+
+    return nullptr;
+}
+
+
+Action * handle_popup_message_keys(TCOD_key_t key, TCOD_mouse_t mouse)
+{
+
+    char key_char = -1;
+
+    // Code to prevent double input
+    if (key.vk == TCODK_CHAR)
+    {
+        key_char = key.c;
+
+        // First check the 'i', in case the player wants to close the inventory
+        //if (key_char == 'i')
+        //{
+            //return new BackToGameAction();
+        //}
+    }
+
+    if (key.vk == TCODK_ESCAPE || key.vk == TCODK_F1)
     {
         return new BackToGameAction();
     }
@@ -526,7 +554,7 @@ Action * handle_input(
         /////////////////////////////////////////
         case POPUP_MESSAGE:
             // TODO create the right function for this
-            return handle_inventory_menu_keys(key, mouse);
+            return handle_popup_message_keys(key, mouse);
             break;
 
         /////////////////////////////////////////

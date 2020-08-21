@@ -708,7 +708,7 @@ Entity * make_butcher(int x, int y, MonsterAi * ai_component)
     butcher->on_death_effects.push_back(ude);
 
     AddLogMessageEffect * alme = new AddLogMessageEffect(
-            "Threat level under control. Unlocking door.",
+            "Threat level under control. Unlocking doors.",
             TCODColor::lightViolet);
     butcher->on_death_effects.push_back(alme);
 

@@ -21,6 +21,8 @@ Action * handle_inventory_item_keys(TCOD_key_t key, TCOD_mouse_t mouse);
  */
 Action * handle_terminal_keys(TCOD_key_t key, TCOD_mouse_t mouse);
 
+Action * handle_popup_message_keys(TCOD_key_t key, TCOD_mouse_t mouse);
+
 Action * handle_inventory_keys(TCOD_key_t key, TCOD_mouse_t mouse);
 
 Action * handle_character_screen(TCOD_key_t key, TCOD_mouse_t mouse);

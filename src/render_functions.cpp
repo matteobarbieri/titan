@@ -1155,7 +1155,8 @@ void render_all(
             "TAB: Target enemies.\n"
             "F: Attack with equipped weapon(s).\n"
             "I: access inventory.\n"
-            "ESC: Return to main menu.\n\n"
+            "ESC: Return to main menu.\n"
+            "F1: Show help screen (this one).\n\n"
             "Bump into doors/objects to interact with them\n"
             "LEFT CLICK on items/monsters/entities to inspect them."
         };

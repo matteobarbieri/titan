@@ -77,6 +77,15 @@ class CancelAction : public Action
 
 };
 
+class ShowHelpAction : public Action
+{
+
+    public:
+
+        Outcome * _execute();
+
+};
+
 
 #endif
 

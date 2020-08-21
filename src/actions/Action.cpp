@@ -70,3 +70,14 @@ Outcome * CancelAction::_execute()
     throw CancelActionException();
     //return nullptr;
 }
+
+Outcome * ShowHelpAction::_execute()
+{
+    
+    Outcome * outcome = new Outcome(
+        POPUP_MESSAGE,
+        false,
+        false);
+
+    return outcome;
+}
