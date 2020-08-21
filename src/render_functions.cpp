@@ -85,6 +85,30 @@ void sync_time() {
     last_frame_length = frame_time * 0.001f;
 }
 
+/**
+ * Taken from https://rosettacode.org/wiki/Word_wrap#C.2B.2B
+ */
+std::string wrap(const char *text, size_t line_length = 72)
+{
+    std::istringstream words(text);
+    std::ostringstream wrapped;
+    std::string word;
+
+    if (words >> word) {
+        wrapped << word;
+        size_t space_left = line_length - word.length();
+        while (words >> word) {
+            if (space_left < word.length() + 1) {
+                wrapped << '\n' << word;
+                space_left = line_length - word.length();
+            } else {
+                wrapped << ' ' << word;
+                space_left -= word.length() + 1;
+            }
+        }
+    }
+    return wrapped.str();
+}
 
 /**
  * Returns the actual size of the characters, correctly computed based on the
@@ -1059,7 +1083,7 @@ void render_all(
             SCREEN_WIDTH, SCREEN_HEIGHT,
             TCODConsole::root,
             0, 0,
-            1.0f, 0.8f);
+            1.0f, 0.9f);
     }
 
     /////////////////////////////////////////
@@ -1079,6 +1103,7 @@ void render_all(
 
         std::string help_headline =  "Instructions";
 
+        /*
         //std::string help_movement_l =  "WASD/arrows:         Movement";
         //std::string help_attack_l =    "F:                   Attack";
         //std::string help_inventory_l = "I:                   Show inventory";
@@ -1118,6 +1143,28 @@ void render_all(
         render_popup_message_text_sdl(renderer, help_headline, x, y, 50, 30, {255, 255, 102, 255});
         render_popup_message_text_sdl(renderer, help_text_l, x, y+4, 50);
         render_popup_message_text_sdl(renderer, help_text_r, x+36, y+4, 50);
+        */
+
+        int x = (SCREEN_WIDTH - 50)/2 + 2;
+        int y = (SCREEN_HEIGHT - 30)/2 + 2;
+
+        const char *text =
+        {
+            "WASD/Arrow keys: Move.\n"
+            "G: Pick up objects (while standing on them).\n"
+            "TAB: Target enemies.\n"
+            "F: Attack with equipped weapon(s).\n"
+            "I: access inventory.\n"
+            "ESC: Return to main menu.\n\n"
+            "Bump into doors/objects to interact with them\n"
+            "LEFT CLICK on items/monsters/entities to inspect them."
+        };
+
+        //std::string help_text_l = wrap(text, 100);
+        std::string help_text_l = std::string(text);
+
+        render_popup_message_text_sdl(renderer, help_headline, x, y, 50, 30, {255, 255, 102, 255});
+        render_popup_message_text_sdl(renderer, help_text_l, x, y+4, 50);
     }
 
     SDL_RenderPresent(renderer);
