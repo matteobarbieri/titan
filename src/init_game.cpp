@@ -135,8 +135,9 @@ void init_new_game(
     // First, empty the list of skills
     Player::singleton().skills.clear();
 
-    Skill * skill_stun = new SkillStun("Stun", "data/graphics/icons/skills/skill_stun.png");
-    Player::singleton().skills.push_back(skill_stun);
+    // Temporarily disable stun skill
+    //Skill * skill_stun = new SkillStun("Stun", "data/graphics/icons/skills/skill_stun.png");
+    //Player::singleton().skills.push_back(skill_stun);
 
     //Skill * skill_parry = new Skill("Parry", "data/graphics/icons/skills/skill_parry.png");
     //Player::singleton().skills.push_back(skill_parry);
