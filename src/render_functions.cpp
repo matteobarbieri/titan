@@ -1155,6 +1155,7 @@ void render_all(
             "TAB: Target enemies.\n"
             "F: Attack with equipped weapon(s).\n"
             "I: access inventory.\n"
+            "Z: wait one turn.\n"
             "ESC: Return to main menu.\n"
             "F1: Show help screen (this one).\n\n"
             "Bump into doors/objects to interact with them\n"
