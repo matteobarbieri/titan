@@ -131,6 +131,10 @@ void init_new_game(
     Player::singleton().entity = (*player);
 
     // Add skills
+    // TODO should be probably done elsewhere!
+    // First, empty the list of skills
+    Player::singleton().skills.clear();
+
     Skill * skill_stun = new SkillStun("Stun", "data/graphics/icons/skills/skill_stun.png");
     Player::singleton().skills.push_back(skill_stun);
 
