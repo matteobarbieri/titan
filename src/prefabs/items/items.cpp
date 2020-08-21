@@ -24,7 +24,7 @@ Entity * make_frag_grenade(int x, int y)
     AOEUsable * usable_component = new AOEUsable(true, 3, 10);
 
     // Add damage effect
-    DamageEnemiesInAreaEffect * damage_effect = new DamageEnemiesInAreaEffect(3, 100);
+    DamageEnemiesInAreaEffect * damage_effect = new DamageEnemiesInAreaEffect(3, 10);
     usable_component->effects.push_back(damage_effect);
 
     grenade->usable = usable_component;
