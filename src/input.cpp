@@ -437,45 +437,15 @@ Action * handle_entity_info_keys(TCOD_key_t key, TCOD_mouse_t mouse)
         return new BackToGameAction();
     }
 
+    if (mouse.lbutton_pressed)
+    {
+        return new InspectAction(mouse.cx, mouse.cy);
+    }
+
     // No key was pressed
     return nullptr;
 
 }
-
-/*
-def handle_player_turn_keys(key, mouse):
-
-
-    #########################################
-    ################ COMBAT #################
-    #########################################
-
-    # Targeting
-    if key.vk == libtcod.KEY_TAB:
-
-        if key.shift:
-            # Select the previous one
-            return CycleTargetAction(-1)
-        else:
-            # Select the next one
-            return CycleTargetAction(1)
-
-    elif key_char == 'f':
-        return ShootAction()
-
-    #########################################
-    ############ SELECT ENTITY ##############
-    #########################################
-
-
-    """
-    elif key_char == 'd':
-        return {'drop_inventory': True}
-    elif key.vk == libtcod.KEY_ENTER:
-        return {'take_stairs': True}
-    """
-
-*/
 
 Action * handle_input(
     TCOD_key_t key, TCOD_mouse_t mouse, GameState * game_state)
@@ -608,47 +578,6 @@ def handle_level_up_menu(key):
 
     return {}
     """
-
-
-def handle_character_screen(key, mouse):
-
-    if key.vk == libtcod.KEY_ENTER and key.lalt:
-        # Alt+Enter: toggle full screen
-        return ToggleFullscreenAction()
-    elif key.vk == libtcod.KEY_ESCAPE:
-        # Exit the menu, go back to main game
-        return BackToGameAction()
-
-    # No key was pressed
-    return NoopAction()
-
-
-def handle_targeting_keys(key):
-    if key.vk == libtcod.KEY_ESCAPE:
-        return {'exit': True}
-
-    return {}
-
-def handle_player_dead_keys(key):
-    """
-    The set of keys for a dead player.
-
-    Can only see the inventory and toggle fullscreen.
-    """
-
-    key_char = chr(key.c) if key.vk == libtcod.KEY_CHAR else ""
-
-    if key_char == 'i':
-        return {'show_inventory': True}
-
-    if key.vk == libtcod.KEY_ENTER and key.lalt:
-        # Alt+Enter: toggle full screen
-        return {'fullscreen': True}
-    elif key.vk == libtcod.KEY_ESCAPE:
-        # Exit the menu
-        return {'exit': True}
-
-    return {}
 
 def handle_mouse(mouse):
     (x, y) = (mouse.cx, mouse.cy)
