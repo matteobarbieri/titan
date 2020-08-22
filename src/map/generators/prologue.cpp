@@ -410,14 +410,21 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
 
     // Create switch
     Entity * launch_terminal_1 = make_switch(53, 95);
-    //launch_terminal_1->symbol = 167;
+    Entity * launch_terminal_2 = make_switch(53, 90);
+    launch_terminal_1->symbol = 167;
+    launch_terminal_1->color(TCODColor::green);
+
+    launch_terminal_2->symbol = 167;
+    launch_terminal_2->color(TCODColor::green);
 
     // Disable switch for 6 turns after using it
     EndMissionEffect * eme = new EndMissionEffect();
 
     ((InteractiveSwitch* )launch_terminal_1->interactive)->effects.push_back(eme);
+    ((InteractiveSwitch* )launch_terminal_2->interactive)->effects.push_back(eme);
 
     level->add_entity(launch_terminal_1);
+    level->add_entity(launch_terminal_2);
 
     // Corridor to boss room
     level->make_floor(40, 73);
