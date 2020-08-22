@@ -66,6 +66,23 @@ Action * handle_player_dead_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 
 }
 
+
+/**
+ * When the player has cleared a level
+ */
+Action * handle_level_summary_keys(TCOD_key_t key, TCOD_mouse_t mouse)
+{
+    /////////////////////////////////////////
+    /////////// GO TO MAIN MENU /////////////
+    /////////////////////////////////////////
+
+    if (key.vk == TCODK_ESCAPE)
+        return new ShowMenuAction();
+
+    return nullptr;
+
+}
+
 Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 {
     char key_char = -1;
@@ -532,6 +549,13 @@ Action * handle_input(
         /////////////////////////////////////////
         case PLAYER_DEAD:
             return handle_player_dead_keys(key, mouse);
+            break;
+
+        /////////////////////////////////////////
+        ///////////// LEVEL SUMMARY /////////////
+        /////////////////////////////////////////
+        case LEVEL_SUMMARY:
+            return handle_level_summary_keys(key, mouse);
             break;
 
         default:

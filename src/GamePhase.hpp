@@ -16,6 +16,7 @@ enum GamePhase
     CHARACTER_SCREEN,
     POPUP_MESSAGE,
     ENTITY_INFO,
+    LEVEL_SUMMARY,
 };
 
 

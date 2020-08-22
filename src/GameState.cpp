@@ -21,6 +21,7 @@ bool GameState::is_players_turn()
         game_phase == CONTAINER_MENU ||
         game_phase == CONTAINER_ITEM_MENU ||
         game_phase == POPUP_MESSAGE ||
+        game_phase == LEVEL_SUMMARY ||
         game_phase == PLAYER_DEAD;
 }
 

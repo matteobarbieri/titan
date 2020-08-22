@@ -173,6 +173,19 @@ class DamageEnemiesInAreaEffect : public Effect
         static DamageEnemiesInAreaEffect * from_json(json);
 };
 
+class EndMissionEffect : public Effect
+{
+    public:
+
+        EndMissionEffect();
+
+        void apply(Entity *, GameMap *, GameState *);
+
+        json to_json();
+
+        static EndMissionEffect * from_json(json);
+};
+
 /**
  * Apply several effects
  */

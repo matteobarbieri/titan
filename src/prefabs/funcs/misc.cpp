@@ -4,6 +4,7 @@
 
 #include "../../map/GameMap.hpp"
 #include "../../Entity.hpp"
+#include "../../GameState.hpp"
 #include "../../SaveGame.hpp"
 #include "../../GameMessages.hpp"
 
@@ -75,6 +76,11 @@ Effect * Effect::from_json(json j)
     if (j["subclass"] == "DisplaySFXEffect")
     {
         return DisplaySFXEffect::from_json(j);
+    }
+
+    if (j["subclass"] == "EndMissionEffect")
+    {
+        return EndMissionEffect::from_json(j);
     }
 
     //if (j["subclass"] == "CompositeEffect")
@@ -255,6 +261,36 @@ ApplyDebuffsOnTrapEffect * ApplyDebuffsOnTrapEffect::from_json(json j)
     return ade;
 }
 
+/////////////////////
+//// END MISSION ////
+/////////////////////
+
+EndMissionEffect::EndMissionEffect()
+{
+}
+
+json EndMissionEffect::to_json()
+{
+    json j;
+
+    j["subclass"] = "EndMissionEffect";
+
+    return j;
+}
+
+EndMissionEffect * EndMissionEffect::from_json(json j)
+{
+    EndMissionEffect * e = new EndMissionEffect();
+
+    return e;
+}
+
+void EndMissionEffect::apply(Entity * player, GameMap * game_map, GameState * game_state)
+{
+    game_state->game_phase = LEVEL_SUMMARY;
+    //game_state->game_phase = PLAYER_DEAD;
+    //DEBUG("Ending mission...");
+}
 
 ////////////////////////////////
 //// DAMAGE ENTITIES IN AOE ////

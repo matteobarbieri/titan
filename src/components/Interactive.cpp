@@ -74,8 +74,16 @@ void InteractiveSwitch::interact(Entity * player, GameMap * game_map, GameState 
             effects[i]->apply(player, game_map, game_state);
         }
 
-        // Pass turn to enemy
-        game_state->game_phase = ENEMY_TURN;
+        // TODO check this maybe?
+        
+        // This is to still allow effects to change the game phase
+        // e.g. level ending effects
+        if (game_state->game_phase == PLAYERS_TURN)
+        {
+            // Pass turn to enemy
+            game_state->game_phase = ENEMY_TURN;
+        }
+
     }
     else
     {

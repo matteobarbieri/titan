@@ -444,6 +444,33 @@ void render_entity_label(
 
 }
 
+void render_level_summary(Entity * player, GameState * game_state)
+{
+
+    // XXX Use submenu console
+
+    // First, clear the console
+    Consoles::singleton().submenu->clear();
+
+    // Extract width and height
+    int w = Consoles::singleton().submenu->getWidth();
+    int h = Consoles::singleton().submenu->getHeight();
+
+    int ds_x = (int)((w - DEATH_SCREEN_WIDTH))/2;
+    int ds_y = (int)((h - DEATH_SCREEN_HEIGHT))/2;
+
+    // Draw frame
+    // Reset the color to white, just in case
+    Consoles::singleton().submenu->setDefaultForeground(TCODColor::white);
+    Consoles::singleton().submenu->setDefaultBackground(TCODColor::black);
+    Consoles::singleton().submenu->printFrame(
+        ds_x, ds_y,
+        DEATH_SCREEN_WIDTH, DEATH_SCREEN_HEIGHT,
+        true, TCOD_BKGND_DEFAULT, "Level complete");
+
+    // TODO add mission summary stats
+}
+
 
 void render_death_screen(Entity * player)
 {
@@ -983,6 +1010,21 @@ void render_all(
     if (game_state->game_phase == PLAYER_DEAD)
     {
         render_death_screen(player);
+        TCODConsole::blit(
+            Consoles::singleton().submenu, 0, 0,
+            TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT,
+            Consoles::singleton().main_window,
+            0, 0,
+            1.0f, 0.8f);
+    }
+
+    //////////////////////////////////////////
+    ////////// Render level summary //////////
+    //////////////////////////////////////////
+
+    if (game_state->game_phase == LEVEL_SUMMARY)
+    {
+        render_level_summary(player, game_state);
         TCODConsole::blit(
             Consoles::singleton().submenu, 0, 0,
             TERRAIN_LAYER_WIDTH, TERRAIN_LAYER_HEIGHT,

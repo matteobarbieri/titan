@@ -97,7 +97,8 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     // Player starting point
     Entity * entry_point = new Entity(
         //6, 16, ' ',
-        33, 73, ' ',
+        //33, 73, ' ', // Boss room
+        51, 95, ' ', // Level end
         TCODColor::white, "", NONE, false, false, true);
     entry_point->tag = "entrypoint"; 
 
@@ -406,6 +407,17 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_part(new Room(Rect(50, 94, 53, 96), Direction::FourD()));
 
     // TODO add terminal to launch escape pod
+
+    // Create switch
+    Entity * launch_terminal_1 = make_switch(53, 95);
+    //launch_terminal_1->symbol = 167;
+
+    // Disable switch for 6 turns after using it
+    EndMissionEffect * eme = new EndMissionEffect();
+
+    ((InteractiveSwitch* )launch_terminal_1->interactive)->effects.push_back(eme);
+
+    level->add_entity(launch_terminal_1);
 
     // Corridor to boss room
     level->make_floor(40, 73);
