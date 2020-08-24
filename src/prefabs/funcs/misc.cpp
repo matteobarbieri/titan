@@ -78,6 +78,11 @@ Effect * Effect::from_json(json j)
         return DisplaySFXEffect::from_json(j);
     }
 
+    if (j["subclass"] == "MovePlayerEffect")
+    {
+        return MovePlayerEffect::from_json(j);
+    }
+
     if (j["subclass"] == "EndMissionEffect")
     {
         return EndMissionEffect::from_json(j);
@@ -481,6 +486,46 @@ AddLogMessageEffect * AddLogMessageEffect::from_json(json j)
         json_to_tcodcolor(j["text_color"]));
 
     return alme;
+}
+
+/*
+ __  __                  ____  _                       
+|  \/  | _____   _____  |  _ \| | __ _ _   _  ___ _ __ 
+| |\/| |/ _ \ \ / / _ \ | |_) | |/ _` | | | |/ _ \ '__|
+| |  | | (_) \ V /  __/ |  __/| | (_| | |_| |  __/ |   
+|_|  |_|\___/ \_/ \___| |_|   |_|\__,_|\__, |\___|_|   
+                                       |___/ 
+*/
+
+MovePlayerEffect::MovePlayerEffect(int x, int y) :
+    x(x), y(y)
+{
+}
+
+void MovePlayerEffect::apply(Entity * player, GameMap * game_map, GameState * game_state)
+{
+    // TODO check
+    player->x = x;
+    player->y = y;
+}
+
+json MovePlayerEffect::to_json()
+{
+    json j;
+
+    j["subclass"] = "MovePlayerEffect";
+
+    j["x"] = x;
+    j["y"] = y;
+
+    return j;
+}
+
+MovePlayerEffect * MovePlayerEffect::from_json(json j)
+{
+    MovePlayerEffect * mpe = new MovePlayerEffect(j["x"], j["y"]);
+
+    return mpe;
 }
 
 //////////////////////////////////

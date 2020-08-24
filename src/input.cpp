@@ -44,6 +44,7 @@ Action * select_skill(char key_char)
 
     if (skill_index >=0)
     {
+        DEBUG("Selecting skill");
         return new UseSkillAction(Player::singleton().skills[skill_index]);
     }
     else
@@ -143,11 +144,15 @@ Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 
     // Attack
     if (key_char == 'f')
+    {
         return new AttackAction();
+    }
 
     // Reload
     if (key_char == 'r')
+    {
         return new ReloadAction();
+    }
 
     // TODO ADD RELOAD IN OFF HAND!
 
@@ -156,7 +161,11 @@ Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     /////////////////////////////////////////
 
     if (key_char >= '1' && key_char <= '7')
+    {
+
+        DEBUG("Selecting skill");
         return select_skill(key_char);
+    }
 
     /////////////////////////////////////////
     //////// CYCLE THROUGH TARGETS //////////
@@ -213,8 +222,6 @@ Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     {
         return new InspectAction(mouse.cx, mouse.cy);
     }
-
-    ;
 
     if (key.vk == TCODK_F1)
     {
@@ -368,7 +375,7 @@ Action * handle_container_item_menu_keys(TCOD_key_t key, TCOD_mouse_t mouse)
     return nullptr;
 }
 
-Action * handle_targeting_keys(TCOD_key_t key, TCOD_mouse_t mouse)
+Action * handle_targeting_keys(TCOD_key_t key, TCOD_mouse_t mouse, GamePhase game_phase)
 {
     char key_char = -1;
 
@@ -388,7 +395,19 @@ Action * handle_targeting_keys(TCOD_key_t key, TCOD_mouse_t mouse)
 
     if (mouse.lbutton_pressed)
     {
-        return new ItemResolveTargetingAction(mouse.cx, mouse.cy);
+        switch (game_phase)
+        {
+            case TARGETING_ITEM:
+                return new ItemResolveTargetingAction(mouse.cx, mouse.cy);
+                break;
+            case TARGETING_SKILL:
+                return new ResolveSkillAction(mouse.cx, mouse.cy);
+                break;
+            default:
+                // TODO throw exception maybe?
+                DEBUG("Should not arrive here....");
+                break;
+        }
     }
 
     return nullptr;
@@ -530,10 +549,11 @@ Action * handle_input(
             break;
 
         /////////////////////////////////////////
-        ////////// INVENTORY ITEM MENU //////////
+        ////////// TARGETING ITEM MENU //////////
         /////////////////////////////////////////
-        case TARGETING:
-            return handle_targeting_keys(key, mouse);
+        case TARGETING_ITEM:
+        case TARGETING_SKILL:
+            return handle_targeting_keys(key, mouse, game_state->game_phase);
             break;
 
         /////////////////////////////////////////
@@ -563,53 +583,3 @@ Action * handle_input(
             break;
     }
 }
-
-/*
-
-def handle_input(key, mouse, game_state):
-    """
-    Handle inputs differently depending on game state
-    """
-
-
-    #########################################
-    ########### CHARACTER SCREEN ############
-    #########################################
-    elif game_state == GamePhase.CHARACTER_SCREEN:
-        return handle_character_screen(key, mouse)
-    # Return empty outcome dict
-    return {}
-
-*/
-
-/*
-
-
-
-
-def handle_level_up_menu(key):
-    pass
-    """
-    if key:
-        key_char = chr(key.c)
-
-        if key_char == 'a':
-            return {'level_up': 'hp'}
-        elif key_char == 'b':
-            return {'level_up': 'str'}
-        elif key_char == 'c':
-            return {'level_up': 'def'}
-
-    return {}
-    """
-
-def handle_mouse(mouse):
-    (x, y) = (mouse.cx, mouse.cy)
-
-    if mouse.lbutton_pressed:
-        return {'left_click': (x, y)}
-    elif mouse.rbutton_pressed:
-        return {'right_click': (x, y)}
-
-    return {}
-*/

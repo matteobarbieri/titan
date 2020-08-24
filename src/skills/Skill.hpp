@@ -3,6 +3,8 @@
 
 #include <SDL2/SDL.h>
 
+#include "../components/Usable.hpp"
+
 // Forward declarations
 class GameMap;
 class Entity;
@@ -38,6 +40,11 @@ class Skill
          */
         virtual Outcome * _use() = 0;
 
+        /**
+         * The actual method which must be reimplemented by subclasses.
+         */
+        virtual Outcome * _resolve(int, int);
+
         int range;
 
     public:
@@ -65,6 +72,11 @@ class Skill
         Outcome * use();
 
         /**
+         * Superclass method which is called to actually use a skill.
+         */
+        Outcome * resolve(int, int);
+
+        /**
          * Returns the icon texture. Loads it in case it is not already loaded
          */
         SDL_Texture * get_icon_texture();
@@ -73,5 +85,21 @@ class Skill
         ~Skill();
 };
 
-#endif
+class SkillBlink : public Skill, public Targetable
+{
 
+    protected:
+
+        /**
+         * The actual method which must be reimplemented by subclasses.
+         */
+        Outcome * _use();
+
+        Outcome * _resolve(int, int);
+
+    public:
+
+        SkillBlink(const char * name, const char * icon_path, int range);
+};
+
+#endif

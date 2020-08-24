@@ -97,8 +97,8 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     // Player starting point
     Entity * entry_point = new Entity(
         //6, 16, ' ',
-        //33, 73, ' ', // Boss room
-        51, 95, ' ', // Level end
+        33, 73, ' ', // Boss room
+        //51, 95, ' ', // Level end
         TCODColor::white, "", NONE, false, false, true);
     entry_point->tag = "entrypoint"; 
 

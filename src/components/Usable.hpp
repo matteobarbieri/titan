@@ -39,6 +39,7 @@ class Usable
         static Usable * from_json(json j);
 };
 
+// TODO consider moving it somewhere else
 class Targetable
 {
     public:

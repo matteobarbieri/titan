@@ -1,9 +1,30 @@
 #include "../Constants.h"
 
+#include <sstream>
+//#include <string>
+
 #include "Skill.hpp"
 
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_render.h>
+
+#include "../actions/Outcome.hpp"
+#include "../GamePhase.hpp"
+#include "../GameState.hpp"
+#include "../Entity.hpp"
+#include "../GameMessages.hpp"
+
+#include "../map/GameMap.hpp"
+
+#include "../utils.hpp"
+
+/*
+ ____  _    _ _ _ 
+/ ___|| | _(_) | |
+\___ \| |/ / | | |
+ ___) |   <| | | |
+|____/|_|\_\_|_|_|
+*/
 
 Skill::Skill(const char * name, const char * icon_path) :
     icon_path(icon_path), name(name) 
@@ -51,4 +72,149 @@ Outcome * Skill::use()
 {
     // Simply call actual function
     return _use();
+}
+
+Outcome * Skill::resolve(int x, int y)
+{
+    // Simply call actual function
+    return _resolve(x, y);
+}
+
+Outcome * Skill::_resolve(int x, int y)
+{
+    // default behaviour, not required for most cases
+    return nullptr;
+}
+
+
+/*
+ ____  _    _ _ _   ____  _ _       _    
+/ ___|| | _(_) | | | __ )| (_)_ __ | | __
+\___ \| |/ / | | | |  _ \| | | '_ \| |/ /
+ ___) |   <| | | | | |_) | | | | | |   < 
+|____/|_|\_\_|_|_| |____/|_|_|_| |_|_|\_\
+*/
+
+
+// TODO move somewhere else!
+SkillBlink::SkillBlink(const char * name, const char * icon_path, int range) :
+    Skill(name, icon_path), Targetable(0, range)
+{
+}
+
+Outcome * SkillBlink::_use()
+{
+
+    DEBUG("Inside blink use");
+
+    GamePhase next_phase = TARGETING_SKILL;
+
+    // Save skill in game state
+    game_state->selected_skill = this;
+
+    DEBUG("Radius: " << radius << ", range: " << ((Targetable *)this)->range);
+    // Build message
+    std::ostringstream stringStream;
+
+    stringStream << "Select target ";
+
+
+    // Add message to message log
+    MessageLog::singleton().add_message(
+        {stringStream.str(), TCODColor::yellow});
+
+    // Return outcome
+    Outcome * outcome = new Outcome(
+        next_phase,
+        false,
+        false);
+
+    DEBUG("111");
+
+    return outcome;
+}
+
+Outcome * SkillBlink::_resolve(int x, int y)
+{
+
+    bool position_changed = false;
+
+    int source_x, source_y;
+    source_x = player->x;
+    source_y = player->y;
+
+    x += game_map->top_x;
+    y += game_map->top_y;
+
+    DEBUG("Currently at " << source_x << ", " << source_y);
+    DEBUG("Destination at " << x << ", " << y);
+
+    if (! game_map->is_blocked(x, y))
+    {
+        Entity * target = get_blocking_entities_at_location(
+            game_map->entities(), x, y);
+
+        if (target != nullptr)
+        {
+            //player->interact_with(target, game_map, game_state);
+            //interacted_with_something = true;
+        }
+        else
+        {
+
+            // Previous tile is now walkable again
+            game_map->fov_map->setProperties(
+                player->x, player->y,
+                game_map->fov_map->isTransparent(
+                    player->x, player->y),
+                true);
+
+            // Update player's position
+            player->x = x;
+            player->y = y;
+
+            // New tile is now not walkable
+            game_map->fov_map->setProperties(
+                player->x, player->y,
+                game_map->fov_map->isTransparent(
+                    player->x, player->y),
+                false);
+
+            // Change phase to enemy turn manually!
+            game_state->game_phase = ENEMY_TURN;
+
+        }
+    }
+    else
+    {
+        // Stupid things said when bumping into walls
+        // TODO enable message log
+        //possible_messages = ['Ouch!', 'Hey!', 'Stop it!']
+        //messages.append(
+            //Message(random.choice(possible_messages), libtcod.yellow))
+
+        //game_state->message_log->add_message(
+            //Message("Ouch!", TCODColor::yellow));
+        
+        // TODO replace with a random one
+        MessageLog::singleton().add_message({"Ouch!", TCODColor::yellow});
+    }
+
+    // Check if the position has changed
+    position_changed = (
+        source_x != player->x or source_y != player->y);
+
+    bool redraw_terrain = position_changed;
+    bool fov_recompute = redraw_terrain;
+
+    // Return outcome
+    Outcome * outcome = new Outcome(
+        // ENEMY_TURN, // TODO this is the right one
+        game_state->game_phase, // TODO this is the right one
+        fov_recompute,
+        redraw_terrain);
+
+    //# TODO check terrain/enemies!!!
+
+    return outcome;
 }

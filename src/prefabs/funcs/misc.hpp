@@ -80,6 +80,25 @@ class DisplaySFXEffect : public Effect
 };
 
 /**
+ * Display a symbol for a given amount of time
+ */
+class MovePlayerEffect : public Effect
+{
+
+    public:
+
+        int x, y;
+        
+        MovePlayerEffect(int x, int y);
+
+        void apply(Entity *, GameMap *, GameState *);
+
+        json to_json();
+
+        static MovePlayerEffect * from_json(json);
+};
+
+/**
  * Apply debuff[s] to entities directly
  */
 class ApplyDebuffsEffect : public Effect

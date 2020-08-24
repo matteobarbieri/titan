@@ -3,6 +3,8 @@
 
 #include "libtcod.hpp"
 
+#include "GamePhase.hpp"
+
 // Forward declarations
 class Action;
 class GameState;
@@ -29,7 +31,7 @@ Action * handle_character_screen(TCOD_key_t key, TCOD_mouse_t mouse);
 
 Action * handle_player_turn_keys(TCOD_key_t key, TCOD_mouse_t mouse);
 
-Action * handle_targeting_keys(TCOD_key_t key);
+Action * handle_targeting_keys(TCOD_key_t key, GamePhase);
 
 Action * handle_player_dead_keys(TCOD_key_t key, TCOD_mouse_t mouse);
 

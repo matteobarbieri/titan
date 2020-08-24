@@ -141,6 +141,9 @@ void init_new_game(
 
     //Skill * skill_parry = new Skill("Parry", "data/graphics/icons/skills/skill_parry.png");
     //Player::singleton().skills.push_back(skill_parry);
+    
+    SkillBlink * skill_parry = new SkillBlink("Parry", "data/graphics/icons/skills/skill_parry.png", 5);
+    Player::singleton().skills.push_back(skill_parry);
 
     Player::singleton().preload_skill_textures(TCOD_sys_get_sdl_renderer());
 

@@ -14,7 +14,8 @@ bool GameState::is_players_turn()
         game_phase == PLAYERS_TURN ||
         game_phase == ENTITY_INFO ||
         game_phase == CHARACTER_SCREEN ||
-        game_phase == TARGETING ||
+        game_phase == TARGETING_ITEM ||
+        game_phase == TARGETING_SKILL ||
         game_phase == INVENTORY_ITEM_MENU ||
         game_phase == INVENTORY_MENU ||
         game_phase == TERMINAL_MENU ||
@@ -74,40 +75,3 @@ GameState * GameState::from_json(json j)
 
     return gs;
 }
-
-/*
-
-from enum import Enum, auto
-
-
-class GamePhase(Enum):
-    PLAYERS_TURN = auto()
-    ENEMY_TURN = auto()
-    PLAYER_DEAD = auto()
-    INVENTORY_MENU = auto()
-    INVENTORY_ITEM_MENU = auto()
-    TARGETING = auto()
-    LEVEL_UP = auto()
-    CHARACTER_SCREEN = auto()
-    ENTITY_INFO = auto()
-
-
-class GameState():
-
-    def is_players_turn(self):
-        """
-        Returns true if waiting for some kind of input from the player.
-        """
-        return self.game_phase in [
-            GamePhase.PLAYERS_TURN,
-            GamePhase.INVENTORY_MENU, GamePhase.INVENTORY_ITEM_MENU,
-            GamePhase.CHARACTER_SCREEN, GamePhase.ENTITY_INFO]
-
-    def is_enemies_turn(self):
-        """
-        Returns true if it's the enemies' turn.
-        """
-
-        return self.game_phase == GamePhase.ENEMY_TURN
-
-*/

@@ -740,18 +740,28 @@ void render_all(
     int target_y = -100;
 
     int range_flag = 1;
-    AOEUsable * a;
+    Targetable * a;
 
     // Force terrain redrawing on targeting
-    if (game_state->game_phase == TARGETING)
+    if (game_state->game_phase == TARGETING_ITEM || game_state->game_phase == TARGETING_SKILL)
     {
         redraw_terrain = true;
 
         target_x = mouse->cx;
         target_y = mouse->cy;
 
-        a = (AOEUsable *)game_state->selected_inventory_item->usable;
-        //Targetable * a = (Targetable *)game_state->selected_inventory_item->usable;
+        if (game_state->game_phase == TARGETING_ITEM)
+        {
+            //a = (Targetable *)(game_state->selected_inventory_item->usable);
+            a = dynamic_cast<Targetable *>(game_state->selected_inventory_item->usable);
+        }
+        else if (game_state->game_phase == TARGETING_SKILL)
+        {
+            //a = (Targetable *)(game_state->selected_skill);
+            a = dynamic_cast<Targetable *>(game_state->selected_skill);
+        }
+        
+        //DEBUG("Radius: " << a->radius << ", range: " << a->range);
         
         if (game_map->aux_fov_map_100->isInFov(target_x+top_x, target_y+top_y))
         {
@@ -769,6 +779,34 @@ void render_all(
             range_flag = 3;
         }
     }
+
+    /*
+    // Force terrain redrawing on targeting
+    if (game_state->game_phase == TARGETING_SKILL)
+    {
+        redraw_terrain = true;
+
+        target_x = mouse->cx;
+        target_y = mouse->cy;
+
+        
+        if (game_map->aux_fov_map_100->isInFov(target_x+top_x, target_y+top_y))
+        {
+            if (tgtbl->is_in_range(target_x, target_y, player->x-top_x, player->y-top_y))
+            {
+                range_flag = 1;
+            }
+            else
+            {
+                range_flag = 3;
+            }
+        }
+        else
+        {
+            range_flag = 3;
+        }
+    }
+    */
 
     // Only redraw terrain if needed
     if (redraw_terrain)
@@ -794,7 +832,7 @@ void render_all(
                 int target_flag = 0;
 
                 //if (x-top_x == target_x and y-top_y == target_y)
-                if (game_state->game_phase == TARGETING)
+                if (game_state->game_phase == TARGETING_ITEM || game_state->game_phase == TARGETING_SKILL)
                 {
 
                     if (a->is_in_radius(target_x, target_y, x-top_x, y-top_y))

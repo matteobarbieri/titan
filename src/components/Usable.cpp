@@ -63,8 +63,9 @@ Outcome * AOEUsable::_use()
     // Build message
     std::ostringstream stringStream;
 
-    next_phase = TARGETING;
+    next_phase = TARGETING_ITEM;
 
+    DEBUG("Radius: " << radius << ", range: " << range);
     stringStream << "Select target ";
 
     // Add message to message log
