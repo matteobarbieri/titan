@@ -103,6 +103,7 @@ Outcome * Skill::use()
         Outcome * outcome = _use();
 
         // If everything went well, set cooldown
+        // TODO must fix
         cooldown = cooldown_max;
 
         return outcome;
@@ -182,6 +183,23 @@ Outcome * SkillBlink::_resolve(int x, int y)
 
     //DEBUG("Currently at " << source_x << ", " << source_y);
     //DEBUG("Destination at " << x << ", " << y);
+
+    if (! this->is_in_range(source_x, source_y, x, y))
+    {
+        MessageLog::singleton().add_message({
+                "Out of range.", TCODColor::yellow});
+
+        return nullptr;
+    }
+
+    if (! game_map->fov_map->isInFov(x, y))
+    {
+        MessageLog::singleton().add_message({
+                "You must be able to see the destination!",
+                TCODColor::yellow});
+
+        return nullptr;
+    }
 
     if (! game_map->is_blocked(x, y))
     {
