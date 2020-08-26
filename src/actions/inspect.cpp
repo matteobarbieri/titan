@@ -1,6 +1,7 @@
 #include "inspect.hpp"
 
 #include "../GamePhase.hpp"
+#include "../GameMessages.hpp"
 
 #include "../map/GameMap.hpp"
 
@@ -15,6 +16,12 @@ Outcome * InspectAction::_execute()
 
     int target_x = game_map->top_x + x;
     int target_y = game_map->top_y + y;
+
+    // Only allow to inspect things that are within the player's vision
+    if (! game_map->fov_map->isInFov(target_x, target_y))
+    {
+        return nullptr;
+    }
 
     // Retrieve an entity that can be inspected at target location
     Entity * target = game_map->get_inspectable_entity_at(target_x, target_y);
