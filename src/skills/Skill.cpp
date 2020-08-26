@@ -26,8 +26,8 @@
 |____/|_|\_\_|_|_|
 */
 
-Skill::Skill(const char * name, const char * icon_path) :
-    icon_path(icon_path), name(name) 
+Skill::Skill(const char * name, const char * icon_path, int cooldown_max) :
+    icon_path(icon_path), name(name), cooldown_max(cooldown_max), cooldown(0)
 {
     icon_texture = NULL;
 }
@@ -67,11 +67,47 @@ void Skill::set_context(
     this->game_state = game_state;
 }
 
+void Skill::tick_cooldown()
+{
+    if (cooldown > 0)
+    {
+        cooldown--;
+    }
+}
 
 Outcome * Skill::use()
 {
-    // Simply call actual function
-    return _use();
+    // Check for cooldown
+    
+    if (cooldown > 0)
+    {
+        std::ostringstream log_text;
+
+        log_text << name << " is on cooldown (" << cooldown << " turn";
+        if (cooldown > 1)
+        {
+            log_text << "s";
+        }
+
+        log_text << ").";
+
+        // Add message to message log
+        MessageLog::singleton().add_message(
+            {log_text.str(), TCODColor::yellow});
+
+        return nullptr;
+    }
+    else
+    {
+        // Simply call actual function
+        Outcome * outcome = _use();
+
+        // If everything went well, set cooldown
+        cooldown = cooldown_max;
+
+        return outcome;
+    }
+
 }
 
 Outcome * Skill::resolve(int x, int y)
@@ -97,22 +133,22 @@ Outcome * Skill::_resolve(int x, int y)
 
 
 // TODO move somewhere else!
-SkillBlink::SkillBlink(const char * name, const char * icon_path, int range) :
-    Skill(name, icon_path), Targetable(0, range)
+SkillBlink::SkillBlink(const char * name, const char * icon_path, int cooldown_max, int range) :
+    Skill(name, icon_path, cooldown_max), Targetable(0, range)
 {
 }
 
 Outcome * SkillBlink::_use()
 {
 
-    DEBUG("Inside blink use");
+    //DEBUG("Inside blink use");
 
     GamePhase next_phase = TARGETING_SKILL;
 
     // Save skill in game state
     game_state->selected_skill = this;
 
-    DEBUG("Radius: " << radius << ", range: " << ((Targetable *)this)->range);
+    //DEBUG("Radius: " << radius << ", range: " << ((Targetable *)this)->range);
     // Build message
     std::ostringstream stringStream;
 
@@ -128,8 +164,6 @@ Outcome * SkillBlink::_use()
         next_phase,
         false,
         false);
-
-    DEBUG("111");
 
     return outcome;
 }
@@ -198,7 +232,9 @@ Outcome * SkillBlink::_resolve(int x, int y)
             //Message("Ouch!", TCODColor::yellow));
         
         // TODO replace with a random one
-        MessageLog::singleton().add_message({"Blinking into wall is severely forbidden.", TCODColor::yellow});
+        MessageLog::singleton().add_message({
+                "Blinking into walls is severely forbidden.",
+                TCODColor::yellow});
     }
 
     // Check if the position has changed

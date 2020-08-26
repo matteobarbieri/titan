@@ -55,6 +55,16 @@ class Skill
         const char * name;
 
         /**
+         * How often a skill can be used
+         */
+        int cooldown_max;
+
+        /**
+         * How much cooldown the skill currently has
+         */
+        int cooldown;
+
+        /**
          * Add context required to use the skill.
          */
         virtual void set_context(
@@ -65,6 +75,12 @@ class Skill
          * Preload texture
          */
         void load_texture(SDL_Renderer * renderer);
+
+        /**
+         * Reduces cooldown by one. Should be called at the end of each turn
+         * (after monsters have taken their action, similar to debuff tick).
+         */
+        void tick_cooldown();
 
         /**
          * Superclass method which is called to actually use a skill.
@@ -81,7 +97,7 @@ class Skill
          */
         SDL_Texture * get_icon_texture();
 
-        Skill(const char * name, const char * icon_path);
+        Skill(const char * name, const char * icon_path, int max_cooldown);
         ~Skill();
 };
 
@@ -99,7 +115,7 @@ class SkillBlink : public Skill, public Targetable
 
     public:
 
-        SkillBlink(const char * name, const char * icon_path, int range);
+        SkillBlink(const char * name, const char * icon_path, int cooldown_max, int range);
 };
 
 #endif

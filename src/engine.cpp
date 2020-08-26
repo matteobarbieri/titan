@@ -19,6 +19,7 @@
 #include "actions/Outcome.hpp"
 
 #include "buffs/Buff.hpp"
+#include "skills/Skill.hpp"
 
 #include "components/Ai.hpp"
 #include "components/Fighter.hpp"
@@ -31,6 +32,7 @@
 using namespace std;
 
 void tick_buffs(GameMap * game_map);
+void tick_cooldown_skills();
 
 void play_game(Entity * player, GameMap * game_map, GameState * game_state, Overseer * overseer)
 {
@@ -236,6 +238,8 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state, Over
             // Resolves buffs effects
             tick_buffs(game_map);
 
+            tick_cooldown_skills();
+
             ////////////////////////////////////////////
             /////////// CHECK GAME EVENTS  /////////////
             ////////////////////////////////////////////
@@ -348,6 +352,19 @@ void tick_buffs(GameMap * game_map)
         }
     }
 }
+
+
+void tick_cooldown_skills()
+{
+    std::vector<Skill *>::iterator s = Player::singleton().skills.begin();
+    while (s != Player::singleton().skills.end())
+    {
+        // Tick cooldown
+        (*s)->tick_cooldown();
+        ++s;
+    }
+}
+
 
 int main(int argc, char *argv[])
 {

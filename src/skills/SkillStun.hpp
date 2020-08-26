@@ -16,7 +16,7 @@ class SkillStun : public Skill
 
     public:
 
-        SkillStun(const char * name, const char * icon_path);
+        SkillStun(const char * name, const char * icon_path, int cooldown_max);
 };
 
 #endif

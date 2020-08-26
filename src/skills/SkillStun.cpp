@@ -12,8 +12,8 @@
 
 #include "../buffs/BuffStun.hpp"
 
-SkillStun::SkillStun(const char * name, const char * icon_path) :
-    Skill(name, icon_path)
+SkillStun::SkillStun(const char * name, const char * icon_path, int cooldown_max) :
+    Skill(name, icon_path, cooldown_max)
 {
     range = 1;
 }
