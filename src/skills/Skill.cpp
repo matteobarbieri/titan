@@ -146,8 +146,8 @@ Outcome * SkillBlink::_resolve(int x, int y)
     x += game_map->top_x;
     y += game_map->top_y;
 
-    DEBUG("Currently at " << source_x << ", " << source_y);
-    DEBUG("Destination at " << x << ", " << y);
+    //DEBUG("Currently at " << source_x << ", " << source_y);
+    //DEBUG("Destination at " << x << ", " << y);
 
     if (! game_map->is_blocked(x, y))
     {
@@ -156,6 +156,7 @@ Outcome * SkillBlink::_resolve(int x, int y)
 
         if (target != nullptr)
         {
+            MessageLog::singleton().add_message({"Can't blink here!", TCODColor::yellow});
             //player->interact_with(target, game_map, game_state);
             //interacted_with_something = true;
         }
@@ -197,7 +198,7 @@ Outcome * SkillBlink::_resolve(int x, int y)
             //Message("Ouch!", TCODColor::yellow));
         
         // TODO replace with a random one
-        MessageLog::singleton().add_message({"Ouch!", TCODColor::yellow});
+        MessageLog::singleton().add_message({"Blinking into wall is severely forbidden.", TCODColor::yellow});
     }
 
     // Check if the position has changed
