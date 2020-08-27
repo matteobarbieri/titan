@@ -54,6 +54,8 @@ void make_trap(int n, const int coordinates[],
                GameMap * level,
                int trap_symbol='X', int switch_symbol=666);
 
+void add_damage_effect(Entity * trap);
+
 /**
  * Entity IDs recap:
  *
@@ -97,7 +99,8 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     // Player starting point
     Entity * entry_point = new Entity(
         //6, 16, ' ',
-        33, 73, ' ', // Boss room
+        //33, 73, ' ', // Boss room
+        23, 40, ' ', // Plasma leak
         //51, 95, ' ', // Level end
         TCODColor::white, "", NONE, false, false, true);
     entry_point->tag = "entrypoint"; 
@@ -285,12 +288,104 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
 
     // Add corridors
     level->add_part(new Corridor(Rect(13, 32, 18, 43), Direction::FourD(), false));
-    level->add_part(new Corridor(Rect(19, 38,  37, 43), Direction::FourD(), true));
+    level->add_part(new Corridor(Rect(19, 38, 37, 43), Direction::FourD(), true));
 
     // TODO add guard's corpse and equipment
     
     Entity * guard_corpse = new Entity(18, 43, '%', TCODColor::red, "Corpse of a guard");
     level->add_entity(guard_corpse);
+
+    // Plasma leak
+    level->make_floor(23, 37);
+    Entity * plasma_warning_panel = make_text_panel(23, 37, Direction::SS, "WARNING: Plasma leak detected");
+    plasma_warning_panel->color(TCODColor::red);
+    level->add_entity(plasma_warning_panel);
+
+    // Change floor
+    level->make_floor(26, 37);
+
+    // TODO change tile symbol/color
+    level->make_wall(28, 38);
+    level->make_wall(29, 38);
+
+    level->make_wall(26, 41);
+    level->make_wall(27, 41);
+    level->make_wall(29, 41);
+
+    level->make_wall(26, 42);
+    level->make_wall(27, 42);
+    level->make_wall(28, 42);
+    level->make_wall(29, 42);
+
+    level->make_wall(27, 43);
+
+    // Add plasma
+    Entity * trap_tmp_tile;
+
+    trap_tmp_tile = make_trap(26, 37, TCODColor::lightOrange);
+    trap_tmp_tile->render_order(SFX);
+    add_damage_effect(trap_tmp_tile);
+    level->add_entity(trap_tmp_tile);
+
+    trap_tmp_tile = make_trap(26, 38, TCODColor::lightOrange);
+    trap_tmp_tile->render_order(SFX);
+    add_damage_effect(trap_tmp_tile);
+    level->add_entity(trap_tmp_tile);
+
+    trap_tmp_tile = make_trap(27, 38, TCODColor::lightOrange);
+    trap_tmp_tile->render_order(SFX);
+    add_damage_effect(trap_tmp_tile);
+    level->add_entity(trap_tmp_tile);
+
+    trap_tmp_tile = make_trap(26, 39, TCODColor::lightOrange);
+    trap_tmp_tile->render_order(SFX);
+    add_damage_effect(trap_tmp_tile);
+    level->add_entity(trap_tmp_tile);
+
+    trap_tmp_tile = make_trap(27, 39, TCODColor::lightOrange);
+    trap_tmp_tile->render_order(SFX);
+    add_damage_effect(trap_tmp_tile);
+    level->add_entity(trap_tmp_tile);
+
+    trap_tmp_tile = make_trap(28, 39, TCODColor::lightOrange);
+    trap_tmp_tile->render_order(SFX);
+    add_damage_effect(trap_tmp_tile);
+    level->add_entity(trap_tmp_tile);
+
+    trap_tmp_tile = make_trap(25, 40, TCODColor::lightOrange);
+    trap_tmp_tile->render_order(SFX);
+    add_damage_effect(trap_tmp_tile);
+    level->add_entity(trap_tmp_tile);
+
+    trap_tmp_tile = make_trap(26, 40, TCODColor::lightOrange);
+    trap_tmp_tile->render_order(SFX);
+    add_damage_effect(trap_tmp_tile);
+    level->add_entity(trap_tmp_tile);
+
+    trap_tmp_tile = make_trap(27, 40, TCODColor::lightOrange);
+    trap_tmp_tile->render_order(SFX);
+    add_damage_effect(trap_tmp_tile);
+    level->add_entity(trap_tmp_tile);
+
+    trap_tmp_tile = make_trap(28, 40, TCODColor::lightOrange);
+    trap_tmp_tile->render_order(SFX);
+    add_damage_effect(trap_tmp_tile);
+    level->add_entity(trap_tmp_tile);
+
+    trap_tmp_tile = make_trap(29, 40, TCODColor::lightOrange);
+    trap_tmp_tile->render_order(SFX);
+    add_damage_effect(trap_tmp_tile);
+    level->add_entity(trap_tmp_tile);
+
+    trap_tmp_tile = make_trap(25, 41, TCODColor::lightOrange);
+    trap_tmp_tile->render_order(SFX);
+    add_damage_effect(trap_tmp_tile);
+    level->add_entity(trap_tmp_tile);
+
+    trap_tmp_tile = make_trap(28, 41, TCODColor::lightOrange);
+    trap_tmp_tile->render_order(SFX);
+    add_damage_effect(trap_tmp_tile);
+    level->add_entity(trap_tmp_tile);
 
     // Doors leading to third room
     level->make_floor(38, 40);
@@ -686,6 +781,16 @@ void make_trap(int n, const int traps_coordinates[],
     }
 
     level->add_entity(trap_switch);
+}
+
+void add_damage_effect(Entity * trap)
+{
+    // Create set_coordinates method for effect
+    DamageEnemiesInAreaEffect * trap_effect = new DamageEnemiesInAreaEffect(0, 20);
+    trap_effect->x = trap->x;
+    trap_effect->y = trap->y;
+    
+    ((InteractiveSwitch* )trap->interactive)->effects.push_back(trap_effect);
 }
 
 Entity * make_butcher(int x, int y, MonsterAi * ai_component)

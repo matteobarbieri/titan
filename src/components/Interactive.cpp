@@ -48,6 +48,13 @@ Interactive * Interactive::from_json(json j)
         return InteractiveSwitch::from_json(j);
     }
 
+    /*
+    if (j["subclass"] == "InteractiveTrap")
+    {
+        return InteractiveTrap::from_json(j);
+    }
+    */
+
     return nullptr;
 }
 
@@ -57,6 +64,7 @@ Interactive * Interactive::from_json(json j)
 
 InteractiveSwitch::InteractiveSwitch(bool enabled) : enabled(enabled)
 {
+    activate_on_step = false;
 }
 
 void InteractiveSwitch::interact(Entity * player, GameMap * game_map, GameState * game_state)
@@ -100,6 +108,7 @@ json InteractiveSwitch::to_json()
     j["subclass"] = "InteractiveSwitch";
 
     j["enabled"] = enabled;
+    j["activate_on_step"] = activate_on_step;
 
     json je;
     for (int i=0; i<(int)effects.size(); i++)
@@ -121,6 +130,8 @@ InteractiveSwitch * InteractiveSwitch::from_json(json j)
         is->effects.push_back(Effect::from_json(j["effects"][i]));
     }
 
+    is->activate_on_step = j["activate_on_step"];
+
     return is;
 }
 
@@ -131,6 +142,7 @@ InteractiveSwitch * InteractiveSwitch::from_json(json j)
 InteractiveDoor::InteractiveDoor(bool is_open, bool locked, unsigned int key_id) :
     is_open(is_open), locked(locked), key_id(key_id)
 {
+    activate_on_step = false;
 }
 
 //void InteractiveDoor::unlock(GameMap * game_map)
@@ -235,6 +247,7 @@ InteractivePanel::InteractivePanel(
         std::string text, TCODColor text_color, Direction * readable_from, bool is_active) :
     text(text), text_color(text_color), readable_from(readable_from), is_active(is_active)
 {
+    activate_on_step = false;
 }
 
 void InteractivePanel::interact(Entity * player, GameMap * game_map, GameState * game_state)
@@ -412,6 +425,7 @@ InteractiveTerminal * InteractiveTerminal::from_json(json j)
 InteractiveContainer::InteractiveContainer(bool locked, unsigned int key_id) :
     locked(locked), key_id(key_id)
 {
+    activate_on_step = false;
 }
 
 void InteractiveContainer::refresh_items_letters(Inventory * inventory)

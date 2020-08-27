@@ -150,10 +150,19 @@ Entity * GameMap::get_inspectable_entity_at(int x, int y)
 {
     for (int i=0; i<(int)_entities.size(); i++)
     {
+
+        //DEBUG("Entity: " << _entities[i]->name);
+        if (_entities[i]->symbol == '@')
+        {
+            //DEBUG("Player found!");
+        }
         if (_entities[i]->x == x && _entities[i]->y == y // check position
             && _entities[i]->render_order() != NONE // check that it is a physical entity
             && _entities[i]->render_order() != SFX) // check that it is a physical entity
+        {
+            //DEBUG("found");
             return _entities[i];
+        }
     }
 
     return nullptr;
@@ -539,7 +548,7 @@ int GameMap::search_target_in_range(int base_x, int base_y, int range, Entity **
             // over walls with greater melee range
             if (fov_map->isInFov(x, y))
             {
-                Entity * target = get_blocking_entities_at_location(
+                Entity * target = get_entities_at_location(
                     entities(), x, y);
 
                 // Check if it is actually a monster

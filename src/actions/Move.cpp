@@ -49,7 +49,8 @@ Outcome * MoveAction::_execute()
         // attack an enemy or interact with an entity
         if (! game_map->is_blocked(destination_x, destination_y))
         {
-            Entity * target = get_blocking_entities_at_location(
+            Entity * target;
+            target = get_entities_at_location(
                 game_map->entities(), destination_x, destination_y);
 
             if (target != nullptr)
@@ -67,9 +68,21 @@ Outcome * MoveAction::_execute()
                         player->x, player->y),
                     true);
 
+                // Interact with something if it is there (non blocking though)
+                target = get_entities_at_location(
+                    game_map->entities(), destination_x, destination_y, false);
+
                 // Update player's position
                 player->x = destination_x;
                 player->y = destination_y;
+
+                if (target != nullptr)
+                {
+                    //DEBUG("Interacting with something: " << target->tag);
+                    
+                    player->interact_with(target, game_map, game_state);
+                    interacted_with_something = true;
+                }
 
                 // New tile is now not walkable
                 game_map->fov_map->setProperties(
@@ -77,6 +90,7 @@ Outcome * MoveAction::_execute()
                     game_map->fov_map->isTransparent(
                         player->x, player->y),
                     false);
+
 
                 // Change phase to enemy turn manually!
                 game_state->game_phase = ENEMY_TURN;

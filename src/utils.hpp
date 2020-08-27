@@ -15,7 +15,9 @@ float l2(int x1, int y1, int x2, int y2);
  */
 int l1(int x1, int y1, int x2, int y2);
 
-Entity * get_blocking_entities_at_location(
-        std::vector<Entity *> entities, int destination_x, int destination_y);
+Entity * get_entities_at_location(
+        std::vector<Entity *> entities,
+        int destination_x, int destination_y,
+        bool blocking=true);
 
 #endif

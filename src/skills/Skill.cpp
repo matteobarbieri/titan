@@ -199,7 +199,7 @@ Outcome * SkillBlink::_resolve(int x, int y)
 
     if (! game_map->is_blocked(x, y))
     {
-        Entity * target = get_blocking_entities_at_location(
+        Entity * target = get_entities_at_location(
             game_map->entities(), x, y);
 
         if (target != nullptr)

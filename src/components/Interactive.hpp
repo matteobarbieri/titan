@@ -36,6 +36,8 @@ class Interactive
 
         Entity * owner;
 
+        bool activate_on_step;
+
         /**
          * Creates a json representation of the component
          */
@@ -61,7 +63,7 @@ class InteractiveSwitch : public Interactive
 {
     public:
 
-        // Whether the door is locked or unlocked
+        // Whether the switch is enabled or not
         bool enabled;
 
         // The list of effects which will take place once the terminal function
@@ -226,5 +228,31 @@ class InteractiveContainer : public Interactive
 
         static InteractiveContainer * from_json(json j);
 };
+
+////////////////////////////////
+/////// INTERACTIVE TRAP ///////
+////////////////////////////////
+
+/*
+class InteractiveTrap : public Interactive
+{
+    public:
+
+        // Whether the switch is enabled or not
+        bool enabled;
+
+        // The list of effects which will take place once the terminal function
+        // will be executed.
+        std::vector<Effect *> effects;
+
+        InteractiveTrap(bool enabled=false);
+
+        virtual void interact(Entity *, GameMap *, GameState *);
+
+        json to_json();
+
+        static InteractiveTrap * from_json(json j);
+};
+*/
 
 #endif /* ifndef ROGUE_20177_INTERACTIVE */

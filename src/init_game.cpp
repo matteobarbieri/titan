@@ -124,6 +124,7 @@ void init_new_game(
     (* player)->equipment = equipment_component; 
     equipment_component->owner = (* player); 
 
+    //DEBUG("Placing player...");
     // Place player in the map
     (*game_map)->place_player(* player);
 

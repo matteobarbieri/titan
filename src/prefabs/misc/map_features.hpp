@@ -49,7 +49,7 @@ Entity * make_container(int x, int y,
                         unsigned int key_id=0);
 
 /**
- * Creates a container.
+ * Creates a switch that activates a mechanism
  */
 Entity * make_switch(int x, int y,
                      TCODColor symbol_color=TCODColor::lime,
@@ -57,5 +57,15 @@ Entity * make_switch(int x, int y,
                      int symbol=245,
                      bool enabled=true);
 
+/**
+ * Creates a trap that triggers on stepping
+ */
+Entity * make_trap(int x, int y,
+                   TCODColor symbol_color=TCODColor::lime,
+                   std::string name="",
+                   int symbol=247,
+                   bool enabled=true);
+
+//Entity * make_trigger(int x, int y);
 
 #endif /* ifndef ROGUE_20177_PREFABS_MISC_MAP_FEATURES */

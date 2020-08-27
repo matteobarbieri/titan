@@ -120,6 +120,7 @@ void Entity::interact_with(Entity * other, GameMap * game_map, GameState * game_
     // Is an entity with wich it seems possible to interact
     else if (other->interactive != nullptr)
     {
+        //DEBUG("Interacting with interactive");
         if (other->is_disabled())
         {
             // Build message
@@ -135,6 +136,7 @@ void Entity::interact_with(Entity * other, GameMap * game_map, GameState * game_
         }
         else
         {
+            //DEBUG("Not disabled!");
             // Assume game phase is determined by the side effect of the specific
             // implementation of the interact method.
             other->interactive->interact(this, game_map, game_state);

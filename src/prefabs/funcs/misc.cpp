@@ -310,8 +310,11 @@ void DamageEnemiesInAreaEffect::apply(Entity * player, GameMap * game_map, GameS
 {
 
     // Correct coordinates
-    x = game_map->top_x + x;
-    y = game_map->top_y + y;
+    // TODO must check this
+    //x = game_map->top_x + x;
+    //y = game_map->top_y + y;
+
+    //DEBUG("Applying effect in " << x << ", " << y);
 
     // Cycle through a square which contains the area
     // TODO check

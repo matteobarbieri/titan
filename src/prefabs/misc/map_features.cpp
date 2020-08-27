@@ -96,6 +96,28 @@ Entity * make_switch(int x, int y, TCODColor symbol_color, std::string switch_na
     return the_switch;
 }
 
+Entity * make_trap(int x, int y, TCODColor symbol_color, std::string switch_name, int symbol, bool enabled)
+{
+
+    Entity * the_trap = new Entity(
+        x, y, symbol,
+        symbol_color, switch_name,
+        NONE,
+        false, false, true);
+
+    the_trap->tag = "trap";
+
+    // Add the interactive component to the switch
+    InteractiveSwitch * interactive_component = new InteractiveSwitch(enabled);
+    interactive_component->activate_on_step = true;
+
+    the_trap->interactive = interactive_component;
+
+    the_trap->interactive->owner = the_trap;
+    
+    return the_trap;
+}
+
 
 Entity * make_container(int x, int y,
                         TCODColor symbol_color,
