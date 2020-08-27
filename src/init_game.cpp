@@ -142,7 +142,7 @@ void init_new_game(
     //Skill * skill_parry = new Skill("Parry", "data/graphics/icons/skills/skill_parry.png");
     //Player::singleton().skills.push_back(skill_parry);
     
-    SkillBlink * skill_blink = new SkillBlink("Blink", "data/graphics/icons/skills/skill_blink.png", 5, 5);
+    SkillBlink * skill_blink = new SkillBlink("Blink", "data/graphics/icons/skills/skill_blink.png", 25, 5);
     Player::singleton().skills.push_back(skill_blink);
 
     Player::singleton().preload_skill_textures(TCOD_sys_get_sdl_renderer());
