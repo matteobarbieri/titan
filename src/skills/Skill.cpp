@@ -102,10 +102,6 @@ Outcome * Skill::use()
         // Simply call actual function
         Outcome * outcome = _use();
 
-        // If everything went well, set cooldown
-        // TODO must fix
-        cooldown = cooldown_max;
-
         return outcome;
     }
 
@@ -236,23 +232,19 @@ Outcome * SkillBlink::_resolve(int x, int y)
             // Change phase to enemy turn manually!
             game_state->game_phase = ENEMY_TURN;
 
+            // Finally, put the skill on CD
+            cooldown = cooldown_max;
+
         }
     }
     else
     {
         // Stupid things said when bumping into walls
-        // TODO enable message log
-        //possible_messages = ['Ouch!', 'Hey!', 'Stop it!']
-        //messages.append(
-            //Message(random.choice(possible_messages), libtcod.yellow))
-
-        //game_state->message_log->add_message(
-            //Message("Ouch!", TCODColor::yellow));
-        
-        // TODO replace with a random one
         MessageLog::singleton().add_message({
                 "Blinking into walls is severely forbidden.",
                 TCODColor::yellow});
+
+        return nullptr;
     }
 
     // Check if the position has changed
@@ -268,8 +260,6 @@ Outcome * SkillBlink::_resolve(int x, int y)
         game_state->game_phase, // TODO this is the right one
         fov_recompute,
         redraw_terrain);
-
-    //# TODO check terrain/enemies!!!
 
     return outcome;
 }

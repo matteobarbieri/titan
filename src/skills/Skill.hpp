@@ -97,7 +97,7 @@ class Skill
          */
         SDL_Texture * get_icon_texture();
 
-        Skill(const char * name, const char * icon_path, int max_cooldown);
+        Skill(const char * name, const char * icon_path, int cooldown_max);
         ~Skill();
 };
 
