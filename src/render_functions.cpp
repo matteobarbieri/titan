@@ -936,29 +936,41 @@ void render_all(
     //render_message_log();
 
     render_bar(
-        Consoles::singleton().panel, 1, 1, BAR_WIDTH,
+        Consoles::singleton().panel, 1, 2, BAR_WIDTH,
         "HP", player->fighter->hp() , player->fighter->max_hp(),
         TCODColor::lightRed, TCODColor::darkerRed);
 
     // Show current dungeon level
     // TODO change with non deprecated function?
     Consoles::singleton().panel->printEx(
-        1, 3, TCOD_BKGND_NONE, TCOD_LEFT, "Dungeon level: %d",
+        1, 4, TCOD_BKGND_NONE, TCOD_LEFT, "Dungeon level: %d",
         game_map->dungeon_level);
 
     // Show current turn
     // TODO change with non deprecated function?
     Consoles::singleton().panel->printEx(
-        1, 5, TCOD_BKGND_NONE, TCOD_LEFT, "Time: %d",
+        1, 6, TCOD_BKGND_NONE, TCOD_LEFT, "Time: %d",
         game_state->current_turn);
 
+    /*
     Consoles::singleton().panel->setDefaultForeground(TCODColor::lightGrey);
     Consoles::singleton().panel->printEx(
-        1, 0, TCOD_BKGND_NONE, TCOD_LEFT,
+        1, 1, TCOD_BKGND_NONE, TCOD_LEFT,
         "%s",
         get_names_under_mouse(
             mouse, game_map->entities(), fov_map,
             top_x, top_y).c_str());
+    */
+
+    // Manualy draw tiny frame around bottom frame (skills and stats)
+    //int panel_frame_y = PANEL_Y-1; 
+    int panel_frame_y = 0;
+    int x = 0, y = panel_frame_y; 
+    TCODLine::init(x, y, TERRAIN_LAYER_WIDTH-1, panel_frame_y);
+    do {
+        Consoles::singleton().panel->putChar(x, y, 196);
+        // update cell x,y
+    } while (!TCODLine::step(&x,&y));
 
     /////////////////////////////////////////
     /////// Blit panel on root console //////

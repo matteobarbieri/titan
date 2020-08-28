@@ -11,7 +11,7 @@
 // Size of the panel containing health bar and log
 #define BAR_WIDTH 20
 #define PANEL_WIDTH SCREEN_WIDTH
-#define PANEL_HEIGHT 7
+#define PANEL_HEIGHT 8
 #define PANEL_Y (SCREEN_HEIGHT - PANEL_HEIGHT)
 
 // Define geometry parameters for message log
@@ -28,6 +28,7 @@
 
 // The main console geometry (where terrain and stuff is being displayed)
 #define TERRAIN_LAYER_WIDTH SCREEN_WIDTH
+//#define TERRAIN_LAYER_HEIGHT (SCREEN_HEIGHT - PANEL_HEIGHT - 1)
 #define TERRAIN_LAYER_HEIGHT (SCREEN_HEIGHT - PANEL_HEIGHT)
 
 // Geometry of entity info frame
