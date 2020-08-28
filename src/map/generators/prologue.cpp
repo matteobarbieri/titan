@@ -56,6 +56,9 @@ void make_trap(int n, const int coordinates[],
 
 void add_damage_effect(Entity * trap);
 
+
+void add_plasma_leak(int coordinates[], int n, GameMap * level);
+
 /**
  * Entity IDs recap:
  *
@@ -319,73 +322,24 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
 
     level->make_wall(27, 43);
 
-    // Add plasma
-    Entity * trap_tmp_tile;
+    // Add plasma leaks
+    int plasma_leak_coordinates[] = {
+        26, 37,
+        26, 38,
+        27, 38,
+        26, 39,
+        27, 39,
+        28, 39,
+        25, 40,
+        26, 40,
+        27, 40,
+        28, 40,
+        29, 40,
+        25, 41,
+        28, 41
+    };
 
-    trap_tmp_tile = make_trap(26, 37, TCODColor::lightOrange);
-    trap_tmp_tile->render_order(SFX);
-    add_damage_effect(trap_tmp_tile);
-    level->add_entity(trap_tmp_tile);
-
-    trap_tmp_tile = make_trap(26, 38, TCODColor::lightOrange);
-    trap_tmp_tile->render_order(SFX);
-    add_damage_effect(trap_tmp_tile);
-    level->add_entity(trap_tmp_tile);
-
-    trap_tmp_tile = make_trap(27, 38, TCODColor::lightOrange);
-    trap_tmp_tile->render_order(SFX);
-    add_damage_effect(trap_tmp_tile);
-    level->add_entity(trap_tmp_tile);
-
-    trap_tmp_tile = make_trap(26, 39, TCODColor::lightOrange);
-    trap_tmp_tile->render_order(SFX);
-    add_damage_effect(trap_tmp_tile);
-    level->add_entity(trap_tmp_tile);
-
-    trap_tmp_tile = make_trap(27, 39, TCODColor::lightOrange);
-    trap_tmp_tile->render_order(SFX);
-    add_damage_effect(trap_tmp_tile);
-    level->add_entity(trap_tmp_tile);
-
-    trap_tmp_tile = make_trap(28, 39, TCODColor::lightOrange);
-    trap_tmp_tile->render_order(SFX);
-    add_damage_effect(trap_tmp_tile);
-    level->add_entity(trap_tmp_tile);
-
-    trap_tmp_tile = make_trap(25, 40, TCODColor::lightOrange);
-    trap_tmp_tile->render_order(SFX);
-    add_damage_effect(trap_tmp_tile);
-    level->add_entity(trap_tmp_tile);
-
-    trap_tmp_tile = make_trap(26, 40, TCODColor::lightOrange);
-    trap_tmp_tile->render_order(SFX);
-    add_damage_effect(trap_tmp_tile);
-    level->add_entity(trap_tmp_tile);
-
-    trap_tmp_tile = make_trap(27, 40, TCODColor::lightOrange);
-    trap_tmp_tile->render_order(SFX);
-    add_damage_effect(trap_tmp_tile);
-    level->add_entity(trap_tmp_tile);
-
-    trap_tmp_tile = make_trap(28, 40, TCODColor::lightOrange);
-    trap_tmp_tile->render_order(SFX);
-    add_damage_effect(trap_tmp_tile);
-    level->add_entity(trap_tmp_tile);
-
-    trap_tmp_tile = make_trap(29, 40, TCODColor::lightOrange);
-    trap_tmp_tile->render_order(SFX);
-    add_damage_effect(trap_tmp_tile);
-    level->add_entity(trap_tmp_tile);
-
-    trap_tmp_tile = make_trap(25, 41, TCODColor::lightOrange);
-    trap_tmp_tile->render_order(SFX);
-    add_damage_effect(trap_tmp_tile);
-    level->add_entity(trap_tmp_tile);
-
-    trap_tmp_tile = make_trap(28, 41, TCODColor::lightOrange);
-    trap_tmp_tile->render_order(SFX);
-    add_damage_effect(trap_tmp_tile);
-    level->add_entity(trap_tmp_tile);
+    add_plasma_leak(plasma_leak_coordinates, 13, level);
 
     // Doors leading to third room
     level->make_floor(38, 40);
@@ -781,6 +735,23 @@ void make_trap(int n, const int traps_coordinates[],
     }
 
     level->add_entity(trap_switch);
+}
+
+void add_plasma_leak(int coordinates[], int n, GameMap * level)
+{
+
+    Entity * trap_tmp_tile;
+
+    for (int i=0; i<2*n; i+=2)
+    {
+        int x = coordinates[i];
+        int y = coordinates[i+1];
+
+        trap_tmp_tile = make_trap(x, y, TCODColor::lightOrange);
+        trap_tmp_tile->render_order(SFX);
+        add_damage_effect(trap_tmp_tile);
+        level->add_entity(trap_tmp_tile);
+    }
 }
 
 void add_damage_effect(Entity * trap)
