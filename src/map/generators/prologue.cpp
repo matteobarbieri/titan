@@ -142,6 +142,10 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     
     Entity * seeking_droid = make_security_droid(14, 20, new SeekerAi());
 
+    // TODO Move this line
+    //level->add_entity(make_guard(49, 46, new RangedAi()));
+    level->add_entity(make_guard(14, 40, new RangedAi()));
+
     level->add_entity(seeking_droid);
 
     Entity * baton = make_baton(6, 15);

@@ -1,4 +1,5 @@
 #include "Ai.hpp"
+#include <sstream>
 #include <iostream>
 
 #include "../utils.hpp"
@@ -7,6 +8,13 @@
 #include "../map/GameMap.hpp"
 
 #include "../components/Fighter.hpp"
+
+#include "../EquipmentSlots.hpp"
+#include "Equipment.hpp"
+#include "Equippable.hpp"
+#include "Item.hpp"
+#include "Reloadable.hpp"
+#include "../GameMessages.hpp"
 
 ///////////////////////////////////
 //////////// AI ACTION ////////////
@@ -65,6 +73,11 @@ MonsterAi * MonsterAi::from_json(json j)
         mai = SeekerAi::from_json(j);
     }
 
+    if (j["subclass"] == "RangedAi")
+    {
+        mai = RangedAi::from_json(j);
+    }
+
     // Restore state
     mai->state = j["state"];
 
@@ -104,6 +117,143 @@ ImmobileAi * ImmobileAi::from_json(json j)
 
     return c;
 }
+
+///////////////////////////////////
+//////////// RANGED AI ////////////
+///////////////////////////////////
+
+RangedAi::RangedAi() : MonsterAi()
+{
+    // Init coordinates of player's last known position to invalid values,
+    // meaning that the current monster has no memory of such position.
+    player_last_seen_x = -1;
+    player_last_seen_y = -1;
+}
+
+int RangedAi::getRange()
+{
+    // TODO extract this from monster's equipment
+    return 5;
+}
+
+
+Entity * RangedAi::mustReload()
+{
+    // If an entity has only weapons that need reloading, return the pointer to
+    // the entity which needs to be reloaded.
+
+    // Loop through equipment slots
+    std::map<EquipmentSlot, Entity *>::iterator it;
+    for (it=owner->equipment->slots.begin(); it!=owner->equipment->slots.end(); ++it)
+    {
+
+        // Check that it has a weapon equipped in that slot
+        if (it->second != nullptr && it->second->item->is_weapon())
+        {
+
+            //if (it->second->item->is_ranged()) // check that it is a ranged weapon
+            //{
+            //}
+
+            //if (it->second->equippable->reloadable == nullptr || it->second->equippable->reloadable->ammo > 0)
+            //{
+                //return false;
+            //}
+
+            if (it->second->equippable->reloadable != nullptr && it->second->equippable->reloadable->ammo == 0)
+            {
+                return it->second;
+            }
+
+        }
+
+    }
+
+    //return true;
+    return nullptr;
+
+}
+
+
+AIAction * RangedAi::pick_action(Entity * player, GameMap * game_map)
+{
+    // First check if he sees the player
+    
+    // Save the distance from player
+    float dist = l2(owner->x, owner->y, player->x, player->y);
+
+    // TODO replace 100 with actual sight range
+    if (game_map->aux_fov_map_100->isInFov(owner->x, owner->y) && \
+         dist <= 100)
+    {
+        // Update player's last known position
+        player_last_seen_x = player->x;
+        player_last_seen_y = player->y;
+
+    }
+
+    // If there is a last position
+    if (player_last_seen_x != -1 && (owner->x != player_last_seen_x || owner->y != player_last_seen_y))
+    {
+        // TODO move in separate action object
+        
+        if (dist >= getRange())
+        {
+            return new MoveTowardsAIAction(
+                owner, player, game_map,
+                player_last_seen_x, player_last_seen_y);
+        }
+        else
+        {
+
+            Entity * weapon = mustReload();
+
+            if (weapon != nullptr)
+            {
+                return new ReloadWeaponAIAction(owner, weapon);
+            }
+            else
+            {
+                return new AttackPlayerAIAction(owner, player, game_map);
+            }
+        }
+
+    }
+
+    //DEBUG("I last saw the player at (" << player_last_seen_x << ", " << player_last_seen_y << ")");
+
+    return nullptr;
+}
+
+json RangedAi::to_json()
+{
+    // Set common properties for AI
+    json j = MonsterAi::to_json();
+
+    j["subclass"] = "RangedAi";
+
+    // Save properties specific to RangedAi
+    j["player_last_seen_x"] = player_last_seen_x;
+    j["player_last_seen_y"] = player_last_seen_y;
+    j["state"] = state;
+
+    return j;
+}
+
+RangedAi * RangedAi::from_json(json j)
+{
+    RangedAi * c = new RangedAi();
+
+    // Restore state
+    c->state = j["state"];
+
+    // Restore properties specific to SeekerAi
+    c->player_last_seen_x = j["player_last_seen_x"];
+    c->player_last_seen_y = j["player_last_seen_y"];
+
+    return c;
+}
+
 
 ///////////////////////////////////
 //////////// SEEKER AI ////////////
@@ -198,6 +348,42 @@ void AttackPlayerAIAction::_execute()
 AttackPlayerAIAction::AttackPlayerAIAction(
         Entity * monster, Entity * player, GameMap * game_map) :
     AIAction(monster, player, game_map)
+{
+}
+
+///////////////////////////////////
+///// RELOAD WEAPON AI ACTION /////
+///////////////////////////////////
+
+void ReloadWeaponAIAction::_execute()
+{
+    // In case we need to do something with it
+    bool outcome = weapon->equippable->reloadable->reload();
+
+
+    if (outcome)
+    {
+    }
+    else
+    {
+        DEBUG("Should not get to this point... [ReloadWeaponAIAction::_execute()]");
+    }
+
+    // Build message
+    std::ostringstream stringStream;
+
+    //stringStream << "You miss the " << target->name << "!";
+    stringStream << "The " << monster->name << " reloads their " << weapon->name << "";
+
+    // Add message to message log
+    MessageLog::singleton().add_message(
+        {stringStream.str(), TCODColor::lightYellow});
+
+}
+
+ReloadWeaponAIAction::ReloadWeaponAIAction(
+        Entity * monster, Entity * weapon) :
+    AIAction(monster, nullptr, nullptr), weapon(weapon)
 {
 }
 
