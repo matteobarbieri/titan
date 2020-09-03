@@ -181,6 +181,7 @@ AIAction * RangedAi::pick_action(Entity * player, GameMap * game_map)
     
     // Save the distance from player
     float dist = l2(owner->x, owner->y, player->x, player->y);
+    bool player_in_sight = false;
 
     // TODO replace 100 with actual sight range
     if (game_map->aux_fov_map_100->isInFov(owner->x, owner->y) && \
@@ -189,6 +190,7 @@ AIAction * RangedAi::pick_action(Entity * player, GameMap * game_map)
         // Update player's last known position
         player_last_seen_x = player->x;
         player_last_seen_y = player->y;
+        player_in_sight = true;
 
     }
 
@@ -197,16 +199,23 @@ AIAction * RangedAi::pick_action(Entity * player, GameMap * game_map)
     {
         // TODO move in separate action object
         
-        if (dist >= getRange())
+        Entity * weapon = mustReload();
+
+        if (!player_in_sight || dist >= getRange())
         {
-            return new MoveTowardsAIAction(
-                owner, player, game_map,
-                player_last_seen_x, player_last_seen_y);
+            if (weapon != nullptr)
+            {
+                return new ReloadWeaponAIAction(owner, weapon);
+            }
+            else
+            {
+                return new MoveTowardsAIAction(
+                    owner, player, game_map,
+                    player_last_seen_x, player_last_seen_y);
+            }
         }
         else
         {
-
-            Entity * weapon = mustReload();
 
             if (weapon != nullptr)
             {
