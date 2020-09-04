@@ -156,7 +156,8 @@ bool Fighter::roll_to_hit_ranged(Entity * target, WeaponAttack * weapon_attack, 
     DEBUG("Cover multiplier: " << cover_multiplier);
 
     // Determine chance to hit using a sigmoid function
-    int chance_to_hit = floor(100/(1+exp(-acc/10)));
+    //int chance_to_hit = floor(100/(1+exp(-acc/10)));
+    int chance_to_hit = acc;
 
     DEBUG("Unmodified chance to hit: " << chance_to_hit);
 
