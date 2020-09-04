@@ -780,34 +780,6 @@ void render_all(
         }
     }
 
-    /*
-    // Force terrain redrawing on targeting
-    if (game_state->game_phase == TARGETING_SKILL)
-    {
-        redraw_terrain = true;
-
-        target_x = mouse->cx;
-        target_y = mouse->cy;
-
-        
-        if (game_map->aux_fov_map_100->isInFov(target_x+top_x, target_y+top_y))
-        {
-            if (tgtbl->is_in_range(target_x, target_y, player->x-top_x, player->y-top_y))
-            {
-                range_flag = 1;
-            }
-            else
-            {
-                range_flag = 3;
-            }
-        }
-        else
-        {
-            range_flag = 3;
-        }
-    }
-    */
-
     // Only redraw terrain if needed
     if (redraw_terrain)
     {
