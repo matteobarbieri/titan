@@ -21,7 +21,7 @@ Entity * make_guard(int x, int y, MonsterAi * ai_component)
         "Guard", ACTOR, true);
 
     // Fighter
-    Fighter * fighter_component = new Fighter(20, 30, 40);
+    Fighter * fighter_component = new Fighter(10, 30, 40);
     guard->fighter = fighter_component;
     fighter_component->owner = guard;
 

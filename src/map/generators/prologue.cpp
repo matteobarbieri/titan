@@ -103,7 +103,8 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     Entity * entry_point = new Entity(
         //6, 16, ' ',
         //33, 73, ' ', // Boss room
-        23, 40, ' ', // Plasma leak
+        //23, 40, ' ', // Plasma leak
+        44, 45, ' ', // Large room before warden's chamber
         //51, 95, ' ', // Level end
         TCODColor::white, "", NONE, false, false, true);
     entry_point->tag = "entrypoint"; 
@@ -141,10 +142,6 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     // Seeking droid in the first corridor
     
     Entity * seeking_droid = make_security_droid(14, 20, new SeekerAi());
-
-    // TODO Move this line
-    //level->add_entity(make_guard(49, 46, new RangedAi()));
-    level->add_entity(make_guard(14, 40, new RangedAi()));
 
     level->add_entity(seeking_droid);
 
@@ -426,6 +423,13 @@ GameMap * generate_map(int width, int height, Overseer ** overseer)
     level->add_entity(make_door(45, 69, false, false));
 
     level->add_part(new Room(Rect(41, 70, 48, 77), Direction::FourD()));
+
+    // TODO remove this pistol
+    level->add_entity(make_pistol(45, 45));
+
+    // Two elite guards
+    level->add_entity(make_guard(41, 66, new RangedAi()));
+    level->add_entity(make_guard(48, 69, new RangedAi()));
 
     // Corridor to escape pod room
     level->make_floor(44, 78);
