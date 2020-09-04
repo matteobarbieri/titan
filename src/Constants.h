@@ -49,7 +49,7 @@
 //#define FOV_ALGORITHM FOV_PERMISSIVE_0
 #define FOV_ALGORITHM FOV_DIAMOND
 #define FOV_LIGHT_WALLS true
-#define FOV_RADIUS 10
+#define FOV_RADIUS 15
 
 // TODO should this be here?
 // Size of the playing map
