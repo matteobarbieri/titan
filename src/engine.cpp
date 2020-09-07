@@ -372,7 +372,7 @@ int main(int argc, char *argv[])
     init_engine();
 
     // Load the background image
-    TCODImage main_menu_background_image("menu_background2.png");
+    TCODImage main_menu_background_image("data/graphics/backgrounds/menu_background2.png");
 
     TCOD_key_t key;
     TCOD_mouse_t mouse;
