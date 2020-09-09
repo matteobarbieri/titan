@@ -1218,6 +1218,7 @@ void render_all(
             "G: Pick up objects (while standing on them).\n"
             "TAB: Target enemies.\n"
             "F: Attack with equipped weapon(s).\n"
+            "R: Reload equipped weapon(s).\n"
             "I: access inventory.\n"
             "Z: wait one turn.\n"
             "ESC: Return to main menu.\n"
