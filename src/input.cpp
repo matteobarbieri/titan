@@ -8,7 +8,7 @@
 
 #include "actions/combat.hpp"
 #include "actions/skills.hpp"
-#include "actions/items.hpp"
+#include "actions/actions_items.hpp"
 #include "actions/inspect.hpp"
 
 #include "Player.hpp"

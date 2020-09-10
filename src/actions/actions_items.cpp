@@ -1,7 +1,7 @@
 #include <string>
 #include <sstream>
 
-#include "items.hpp"
+#include "actions_items.hpp"
 
 #include "../GamePhase.hpp"
 #include "../Entity.hpp"
