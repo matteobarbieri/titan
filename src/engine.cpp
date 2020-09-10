@@ -281,6 +281,7 @@ void teardown_sdl();
  */
 void init_engine()
 {
+    setup_sdl();
 
     // Set Custom font to use
     TCODConsole::setCustomFont(
@@ -453,6 +454,8 @@ int main(int argc, char *argv[])
         
         TCODConsole::flush();
     }
+
+    teardown_sdl();
 
     return 0;
 }
