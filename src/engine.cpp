@@ -272,20 +272,15 @@ void play_game(Entity * player, GameMap * game_map, GameState * game_state, Over
 void init_new_game(
     GameMap ** game_map, Entity ** player, GameState ** game_state, Overseer ** overseer);
 
+void setup_sdl();
+
+void teardown_sdl();
+
 /**
  * Initializes different components of the engine, mainly related to SDL.
  */
 void init_engine()
 {
-
-    // Init SDL TTF
-    if(TTF_Init()==-1) {
-        DEBUG("TTF_Init: " << TTF_GetError());
-        exit(2);
-    }
-
-    // Init SDL Image module with PNG support
-    IMG_Init(IMG_INIT_PNG);
 
     // Set Custom font to use
     TCODConsole::setCustomFont(
@@ -460,4 +455,23 @@ int main(int argc, char *argv[])
     }
 
     return 0;
+}
+
+void setup_sdl()
+{
+    // Init SDL TTF
+    if(TTF_Init()==-1) {
+        DEBUG("TTF_Init: " << TTF_GetError());
+        exit(2);
+    }
+
+    // Init SDL Image module with PNG support
+    IMG_Init(IMG_INIT_PNG);
+}
+
+void teardown_sdl()
+{
+     TTF_Quit();
+     IMG_Quit();
+     SDL_Quit();
 }
